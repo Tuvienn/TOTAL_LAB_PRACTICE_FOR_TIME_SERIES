@@ -46,7 +46,7 @@ active .agent/ hoặc .agents/ rules
 docs/rules/architecture_rule.md
 docs/rules/rule_code.md
 docs/plans/practice_1_overview.md
-docs/specifications/exercise_01_acf_pacf.md
+docs/exercise_details/exercise_01_acf_pacf.md
 docs/plans/initialize_practice_1.md
 docs/status/current_status.md nếu đã tồn tại
 ```
@@ -112,7 +112,7 @@ Agent cần đọc hoặc inspect:
 datasets/raw/air_passengers.csv
 datasets/README.md
 config/practice_1.json
-docs/specifications/exercise_01_acf_pacf.md
+docs/exercise_details/exercise_01_acf_pacf.md
 relevant reusable source files nếu đã tồn tại
 current notebook nếu đã tồn tại
 ```

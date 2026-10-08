@@ -49,11 +49,11 @@ các rule trong .agent/ hoặc .agents/ đang active
 docs/rules/architecture_rule.md
 docs/rules/rule_code.md
 docs/plans/practice_1_overview.md
-docs/specifications/exercise_01_acf_pacf.md
-docs/specifications/exercise_02_white_noise.md
-docs/specifications/exercise_03_decomposition.md
-docs/specifications/exercise_04_data_quality.md
-docs/specifications/exercise_05_visualization.md
+docs/exercise_details/exercise_01_acf_pacf.md
+docs/exercise_details/exercise_02_white_noise.md
+docs/exercise_details/exercise_03_decomposition.md
+docs/exercise_details/exercise_04_data_quality.md
+docs/exercise_details/exercise_05_visualization.md
 ```
 
 Nếu file hoặc path thực tế khác:

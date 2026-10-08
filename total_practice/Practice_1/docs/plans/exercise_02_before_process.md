@@ -49,7 +49,7 @@ active .agent/ hoặc .agents/ rules
 docs/rules/architecture_rule.md
 docs/rules/rule_code.md
 docs/plans/practice_1_overview.md
-docs/specifications/exercise_02_white_noise.md
+docs/exercise_details/exercise_02_white_noise.md
 docs/plans/initialize_practice_1.md
 docs/plans/exercise_01_before_process.md
 docs/status/current_status.md nếu đã tồn tại
@@ -105,7 +105,7 @@ Nếu cần tái chạy, phải dùng đúng logic và parameters của Exercise
 Agent cần đọc hoặc inspect:
 
 ```text
-docs/specifications/exercise_02_white_noise.md
+docs/exercise_details/exercise_02_white_noise.md
 config/practice_1.json
 docs/plans/exercise_01_before_process.md
 validated AirPassengers ACF output

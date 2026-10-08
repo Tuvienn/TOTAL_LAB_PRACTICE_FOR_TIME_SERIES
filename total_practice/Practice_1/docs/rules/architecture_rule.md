@@ -89,7 +89,7 @@ Practice_1/
 │   └── processed/
 ├── docs/
 │   ├── rules/
-│   ├── specifications/
+│   ├── exercise_details/
 │   ├── plans/
 │   ├── status/
 │   └── logs/
@@ -430,7 +430,7 @@ completion condition
 Các nội dung này nằm trong:
 
 ```text
-docs/specifications/
+docs/exercise_details/
 ```
 
 Exercise execution phải tuân thủ exercise detail đã duyệt và before-process plan hiện tại.

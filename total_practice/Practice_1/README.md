@@ -131,7 +131,7 @@ Practice_1/
 │   └── processed/
 ├── docs/
 │   ├── rules/
-│   ├── specifications/
+│   ├── exercise_details/
 │   ├── plans/
 │   ├── status/
 │   └── logs/

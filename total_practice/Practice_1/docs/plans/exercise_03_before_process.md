@@ -47,7 +47,7 @@ active .agent/ hoặc .agents/ rules
 docs/rules/architecture_rule.md
 docs/rules/rule_code.md
 docs/plans/practice_1_overview.md
-docs/specifications/exercise_03_decomposition.md
+docs/exercise_details/exercise_03_decomposition.md
 docs/plans/initialize_practice_1.md
 docs/plans/exercise_01_before_process.md
 docs/plans/exercise_02_before_process.md
@@ -96,7 +96,7 @@ no unresolved missing values affecting decomposition
 Agent cần đọc hoặc inspect:
 
 ```text
-docs/specifications/exercise_03_decomposition.md
+docs/exercise_details/exercise_03_decomposition.md
 config/practice_1.json
 validated AirPassengers source/output
 relevant src/practice_1/data/ files

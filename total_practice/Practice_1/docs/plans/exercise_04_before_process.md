@@ -47,7 +47,7 @@ active .agent/ hoặc .agents/ rules
 docs/rules/architecture_rule.md
 docs/rules/rule_code.md
 docs/plans/practice_1_overview.md
-docs/specifications/exercise_04_data_quality.md
+docs/exercise_details/exercise_04_data_quality.md
 docs/plans/initialize_practice_1.md
 docs/plans/exercise_03_before_process.md
 docs/status/current_status.md nếu đã tồn tại
@@ -120,7 +120,7 @@ trí thay thế.
 Agent cần đọc hoặc inspect:
 
 ```text
-docs/specifications/exercise_04_data_quality.md
+docs/exercise_details/exercise_04_data_quality.md
 config/practice_1.json
 validated AirPassengers input
 Exercise 3 decomposition outputs

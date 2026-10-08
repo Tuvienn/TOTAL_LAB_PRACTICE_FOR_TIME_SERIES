@@ -46,7 +46,7 @@ active .agent/ hoặc .agents/ rules
 docs/rules/architecture_rule.md
 docs/rules/rule_code.md
 docs/plans/practice_1_overview.md
-docs/specifications/exercise_05_visualization.md
+docs/exercise_details/exercise_05_visualization.md
 docs/plans/initialize_practice_1.md
 docs/plans/exercise_03_before_process.md
 docs/plans/exercise_04_before_process.md
@@ -94,7 +94,7 @@ Visualization phải dựa trên actual validated data.
 Agent cần đọc hoặc inspect:
 
 ```text
-docs/specifications/exercise_05_visualization.md
+docs/exercise_details/exercise_05_visualization.md
 config/practice_1.json
 validated AirPassengers input
 Exercise 3 decomposition outputs
