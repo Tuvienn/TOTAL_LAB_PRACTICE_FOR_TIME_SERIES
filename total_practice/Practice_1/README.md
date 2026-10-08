@@ -68,10 +68,8 @@ Lý do lựa chọn:
 - Phù hợp cho ACF/PACF, decomposition, seasonal plot và heatmap.
 - Phù hợp để so sánh với white noise giả lập.
 
-Raw dataset đã được thêm vào `data/raw/air_passengers.csv` và được xác minh bằng actual
-execution. Schema nguồn là `rownames, time, value`; package tái dựng index tháng từ
-1949-01 đến 1960-12. SHA-256 và execution evidence được lưu trong
-`docs/logs/exercise_01_execution.md`.
+Raw dataset chưa được thêm vào repository. Source response, schema thực tế, checksum,
+time semantics và data integrity vẫn phải được xác minh bằng execution trước analysis.
 
 ## 4. Hướng phân tích đã thống nhất
 
