@@ -1,0 +1,7 @@
+---
+description: Canonical repository rules and workflow
+globs:
+alwaysApply: true
+---
+
+@.agents/RULES_INDEX.md
