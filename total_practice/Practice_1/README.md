@@ -133,6 +133,8 @@ Practice_1/
 │   ├── rules/
 │   ├── exercise_details/
 │   ├── plans/
+│   ├── error_analysis/
+│   ├── fix_plans/
 │   ├── status/
 │   └── logs/
 ├── notebooks/
@@ -149,6 +151,14 @@ Practice_1/
 ```
 
 Folder trong kiến trúc chỉ được sử dụng khi có artifact thực tế thuộc trách nhiệm của folder đó.
+
+Khi có bug hoặc scientific issue không trivial:
+
+```text
+error_analysis/ = phân tích lỗi và root cause
+fix_plans/      = kế hoạch sửa chờ Human phê duyệt
+logs/           = bằng chứng thực thi và validation sau khi sửa
+```
 
 ## 7. Rule routing
 

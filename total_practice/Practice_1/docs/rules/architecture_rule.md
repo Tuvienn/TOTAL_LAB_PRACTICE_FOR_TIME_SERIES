@@ -91,6 +91,8 @@ Practice_1/
 │   ├── rules/
 │   ├── exercise_details/
 │   ├── plans/
+│   ├── error_analysis/
+│   ├── fix_plans/
 │   ├── status/
 │   └── logs/
 ├── notebooks/
@@ -482,12 +484,12 @@ Có blocker nào không?
 
 ---
 
-## 12. Error Analysis
+## 12. Error Analysis and Fix Planning
 
 Khi xuất hiện bug hoặc scientific issue không trivial, phần investigation nằm trong:
 
 ```text
-docs/analysis_error/
+docs/error_analysis/
 ```
 
 Một issue report hữu ích nên gồm:
@@ -500,6 +502,23 @@ root cause
 impact
 recommended correction direction
 ```
+
+Fix plan tương ứng nằm trong:
+
+```text
+docs/fix_plans/
+```
+
+Issue và fix plan phải dùng cùng exercise number và error name:
+
+```text
+error_analysis/exercise_02_<error_name>_issue.md
+fix_plans/exercise_02_<error_name>_fix_plan.md
+```
+
+`error_analysis/` chỉ sở hữu evidence, root cause và impact. `fix_plans/` chỉ sở hữu
+correction scope, implementation steps, validation và approval state. Execution
+evidence sau khi sửa thuộc `docs/logs/`.
 
 Không patch downstream symptom nếu root cause nằm upstream.
 

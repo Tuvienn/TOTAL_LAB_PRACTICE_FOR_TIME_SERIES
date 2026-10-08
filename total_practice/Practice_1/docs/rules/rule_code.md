@@ -256,11 +256,13 @@ Khi xuất hiện lỗi:
 → mô tả observed vs expected
 → kiểm tra relevant files
 → trace root cause
-→ document issue nếu non-trivial
-→ tạo fix plan
+→ tạo docs/error_analysis/exercise_<số>_<tên_lỗi>_issue.md nếu non-trivial
+→ tạo docs/fix_plans/exercise_<số>_<tên_lỗi>_fix_plan.md
 → chờ approval
 → fix
 → validate
+→ ghi execution evidence trong docs/logs/
+→ cập nhật docs/status/current_status.md khi cần
 ```
 
 Không nhảy thẳng từ traceback sang patch.
@@ -493,12 +495,14 @@ Với bug không trivial:
 ```text
 Evidence
 → Root-cause investigation
-→ Issue document
-→ Fix plan
+→ Error analysis document in docs/error_analysis/
+→ Fix plan in docs/fix_plans/
 → Human approval
 → Sequential fix
 → Local validation
 → Impact validation
+→ Execution evidence in docs/logs/
+→ Current-status update when required
 → Report
 ```
 

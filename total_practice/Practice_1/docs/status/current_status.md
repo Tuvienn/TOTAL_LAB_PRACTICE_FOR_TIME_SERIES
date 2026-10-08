@@ -59,6 +59,7 @@ Các công việc đã hoàn thành:
 [COMPLETED] Exercise 1 notebook executed end-to-end
 [COMPLETED] Exercise 1 tests, figures, tables, and findings validated
 [COMPLETED] Practice 1 folders standardized to datasets and simplified docs structure
+[COMPLETED] Error-analysis and fix-plan workflow standardized in dedicated folders
 ```
 
 Exercise 6 không có exercise specification riêng.

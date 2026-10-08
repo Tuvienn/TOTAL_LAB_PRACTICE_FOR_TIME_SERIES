@@ -108,11 +108,14 @@ Evidence
 → Observed versus expected behavior
 → Owner and dependency tracing
 → Root-cause analysis
-→ Issue record when useful
-→ Fix plan and scope approval
+→ Issue record in Practice `docs/error_analysis/` when non-trivial
+→ Fix plan in Practice `docs/fix_plans/`
+→ Human scope approval
 → Sequential correction
 → Local validation
 → Impact validation
+→ Execution evidence in Practice `docs/logs/`
+→ Current-status update when required
 → Report
 ```
 

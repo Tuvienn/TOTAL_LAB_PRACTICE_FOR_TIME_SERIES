@@ -148,7 +148,8 @@ outputs/results/
 tests/
 docs/status/
 docs/logs/
-docs/analysis_error/
+docs/error_analysis/
+docs/fix_plans/
 ```
 
 Reusable logic có thể gồm:

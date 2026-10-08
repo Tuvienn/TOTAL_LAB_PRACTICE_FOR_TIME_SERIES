@@ -451,7 +451,8 @@ outputs/results/
 tests/
 docs/status/
 docs/logs/
-docs/analysis_error/
+docs/error_analysis/
+docs/fix_plans/
 ```
 
 Không được tự tạo top-level folder mới.
