@@ -17,7 +17,7 @@ Tài liệu này không thay thế:
 
 ```text
 .agents/RULES_INDEX.md và các canonical source được router này nạp
-total_practice/Practice_1/docs/RULE_BASE/rule_code.md
+total_practice/Practice_1/docs/rules/rule_code.md
 các tài liệu chi tiết của từng exercise khi tồn tại
 các before-process plan đã được duyệt khi implementation được yêu cầu
 ```
@@ -83,20 +83,16 @@ Practice_1/
 ├── README.md
 ├── pyproject.toml
 ├── config/
-├── data/
+├── datasets/
 │   ├── README.md
 │   ├── raw/
 │   └── processed/
 ├── docs/
-│   ├── RULE_BASE/
-│   ├── plan/
-│   │   ├── overview/
-│   │   ├── exercise_details/
-│   │   └── before_process/
-│   ├── current_flow/
-│   ├── analysis_error/
-│   ├── logs/
-│   └── learning_notes/
+│   ├── rules/
+│   ├── specifications/
+│   ├── plans/
+│   ├── status/
+│   └── logs/
 ├── notebooks/
 ├── src/
 │   └── practice_1/
@@ -118,12 +114,12 @@ Folder trong cây kiến trúc chỉ được tạo khi có artifact thực tế
 
 ## 4. Trách nhiệm các thư mục cấp cao
 
-### 4.1 `data/`
+### 4.1 `datasets/`
 
 Lưu dữ liệu nguồn và dữ liệu dẫn xuất.
 
 ```text
-data/raw/
+datasets/raw/
 ```
 
 lưu dữ liệu gốc.
@@ -140,7 +136,7 @@ Không thay raw file bằng processed version.
 ```
 
 ```text
-data/processed/
+datasets/processed/
 ```
 
 lưu dữ liệu dẫn xuất đã được duyệt.
@@ -155,7 +151,7 @@ source code
 approved processing steps
 ```
 
-`data/README.md` sở hữu provenance của dataset, bao gồm source, retrieval date, license, checksum, schema, units, frequency và known limitations.
+`datasets/README.md` sở hữu provenance của dataset, bao gồm source, retrieval date, license, checksum, schema, units, frequency và known limitations.
 
 ---
 
@@ -316,7 +312,7 @@ Không tạo test vô nghĩa chỉ để lấp đầy folder.
 Luồng chuẩn:
 
 ```text
-data/raw
+datasets/raw
 → provenance and integrity validation
 → in-memory working copy
 → approved exploratory processing
@@ -434,7 +430,7 @@ completion condition
 Các nội dung này nằm trong:
 
 ```text
-docs/plan/exercise_details/
+docs/specifications/
 ```
 
 Exercise execution phải tuân thủ exercise detail đã duyệt và before-process plan hiện tại.
@@ -446,7 +442,7 @@ Exercise execution phải tuân thủ exercise detail đã duyệt và before-pr
 Trước meaningful implementation, active task phải được mô tả trong:
 
 ```text
-docs/plan/before_process/
+docs/plans/
 ```
 
 Plan phải chỉ rõ:
@@ -471,7 +467,7 @@ Human phải approve plan trước khi có major execution.
 Trạng thái hiện tại của Lab phải được tổng hợp trong:
 
 ```text
-docs/current_flow/
+docs/status/
 ```
 
 Tài liệu phải trả lời được:

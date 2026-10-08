@@ -43,12 +43,12 @@ Trước khi implementation, agent phải đọc:
 ```text
 working_rule.md
 active .agent/ hoặc .agents/ rules
-docs/RULE_BASE/architecture_rule.md
-docs/RULE_BASE/rule_code.md
-docs/plan/overview/practice_1_overview.md
-docs/plan/exercise_details/exercise_01_acf_pacf.md
-docs/plan/before_process/initialize_practice_1.md
-docs/current_flow/current_status.md nếu đã tồn tại
+docs/rules/architecture_rule.md
+docs/rules/rule_code.md
+docs/plans/practice_1_overview.md
+docs/specifications/exercise_01_acf_pacf.md
+docs/plans/initialize_practice_1.md
+docs/status/current_status.md nếu đã tồn tại
 ```
 
 Nếu thiếu tài liệu bắt buộc hoặc có conflict:
@@ -76,7 +76,7 @@ Approved source contract:
 
 ```text
 CSV URL: https://vincentarelbundock.github.io/Rdatasets/csv/datasets/AirPassengers.csv
-Raw file: data/raw/air_passengers.csv
+Raw file: datasets/raw/air_passengers.csv
 Expected observations: 144
 Expected range: 1949-01 through 1960-12
 Expected frequency: monthly
@@ -109,10 +109,10 @@ observation count sufficient
 Agent cần đọc hoặc inspect:
 
 ```text
-data/raw/air_passengers.csv
-data/README.md
+datasets/raw/air_passengers.csv
+datasets/README.md
 config/practice_1.json
-docs/plan/exercise_details/exercise_01_acf_pacf.md
+docs/specifications/exercise_01_acf_pacf.md
 relevant reusable source files nếu đã tồn tại
 current notebook nếu đã tồn tại
 ```
@@ -133,7 +133,7 @@ notebooks/
 outputs/figures/
 outputs/results/
 tests/
-docs/current_flow/
+docs/status/
 docs/logs/
 docs/analysis_error/
 ```
@@ -158,9 +158,9 @@ Không tạo duplicate module nếu owner tương đương đã tồn tại.
 Không được tự ý sửa:
 
 ```text
-data/raw/air_passengers.csv
+datasets/raw/air_passengers.csv
 working_rule.md
-approved RULE_BASE files
+approved scoped rule files
 approved practice_1_overview.md
 approved exercise_01_acf_pacf.md
 approved initialize_practice_1.md
@@ -493,7 +493,7 @@ interpretation matches actual plots
 Sau khi Exercise 1 pass validation:
 
 ```text
-update current_flow
+update current status
 append concise progress log
 ```
 

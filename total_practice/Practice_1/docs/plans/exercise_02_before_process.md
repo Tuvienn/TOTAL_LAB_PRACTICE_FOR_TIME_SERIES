@@ -46,13 +46,13 @@ Trước implementation, agent phải đọc:
 ```text
 working_rule.md
 active .agent/ hoặc .agents/ rules
-docs/RULE_BASE/architecture_rule.md
-docs/RULE_BASE/rule_code.md
-docs/plan/overview/practice_1_overview.md
-docs/plan/exercise_details/exercise_02_white_noise.md
-docs/plan/before_process/initialize_practice_1.md
-docs/plan/before_process/exercise_01_before_process.md
-docs/current_flow/current_status.md nếu đã tồn tại
+docs/rules/architecture_rule.md
+docs/rules/rule_code.md
+docs/plans/practice_1_overview.md
+docs/specifications/exercise_02_white_noise.md
+docs/plans/initialize_practice_1.md
+docs/plans/exercise_01_before_process.md
+docs/status/current_status.md nếu đã tồn tại
 ```
 
 Ngoài ra phải xác minh Exercise 1 đã có validated ACF output.
@@ -105,9 +105,9 @@ Nếu cần tái chạy, phải dùng đúng logic và parameters của Exercise
 Agent cần đọc hoặc inspect:
 
 ```text
-docs/plan/exercise_details/exercise_02_white_noise.md
+docs/specifications/exercise_02_white_noise.md
 config/practice_1.json
-docs/plan/before_process/exercise_01_before_process.md
+docs/plans/exercise_01_before_process.md
 validated AirPassengers ACF output
 relevant reusable source files
 current notebook nếu đã tồn tại
@@ -134,7 +134,7 @@ notebooks/
 outputs/figures/
 outputs/results/
 tests/
-docs/current_flow/
+docs/status/
 docs/logs/
 docs/analysis_error/
 ```
@@ -157,9 +157,9 @@ Không tạo duplicate function nếu reusable owner đã tồn tại.
 Không được tự ý sửa:
 
 ```text
-data/raw/
+datasets/raw/
 working_rule.md
-approved RULE_BASE files
+approved scoped rule files
 approved overview
 approved exercise_01_acf_pacf.md
 approved exercise_02_white_noise.md
@@ -465,7 +465,7 @@ interpretation matches actual evidence
 Sau khi Exercise 2 pass validation:
 
 ```text
-update current_flow
+update current status
 append concise progress log
 ```
 

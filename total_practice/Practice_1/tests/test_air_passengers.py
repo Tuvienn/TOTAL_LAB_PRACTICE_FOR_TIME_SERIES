@@ -7,7 +7,7 @@ from practice_1.data.air_passengers import calculate_sha256, load_air_passengers
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-RAW_PATH = PROJECT_ROOT / "data" / "raw" / "air_passengers.csv"
+RAW_PATH = PROJECT_ROOT / "datasets" / "raw" / "air_passengers.csv"
 CONFIG_PATH = PROJECT_ROOT / "config" / "practice_1.json"
 
 
@@ -26,4 +26,3 @@ def test_raw_dataset_matches_approved_contract() -> None:
     assert not frame.index.has_duplicates
     assert frame.isna().sum().sum() == 0
     assert frame.columns.tolist() == ["passengers_thousands"]
-

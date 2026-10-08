@@ -9,8 +9,8 @@ Before working in this repository:
 For work under `total_practice/Practice_1/`, also read:
 
 - `total_practice/Practice_1/README.md`
-- `total_practice/Practice_1/docs/RULE_BASE/architecture_rule.md`
-- `total_practice/Practice_1/docs/RULE_BASE/rule_code.md`
+- `total_practice/Practice_1/docs/rules/architecture_rule.md`
+- `total_practice/Practice_1/docs/rules/rule_code.md`
 - the relevant approved exercise specification, when it exists
 - the approved before-process plan, when implementation is requested
 

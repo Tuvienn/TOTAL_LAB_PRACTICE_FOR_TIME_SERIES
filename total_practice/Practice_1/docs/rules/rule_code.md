@@ -57,8 +57,8 @@ Trước implementation, công việc liên quan phải tuân thủ:
 
 ```text
 .agents/RULES_INDEX.md và các canonical source được router này nạp
-total_practice/Practice_1/docs/RULE_BASE/architecture_rule.md
-total_practice/Practice_1/docs/RULE_BASE/rule_code.md
+total_practice/Practice_1/docs/rules/architecture_rule.md
+total_practice/Practice_1/docs/rules/rule_code.md
 relevant approved exercise detail when it exists
 approved before-process plan when implementation is requested
 ```

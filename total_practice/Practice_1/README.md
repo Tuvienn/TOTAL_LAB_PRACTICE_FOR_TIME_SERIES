@@ -53,7 +53,7 @@ Unit: thousands of international airline passengers
 ```
 
 Không dùng URL có query parameter `?utm_source`. CSV tải về được giữ nguyên trong
-`data/raw/`; checksum SHA-256 và ngày tải chỉ được ghi sau actual acquisition.
+`datasets/raw/`; checksum SHA-256 và ngày tải chỉ được ghi sau actual acquisition.
 
 Rdatasets công bố license cho code của mirror nhưng không xác nhận dứt khoát một
 standalone license cho mọi underlying dataset. Vì vậy provenance phải ghi đúng giới
@@ -68,8 +68,9 @@ Lý do lựa chọn:
 - Phù hợp cho ACF/PACF, decomposition, seasonal plot và heatmap.
 - Phù hợp để so sánh với white noise giả lập.
 
-Raw dataset chưa được thêm vào repository. Source response, schema thực tế, checksum,
-time semantics và data integrity vẫn phải được xác minh bằng execution trước analysis.
+Raw dataset đã được thêm tại `datasets/raw/air_passengers.csv` và được xác minh bằng
+actual execution. Chi tiết provenance và integrity nằm trong `datasets/README.md` và
+`docs/logs/exercise_01_execution.md`.
 
 ## 4. Hướng phân tích đã thống nhất
 
@@ -124,17 +125,16 @@ Practice_1/
 ├── README.md
 ├── pyproject.toml
 ├── config/
-├── data/
+├── datasets/
 │   ├── README.md
 │   ├── raw/
 │   └── processed/
 ├── docs/
-│   ├── RULE_BASE/
-│   ├── plan/
-│   ├── current_flow/
-│   ├── analysis_error/
-│   ├── logs/
-│   └── learning_notes/
+│   ├── rules/
+│   ├── specifications/
+│   ├── plans/
+│   ├── status/
+│   └── logs/
 ├── notebooks/
 ├── src/
 │   └── practice_1/
@@ -155,8 +155,8 @@ Folder trong kiến trúc chỉ được sử dụng khi có artifact thực t�
 Nguồn bắt buộc:
 
 1. [`.agents/RULES_INDEX.md`](../../.agents/RULES_INDEX.md)
-2. [`docs/RULE_BASE/architecture_rule.md`](docs/RULE_BASE/architecture_rule.md)
-3. [`docs/RULE_BASE/rule_code.md`](docs/RULE_BASE/rule_code.md)
+2. [`docs/rules/architecture_rule.md`](docs/rules/architecture_rule.md)
+3. [`docs/rules/rule_code.md`](docs/rules/rule_code.md)
 4. Exercise detail đã được duyệt.
 5. Before-process plan đã được duyệt.
 

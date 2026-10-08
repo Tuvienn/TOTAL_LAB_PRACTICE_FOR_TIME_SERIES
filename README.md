@@ -67,18 +67,21 @@ Mục tiêu không chỉ là chạy được code, mà còn là hiểu đúng:
 
 ```text
 TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/
-│
 ├── total_practice/
 │   ├── Practice_1/
-│   ├── Practice_2/
-│   └── ...
-│
+│   │   ├── datasets/
+│   │   ├── notebooks/
+│   │   ├── src/
+│   │   ├── tests/
+│   │   ├── outputs/
+│   │   ├── docs/
+│   │   ├── config/
+│   │   ├── pyproject.toml
+│   │   └── README.md
+│   └── Practice_2/
+├── references/
 ├── .agents/
-│   ├── RULES_INDEX.md
-│   ├── rules/
-│   ├── workflows/
-│   └── history/
-│
+├── AGENTS.md
 ├── working_rule.md
 └── README.md
 ```
@@ -95,6 +98,10 @@ TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/
   <tr>
     <td><code>Practice_n/</code></td>
     <td>Mỗi Practice là một bài học hoặc bài thực hành độc lập.</td>
+  </tr>
+  <tr>
+    <td><code>references/</code></td>
+    <td>Chứa tài liệu học tập và nguồn tham khảo dùng chung.</td>
   </tr>
   <tr>
     <td><code>.agents/</code></td>
@@ -162,20 +169,32 @@ Practice 1 sử dụng dataset **AirPassengers**.
 
 ---
 
-# 🔄 Quy trình Time Series chuẩn
+# 🔄 Quy trình phân tích Time Series
 
 ```mermaid
-flowchart LR
-    A[📌 Define Problem] --> B[📥 Load Data]
-    B --> C[🕒 Validate Time Index]
-    C --> D[🔍 Explore / EDA]
-    D --> E[📊 Analyze Structure]
-    E --> F[📏 Build Baseline]
-    F --> G[🧩 Feature Engineering]
-    G --> H[🧠 Train Model]
-    H --> I[⏳ Time-aware Validation]
-    I --> J[📈 Evaluate]
-    J --> K[🧾 Interpret & Document]
+flowchart TD
+    A["1. Xác định bài toán<br/>Define Problem"]
+    B["2. Thu thập và đọc dữ liệu<br/>Load Data"]
+    C["3. Kiểm tra thời gian<br/>Validate Time Index"]
+    D["4. Khám phá dữ liệu<br/>Exploratory Data Analysis"]
+    E["5. Phân tích cấu trúc chuỗi<br/>Trend · Seasonality · Noise"]
+    F["6. Kiểm tra đặc tính thống kê<br/>Stationarity · ACF · PACF"]
+    G["7. Chuẩn bị dữ liệu<br/>Clean · Transform · Features"]
+    H["8. Xây dựng baseline hoặc mô hình"]
+    I["9. Kiểm chứng theo thời gian<br/>Time-aware Validation"]
+    J["10. Đánh giá kết quả"]
+    K["11. Giải thích và ghi nhận kết luận"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+    H --> I
+    I --> J
+    J --> K
 ```
 
 ---

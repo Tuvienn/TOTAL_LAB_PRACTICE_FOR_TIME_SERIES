@@ -5,7 +5,7 @@ Dataset: AirPassengers
 Canonical CSV: https://vincentarelbundock.github.io/Rdatasets/csv/datasets/AirPassengers.csv
 Documentation: https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/AirPassengers.html
 Retrieved at: 2026-10-08T14:07:55+07:00
-Raw file: data/raw/air_passengers.csv
+Raw file: datasets/raw/air_passengers.csv
 SHA-256: bdb98adbd418a6de6842a742e0602f363c3b841c26677e7e61a1e055e9509bd8
 Actual schema: rownames,time,value
 Observations: 144

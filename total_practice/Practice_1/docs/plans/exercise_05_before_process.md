@@ -43,14 +43,14 @@ Trước implementation, agent phải đọc:
 ```text
 working_rule.md
 active .agent/ hoặc .agents/ rules
-docs/RULE_BASE/architecture_rule.md
-docs/RULE_BASE/rule_code.md
-docs/plan/overview/practice_1_overview.md
-docs/plan/exercise_details/exercise_05_visualization.md
-docs/plan/before_process/initialize_practice_1.md
-docs/plan/before_process/exercise_03_before_process.md
-docs/plan/before_process/exercise_04_before_process.md
-docs/current_flow/current_status.md nếu đã tồn tại
+docs/rules/architecture_rule.md
+docs/rules/rule_code.md
+docs/plans/practice_1_overview.md
+docs/specifications/exercise_05_visualization.md
+docs/plans/initialize_practice_1.md
+docs/plans/exercise_03_before_process.md
+docs/plans/exercise_04_before_process.md
+docs/status/current_status.md nếu đã tồn tại
 ```
 
 Phải xác minh upstream outputs cần dùng đã được validate.
@@ -94,7 +94,7 @@ Visualization phải dựa trên actual validated data.
 Agent cần đọc hoặc inspect:
 
 ```text
-docs/plan/exercise_details/exercise_05_visualization.md
+docs/specifications/exercise_05_visualization.md
 config/practice_1.json
 validated AirPassengers input
 Exercise 3 decomposition outputs
@@ -120,7 +120,7 @@ notebooks/
 outputs/figures/
 outputs/results/
 tests/
-docs/current_flow/
+docs/status/
 docs/logs/
 docs/analysis_error/
 ```
@@ -145,9 +145,9 @@ Không tạo duplicate owner nếu reusable logic tương đương đã tồn t�
 Không được tự ý sửa:
 
 ```text
-data/raw/
+datasets/raw/
 working_rule.md
-approved RULE_BASE files
+approved scoped rule files
 approved overview
 approved exercise_05_visualization.md
 approved initialize_practice_1.md
@@ -521,7 +521,7 @@ interpretation matches actual figures
 Sau khi Exercise 5 pass validation:
 
 ```text
-update current_flow
+update current status
 append concise progress log
 ```
 

@@ -44,13 +44,13 @@ Trước implementation, agent phải đọc:
 ```text
 working_rule.md
 active .agent/ hoặc .agents/ rules
-docs/RULE_BASE/architecture_rule.md
-docs/RULE_BASE/rule_code.md
-docs/plan/overview/practice_1_overview.md
-docs/plan/exercise_details/exercise_04_data_quality.md
-docs/plan/before_process/initialize_practice_1.md
-docs/plan/before_process/exercise_03_before_process.md
-docs/current_flow/current_status.md nếu đã tồn tại
+docs/rules/architecture_rule.md
+docs/rules/rule_code.md
+docs/plans/practice_1_overview.md
+docs/specifications/exercise_04_data_quality.md
+docs/plans/initialize_practice_1.md
+docs/plans/exercise_03_before_process.md
+docs/status/current_status.md nếu đã tồn tại
 ```
 
 Phải xác minh Exercise 3 đã có validated decomposition residual nếu residual được dùng trong outlier analysis.
@@ -120,7 +120,7 @@ trí thay thế.
 Agent cần đọc hoặc inspect:
 
 ```text
-docs/plan/exercise_details/exercise_04_data_quality.md
+docs/specifications/exercise_04_data_quality.md
 config/practice_1.json
 validated AirPassengers input
 Exercise 3 decomposition outputs
@@ -146,7 +146,7 @@ notebooks/
 outputs/figures/
 outputs/results/
 tests/
-docs/current_flow/
+docs/status/
 docs/logs/
 docs/analysis_error/
 ```
@@ -172,9 +172,9 @@ Không tạo duplicate owner nếu reusable logic tương đương đã tồn t�
 Không được tự ý sửa:
 
 ```text
-data/raw/
+datasets/raw/
 working_rule.md
-approved RULE_BASE files
+approved scoped rule files
 approved overview
 approved exercise_04_data_quality.md
 approved initialize_practice_1.md
@@ -604,7 +604,7 @@ raw data unchanged
 Sau khi Exercise 4 pass validation:
 
 ```text
-update current_flow
+update current status
 append concise progress log
 ```
 

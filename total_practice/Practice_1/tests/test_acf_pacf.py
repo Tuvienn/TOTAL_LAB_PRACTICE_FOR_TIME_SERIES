@@ -8,7 +8,7 @@ from practice_1.data.air_passengers import load_air_passengers
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-RAW_PATH = PROJECT_ROOT / "data" / "raw" / "air_passengers.csv"
+RAW_PATH = PROJECT_ROOT / "datasets" / "raw" / "air_passengers.csv"
 
 
 def test_acf_and_pacf_cover_lags_zero_through_forty() -> None:
@@ -24,4 +24,3 @@ def test_acf_and_pacf_cover_lags_zero_through_forty() -> None:
     assert np.allclose(pacf_table["pacf"].to_numpy(), expected_pacf)
     assert acf_table[["acf", "lower_ci", "upper_ci"]].notna().all().all()
     assert pacf_table[["pacf", "lower_ci", "upper_ci"]].notna().all().all()
-

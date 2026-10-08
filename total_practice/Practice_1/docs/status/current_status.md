@@ -29,7 +29,7 @@ Các công việc đã hoàn thành:
 
 ```text
 [COMPLETED] Project folder structure for Practice 1 created
-[COMPLETED] RULE_BASE documents created
+[COMPLETED] Scoped rule documents created
 [COMPLETED] Practice 1 requirements reviewed
 [COMPLETED] Practice 1 overview created
 [COMPLETED] Practice 1 scientific scope defined
@@ -58,6 +58,7 @@ Các công việc đã hoàn thành:
 [COMPLETED] Reusable data, ACF/PACF, and plotting modules implemented
 [COMPLETED] Exercise 1 notebook executed end-to-end
 [COMPLETED] Exercise 1 tests, figures, tables, and findings validated
+[COMPLETED] Practice 1 folders standardized to datasets and simplified docs structure
 ```
 
 Exercise 6 không có exercise specification riêng.

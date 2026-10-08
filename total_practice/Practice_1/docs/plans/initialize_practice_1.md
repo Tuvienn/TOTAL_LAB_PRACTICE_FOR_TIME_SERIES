@@ -16,11 +16,11 @@ Tài liệu này chỉ quản lý kế hoạch khởi tạo chung của Practice
 Chi tiết thực thi từng bài được tách riêng tại:
 
 ```text
-docs/plan/before_process/exercise_01_before_process.md
-docs/plan/before_process/exercise_02_before_process.md
-docs/plan/before_process/exercise_03_before_process.md
-docs/plan/before_process/exercise_04_before_process.md
-docs/plan/before_process/exercise_05_before_process.md
+docs/plans/exercise_01_before_process.md
+docs/plans/exercise_02_before_process.md
+docs/plans/exercise_03_before_process.md
+docs/plans/exercise_04_before_process.md
+docs/plans/exercise_05_before_process.md
 ```
 
 ---
@@ -46,14 +46,14 @@ Agent phải đọc trước khi bắt đầu:
 ```text
 working_rule.md
 các rule trong .agent/ hoặc .agents/ đang active
-docs/RULE_BASE/architecture_rule.md
-docs/RULE_BASE/rule_code.md
-docs/plan/overview/practice_1_overview.md
-docs/plan/exercise_details/exercise_01_acf_pacf.md
-docs/plan/exercise_details/exercise_02_white_noise.md
-docs/plan/exercise_details/exercise_03_decomposition.md
-docs/plan/exercise_details/exercise_04_data_quality.md
-docs/plan/exercise_details/exercise_05_visualization.md
+docs/rules/architecture_rule.md
+docs/rules/rule_code.md
+docs/plans/practice_1_overview.md
+docs/specifications/exercise_01_acf_pacf.md
+docs/specifications/exercise_02_white_noise.md
+docs/specifications/exercise_03_decomposition.md
+docs/specifications/exercise_04_data_quality.md
+docs/specifications/exercise_05_visualization.md
 ```
 
 Nếu file hoặc path thực tế khác:
@@ -149,10 +149,10 @@ license/provenance limitation
 Dataset raw phải lưu tại:
 
 ```text
-data/raw/air_passengers.csv
+datasets/raw/air_passengers.csv
 ```
 
-Dataset provenance được ghi tại `data/README.md` sau actual download, bao gồm canonical
+Dataset provenance được ghi tại `datasets/README.md` sau actual download, bao gồm canonical
 URL, documentation URL, retrieval date, actual schema, units, frequency, SHA-256 và
 license limitation.
 
@@ -242,8 +242,8 @@ Các owner dự kiến cho implementation:
 
 ```text
 config/practice_1.json
-data/README.md
-data/raw/air_passengers.csv
+datasets/README.md
+datasets/raw/air_passengers.csv
 .gitignore
 pyproject.toml
 src/practice_1/__init__.py
@@ -441,15 +441,15 @@ Agent chỉ được làm việc trong các khu vực đã duyệt:
 config/practice_1.json
 pyproject.toml
 .gitignore
-data/raw/
-data/processed/
-data/README.md
+datasets/raw/
+datasets/processed/
+datasets/README.md
 src/practice_1/
 notebooks/
 outputs/figures/
 outputs/results/
 tests/
-docs/current_flow/
+docs/status/
 docs/logs/
 docs/analysis_error/
 ```
@@ -464,7 +464,7 @@ Không tự ý sửa:
 
 ```text
 working_rule.md
-approved RULE_BASE files
+approved scoped rule files
 approved overview
 approved exercise specification files
 raw dataset sau khi đã xác minh

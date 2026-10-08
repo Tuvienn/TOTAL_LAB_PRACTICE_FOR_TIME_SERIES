@@ -72,7 +72,7 @@ decomposition residual
 Raw data:
 
 ```text
-data/raw/
+datasets/raw/
 ```
 
 không được sửa.
