@@ -36,6 +36,26 @@ Mục tiêu không chỉ là chạy được code, mà còn là hiểu đúng:
 > README này mô tả **toàn bộ repository**.  
 > Mỗi Practice sẽ có tài liệu riêng cho mục tiêu, dữ liệu, quy trình, kết quả và kết luận chi tiết.
 
+## 🚀 Bắt đầu nhanh
+
+Thành viên mới hãy đọc [GETTING_STARTED.md](GETTING_STARTED.md) để:
+
+- clone repository;
+- cài Python 3.12 và môi trường `.venv`;
+- chạy tests và notebook;
+- biết phải đọc rule nào;
+- xác định exercise nào đã được phép triển khai;
+- tạo branch, commit và Pull Request đúng quy trình.
+
+```bash
+git clone https://github.com/Tuvienn/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES-.git
+cd TOTAL_LAB_PRACTICE_FOR_TIME_SERIES-/total_practice/Practice_1
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+python -m pytest
+```
+
 ---
 
 # 🎯 Mục tiêu học tập
@@ -80,6 +100,7 @@ TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/
 │   └── history/
 │
 ├── working_rule.md
+├── GETTING_STARTED.md
 └── README.md
 ```
 
@@ -103,6 +124,10 @@ TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/
   <tr>
     <td><code>working_rule.md</code></td>
     <td>Tài liệu governance và nguyên tắc làm việc chung của repository.</td>
+  </tr>
+  <tr>
+    <td><code>GETTING_STARTED.md</code></td>
+    <td>Hướng dẫn clone, thiết lập môi trường, chạy project và đóng góp.</td>
   </tr>
   <tr>
     <td><code>README.md</code></td>
