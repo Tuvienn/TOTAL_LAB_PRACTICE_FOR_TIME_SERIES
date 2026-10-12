@@ -12,8 +12,8 @@ Synthetic sample size: 1000
 Random seed: 42
 Synthetic distribution: Normal(0, 1)
 Maximum ACF lag: 40
-Status: WAITING_APPROVAL
-Implementation authorized: NO
+Status: COMPLETED
+Implementation authorized: YES
 ```
 
 Tài liệu này là execution plan riêng cho Exercise 2.
@@ -585,9 +585,9 @@ Trạng thái hiện tại:
 
 ```text
 EXERCISE_02_BEFORE_PROCESS_CREATED=true
-EXERCISE_02_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_02_BEFORE_PROCESS_APPROVED=false
-EXERCISE_02_IMPLEMENTATION_AUTHORIZED=false
+EXERCISE_02_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_02_BEFORE_PROCESS_APPROVED=true
+EXERCISE_02_IMPLEMENTATION_AUTHORIZED=true
 ```
 
 Agent không được code Exercise 2 khi:

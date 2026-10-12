@@ -8,13 +8,13 @@ Exercise ID: EXERCISE_05
 Topic: Time Series Visualization
 Plan type: Exercise Before-Process Plan
 Dataset: AirPassengers
-Status: WAITING_APPROVAL
-Implementation authorized: NO
+Status: COMPLETED_AND_VALIDATED
+Implementation authorized: YES
 ```
 
 Tài liệu này là execution plan riêng cho Exercise 5.
 
-Agent chỉ được bắt đầu code Exercise 5 sau khi Human approve file này.
+Human đã phê duyệt và Exercise 5 đã được triển khai, chạy và xác minh.
 
 ---
 
@@ -533,29 +533,29 @@ Không đánh dấu `COMPLETED` nếu còn blocker.
 ## 10. Validation Checklist
 
 ```text
-[ ] Required documents were read
-[ ] Validated AirPassengers input confirmed
-[ ] Raw data unchanged
-[ ] Full-series plot created and inspected
-[ ] Rolling mean window = 12
-[ ] Rolling std window = 12
-[ ] Rolling calculations are trailing
-[ ] center=True not used
-[ ] Rolling min_periods = 12
-[ ] Rolling std ddof = 1
-[ ] Future information not used in rolling statistics
-[ ] Rolling figure created and inspected
-[ ] Monthly seasonal plot created
-[ ] Month order verified
-[ ] Year grouping verified
-[ ] Month-year heatmap created
-[ ] Heatmap rows = month, columns = year, shape = 12 × 12
-[ ] No duplicate month-year cells silently aggregated
-[ ] Heatmap labels and mapping verified
-[ ] Possible anomalies compared with upstream evidence
-[ ] Interpretation based on actual outputs
-[ ] No model training performed
-[ ] No unrelated file modified
+[x] Required documents were read
+[x] Validated AirPassengers input confirmed
+[x] Raw data unchanged
+[x] Full-series plot created and inspected
+[x] Rolling mean window = 12
+[x] Rolling std window = 12
+[x] Rolling calculations are trailing
+[x] center=True not used
+[x] Rolling min_periods = 12
+[x] Rolling std ddof = 1
+[x] Future information not used in rolling statistics
+[x] Rolling figure created and inspected
+[x] Monthly seasonal plot created
+[x] Month order verified
+[x] Year grouping verified
+[x] Month-year heatmap created
+[x] Heatmap rows = month, columns = year, shape = 12 × 12
+[x] No duplicate month-year cells silently aggregated
+[x] Heatmap labels and mapping verified
+[x] Possible anomalies compared with upstream evidence
+[x] Interpretation based on actual outputs
+[x] No model training performed
+[x] No unrelated file modified
 ```
 
 ---
@@ -656,9 +656,11 @@ Trạng thái hiện tại:
 
 ```text
 EXERCISE_05_BEFORE_PROCESS_CREATED=true
-EXERCISE_05_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_05_BEFORE_PROCESS_APPROVED=false
-EXERCISE_05_IMPLEMENTATION_AUTHORIZED=false
+EXERCISE_05_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_05_BEFORE_PROCESS_APPROVED=true
+EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_05_COMPLETED=true
+EXERCISE_05_VALIDATED=true
 ```
 
 Agent không được code Exercise 5 khi:

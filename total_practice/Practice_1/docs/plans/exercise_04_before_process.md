@@ -8,8 +8,8 @@ Exercise ID: EXERCISE_04
 Topic: Time Series Data Quality
 Plan type: Exercise Before-Process Plan
 Dataset: AirPassengers
-Status: WAITING_APPROVAL
-Implementation authorized: NO
+Status: COMPLETED_AND_VALIDATED
+Implementation authorized: YES
 ```
 
 Tài liệu này là execution plan riêng cho Exercise 4.
@@ -738,9 +738,9 @@ Trạng thái hiện tại:
 
 ```text
 EXERCISE_04_BEFORE_PROCESS_CREATED=true
-EXERCISE_04_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_04_BEFORE_PROCESS_APPROVED=false
-EXERCISE_04_IMPLEMENTATION_AUTHORIZED=false
+EXERCISE_04_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_04_BEFORE_PROCESS_APPROVED=true
+EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
 ```
 
 Agent không được code Exercise 4 khi:

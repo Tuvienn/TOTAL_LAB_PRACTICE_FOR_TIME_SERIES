@@ -9,8 +9,8 @@ Topic: Time Series Decomposition
 Plan type: Exercise Before-Process Plan
 Dataset: AirPassengers
 Decomposition: Log Transform + STL
-Status: WAITING_APPROVAL
-Implementation authorized: NO
+Status: COMPLETED_AND_VALIDATED
+Implementation authorized: YES
 ```
 
 Tài liệu này là execution plan riêng cho Exercise 3.
@@ -528,28 +528,28 @@ Không đánh dấu `COMPLETED` nếu còn blocker.
 ## 10. Validation Checklist
 
 ```text
-[ ] Required documents were read
-[ ] Upstream validated AirPassengers input confirmed
-[ ] Log-transform preconditions checked
-[ ] Raw data unchanged
-[ ] Working copy created
-[ ] Natural-log transform applied
-[ ] Index preserved after transform
-[ ] No unexpected NaN/inf after transform
-[ ] STL period = 12
-[ ] STL robust = True
-[ ] Observed component created
-[ ] Trend component created
-[ ] Seasonal component created
-[ ] Residual component created
-[ ] Component alignment verified
-[ ] Decomposition figure created and inspected
-[ ] Residual figure created and inspected
-[ ] Residual ACF to 40 lags created and inspected
-[ ] Residual Ljung-Box lag 12 executed and interpreted as supplementary evidence
-[ ] Residual interpretation based on actual evidence
-[ ] No model training performed
-[ ] No unrelated file modified
+[x] Required documents were read
+[x] Upstream validated AirPassengers input confirmed
+[x] Log-transform preconditions checked
+[x] Raw data unchanged
+[x] Working copy created
+[x] Natural-log transform applied
+[x] Index preserved after transform
+[x] No unexpected NaN/inf after transform
+[x] STL period = 12
+[x] STL robust = True
+[x] Observed component created
+[x] Trend component created
+[x] Seasonal component created
+[x] Residual component created
+[x] Component alignment verified
+[x] Decomposition figure created and inspected
+[x] Residual figure created and inspected
+[x] Residual ACF to 40 lags created and inspected
+[x] Residual Ljung-Box lag 12 executed and interpreted as supplementary evidence
+[x] Residual interpretation based on actual evidence
+[x] No model training performed
+[x] No unrelated file modified
 ```
 
 ---
@@ -650,9 +650,9 @@ Trạng thái hiện tại:
 
 ```text
 EXERCISE_03_BEFORE_PROCESS_CREATED=true
-EXERCISE_03_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_03_BEFORE_PROCESS_APPROVED=false
-EXERCISE_03_IMPLEMENTATION_AUTHORIZED=false
+EXERCISE_03_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_03_BEFORE_PROCESS_APPROVED=true
+EXERCISE_03_IMPLEMENTATION_AUTHORIZED=true
 ```
 
 Agent không được code Exercise 3 khi:

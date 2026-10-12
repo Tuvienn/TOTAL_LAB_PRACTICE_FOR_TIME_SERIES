@@ -13,7 +13,7 @@ Missing-value methods:
 - Time interpolation
 Primary outlier basis: Decomposition residual
 Model training required: NO
-Status: READY_FOR_HUMAN_APPROVAL
+Status: COMPLETED_AND_VALIDATED
 ```
 
 ---
@@ -485,24 +485,24 @@ Không được kết luận treatment nào tốt hơn trước actual compariso
 Exercise 4 đạt khi:
 
 ```text
-[ ] Validated AirPassengers series được sử dụng
-[ ] Raw dataset không bị sửa
-[ ] Existing missing values đã được kiểm tra
-[ ] Working copy được tạo
-[ ] True values được lưu trước masking
-[ ] Missing positions giống nhau cho cả hai methods
-[ ] Missing count sau masking được xác nhận
-[ ] Forward-fill được thực hiện
-[ ] Time interpolation được thực hiện
-[ ] Interpolation dùng method = time và limit_area = inside
-[ ] Reconstruction comparison sử dụng đúng masked positions
-[ ] MAE được tính riêng cho từng method trên đúng 6 masked positions
-[ ] Potential outliers được phát hiện bằng approved method
-[ ] Flagged points được inspect
-[ ] Không tự động xóa hoặc replace outlier
-[ ] Before/after plots được tạo
-[ ] Interpretation dựa trên actual outputs
-[ ] Không fabricate result
+[x] Validated AirPassengers series được sử dụng
+[x] Raw dataset không bị sửa
+[x] Existing missing values đã được kiểm tra
+[x] Working copy được tạo
+[x] True values được lưu trước masking
+[x] Missing positions giống nhau cho cả hai methods
+[x] Missing count sau masking được xác nhận
+[x] Forward-fill được thực hiện
+[x] Time interpolation được thực hiện
+[x] Interpolation dùng method = time và limit_area = inside
+[x] Reconstruction comparison sử dụng đúng masked positions
+[x] MAE được tính riêng cho từng method trên đúng 6 masked positions
+[x] Potential outliers được phát hiện bằng approved method
+[x] Flagged points được inspect
+[x] Không tự động xóa hoặc replace outlier
+[x] Before/after plots được tạo
+[x] Interpretation dựa trên actual outputs
+[x] Không fabricate result
 ```
 
 ---

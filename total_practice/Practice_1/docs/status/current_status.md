@@ -6,7 +6,7 @@
 Practice: Practice_1
 Document type: Current Flow / Current Status
 Primary dataset: AirPassengers
-Current stage: EXERCISE_1_COMPLETED / WAITING_FOR_EXERCISE_2_APPROVAL
+Current stage: EXERCISE_5_COMPLETED / PRACTICE_1_TECHNICAL_CLOSURE_COMPLETED
 Implementation started: YES
 Model training required: NO
 ```
@@ -58,8 +58,27 @@ Các công việc đã hoàn thành:
 [COMPLETED] Reusable data, ACF/PACF, and plotting modules implemented
 [COMPLETED] Exercise 1 notebook executed end-to-end
 [COMPLETED] Exercise 1 tests, figures, tables, and findings validated
+[COMPLETED] practice_1_present.ipynb confirmed as the sole primary notebook
+[COMPLETED] Exercise 1 notebook alignment fix implemented and validated
+[COMPLETED] Exercise 2 specification and before-process plan approved
+[COMPLETED] Reusable white-noise generator and visualization logic implemented
+[COMPLETED] Exercise 2 notebook cells 22–27 aligned and executed
+[COMPLETED] Exercise 2 tests, figures, ACF table, and interpretation validated
 [COMPLETED] Practice 1 folders standardized to datasets and simplified docs structure
 [COMPLETED] Error-analysis and fix-plan workflow standardized in dedicated folders
+[COMPLETED] Exercise 3 error analysis and fix plan approved
+[COMPLETED] Reusable log-STL decomposition and residual diagnostic logic implemented
+[COMPLETED] Exercise 3 notebook cells 28–31 aligned and executed
+[COMPLETED] Exercise 3 tests, figures, component table, diagnostics, and interpretation validated
+[COMPLETED] Exercise 4 error analysis and fix plan approved
+[COMPLETED] Reusable missing-value and residual-IQR logic implemented
+[COMPLETED] Exercise 4 notebook cells 32–44 aligned and executed
+[COMPLETED] Exercise 4 tests, figures, result tables, and interpretation validated
+[COMPLETED] Exercise 5 error analysis and fix plan approved
+[COMPLETED] Reusable rolling-statistics and seasonal-matrix logic implemented
+[COMPLETED] Exercise 5 notebook cells 45–51 aligned and executed
+[COMPLETED] Exercise 5 tests, four figures, rolling table, and interpretation validated
+[COMPLETED] Practice 1 technical closure for Exercise 1–5
 ```
 
 Exercise 6 không có exercise specification riêng.
@@ -81,11 +100,21 @@ evidence từ Exercise 1–5.
 Task hiện tại:
 
 ```text
-Exercise 1 completed; stop before Exercise 2 pending Human approval
+Exercise 1–5 implementation completed and validated; evidence ready for TuVien report
 ```
 
-Initialization và Exercise 1 đã có actual execution evidence. Không triển khai Exercise 2
-cho đến khi Human duyệt specification/before-process plan và cấp authorization riêng.
+Notebook chính và duy nhất là:
+
+```text
+notebooks/practice_1_present.ipynb
+```
+
+Initialization và Exercise 1–5 đã có bằng chứng thực thi thực tế. E3 dùng natural-log
+transform, STL `period=12`, `robust=True`, residual ACF 40 lag và Ljung–Box lag 12.
+E4 mô phỏng đúng 6 giá trị thiếu đã khóa, so sánh forward fill với nội suy theo thời
+gian bằng MAE, đồng thời chỉ gắn cờ ứng viên ngoại lai trên residual E3. E5 dùng
+trailing rolling 12 tháng, monthly seasonal plot và heatmap 12 × 12, đồng thời đối
+chiếu E1, E3 và E4. Notebook đã chạy sạch toàn bộ 52 cell bằng kernel Python 3.12.
 
 ---
 
@@ -94,13 +123,9 @@ cho đến khi Human duyệt specification/before-process plan và cấp authori
 Thứ tự tiếp theo:
 
 ```text
-1. Human reviews the validated Exercise 1 evidence.
-2. Human reviews and approves the Exercise 2 specification and before-process plan.
-3. Human explicitly authorizes Exercise 2 implementation.
-4. Agent executes and validates Exercise 2 within that approved scope.
-5. Repeat the same approval gate sequentially for Exercise 3–5.
-6. Hand validated Exercise 1–5 evidence to TuVien for the user-owned Word report.
-7. Perform final Practice 1 technical closure review for Exercise 1–5.
+1. Human reviews the validated Exercise 5 and technical-closure evidence.
+2. Hand validated Exercise 1–5 evidence to TuVien for the user-owned Word report.
+3. Reopen implementation only if Human identifies a concrete correction.
 ```
 
 ---
@@ -220,42 +245,44 @@ Status: COMPLETED
 ### Exercise 2 — White Noise
 
 ```text
-Specification: CREATED
-Before-process plan: CREATED
-Implementation: NOT_STARTED
-Validation: NOT_STARTED
-Status: READY_FOR_HUMAN_APPROVAL
+Specification: APPROVED
+Before-process plan: APPROVED
+Implementation: COMPLETED
+Validation: COMPLETED
+Status: COMPLETED
 ```
 
 ### Exercise 3 — Decomposition
 
 ```text
-Specification: CREATED
-Before-process plan: CREATED
-Implementation: NOT_STARTED
-Validation: NOT_STARTED
-Status: WAITING_FOR_UPSTREAM_EXECUTION
+Specification: APPROVED
+Before-process plan: APPROVED
+Implementation: COMPLETED
+Validation: COMPLETED
+Status: COMPLETED
 ```
 
 ### Exercise 4 — Data Quality
 
 ```text
-Specification: CREATED
-Before-process plan: CREATED
-Implementation: NOT_STARTED
-Validation: NOT_STARTED
+Specification: APPROVED
+Before-process plan: APPROVED
+Implementation: COMPLETED
+Validation: COMPLETED
 Scientific parameters: LOCKED_FOR_REVIEW
-Status: WAITING_FOR_UPSTREAM_EXECUTION
+Upstream Exercise 3 dependency: SATISFIED
+Status: COMPLETED
 ```
 
 ### Exercise 5 — Visualization
 
 ```text
-Specification: CREATED
-Before-process plan: CREATED
-Implementation: NOT_STARTED
-Validation: NOT_STARTED
-Status: WAITING_FOR_UPSTREAM_EXECUTION
+Specification: APPROVED
+Before-process plan: APPROVED
+Implementation: COMPLETED
+Validation: COMPLETED
+Upstream Exercise 1, 3 and 4 evidence: SATISFIED
+Status: COMPLETED
 ```
 
 ### Exercise 6 — Final Word Report
@@ -263,9 +290,9 @@ Status: WAITING_FOR_UPSTREAM_EXECUTION
 ```text
 Separate exercise specification: NOT_REQUIRED
 Implementation: NOT_STARTED
-Input dependency: validated outputs from Exercise 1–5
+Input dependency: validated outputs from Exercise 1–5 — SATISFIED
 Expected deliverable: managed by TuVien outside the AI implementation plan
-Status: WAITING_FOR_EXERCISE_1_TO_5
+Status: READY_FOR_USER_REPORT
 ```
 
 ---
@@ -355,15 +382,21 @@ Planning
   ✅ Exercise 5 before-process plan
 
 Current
-  → Exercise 1 completed and validated
-  → Waiting for Human review/approval of Exercise 2
+  → Exercise 1–5 completed and validated
+  → Practice 1 technical implementation closed
+  → Validated evidence ready for TuVien-owned Word report
 
 Implementation
   ✅ INITIALIZATION_COMPLETED
   ✅ EXERCISE_1_COMPLETED
+  ✅ EXERCISE_2_COMPLETED
+  ✅ EXERCISE_3_COMPLETED
+  ✅ EXERCISE_4_COMPLETED
+  ✅ EXERCISE_5_COMPLETED
+  ✅ PRACTICE_1_TECHNICAL_CLOSURE_COMPLETED
 
 Next execution target
-  → After separate Human authorization: Exercise 2 — White Noise
+  → No remaining AI implementation exercise; TuVien may prepare the Word report
 ```
 
 ---
@@ -400,8 +433,20 @@ IMPLEMENTATION_STARTED=true
 INITIALIZATION_COMPLETED=true
 EXERCISE_01_COMPLETED=true
 INITIALIZATION_AND_EXERCISE_01_AUTHORIZATION_CONSUMED=true
-EXERCISE_02_IMPLEMENTATION_AUTHORIZED=false
-PRACTICE_1_COMPLETED=false
+EXERCISE_02_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_02_COMPLETED=true
+EXERCISE_02_AUTHORIZATION_CONSUMED=true
+EXERCISE_03_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_03_COMPLETED=true
+EXERCISE_03_AUTHORIZATION_CONSUMED=true
+EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_04_COMPLETED=true
+EXERCISE_04_AUTHORIZATION_CONSUMED=true
+EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_05_COMPLETED=true
+EXERCISE_05_AUTHORIZATION_CONSUMED=true
+PRACTICE_1_TECHNICAL_CLOSURE_COMPLETED=true
+PRACTICE_1_COMPLETED=true
 ```
 
-Human phải xác nhận authorization riêng trước khi agent bắt đầu Exercise 2.
+Không còn exercise implementation nào đang chờ authorization trong Practice 1.

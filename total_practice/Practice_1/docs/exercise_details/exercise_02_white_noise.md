@@ -13,7 +13,7 @@ Random seed: 42
 Synthetic distribution: Normal(0, 1)
 Maximum ACF lag: 40
 Model training required: NO
-Status: READY_FOR_HUMAN_APPROVAL
+Status: COMPLETED
 ```
 
 ---
