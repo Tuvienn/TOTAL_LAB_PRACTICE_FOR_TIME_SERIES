@@ -3,6 +3,21 @@
 </div>
 
 
+## Mục lục
+
+- [1. Mục tiêu](#1-mục-tiêu)
+  - [1.1. Truy cập nhanh](#11-truy-cập-nhanh)
+- [2. Phạm vi bài thực hành](#2-phạm-vi-bài-thực-hành)
+- [3. Dataset đã chốt](#3-dataset-đã-chốt)
+- [4. Hướng phân tích đã thống nhất](#4-hướng-phân-tích-đã-thống-nhất)
+  - [4.1. Runtime contract](#41-runtime-contract)
+- [5. Workflow tổng quát](#5-workflow-tổng-quát)
+- [6. Cấu trúc canonical hiện tại](#6-cấu-trúc-canonical-hiện-tại)
+- [7. Rule routing](#7-rule-routing)
+- [8. Kết quả đã hoàn thành](#8-kết-quả-đã-hoàn-thành)
+- [9. Trạng thái hiện tại](#9-trạng-thái-hiện-tại)
+- [10. Phạm vi hoàn thành](#10-phạm-vi-hoàn-thành)
+
 ## 1. Mục tiêu
 
 Practice 1 là bài thực hành khám phá và chẩn đoán dữ liệu chuỗi thời gian dựa trên nội dung Chương 2.
@@ -10,6 +25,17 @@ Practice 1 là bài thực hành khám phá và chẩn đoán dữ liệu chuỗ
 Mục tiêu cuối cùng là đánh giá chuỗi có cấu trúc thời gian và chất lượng dữ liệu phù hợp để tiếp tục sang bài toán forecasting hay không.
 
 Practice 1 không huấn luyện forecasting model.
+
+### 1.1. Truy cập nhanh
+
+- [Notebook chính](notebooks/practice_1_present.ipynb)
+- [Dữ liệu AirPassengers bản raw](datasets/raw/air_passengers.csv)
+- [Nguồn dữ liệu, schema và checksum](datasets/README.md)
+- [Trạng thái hiện tại của Practice 1](docs/status/current_status.md)
+- [Source code](src/practice_1/)
+- [Tests](tests/)
+- [Toàn bộ biểu đồ](outputs/figures/)
+- [Toàn bộ kết quả dạng bảng](outputs/results/)
 
 ## 2. Phạm vi bài thực hành
 
@@ -22,8 +48,7 @@ Practice 1 gồm sáu phần:
 5. Trực quan hóa dữ liệu chuỗi thời gian.
 6. Viết báo cáo và đánh giá forecastability.
 
-Exercise 6 là báo cáo Word do TuVien tự thực hiện. Repository không tạo exercise
-specification hoặc before-process plan riêng cho Exercise 6; AI implementation chỉ
+Repository không tạo exercise specification hoặc before-process plan riêng cho Exercise 6; AI implementation chỉ
 chuẩn bị validated evidence từ Exercise 1–5.
 
 Ngoài phạm vi:
@@ -43,14 +68,14 @@ Dataset chính được Human phê duyệt cho Practice 1 là `AirPassengers`.
 
 Nguồn canonical:
 
-```text
-CSV: https://vincentarelbundock.github.io/Rdatasets/csv/datasets/AirPassengers.csv
-Documentation: https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/AirPassengers.html
-Expected observations: 144
-Expected time range: 1949-01 through 1960-12
-Expected frequency: monthly
-Unit: thousands of international airline passengers
-```
+- CSV: [Rdatasets — AirPassengers.csv](https://vincentarelbundock.github.io/Rdatasets/csv/datasets/AirPassengers.csv)
+- Documentation: [R `datasets::AirPassengers`](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/AirPassengers.html)
+- File được sử dụng trong bài: [`datasets/raw/air_passengers.csv`](datasets/raw/air_passengers.csv)
+- Provenance, schema và checksum: [`datasets/README.md`](datasets/README.md)
+- Số quan sát: 144.
+- Khoảng thời gian: 1949-01 đến 1960-12.
+- Tần suất: hằng tháng.
+- Đơn vị: nghìn hành khách hàng không quốc tế.
 
 Không dùng URL có query parameter `?utm_source`. CSV tải về được giữ nguyên trong
 `datasets/raw/`; checksum SHA-256 và ngày tải chỉ được ghi sau actual acquisition.
@@ -78,7 +103,7 @@ actual execution. Chi tiết provenance và integrity nằm trong `datasets/READ
 - White noise được sinh từ `Normal(0, 1)` với 1000 observations và seed 42; ACF dùng
   maximum lag 40 và confidence level 95%.
 - Ljung-Box là supplementary diagnostic, không thay thế yêu cầu ACF của đề bài.
-- Decomposition dự kiến dùng log transform và STL với seasonal period phù hợp dữ liệu tháng.
+- Decomposition sử dụng log transform và STL với seasonal period phù hợp dữ liệu tháng.
 - Missing values được giả lập trên working copy; raw dataset không bị thay đổi.
 - Forward-fill và time interpolation được so sánh trên cùng các vị trí bị mask.
 - Outlier được đánh dấu và phân tích, không tự động xóa hoặc thay thế.
@@ -98,8 +123,8 @@ Notebook kernel: time-series-practice-1
 ```
 
 Notebook và tests import reusable logic qua `practice_1.*`; không dùng `sys.path`
-mutation hoặc absolute path. Tạo environment, cài dependencies và register kernel
-chỉ được thực hiện sau approval Nhóm 4.
+mutation hoặc absolute path. Environment, dependencies và notebook kernel đã được
+khởi tạo theo approval Nhóm 4.
 
 ## 5. Workflow tổng quát
 
@@ -117,7 +142,7 @@ Dataset provenance
 → Hand validated evidence to TuVien for the user-owned Word report
 ```
 
-## 6. Cấu trúc canonical dự kiến
+## 6. Cấu trúc canonical hiện tại
 
 ```text
 Practice_1/
@@ -174,59 +199,46 @@ Rule precedence tuân theo `.agents/RULES_INDEX.md`.
 
 Nếu có conflict giữa các rule, phải dừng và chờ Human quyết định.
 
-## 8. Deliverables dự kiến
+## 8. Kết quả đã hoàn thành
 
-```text
-validated dataset summary
-data-quality report
-time-series overview plot
-ACF/PACF plot
-white-noise comparison
-decomposition plot
-missing-value method comparison
-outlier analysis
-rolling-statistics plot
-monthly seasonal plot
-month-year heatmap
-forecastability conclusion
-```
+Notebook tổng hợp toàn bộ bài làm E1–E5 tại
+[`notebooks/practice_1_present.ipynb`](notebooks/practice_1_present.ipynb).
 
-Danh sách filename và acceptance criteria đã được chuẩn hóa trong Exercise 1–5
-specifications và đang chờ Human approval.
+| Exercise | Biểu đồ | Kết quả số liệu | Bằng chứng thực thi |
+|---|---|---|---|
+| **E1 — ACF/PACF** | [Chuỗi gốc](outputs/figures/01_time_series_overview.png), [ACF 40 lag](outputs/figures/02_acf_40_lags.png), [PACF 40 lag](outputs/figures/03_pacf_40_lags.png) | [ACF CSV](outputs/results/acf_values.csv), [PACF CSV](outputs/results/pacf_values.csv), [Findings JSON](outputs/results/exercise_01_findings.json) | [Exercise 1 execution log](docs/logs/exercise_01_execution.md) |
+| **E2 — White noise** | [Chuỗi white noise](outputs/figures/04_white_noise_series.png), [White-noise ACF](outputs/figures/05_white_noise_acf.png), [So sánh ACF](outputs/figures/06_white_noise_vs_airpassengers_acf.png) | [White-noise ACF CSV](outputs/results/white_noise_acf_values.csv) | [Exercise 2 execution log](docs/logs/exercise_02_execution.md) |
+| **E3 — Decomposition** | [Chuỗi log](outputs/figures/07_log_transformed_series.png), [STL decomposition](outputs/figures/08_stl_decomposition.png), [Residual diagnostics](outputs/figures/09_decomposition_residual.png) | [Decomposition components](outputs/results/decomposition_components.csv), [Residual diagnostics](outputs/results/residual_diagnostics.csv) | [Exercise 3 execution log](docs/logs/exercise_03_execution.md) |
+| **E4 — Data quality** | [Missing simulation](outputs/figures/10_missing_values_simulation.png), [So sánh xử lý missing](outputs/figures/11_missing_treatment_comparison.png), [Outlier analysis](outputs/figures/12_outlier_analysis.png) | [Missing-value comparison](outputs/results/missing_value_comparison.csv), [Outlier candidates](outputs/results/outlier_candidates.csv) | [Exercise 4 execution log](docs/logs/exercise_04_execution.md) |
+| **E5 — Visualization** | [Toàn bộ chuỗi](outputs/figures/13_full_time_series.png), [Rolling mean/std](outputs/figures/14_rolling_mean_std.png), [Seasonal plot](outputs/figures/15_monthly_seasonal_plot.png), [Heatmap](outputs/figures/16_month_year_heatmap.png) | [Rolling statistics](outputs/results/rolling_statistics.csv) | [Exercise 5 execution log](docs/logs/exercise_05_execution.md) |
+
+Các tài liệu giải thích yêu cầu và quyết định triển khai nằm trong
+[`docs/exercise_details/`](docs/exercise_details/). Phân tích lỗi, kế hoạch sửa và log
+kiểm chứng được lưu lần lượt tại [`docs/error_analysis/`](docs/error_analysis/),
+[`docs/fix_plans/`](docs/fix_plans/) và [`docs/logs/`](docs/logs/).
 
 ## 9. Trạng thái hiện tại
 
 ```text
 Repository governance: active
 Practice architecture/code rules: approved and active
-README: created
-Practice overview: approved
-Exercise 1 specification and before-process plan: approved and completed
-Exercise 2–5 specifications and before-process plans: standardized, waiting sequential approval
-Current-flow document: updated
-Exercise 6 plan: not required; TuVien owns the Word report
+Exercise 1–5: completed and validated
+Exercise 6: user-owned Word report
+Primary notebook: notebooks/practice_1_present.ipynb
+Notebook execution: 32 code cells, 0 errors
+Tests: 31 passed
 Dataset: AirPassengers added and integrity-verified
-Source code: reusable Exercise 1 implementation completed
-Notebook: Exercise 1 executed end-to-end
-Outputs: Exercise 1 figures and machine-readable results generated and validated
+Outputs: Exercise 1–5 figures and machine-readable results generated and validated
 ```
 
-Repository hiện có runnable, tested artifact cho Exercise 1. Exercise 2–5 chưa được
-triển khai và vẫn chịu approval gate riêng.
+Practice 1 đã hoàn thành phần kỹ thuật của E1–E5. Notebook, source code, tests,
+biểu đồ và kết quả dạng bảng đã được chạy và kiểm chứng. E6 không nằm trong phạm vi
+triển khai của repository; TuVien sử dụng các bằng chứng E1–E5 để viết báo cáo Word.
 
-## 10. Approval boundary
+## 10. Phạm vi hoàn thành
 
-Việc duyệt README và overview không đồng nghĩa với approval để:
-
-```text
-thêm dataset
-tạo config
-viết source code
-tạo notebook
-chạy analysis
-sinh outputs
-kích hoạt architecture rule hoặc code rule
-```
-
-Các bước trên đã được Human phê duyệt và hoàn thành cho initialization cùng Exercise 1.
-Approval này không mở rộng sang Exercise 2–5.
+- E1–E5 đã được Human phê duyệt, triển khai, chạy notebook và kiểm thử.
+- Raw dataset được giữ bất biến; missing-value simulation chỉ thao tác trên working copy.
+- Repository không huấn luyện forecasting model trong Practice 1.
+- E6 là báo cáo Word do TuVien thực hiện từ các kết quả đã kiểm chứng của E1–E5.
+- Mọi thay đổi kỹ thuật mới ngoài phạm vi trên vẫn phải tuân theo approval workflow của project.
