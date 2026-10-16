@@ -86,7 +86,7 @@ Skip modeling-only steps when the approved task is exploratory analysis rather t
 
 ## 5. Practice Workflow
 
-For work under `total_practice/Practice_1/`:
+For work under `total_practice/Practice_2/`:
 
 1. Read the Practice README and current approval state.
 2. Read the Practice architecture and code/execution rules.

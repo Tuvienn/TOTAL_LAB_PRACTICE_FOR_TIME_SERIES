@@ -1,1 +1,1 @@
-"""Analysis functions for Practice 2."""
+"""Statistical analysis utilities."""

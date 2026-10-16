@@ -72,12 +72,12 @@ are not required to read, sign, update, or re-acknowledge it during normal work.
 
 ## 5. Scoped Sources
 
-For work under `total_practice/Practice_1/`, also consult:
+For work under `total_practice/Practice_2/`, also consult:
 
 ```text
-total_practice/Practice_1/README.md
-total_practice/Practice_1/docs/rules/architecture_rule.md
-total_practice/Practice_1/docs/rules/rule_code.md
+total_practice/Practice_2/README.md
+total_practice/Practice_2/docs/rules/architecture_rule.md
+total_practice/Practice_2/docs/rules/rule_code.md
 ```
 
 Exercise specifications and before-process plans apply only when they exist and their approval state permits execution.
@@ -87,7 +87,7 @@ Exercise specifications and before-process plans apply only when they exist and 
 Within the repository-local instruction layer, use this order:
 
 1. The relevant Human-approved exercise specification or before-process plan.
-2. The applicable scoped rule under `total_practice/Practice_1/docs/rules/`.
+2. The applicable scoped rule under `total_practice/Practice_2/docs/rules/`.
 3. `.agents/rules/TIME_SERIES_RULES.md` for Time Series-specific constraints.
 4. `.agents/rules/CODE_RULES.md` for code and implementation constraints.
 5. `.agents/rules/GENERAL_RULES.md` for repository-wide constraints.

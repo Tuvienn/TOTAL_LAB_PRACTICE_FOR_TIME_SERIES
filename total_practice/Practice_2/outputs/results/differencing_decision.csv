@@ -1,0 +1,8 @@
+metric,value
+adf_statistic,-1.7060735667963038
+p_value,0.42798594072876345
+used_lag,13
+n_observations,148
+alpha,0.05
+decision,fail to reject H0
+selected_d,REVIEW_REQUIRED

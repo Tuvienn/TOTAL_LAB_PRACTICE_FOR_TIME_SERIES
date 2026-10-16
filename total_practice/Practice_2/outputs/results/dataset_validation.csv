@@ -1,0 +1,10 @@
+metric,value
+rows,204
+start,1991-07-01 00:00:00
+end,2008-06-01 00:00:00
+index_type,DatetimeIndex
+frequency,MS
+missing_values,0
+duplicate_timestamps,0
+missing_intervals,0
+chronological,True

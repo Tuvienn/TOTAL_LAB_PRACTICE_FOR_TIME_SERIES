@@ -1,1 +1,1 @@
-"""Time Series Practice 2 package."""
+"""Reusable components for Time Series Practice 2."""

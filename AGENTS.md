@@ -6,11 +6,12 @@ Before working in this repository:
 2. Read `.agents/RULES_INDEX.md` completely.
 3. Follow every active rule, workflow, and scoped source that the index routes to for the current task.
 
-For work under `total_practice/Practice_1/`, also read:
+For work under `total_practice/Practice_2/`, also read:
 
-- `total_practice/Practice_1/README.md`
-- `total_practice/Practice_1/docs/rules/architecture_rule.md`
-- `total_practice/Practice_1/docs/rules/rule_code.md`
+- `total_practice/Practice_2/README.md`
+- `total_practice/Practice_2/docs/rules/architecture_rule.md`
+- `total_practice/Practice_2/docs/rules/rule_code.md`
+- `total_practice/Practice_2/docs/status/current_status.md`
 - the relevant approved exercise specification, when it exists
 - the approved before-process plan, when implementation is requested
 

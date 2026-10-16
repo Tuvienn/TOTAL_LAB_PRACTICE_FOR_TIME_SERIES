@@ -1,1 +1,1 @@
-"""Data-loading and validation functions for Practice 2."""
+"""Data loading and validation utilities."""

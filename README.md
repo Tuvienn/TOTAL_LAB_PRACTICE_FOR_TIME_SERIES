@@ -13,7 +13,7 @@
 ![Python](https://img.shields.io/badge/Python-Time%20Series-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-In%20Progress-F59E0B?style=flat-square)
 ![Focus](https://img.shields.io/badge/Focus-Forecasting-0EA5E9?style=flat-square)
-![Practice](https://img.shields.io/badge/Practice-1%2B-22C55E?style=flat-square)
+![Practice](https://img.shields.io/badge/Practice-2-22C55E?style=flat-square)
 
 </div>
 
@@ -68,7 +68,7 @@ Mục tiêu không chỉ là chạy được code, mà còn là hiểu đúng:
 ```text
 TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/
 ├── total_practice/
-│   ├── Practice_1/
+│   ├── Practice_2/
 │   │   ├── datasets/
 │   │   ├── notebooks/
 │   │   ├── src/
@@ -121,9 +121,10 @@ TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/
 
 # 🧪 Các Practice
 
-## Practice 1 — Khám phá đặc tính dữ liệu chuỗi thời gian
+## Practice 2 — ADF và ARIMA/SARIMA
 
-Practice 1 sử dụng dataset **AirPassengers**.
+Practice 2 sử dụng Monthly Retail Sales cho Core Practice và AirPassengers cho
+phần Advanced SARIMA Extension.
 
 <table>
   <tr>
@@ -132,7 +133,7 @@ Practice 1 sử dụng dataset **AirPassengers**.
   </tr>
   <tr>
     <td>Dataset</td>
-    <td><b>AirPassengers</b></td>
+    <td><b>Monthly Retail Sales / AirPassengers</b></td>
   </tr>
   <tr>
     <td>Tần suất</td>
@@ -144,15 +145,15 @@ Practice 1 sử dụng dataset **AirPassengers**.
   </tr>
   <tr>
     <td>Timestamp column</td>
-    <td><code>month</code></td>
+    <td><code>date / Month</code></td>
   </tr>
   <tr>
     <td>Target column</td>
-    <td><code>passengers</code></td>
+    <td><code>value / Passengers</code></td>
   </tr>
   <tr>
     <td>Khoảng thời gian</td>
-    <td>1949–1960</td>
+    <td>Dataset 1: theo file; Dataset 2: 1949–1960</td>
   </tr>
 </table>
 
@@ -300,8 +301,8 @@ Mỗi bài thực hành ưu tiên các nguyên tắc sau:
     <td>statsmodels</td>
   </tr>
   <tr>
-    <td>Machine Learning Utilities</td>
-    <td>scikit-learn</td>
+    <td>Core topics</td>
+    <td>ADF, differencing, ACF/PACF, ARIMA</td>
   </tr>
   <tr>
     <td>Notebook Environment</td>
@@ -330,12 +331,12 @@ Mỗi bài thực hành ưu tiên các nguyên tắc sau:
     <th align="left">Nội dung chính</th>
   </tr>
   <tr>
-    <td>Practice 1</td>
-    <td>🟡 Đang phát triển</td>
-    <td>Khám phá đặc tính dữ liệu chuỗi thời gian</td>
+    <td>Practice 2</td>
+    <td>🟡 Documentation prepared</td>
+    <td>ADF, ARIMA/SARIMA và đánh giá forecast</td>
   </tr>
   <tr>
-    <td>Practice 2+</td>
+    <td>Practice 3+</td>
     <td>⚪ Chưa bắt đầu</td>
     <td>Sẽ bổ sung theo lộ trình học</td>
   </tr>

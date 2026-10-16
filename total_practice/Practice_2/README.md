@@ -10,9 +10,8 @@ Exercise scope: chưa chốt
 Implementation: chưa bắt đầu
 ```
 
-Practice 2 hiện chỉ có scaffold dự án. Dataset, notebook, source code phân tích,
-kết quả và kết luận chỉ được bổ sung sau khi đề bài cùng implementation plan được
-Human phê duyệt.
+Practice 2 đã có documentation, execution evidence và notebook workflow cho E01–E03.
+E03 đang bị chặn bởi stationarity evidence sau first differencing; E04 chưa được mở.
 
 ## Cấu trúc
 
@@ -44,7 +43,7 @@ Practice_2/
 
 ## Nguyên tắc khởi tạo
 
-- Không sao chép dataset, notebook, code, outputs hoặc logs của Practice 1.
+- Không sao chép dataset, notebook, code, outputs hoặc logs của Practice khác.
 - Raw data phải được giữ bất biến sau khi nguồn dữ liệu được phê duyệt.
 - Logic tái sử dụng đặt trong `src/practice_2/`; notebook chỉ điều phối và trình bày.
 - Mọi bước triển khai phải tuân theo rule và approval workflow của repository.

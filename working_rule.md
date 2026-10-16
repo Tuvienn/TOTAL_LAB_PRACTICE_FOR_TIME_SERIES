@@ -62,11 +62,11 @@ working_rule.md
 .agents/workflows/WORKFLOW.md
 ```
 
-Với task thuộc `total_practice/Practice_1/`, phải đọc thêm:
+Với task thuộc `total_practice/Practice_2/`, phải đọc thêm:
 
 ```text
-total_practice/Practice_1/docs/rules/architecture_rule.md
-total_practice/Practice_1/docs/rules/rule_code.md
+total_practice/Practice_2/docs/rules/architecture_rule.md
+total_practice/Practice_2/docs/rules/rule_code.md
 relevant approved exercise specification khi tồn tại
 approved before-process plan khi implementation được yêu cầu
 ```
