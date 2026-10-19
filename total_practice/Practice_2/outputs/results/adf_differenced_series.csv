@@ -1,6 +1,6 @@
 metric,value
-adf_statistic,-1.7060735667963027
-p_value,0.4279859407287641
+adf_statistic,-1.7060735667963602
+p_value,0.4279859407287345
 used_lag,13
 n_observations,148
 alpha,0.05

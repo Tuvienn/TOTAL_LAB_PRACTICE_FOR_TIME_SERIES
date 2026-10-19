@@ -1,3 +1,3 @@
 transformation,adf_statistic,p_value,decision
-raw_first_difference,-1.7060735667963027,0.4279859407287641,fail to reject H0
-log_first_difference,-3.6594861401996903,0.004720483508302378,reject H0
+raw_first_difference,-1.7060735667963602,0.4279859407287345,fail to reject H0
+log_first_difference,-3.659486140199735,0.004720483508301671,reject H0
