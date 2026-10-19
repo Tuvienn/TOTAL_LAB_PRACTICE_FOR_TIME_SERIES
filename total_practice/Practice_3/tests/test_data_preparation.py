@@ -17,40 +17,40 @@ from practice_3.data.data_preparation import (
 
 
 # ============================================================
-# Đường dẫn dữ liệu dùng cho test
+# Data path used by the tests
 # ============================================================
 
 RAW_DATA_PATH = Path("datasets/raw/AEP_hourly.csv")
 
 
 # ============================================================
-# Fixture đơn giản
+# Simple fixture
 # ============================================================
 
 def get_prepared_data():
     """
-    Chạy pipeline Phase 1 và trả về:
+    Run the Phase 1 pipeline and return:
     - prepared dataframe
     - audit result
 
-    Hàm này giúp tránh lặp lại đoạn gọi pipeline trong từng test.
+    This helper avoids repeating the pipeline call in each test.
     """
 
     return prepare_aep_data(RAW_DATA_PATH)
 
 
 # ============================================================
-# 1. Kiểm tra raw dataset
+# 1. Validate the raw dataset
 # ============================================================
 
 def test_raw_file_exists():
-    """Kiểm tra dataset raw có tồn tại."""
+    """Check that the raw dataset exists."""
 
     assert RAW_DATA_PATH.exists()
 
 
 def test_raw_sha256():
-    """Kiểm tra raw dataset đúng baseline đã được phê duyệt."""
+    """Check that the raw dataset matches the approved baseline."""
 
     actual_sha256 = calculate_sha256(RAW_DATA_PATH)
 
@@ -58,11 +58,11 @@ def test_raw_sha256():
 
 
 # ============================================================
-# 2. Kiểm tra schema của prepared dataset
+# 2. Validate the prepared dataset schema
 # ============================================================
 
 def test_prepared_schema():
-    """Kiểm tra các cột của prepared dataset."""
+    """Check the columns of the prepared dataset."""
 
     df, _ = get_prepared_data()
 
@@ -87,17 +87,17 @@ def test_prepared_schema():
 
 
 # ============================================================
-# 3. Kiểm tra timeline
+# 3. Validate the timeline
 # ============================================================
 
 def test_hourly_timeline():
     """
-    Kiểm tra timeline:
-    - Có 121296 timestamp.
-    - Timestamp unique.
-    - Không duplicate.
-    - Tăng dần.
-    - Liên tục từng giờ.
+    Validate the timeline:
+    - Contains 121,296 timestamps.
+    - Timestamps are unique.
+    - Contains no duplicates.
+    - Is monotonically increasing.
+    - Is continuous at hourly intervals.
     """
 
     df, _ = get_prepared_data()
@@ -120,15 +120,15 @@ def test_hourly_timeline():
 
 
 # ============================================================
-# 4. Kiểm tra missing timestamp
+# 4. Validate missing timestamps
 # ============================================================
 
 def test_missing_timestamps():
     """
-    Kiểm tra 27 timestamp bị thiếu:
-    - AEP_MW phải là NaN.
-    - source_count phải bằng 0.
-    - quality_flag phải là missing_timestamp.
+    Validate the 27 missing timestamps:
+    - AEP_MW must be NaN.
+    - source_count must equal 0.
+    - quality_flag must be missing_timestamp.
     """
 
     df, _ = get_prepared_data()
@@ -147,13 +147,13 @@ def test_missing_timestamps():
 
 
 # ============================================================
-# 5. Kiểm tra duplicate aggregation
+# 5. Validate duplicate aggregation
 # ============================================================
 
 def test_duplicate_aggregation():
     """
-    Kiểm tra 4 timestamp duplicate đã được aggregate
-    và được đánh dấu đúng.
+    Validate that the 4 duplicate timestamps are aggregated
+    and flagged correctly.
     """
 
     df, _ = get_prepared_data()
@@ -170,7 +170,7 @@ def test_duplicate_aggregation():
 
 
 def test_duplicate_values_are_aggregated_by_mean():
-    """Kiểm tra giá trị duplicate được lấy trung bình đúng contract."""
+    """Check that duplicate values are averaged according to the contract."""
 
     df_raw = pd.read_csv(RAW_DATA_PATH)
     df_raw["Datetime"] = pd.to_datetime(
@@ -200,13 +200,13 @@ def test_duplicate_values_are_aggregated_by_mean():
 
 
 # ============================================================
-# 6. Kiểm tra source conservation
+# 6. Validate source conservation
 # ============================================================
 
 def test_source_conservation():
     """
-    Tổng source_count sau xử lý phải bằng
-    số quan sát raw ban đầu.
+    The total source_count after processing must equal
+    the original number of raw observations.
     """
 
     df, _ = get_prepared_data()
@@ -215,11 +215,11 @@ def test_source_conservation():
 
 
 # ============================================================
-# 7. Kiểm tra phân phối metadata
+# 7. Validate the metadata distribution
 # ============================================================
 
 def test_metadata_distribution():
-    """Kiểm tra source_count và quality_flag."""
+    """Check source_count and quality_flag."""
 
     df, _ = get_prepared_data()
 
@@ -249,11 +249,11 @@ def test_metadata_distribution():
 
 
 # ============================================================
-# 8. Kiểm tra audit
+# 8. Validate the audit
 # ============================================================
 
 def test_phase_01_audit():
-    """Kiểm tra các giá trị chính trong audit Phase 1."""
+    """Check the key values in the Phase 1 audit."""
 
     _, audit = get_prepared_data()
 
@@ -289,11 +289,11 @@ def test_phase_01_audit():
 
 
 # ============================================================
-# 9. Kiểm tra stop conditions
+# 9. Validate stop conditions
 # ============================================================
 
 def test_invalid_datetime_stops_pipeline():
-    """Datetime ngoài format được duyệt phải làm pipeline dừng."""
+    """Datetime values outside the approved format must stop the pipeline."""
 
     invalid = pd.DataFrame(
         {
@@ -307,7 +307,7 @@ def test_invalid_datetime_stops_pipeline():
 
 
 def test_invalid_target_stops_pipeline():
-    """Target không phải số phải làm pipeline dừng."""
+    """Non-numeric target values must stop the pipeline."""
 
     invalid = pd.DataFrame(
         {
@@ -321,7 +321,7 @@ def test_invalid_target_stops_pipeline():
 
 
 def test_non_positive_target_stops_pipeline():
-    """Target không dương phải làm pipeline dừng."""
+    """Non-positive target values must stop the pipeline."""
 
     invalid = pd.DataFrame(
         {
@@ -335,11 +335,11 @@ def test_non_positive_target_stops_pipeline():
 
 
 # ============================================================
-# 10. Kiểm tra integration và artifact
+# 10. Validate integration and artifacts
 # ============================================================
 
 def test_phase_01_runner_creates_valid_artifacts(tmp_path):
-    """Runner phải tạo CSV và JSON có thể đọc/kiểm tra lại."""
+    """The runner must create readable and verifiable CSV and JSON artifacts."""
 
     processed_path = tmp_path / "aep_hourly_prepared.csv"
     audit_path = tmp_path / "phase_01_data_quality.json"
