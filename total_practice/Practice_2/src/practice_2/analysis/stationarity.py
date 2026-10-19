@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from statsmodels.tsa.stattools import adfuller
 
@@ -6,7 +7,7 @@ def run_adf(series: pd.Series, alpha: float = 0.05):
     """Run ADF with AIC autolag and return result and critical-value tables."""
     if series.empty or series.isna().any():
         raise ValueError("ADF input must be non-empty and contain no missing values")
-    result = adfuller(series, autolag="AIC")
+    result = adfuller(series, regression="c", autolag="AIC")
     decision = "reject H0" if result[1] <= alpha else "fail to reject H0"
     summary = pd.DataFrame({
         "metric": ["adf_statistic", "p_value", "used_lag", "n_observations", "alpha", "decision"],
@@ -21,3 +22,14 @@ def first_difference(series: pd.Series) -> pd.Series:
     if series.empty:
         raise ValueError("Cannot difference an empty series")
     return series.diff().dropna()
+
+
+def log_first_difference(series: pd.Series) -> pd.Series:
+    """Return the first difference of a natural-log transformed series."""
+    if series.empty:
+        raise ValueError("Cannot transform an empty series")
+    if series.isna().any():
+        raise ValueError("Log transform input must contain no missing values")
+    if (series <= 0).any():
+        raise ValueError("Log transform input must contain only positive values")
+    return np.log(series.astype(float)).diff().dropna()

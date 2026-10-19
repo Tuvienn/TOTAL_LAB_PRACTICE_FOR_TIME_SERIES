@@ -5,7 +5,8 @@
 ```text
 EXERCISE_01_COMPLETED
 EXERCISE_02_COMPLETED
-EXERCISE_03_BLOCKED_BY_SCIENTIFIC_RESULT
+EXERCISE_03_COMPLETED_WITH_LOG_TRANSFORMATION
+EXERCISE_04_HANDOFF_OPEN
 ```
 
 ## Exercise 01 Evidence
@@ -43,16 +44,36 @@ EXERCISE_02_COMPLETED=true
 EXERCISE_03_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_03_IMPLEMENTED=true
 EXERCISE_03_VALIDATED=true
-EXERCISE_03_COMPLETED=false
+EXERCISE_03_COMPLETED=true
+EXERCISE_03_BLOCKED_BY_SCIENTIFIC_RESULT=false
+EXERCISE_04_HANDOFF_OPEN=true
+```
 
 ## Exercise 03 Result
 
 ```text
-first difference created: true
-ADF statistic: -1.706074
-p-value: 0.427986
-decision: fail to reject H0
-selected d: REVIEW_REQUIRED
-blocker: first difference is not supported as stationary by current ADF evidence
+raw first difference created: true
+raw first-difference ADF statistic: -1.706074
+raw first-difference p-value: 0.427986
+raw first-difference decision: fail to reject H0
+remediation transformation: natural logarithm
+regular differencing order: 1
+log first-differenced observations: 162
+remaining missing values: 0
+ADF statistic: -3.659486
+p-value: 0.004720
+used lag: 13
+n observations: 148
+decision: reject H0
+selected d: 1
+stationarity supported: true on log first-differenced training scale
+test set used: false
+E04 handoff: open for review
 ```
-```
+
+## Exercise 03 Limitation
+
+ADF evidence supports removal of the non-seasonal unit root on the log first-differenced
+training scale. The inspected plot still shows recurring annual spikes, so this result
+does not claim that seasonal dependence has disappeared. E04 must use the exact
+transformed training series and report seasonal ACF/PACF structure honestly.

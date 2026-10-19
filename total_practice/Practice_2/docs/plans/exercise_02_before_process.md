@@ -8,11 +8,15 @@ Exercise ID: EXERCISE_02
 Topic: ADF on Original Series
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: DRAFT_FOR_HUMAN_REVIEW
-Implementation authorized: NO
+Status: APPROVED
+Implementation authorized: YES
+Execution result: COMPLETED
+Execution state owner: docs/status/current_status.md
+Execution evidence: docs/logs/exercise_02_execution.md
 ```
 
-Agent chỉ được bắt đầu code Exercise 2 sau khi Human approve file này và implementation scope tương ứng.
+Plan và implementation scope của Exercise 2 đã được Human phê duyệt. Mọi lần chạy lại
+phải tiếp tục tuân thủ đúng scope, validation và stop conditions trong file này.
 
 ## 2. Objective
 
@@ -91,6 +95,8 @@ Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → 
 Test: Augmented Dickey-Fuller
 Input: original training series
 Significance level α: 0.05
+Regression: constant (`regression="c"`)
+Lag selection: AIC (`autolag="AIC"`)
 Test set usage: NO
 Differencing: NO
 Model training: NO
@@ -115,7 +121,8 @@ observations không xuất hiện trong input và không thực hiện differenc
 
 ### Step 4 — Execute ADF
 
-Chạy ADF với `α = 0.05`. Ghi statistic, p-value, critical values, used lag và used observations khi output cung cấp.
+Chạy ADF với `α = 0.05`, `regression="c"` và `autolag="AIC"`. Ghi statistic,
+p-value, critical values, used lag và used observations khi output cung cấp.
 
 ### Step 5 — Apply Decision Rule
 
@@ -132,6 +139,7 @@ Lưu actual result tại:
 
 ```text
 outputs/results/adf_original_series.csv
+outputs/results/adf_original_critical_values.csv
 ```
 
 Inspect result table và narrative answer cho ba câu hỏi: H₀, p-value và chuỗi có dừng không.
@@ -149,6 +157,8 @@ Chỉ sau khi output pass validation mới cập nhật current status và execu
 [ ] Test set excluded
 [ ] ADF executed successfully
 [ ] Significance level α = 0.05
+[ ] Regression option `c` recorded
+[ ] Autolag setting `AIC` recorded
 [ ] ADF statistic recorded
 [ ] p-value recorded
 [ ] Critical values recorded
@@ -164,6 +174,7 @@ Chỉ sau khi output pass validation mới cập nhật current status và execu
 
 ```text
 outputs/results/adf_original_series.csv
+outputs/results/adf_original_critical_values.csv
 ```
 
 Required narrative evidence:
@@ -206,14 +217,16 @@ AND no unresolved blocking issue
 
 ```text
 EXERCISE_02_BEFORE_PROCESS_CREATED=true
-EXERCISE_02_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_02_BEFORE_PROCESS_APPROVED=false
-EXERCISE_02_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_02_IMPLEMENTED=false
-EXERCISE_02_VALIDATED=false
+EXERCISE_02_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_02_BEFORE_PROCESS_APPROVED=true
+EXERCISE_02_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_02_IMPLEMENTED=true
+EXERCISE_02_VALIDATED=true
+EXERCISE_02_COMPLETED=true
 ```
 
-Agent không được code khi `EXERCISE_02_IMPLEMENTATION_AUTHORIZED=false`.
+Actual result và runtime state phải được đọc từ execution log và current status;
+before-process plan không thay thế hai evidence owner này.
 
 ## 14. Agent Execution Rule
 

@@ -8,11 +8,15 @@ Exercise ID: EXERCISE_01
 Topic: EDA and Time-Series Preparation
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: DRAFT_FOR_HUMAN_REVIEW
-Implementation authorized: NO
+Status: APPROVED
+Implementation authorized: YES
+Execution result: COMPLETED
+Execution state owner: docs/status/current_status.md
+Execution evidence: docs/logs/exercise_01_execution.md
 ```
 
-Agent chỉ được bắt đầu code Exercise 1 sau khi Human approve file này và implementation scope tương ứng.
+Plan và implementation scope của Exercise 1 đã được Human phê duyệt. Mọi lần chạy lại
+phải tiếp tục tuân thủ đúng scope, validation và stop conditions trong file này.
 
 ## 2. Objective
 
@@ -187,8 +191,8 @@ và append concise progress log. Không đánh dấu complete nếu còn blocker
 
 ```text
 outputs/figures/01_original_time_series.png
-outputs/results/dataset_validation.csv       (optional)
-outputs/results/train_test_boundary.csv      (optional)
+outputs/results/dataset_validation.csv
+outputs/results/train_test_boundary.csv
 ```
 
 Required narrative evidence: validated schema/time index, EDA observations và sealed boundary.
@@ -227,14 +231,16 @@ AND no unresolved blocking issue
 
 ```text
 EXERCISE_01_BEFORE_PROCESS_CREATED=true
-EXERCISE_01_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_01_BEFORE_PROCESS_APPROVED=false
-EXERCISE_01_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_01_IMPLEMENTED=false
-EXERCISE_01_VALIDATED=false
+EXERCISE_01_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_01_BEFORE_PROCESS_APPROVED=true
+EXERCISE_01_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_01_IMPLEMENTED=true
+EXERCISE_01_VALIDATED=true
+EXERCISE_01_COMPLETED=true
 ```
 
-Agent không được code khi `EXERCISE_01_IMPLEMENTATION_AUTHORIZED=false`.
+Actual result và runtime state phải được đọc từ execution log và current status;
+before-process plan không thay thế hai evidence owner này.
 
 ## 14. Agent Execution Rule
 

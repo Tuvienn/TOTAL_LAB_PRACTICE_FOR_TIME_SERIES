@@ -1,8 +1,10 @@
 metric,value
-adf_statistic,-1.7060735667963038
-p_value,0.42798594072876345
-used_lag,13
-n_observations,148
+analysis_series,log_first_differenced_training
+transformation,natural_log
+regular_differencing_order,1
+adf_statistic,-3.6594861401996903
+p_value,0.004720483508302378
 alpha,0.05
-decision,fail to reject H0
-selected_d,REVIEW_REQUIRED
+decision,reject H0
+stationarity_supported,True
+e04_handoff,READY_FOR_E04_REVIEW

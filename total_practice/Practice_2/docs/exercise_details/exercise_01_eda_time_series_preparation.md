@@ -10,7 +10,9 @@ Dataset: Monthly Retail Sales
 Frequency: Monthly
 Chronological split: approximately 80% train / 20% test
 Model training required: NO
-Status: PLANNED
+Specification status: APPROVED
+Execution state owner: docs/status/current_status.md
+Execution evidence: docs/logs/exercise_01_execution.md
 ```
 
 ## 2. Objective
@@ -68,11 +70,14 @@ ADF and differencing: NOT IN THIS EXERCISE
 
 ```text
 outputs/figures/01_original_time_series.png
-outputs/results/dataset_validation.csv       (optional)
-outputs/results/train_test_boundary.csv      (optional)
+outputs/results/dataset_validation.csv
+outputs/results/train_test_boundary.csv
 ```
 
 Phải có narrative interpretation dựa trên actual checks và plot.
+
+Execution result và trạng thái hoàn thành phải được đọc từ `docs/status/current_status.md`
+và `docs/logs/exercise_01_execution.md`; specification này không tự sở hữu trạng thái runtime.
 
 ## 7. Interpretation Questions
 

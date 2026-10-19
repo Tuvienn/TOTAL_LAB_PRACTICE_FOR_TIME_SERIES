@@ -10,7 +10,9 @@ Dataset: Monthly Retail Sales
 Input: Original training series from Exercise 1
 Significance level: 0.05
 Model training required: NO
-Status: PLANNED
+Specification status: APPROVED
+Execution state owner: docs/status/current_status.md
+Execution evidence: docs/logs/exercise_02_execution.md
 ```
 
 ## 2. Objective
@@ -69,6 +71,8 @@ Kết luận phải dựa trên actual ADF output.
 Test: Augmented Dickey-Fuller
 Input: original training series
 Significance level α: 0.05
+Regression: constant (`regression="c"`)
+Lag selection: AIC (`autolag="AIC"`)
 Test set usage: NO
 Differencing: NO
 Model training: NO
@@ -79,6 +83,7 @@ Forecast generation: NO
 
 ```text
 outputs/results/adf_original_series.csv
+outputs/results/adf_original_critical_values.csv
 ```
 
 Result tối thiểu phải có:
@@ -93,6 +98,9 @@ stationarity decision
 ```
 
 Narrative output phải trả lời đúng ba câu hỏi của đề.
+
+Execution result phải được truy vết qua `docs/logs/exercise_02_execution.md` và
+`docs/status/current_status.md`; specification này không thay thế execution evidence.
 
 ## 8. Interpretation Questions
 
@@ -109,6 +117,8 @@ Không được viết kết luận trước khi actual ADF result được tạ
 [ ] ADF chạy trên original training series
 [ ] Test set không được sử dụng
 [ ] Significance level α = 0.05
+[ ] Regression option được ghi là `c`
+[ ] Autolag được ghi là `AIC`
 [ ] ADF statistic được ghi
 [ ] p-value được ghi
 [ ] Critical values được ghi
