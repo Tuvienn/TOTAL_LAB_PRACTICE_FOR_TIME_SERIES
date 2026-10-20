@@ -4,12 +4,12 @@
 
 ```text
 Practice: Practice_3
-Current stage: PHASE_03_PASS_PHASE_04_READY
+Current stage: PHASE_04_PASS_PHASE_05_READY
 Primary dataset: datasets/raw/AEP_hourly.csv
 Implementation started: YES
 Active implementation phase: NONE
 Detailed phase design: PHASE_01_TO_PHASE_07_APPROVED
-Next target: begin the approved Phase 4 implementation
+Next target: begin the approved Phase 5 implementation
 ```
 
 Tài liệu này ghi trạng thái thực tế của Practice 3. Không dùng trạng thái dự đoán để tuyên bố một phase đã được phép hoặc đã hoàn thành.
@@ -44,9 +44,13 @@ Tài liệu này ghi trạng thái thực tế của Practice 3. Không dùng tr
 [COMPLETED] Phase 3 common validity mask and row-loss audit
 [COMPLETED] Phase 3 six aligned supervised datasets
 [COMPLETED] Phase 3 automated tests, audit and execution log
+[COMPLETED] Phase 4 implementation approval granted by Human
+[COMPLETED] Phase 4 shared top-level temporal split
+[COMPLETED] Phase 4 training-only TimeSeriesSplit design
+[COMPLETED] Phase 4 automated tests, audit and execution log
 ```
 
-Phase 1, Phase 2 và Phase 3 đã hoàn thành. Chưa có train/test split, trained model hoặc evaluation output của các phase sau.
+Phase 1–4 đã hoàn thành. Chưa có trained model hoặc evaluation output của các phase sau.
 
 ---
 
@@ -75,8 +79,8 @@ Pipeline Phase 1 đã xử lý trên bản working data; raw dataset không bị
 | Phase 1 | Data Preparation | PASS |
 | Phase 2 | Feature Engineering | PASS |
 | Phase 3 | X/y Preparation | PASS |
-| Phase 4 | Time-Based Split và TimeSeriesSplit Design | APPROVED_READY_TO_START |
-| Phase 5 | Model Training và Tuning | APPROVED_WAITING_PHASE_04 |
+| Phase 4 | Time-Based Split và TimeSeriesSplit Design | PASS |
+| Phase 5 | Model Training và Tuning | APPROVED_READY_TO_START |
 | Phase 6 | Forecasting và Evaluation | APPROVED_WAITING_PHASE_05 |
 | Phase 7 | Interpretation và Final Conclusion | APPROVED_WAITING_PHASE_06 |
 
@@ -105,8 +109,10 @@ Phase 3 implementation and validation: PASS
 Phase 3 required artifacts: READY
 Phase 4 detailed design: READY
 Phase 4 implementation authorization: GRANTED
+Phase 4 implementation and validation: PASS
+Phase 4 required artifacts: READY
 Phase 5 detailed design: READY
-Phase 5 implementation authorization: GRANTED_AFTER_PHASE_04_PASS
+Phase 5 implementation authorization: GRANTED
 Phase 6 detailed design: READY
 Phase 6 implementation authorization: GRANTED_AFTER_PHASE_05_PASS
 Phase 7 detailed design: READY
@@ -114,7 +120,7 @@ Phase 7 implementation authorization: GRANTED_AFTER_PHASE_06_PASS
 Runtime environment: LOCAL_VENV_ACTIVE
 ```
 
-Phase 1 đã qua 14 automated tests và notebook đã chạy sạch 6/6 code cells. Phase 2 đã qua 19 automated tests. Phase 3 đã qua 13 automated tests; sáu supervised datasets dùng chung 116.675 timestamp và toàn project hiện có 46 tests đạt. Phase 4 đã mở gate triển khai. Phase 5 chỉ được thực thi sau khi Phase 4 `PASS`; Phase 6 chỉ được thực thi sau khi Phase 5 `PASS`; Phase 7 chỉ được thực thi sau khi Phase 6 `PASS`.
+Phase 1 đã qua 14 automated tests và notebook đã chạy sạch 6/6 code cells. Phase 2 đã qua 19 automated tests. Phase 3 đã qua 13 automated tests. Phase 4 đã qua 22 automated tests; split chung gồm 108.083 train samples và 8.592 sealed final-test samples, với năm training-only CV folds. Toàn project hiện có 68 tests đạt. Phase 5 đã mở gate triển khai. Phase 6 chỉ được thực thi sau khi Phase 5 `PASS`; Phase 7 chỉ được thực thi sau khi Phase 6 `PASS`.
 
 Kết luận readiness:
 
@@ -122,8 +128,10 @@ Kết luận readiness:
 PHASE 1 PASS
 PHASE 2 PASS
 PHASE 3 PASS
-READY to implement Phase 4
-NOT READY to begin modeling
+PHASE 4 PASS
+READY to implement Phase 5
+READY to begin approved Phase 5 modeling
+FINAL TEST remains SEALED until Phase 6
 ```
 
 ---
@@ -133,10 +141,10 @@ NOT READY to begin modeling
 Thứ tự tiếp theo:
 
 ```text
-1. Review the Phase 3 audit and execution log.
-2. Begin Phase 4 only according to its approved detailed design.
-3. Preserve the common timestamp population across all configurations.
-4. Do not begin model training before Phase 4 passes its validation gate.
+1. Review the Phase 4 audit and execution log.
+2. Begin Phase 5 only according to its approved detailed design.
+3. Use only top-level train and its CV folds for model/configuration selection.
+4. Keep final-test metrics sealed until Phase 6.
 ```
 
 ---

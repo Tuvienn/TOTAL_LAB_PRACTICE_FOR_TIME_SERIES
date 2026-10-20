@@ -1,0 +1,16 @@
+{
+  "phase": "phase_04_temporal_split_validation",
+  "test_start": "2017-08-03 00:00:00",
+  "cv": {
+    "strategy": "expanding_window",
+    "n_splits": 5,
+    "test_size": 2160,
+    "gap": 0,
+    "max_train_size": null
+  },
+  "policies": {
+    "shuffle": false,
+    "seal_final_test": true,
+    "persist_full_split_datasets": false
+  }
+}

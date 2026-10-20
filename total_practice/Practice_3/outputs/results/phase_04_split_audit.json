@@ -1,0 +1,158 @@
+{
+  "phase": "phase_04_temporal_split_validation",
+  "entry_gate": {
+    "phase_01": "PASS",
+    "phase_02": "PASS",
+    "phase_03": "PASS",
+    "phase_03_reconstruction": "PASS",
+    "validation_config": "PASS",
+    "status": "PASS"
+  },
+  "configuration": {
+    "approved_contract": true,
+    "status": "PASS"
+  },
+  "top_level_split": {
+    "train_rows": 108083,
+    "train_start": "2004-10-08 01:00:00",
+    "train_end": "2017-08-02 23:00:00",
+    "test_rows": 8592,
+    "test_start": "2017-08-03 00:00:00",
+    "test_end": "2018-08-03 00:00:00",
+    "total_rows": 116675,
+    "train_test_disjoint": true,
+    "train_test_complete_union": true,
+    "chronological_boundary": true,
+    "status": "PASS"
+  },
+  "cross_validation": {
+    "strategy": "expanding_window",
+    "n_splits": 5,
+    "test_size": 2160,
+    "gap": 0,
+    "max_train_size": null,
+    "folds": [
+      {
+        "fold": 1,
+        "train_samples": 97283,
+        "validation_samples": 2160,
+        "train_start": "2004-10-08 01:00:00",
+        "train_end": "2016-05-02 22:00:00",
+        "validation_start": "2016-05-02 23:00:00",
+        "validation_end": "2016-07-31 22:00:00"
+      },
+      {
+        "fold": 2,
+        "train_samples": 99443,
+        "validation_samples": 2160,
+        "train_start": "2004-10-08 01:00:00",
+        "train_end": "2016-07-31 22:00:00",
+        "validation_start": "2016-07-31 23:00:00",
+        "validation_end": "2016-10-29 22:00:00"
+      },
+      {
+        "fold": 3,
+        "train_samples": 101603,
+        "validation_samples": 2160,
+        "train_start": "2004-10-08 01:00:00",
+        "train_end": "2016-10-29 22:00:00",
+        "validation_start": "2016-10-29 23:00:00",
+        "validation_end": "2017-01-27 22:00:00"
+      },
+      {
+        "fold": 4,
+        "train_samples": 103763,
+        "validation_samples": 2160,
+        "train_start": "2004-10-08 01:00:00",
+        "train_end": "2017-01-27 22:00:00",
+        "validation_start": "2017-01-27 23:00:00",
+        "validation_end": "2017-05-04 23:00:00"
+      },
+      {
+        "fold": 5,
+        "train_samples": 105923,
+        "validation_samples": 2160,
+        "train_start": "2004-10-08 01:00:00",
+        "train_end": "2017-05-04 23:00:00",
+        "validation_start": "2017-05-05 00:00:00",
+        "validation_end": "2017-08-02 23:00:00"
+      }
+    ],
+    "training_windows_expand": true,
+    "validation_folds_disjoint": true,
+    "final_test_excluded": true,
+    "status": "PASS"
+  },
+  "shared_indices": {
+    "configuration_count": 6,
+    "configuration_names": [
+      "lag_only_p24",
+      "lag_only_p72",
+      "lag_only_p168",
+      "lag_rolling_p24",
+      "lag_rolling_p72",
+      "lag_rolling_p168"
+    ],
+    "shared_top_level_indices": true,
+    "shared_cv_indices": true,
+    "configurations": {
+      "lag_only_p24": {
+        "train_rows": 108083,
+        "test_rows": 8592,
+        "train_test_indices_shared": true,
+        "cv_indices_shared": true,
+        "alignment": "PASS"
+      },
+      "lag_only_p72": {
+        "train_rows": 108083,
+        "test_rows": 8592,
+        "train_test_indices_shared": true,
+        "cv_indices_shared": true,
+        "alignment": "PASS"
+      },
+      "lag_only_p168": {
+        "train_rows": 108083,
+        "test_rows": 8592,
+        "train_test_indices_shared": true,
+        "cv_indices_shared": true,
+        "alignment": "PASS"
+      },
+      "lag_rolling_p24": {
+        "train_rows": 108083,
+        "test_rows": 8592,
+        "train_test_indices_shared": true,
+        "cv_indices_shared": true,
+        "alignment": "PASS"
+      },
+      "lag_rolling_p72": {
+        "train_rows": 108083,
+        "test_rows": 8592,
+        "train_test_indices_shared": true,
+        "cv_indices_shared": true,
+        "alignment": "PASS"
+      },
+      "lag_rolling_p168": {
+        "train_rows": 108083,
+        "test_rows": 8592,
+        "train_test_indices_shared": true,
+        "cv_indices_shared": true,
+        "alignment": "PASS"
+      }
+    },
+    "status": "PASS"
+  },
+  "final_test": {
+    "sealed": true,
+    "used_for_feature_selection": false,
+    "used_for_tuning": false,
+    "used_for_model_selection": false,
+    "metrics_computed": false,
+    "status": "PASS"
+  },
+  "determinism": {
+    "deterministic_split": true,
+    "status": "PASS"
+  },
+  "full_split_datasets_persisted": false,
+  "status": "PASS"
+}
