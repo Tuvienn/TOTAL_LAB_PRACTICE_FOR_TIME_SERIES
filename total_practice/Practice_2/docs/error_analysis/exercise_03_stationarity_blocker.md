@@ -1,6 +1,6 @@
-# EXERCISE 03 — STATIONARITY BLOCKER ANALYSIS
+# EXERCISE 03 — PHÂN TÍCH ĐIỂM CHẶN STATIONARITY
 
-## 1. Issue Identity
+## 1. Thông tin vấn đề
 
 ```text
 Practice: Practice_2
@@ -11,7 +11,7 @@ Downstream impact: EXERCISE_04_HANDOFF_OPEN=false
 Review scope: Practice_2_present.ipynb and Practice2_latest.ipynb
 ```
 
-## 2. Expected Behavior
+## 2. Hành vi kỳ vọng
 
 Exercise 3 phải:
 
@@ -23,9 +23,9 @@ Exercise 3 phải:
 5. chỉ chốt `d=1` và mở handoff sang E04 khi stationarity được actual evidence hỗ trợ;
 6. giữ `selected_d=REVIEW_REQUIRED` và dừng trước E04 nếu `p-value > 0.05`.
 
-## 3. Observed Behavior
+## 3. Hành vi quan sát được
 
-### 3.1. Canonical notebook: `Practice_2_present.ipynb`
+### 3.1. Notebook chính: `Practice_2_present.ipynb`
 
 ```text
 full observations: 204
@@ -49,7 +49,7 @@ Notebook present thực hiện đúng boundary, differencing và stop condition.
 first-differenced training series chưa có evidence stationary nên E03 chưa đạt
 Scientific Handoff Gate.
 
-### 3.2. Legacy notebook: `Practice2_latest.ipynb`
+### 3.2. Notebook cũ: `Practice2_latest.ipynb`
 
 ```text
 differencing input: full series
@@ -67,7 +67,7 @@ observations thuộc test period. Sau khi E03 vẫn có `p-value > 0.05`, notebo
 tiếp tục chạy ACF/PACF và trình bày `d=1`. Hành vi đó vi phạm leakage boundary và
 stationarity gate hiện hành.
 
-## 4. Confirmed Findings
+## 4. Kết quả đã xác nhận
 
 1. Chronological split 163/41 của notebook present là đúng và không shuffle.
 2. First-order differencing được tính đúng theo `y_t - y_(t-1)`.
@@ -78,28 +78,28 @@ stationarity gate hiện hành.
 6. `d=1` chưa hợp lệ theo evidence hiện tại.
 7. Notebook present dừng đúng với `REVIEW_REQUIRED`; notebook legacy tiếp tục E04 sai protocol.
 
-## 5. Root-Cause Analysis
+## 5. Phân tích nguyên nhân gốc
 
-### 5.1. Confirmed scientific root cause
+### 5.1. Nguyên nhân khoa học đã xác nhận
 
 Regular first-order differencing trên raw scale không đủ tạo stationary evidence cho
 training series. Vấn đề không nằm ở phép tính `.diff()` hoặc xử lý `NaN`; vấn đề là
 transformation hiện tại chưa xử lý đầy đủ cấu trúc của chuỗi.
 
-### 5.2. Likely contributing characteristics
+### 5.2. Đặc điểm có khả năng đóng góp vào vấn đề
 
 EDA cho thấy level tăng, biên độ biến động tăng theo level và có pattern mùa vụ hàng
 năm. Các đặc điểm này có thể làm first difference trên raw scale vẫn giữ variance
 không ổn định hoặc seasonal dependence. Đây là giả thuyết cần kiểm tra trong fix plan,
 không phải kết luận đã được phê duyệt.
 
-### 5.3. Confirmed legacy workflow root cause
+### 5.3. Nguyên nhân từ workflow cũ đã xác nhận
 
 Notebook legacy xác lập holdout boundary quá muộn. ADF, differencing và ACF/PACF đã
 dùng full series trước khi split tại E05. Sau đó notebook hard-code cách diễn giải
 `d=1` dù ADF retest chưa reject H0.
 
-### 5.4. Reproducibility gaps
+### 5.4. Khoảng trống về reproducibility
 
 - `run_adf()` đang dựa vào default `regression="c"` thay vì truyền tham số tường minh.
 - Notebook present hiện không lưu rendered code output, nên evidence phải đối chiếu
@@ -108,7 +108,7 @@ dùng full series trước khi split tại E05. Sau đó notebook hard-code các
 Hai điểm này không làm thay đổi các con số ADF hiện tại nhưng phải được xử lý trong
 fix scope để handoff có thể tái tạo và review.
 
-## 6. Impact
+## 6. Tác động
 
 ```text
 E03 technical execution: validated
@@ -123,7 +123,7 @@ Nếu tiếp tục E04 từ first-differenced raw training series hiện tại, 
 diễn giải trên một input chưa đạt stationarity gate. Nếu tiếp tục từ notebook legacy,
 kết quả còn bị test contamination.
 
-## 7. Diagnostic Evidence for the Next Plan
+## 7. Bằng chứng diagnostics cho kế hoạch tiếp theo
 
 Một kiểm tra read-only trên training data xác nhận tất cả training values đều dương.
 Khi thử `log(train_series)` rồi first difference và chạy ADF với cùng cấu hình:
@@ -140,7 +140,7 @@ plan. Đây chưa phải canonical E03 result và không tự động mở E04.
 Second regular differencing hoặc seasonal differencing chỉ được xem xét sau khi phân
 tích risk over-differencing và phân biệt rõ regular order `d` với seasonal order `D`.
 
-## 8. Required Decision Before Fixing
+## 8. Quyết định cần có trước khi sửa
 
 Human cần duyệt một fix plan riêng để chọn transformation protocol. Fix plan tối thiểu
 phải xác định:
@@ -153,23 +153,23 @@ phải xác định:
 - stop condition nếu candidate vẫn không stationary;
 - notebook, source, tests, outputs và state files được phép sửa.
 
-## 9. Future Fix Acceptance Criteria
+## 9. Tiêu chí nghiệm thu của bản sửa
 
 ```text
-[ ] Only the 163-observation training series is used
-[ ] Test values remain sealed
-[ ] Transformation protocol is Human-approved
-[ ] Transformation scale and differencing order are recorded
-[ ] NaN count and timestamp alignment are validated
-[ ] ADF uses alpha=0.05, regression="c", autolag="AIC"
-[ ] ADF statistic, p-value, critical values, lag and observations are saved
-[ ] Stationarity conclusion is based on actual execution
-[ ] d is selected only when supported by evidence
-[ ] Notebook is executed from a clean kernel and outputs are inspected
-[ ] E04 remains untouched until the Scientific Handoff Gate passes
+[ ] Chỉ sử dụng 163 quan sát thuộc tập train
+[ ] Giá trị test tiếp tục được niêm phong
+[ ] Transformation protocol được Human phê duyệt
+[ ] Ghi lại transformation scale và differencing order
+[ ] Xác nhận số lượng NaN và timestamp alignment
+[ ] ADF dùng alpha=0.05, regression="c", autolag="AIC"
+[ ] Lưu ADF statistic, p-value, critical values, lag và số quan sát
+[ ] Kết luận stationarity dựa trên kết quả thực thi
+[ ] Chỉ chọn d khi evidence hỗ trợ
+[ ] Notebook được chạy từ kernel sạch và output được kiểm tra
+[ ] Không chạm E04 trước khi Scientific Handoff Gate đạt
 ```
 
-## 10. Stop Condition
+## 10. Điều kiện dừng
 
 Không sửa hoặc chạy tiếp E04/E05 từ kết quả E03 hiện tại. Bước kế tiếp là lập và
 Human duyệt fix plan cho E03; chỉ sau khi fix được triển khai, kiểm chứng và cập nhật

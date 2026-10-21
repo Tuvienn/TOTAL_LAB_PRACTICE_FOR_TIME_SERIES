@@ -1,6 +1,6 @@
-# EXERCISE 03 — STATIONARITY FIX PLAN
+# EXERCISE 03 — KẾ HOẠCH SỬA STATIONARITY
 
-## 1. Plan Identity
+## 1. Thông tin kế hoạch
 
 ```text
 Practice: Practice_2
@@ -13,7 +13,7 @@ E04 handoff: OPEN_FOR_REVIEW
 E04/E05 modification: NOT ALLOWED
 ```
 
-## 2. Objective
+## 2. Mục tiêu
 
 Tạo một stationary training series có evidence để bàn giao cho E04 mà không dùng
 test observations, không sửa raw data và không tự tăng differencing order chỉ để đạt
@@ -31,7 +31,7 @@ original training series
 → stationarity and d decision
 ```
 
-## 3. Current Evidence
+## 3. Bằng chứng hiện tại
 
 Attempt hiện tại dùng first difference trên raw training scale:
 
@@ -56,9 +56,9 @@ decision: reject H0 at alpha=0.05
 Diagnostic này chỉ hỗ trợ lựa chọn candidate; implementation phải chạy lại từ
 kernel/process sạch và không được hard-code kết quả dự kiến.
 
-## 4. Scope
+## 4. Phạm vi
 
-### 4.1. Files allowed to modify after approval
+### 4.1. File được phép chỉnh sửa sau khi phê duyệt
 
 ```text
 total_practice/Practice_2/src/practice_2/analysis/stationarity.py
@@ -75,7 +75,7 @@ total_practice/Practice_2/outputs/results/
 Nếu test E3 được tách thành file riêng theo pattern hiện có, việc tạo file test mới
 phải được ghi rõ trong implementation report.
 
-### 4.2. Files and responsibilities excluded
+### 4.2. File và trách nhiệm ngoài phạm vi
 
 ```text
 datasets/raw/a10.csv
@@ -88,7 +88,7 @@ repository and Practice architecture rules
 
 Không dùng notebook legacy làm canonical owner và không sửa notebook legacy trong fix này.
 
-## 5. Approved Scientific Boundary Proposed by This Plan
+## 5. Ranh giới khoa học được kế hoạch đề xuất
 
 ```text
 input: original training series from E01
@@ -107,9 +107,9 @@ forecasting: NO
 Giá trị `d=1` chỉ mô tả regular differencing trên log-transformed training series.
 Notebook và outputs phải ghi rõ analysis scale là `log` để tránh diễn giải như raw scale.
 
-## 6. Planned Changes
+## 6. Thay đổi đã lên kế hoạch
 
-### Step 1 — Synchronize the E03 Contract
+### Bước 1 — Đồng bộ E3 contract
 
 Cập nhật E03 specification và before-process plan để ghi nhận protocol đã được Human
 duyệt: log transformation trước first differencing, training-only boundary, output
@@ -117,7 +117,7 @@ contract, validation criteria và stop conditions.
 
 Không đổi E01/E02 results và không mở E04 ở bước này.
 
-### Step 2 — Make ADF Configuration Explicit
+### Bước 2 — Khai báo tường minh cấu hình ADF
 
 Cập nhật reusable ADF owner để truyền tường minh:
 
@@ -128,7 +128,7 @@ autolag="AIC"
 
 Không thay đổi `alpha=0.05` và không đổi decision rule.
 
-### Step 3 — Add the Approved Transformation Path
+### Bước 3 — Bổ sung transformation path đã phê duyệt
 
 Đặt reusable transformation logic trong `src/practice_2/analysis/` theo ownership
 hiện tại. Logic phải:
@@ -142,7 +142,7 @@ hiện tại. Logic phải:
 
 Không duplicate logic trong notebook.
 
-### Step 4 — Update the E03 Notebook Orchestration
+### Bước 4 — Cập nhật notebook orchestration của E3
 
 Trong `Practice_2_present.ipynb`:
 
@@ -159,7 +159,7 @@ Trong `Practice_2_present.ipynb`:
 
 Notebook phải chạy tuần tự từ kernel sạch và không phụ thuộc hidden state.
 
-### Step 5 — Preserve Failed Evidence and Create New Evidence
+### Bước 5 — Giữ failed evidence và tạo evidence mới
 
 Giữ các output raw-first-difference hiện tại làm evidence cho failed attempt:
 
@@ -187,7 +187,7 @@ outputs/results/differencing_decision.csv
 Decision artifact phải ghi tối thiểu transformation, regular differencing order,
 ADF statistic, p-value, alpha, decision và handoff state.
 
-### Step 6 — Add Regression Tests
+### Bước 6 — Bổ sung regression test
 
 Test phải xác nhận:
 
@@ -205,7 +205,7 @@ Test phải xác nhận:
 
 Float comparisons phải dùng tolerance, không so sánh tuyệt đối.
 
-### Step 7 — Execute and Inspect
+### Bước 7 — Thực thi và kiểm tra
 
 Thứ tự validation:
 
@@ -221,7 +221,7 @@ targeted unit tests
 
 Không coi việc code chạy không exception là đủ để mở handoff.
 
-### Step 8 — Update Evidence and State
+### Bước 8 — Cập nhật evidence và trạng thái
 
 Nếu acceptance criteria đạt:
 
@@ -237,7 +237,7 @@ Nếu acceptance criteria không đạt:
 - giữ E04 handoff đóng;
 - ghi actual blocker mới và dừng.
 
-## 7. Decision Rule
+## 7. Quy tắc quyết định
 
 ```text
 p-value <= 0.05
@@ -258,9 +258,9 @@ OR leakage is detected
 → STOP and report
 ```
 
-## 8. Alternatives Considered
+## 8. Các phương án đã cân nhắc
 
-### Option A — Log transformation plus first difference
+### Phương án A — Log transformation kết hợp first difference
 
 ```text
 Status: RECOMMENDED
@@ -269,7 +269,7 @@ Evidence: diagnostic p-value 0.004720 on training data
 Risk: forecasts and interpretation later require explicit back-transformation handling
 ```
 
-### Option B — Second regular difference on raw scale
+### Phương án B — Regular difference bậc hai trên raw scale
 
 ```text
 Status: NOT SELECTED AS FIRST FIX
@@ -278,7 +278,7 @@ Risk: over-differencing, noisier series and less stable model interpretation
 Requirement: separate approval and over-differencing diagnostics
 ```
 
-### Option C — Seasonal differencing
+### Phương án C — Seasonal differencing
 
 ```text
 Status: NOT SELECTED IN THIS FIX
@@ -287,42 +287,42 @@ Risk: introduces seasonal order D and changes the non-seasonal E03/E04 contract
 Requirement: separate scope decision that distinguishes d from D
 ```
 
-## 9. Risks and Controls
+## 9. Rủi ro và biện pháp kiểm soát
 
-| Risk | Control |
+| Rủi ro | Biện pháp kiểm soát |
 |---|---|
-| Test leakage | Construct transformation only from `train_series` and assert boundary |
-| Hidden notebook state | Restart kernel and run sequentially |
-| Hard-coded favorable result | Derive decision from actual ADF output |
-| Over-differencing | Do not introduce `d=2` without separate approval |
-| Confusing raw and log scales | Encode transformation in variable, plot, table and artifact names |
-| Output provenance loss | Preserve failed raw-difference outputs separately |
-| Reproducibility drift | Pass ADF configuration explicitly and test it |
-| Premature E04 work | Verify E04/E05 remain unchanged before reporting |
+| Test leakage | Chỉ tạo transformation từ `train_series` và assert boundary |
+| Hidden notebook state | Restart kernel và chạy tuần tự |
+| Hard-code kết quả thuận lợi | Suy ra quyết định từ actual ADF output |
+| Over-differencing | Không dùng `d=2` nếu chưa có phê duyệt riêng |
+| Nhầm raw scale với log scale | Ghi transformation trong tên biến, plot, table và artifact |
+| Mất output provenance | Lưu failed raw-difference output riêng biệt |
+| Reproducibility drift | Truyền tường minh cấu hình ADF và kiểm thử |
+| Triển khai E4 quá sớm | Xác nhận E4/E5 không đổi trước khi báo cáo |
 
-## 10. Acceptance Criteria
+## 10. Tiêu chí nghiệm thu
 
 ```text
-[x] Human approved this fix plan
-[x] E03 specification and before-process contract are synchronized
-[x] Only the 163-observation training series is transformed
-[x] The 41-observation test series remains sealed
-[x] Raw dataset checksum is unchanged
-[x] All training values are validated as positive before log
-[x] Log first difference has 162 observations
-[x] Exactly one differencing NaN is removed
-[x] Timestamp alignment is correct
-[x] ADF uses alpha=0.05, regression="c", autolag="AIC"
-[x] ADF outputs and critical values are saved from actual execution
-[x] Stationarity decision is derived from actual evidence
-[x] d is not hard-coded
-[x] Tests pass
-[x] Notebook runs from a clean kernel through E03
-[x] Notebook outputs are saved and inspected
-[x] E04/E05 files and outputs are not modified
+[x] Human đã phê duyệt fix plan
+[x] E3 specification và before-process contract đã đồng bộ
+[x] Chỉ transform 163 quan sát train
+[x] 41 quan sát test tiếp tục được niêm phong
+[x] Raw dataset checksum không đổi
+[x] Mọi giá trị train được xác nhận dương trước khi log
+[x] Log first difference có 162 quan sát
+[x] Loại đúng một NaN do differencing
+[x] Timestamp alignment đúng
+[x] ADF dùng alpha=0.05, regression="c", autolag="AIC"
+[x] Lưu ADF output và critical values từ lần chạy thực tế
+[x] Quyết định stationarity được suy ra từ actual evidence
+[x] Không hard-code d
+[x] Test đạt
+[x] Notebook chạy từ kernel sạch qua E3
+[x] Notebook output được lưu và kiểm tra
+[x] Không sửa file và output của E4/E5
 ```
 
-## 11. Stop Conditions
+## 11. Điều kiện dừng
 
 Phải dừng và báo Human nếu:
 
@@ -336,7 +336,7 @@ Phải dừng và báo Human nếu:
 - implementation cần chạm E04/E05;
 - actual result mâu thuẫn với specification hoặc rule hiện hành.
 
-## 12. Approval Gate
+## 12. Approval gate
 
 ```text
 E03_FIX_PLAN_CREATED=true

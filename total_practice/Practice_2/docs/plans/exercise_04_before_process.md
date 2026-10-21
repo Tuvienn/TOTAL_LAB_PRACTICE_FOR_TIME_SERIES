@@ -1,6 +1,6 @@
-# EXERCISE 04 — BEFORE-PROCESS PLAN
+# EXERCISE 04 — KẾ HOẠCH TRƯỚC KHI THỰC THI
 
-## 1. Plan Identity
+## 1. Thông tin kế hoạch
 
 ```text
 Practice: Practice_2
@@ -8,10 +8,10 @@ Exercise ID: EXERCISE_04
 Topic: ACF/PACF and ARIMA Candidate Identification
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: DRAFT_WAITING_HUMAN_REVIEW
-Implementation authorized: NO
+Status: IMPLEMENTED_AND_VALIDATED
+Implementation authorized: YES
 Upstream handoff: EXERCISE_03_COMPLETED_WITH_LOG_TRANSFORMATION
-Downstream gate: CLOSED_PENDING_E04_VALIDATION
+Downstream gate: OPEN_FOR_E05
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_04_execution.md
 ```
@@ -19,7 +19,7 @@ Execution evidence: docs/logs/exercise_04_execution.md
 File này chỉ mô tả kế hoạch chi tiết cho E04. Việc tạo plan không cho phép triển khai
 code, chỉnh notebook, tạo output hoặc mở handoff sang E05 khi chưa có Human approval.
 
-## 2. Objective
+## 2. Mục tiêu
 
 - phân tích ACF và PACF của stationary training series do E03 bàn giao;
 - xác định các lag ngắn và lag mùa vụ đáng chú ý;
@@ -28,7 +28,7 @@ code, chỉnh notebook, tạo output hoặc mở handoff sang E05 khi chưa có 
 - xác định từ một đến hai ARIMA candidates để bàn giao cho E05;
 - không fit model, forecast, mở test set hoặc triển khai SARIMA trong E04.
 
-## 3. Required Documents
+## 3. Tài liệu bắt buộc
 
 ```text
 working_rule.md
@@ -52,7 +52,7 @@ total_practice/Practice_2/docs/status/current_status.md
 Nếu thiếu tài liệu, upstream evidence hoặc có conflict:
 `STOP → report issue → chờ Human quyết định`.
 
-## 4. Upstream Input Contract
+## 4. Input contract từ bước trước
 
 ```text
 Source series: original training series from E01
@@ -72,7 +72,7 @@ Stationarity supported: true on transformed training scale
 E04 không được sử dụng `df_diff1` từ `Practice2_latest.ipynb`, full series, raw
 first-differenced series hoặc bất kỳ test observation nào.
 
-## 5. Scientific Parameters
+## 5. Tham số khoa học
 
 ```text
 ACF maximum lag: 36
@@ -95,7 +95,7 @@ Ba mươi sáu lag bao phủ ba chu kỳ năm của dữ liệu monthly và vẫ
 quan sát transformed training. ACF/PACF chỉ cung cấp evidence để đề xuất candidates,
 không tự động xác nhận final model.
 
-## 6. Files Allowed to Create or Modify
+## 6. File được phép tạo hoặc chỉnh sửa
 
 Sau khi plan được Human phê duyệt, E04 chỉ được phép tạo hoặc cập nhật:
 
@@ -117,7 +117,7 @@ docs/status/current_status.md
 
 Không tạo duplicate module nếu reusable owner tương đương đã tồn tại.
 
-## 7. Files Not to Modify
+## 7. File không được chỉnh sửa
 
 ```text
 datasets/raw/a10.csv
@@ -134,11 +134,11 @@ unrelated Practice/Lab files
 ```
 
 Nếu cần sửa ngoài scope:
-`STOP → explain reason and impact → propose scope update → wait for approval`.
+`STOP → giải thích lý do và tác động → đề xuất cập nhật phạm vi → chờ phê duyệt`.
 
-## 8. Planned Reusable Logic
+## 8. Reusable logic đã lên kế hoạch
 
-### 8.1. Correlation Analysis Owner
+### 8.1. Owner của correlation analysis
 
 Tạo `src/practice_2/analysis/correlation.py` với trách nhiệm:
 
@@ -160,7 +160,7 @@ ci_upper
 significant
 ```
 
-### 8.2. Visualization Owner
+### 8.2. Owner của visualization
 
 Mở rộng approved visualization owner để tạo một figure gồm:
 
@@ -177,14 +177,14 @@ Figure phải:
 - hỗ trợ nhận diện các lag 12, 24 và 36;
 - được inspect trước khi viết interpretation.
 
-## 9. Sequential Execution Steps
+## 9. Các bước thực thi tuần tự
 
-### Step 1 — Verify Repository and Approval State
+### Bước 1 — Xác minh repository và trạng thái approval
 
 Xác minh required documents, E03 completion, E04 plan approval và current status.
 Nếu plan chưa được Human phê duyệt thì không triển khai bước tiếp theo.
 
-### Step 2 — Verify E03 Handoff
+### Bước 2 — Xác minh E3 handoff
 
 Tái tạo approved E03 input bằng reusable source logic và xác minh:
 
@@ -200,12 +200,12 @@ ADF decision = reject H0 at alpha 0.05
 
 Nếu bất kỳ điều kiện nào không đạt thì STOP.
 
-### Step 3 — Compute ACF/PACF Evidence
+### Bước 3 — Tính ACF/PACF evidence
 
 Tính ACF/PACF trên đúng `log_first_differenced_training` với configuration đã chốt.
 Không truy cập test values để tính correlation hoặc chọn candidate.
 
-### Step 4 — Save Machine-Readable Results
+### Bước 4 — Lưu machine-readable result
 
 Lưu:
 
@@ -216,7 +216,7 @@ outputs/results/pacf_log_first_differenced.csv
 
 Mỗi output phải chứa lag, correlation, confidence interval và significant flag.
 
-### Step 5 — Create and Inspect Figure
+### Bước 5 — Tạo và kiểm tra figure
 
 Tạo:
 
@@ -226,7 +226,7 @@ outputs/figures/03_acf_pacf_log_first_differenced.png
 
 Inspect actual plot; không viết kết luận từ expected pattern hoặc notebook legacy.
 
-### Step 6 — Interpret Actual Lag Structure
+### Bước 6 — Diễn giải cấu trúc lag thực tế
 
 Trả lời từ actual tables và figure:
 
@@ -238,7 +238,7 @@ Trả lời từ actual tables và figure:
 
 Không dùng một spike đơn lẻ để tuyên bố model chắc chắn đúng.
 
-### Step 7 — Propose ARIMA Candidates
+### Bước 7 — Đề xuất ARIMA candidate
 
 Chọn từ một đến hai candidates sau khi actual evidence được inspect. Candidate phải:
 
@@ -269,7 +269,7 @@ pacf_evidence
 status
 ```
 
-### Step 8 — Update Canonical Notebook
+### Bước 8 — Cập nhật canonical notebook
 
 Thêm E04 vào `Practice_2_present.ipynb` theo cấu trúc ngắn:
 
@@ -285,37 +285,39 @@ Thêm E04 vào `Practice_2_present.ipynb` theo cấu trúc ngắn:
 Notebook chỉ trình bày input metadata ngắn, figure, bảng lag cần thiết, candidate
 table và kết luận ngắn. Không chép theory, rules hoặc plan vào notebook.
 
-### Step 9 — Run Validation
+### Bước 9 — Chạy validation
 
-Chạy targeted tests, full relevant tests và notebook từ clean kernel. Inspect figure,
-CSV, notebook output, execution order và absence of errors.
+Chạy targeted tests, full relevant tests và canonical setup + E04 từ clean kernel
+trong một execution notebook cô lập. Chỉ merge output của các cell E04 về notebook
+chính; không chạy hoặc thay đổi E05/E06. Inspect figure, CSV, notebook output,
+execution order và absence of errors.
 
-### Step 10 — Update Execution Evidence
+### Bước 10 — Cập nhật execution evidence
 
 Chỉ sau khi validation đạt mới tạo execution log và cập nhật current status bằng
 actual result. Không ghi candidate, significant lag hoặc completion state trước execution.
 
-## 10. Test Plan
+## 10. Kế hoạch kiểm thử
 
 Tests tối thiểu:
 
 ```text
-[ ] E04 uses exactly 162 log-first-differenced training observations
-[ ] No test timestamp appears in E04 input
-[ ] Empty input is rejected
-[ ] Input containing NaN is rejected
-[ ] Output covers the approved lag range
-[ ] PACF method is ywm
-[ ] Confidence level is 95%
-[ ] Significant flag agrees with the confidence interval
-[ ] Lag 0 is excluded from p/q interpretation
-[ ] Candidate inherits natural_log and d = 1
-[ ] Candidate count is between 1 and 2
-[ ] Raw dataset checksum is unchanged
-[ ] E05/E06 remain unmodified
+[x] E04 uses exactly 162 log-first-differenced training observations
+[x] No test timestamp appears in E04 input
+[x] Empty input is rejected
+[x] Input containing NaN is rejected
+[x] Output covers the approved lag range
+[x] PACF method is ywm
+[x] Confidence level is 95%
+[x] Significant flag agrees with the confidence interval
+[x] Lag 0 is excluded from p/q interpretation
+[x] Candidate inherits natural_log and d = 1
+[x] Candidate count is between 1 and 2
+[x] Raw dataset checksum is unchanged
+[x] E05/E06 remain unmodified
 ```
 
-## 11. Required Outputs
+## 11. Output bắt buộc
 
 ```text
 outputs/figures/03_acf_pacf_log_first_differenced.png
@@ -324,7 +326,7 @@ outputs/results/pacf_log_first_differenced.csv
 outputs/results/arima_candidates.csv
 ```
 
-Required notebook evidence:
+Bằng chứng bắt buộc trong notebook:
 
 ```text
 input series identity and observation count
@@ -334,27 +336,27 @@ one or two provisional ARIMA candidates
 concise limitation about remaining seasonal dependence when present
 ```
 
-## 12. Acceptance Criteria
+## 12. Tiêu chí nghiệm thu
 
 ```text
-[ ] E03 handoff is reproduced and validated
-[ ] Only transformed training series is analyzed
-[ ] Test set remains sealed
-[ ] ACF/PACF configuration is explicit
-[ ] ACF/PACF tables are created and inspected
-[ ] Combined figure is created and inspected
-[ ] Lag interpretation is based on actual evidence
-[ ] One or two ARIMA candidates have traceable rationale
-[ ] d = 1 and natural_log are inherited correctly
-[ ] No model is fitted or forecast is generated
-[ ] Tests pass
-[ ] Notebook runs from a clean kernel without errors
-[ ] Outputs match notebook values
-[ ] Raw data remains unchanged
-[ ] E05/E06 are not modified
+[x] E3 handoff được tái tạo và xác nhận
+[x] Chỉ phân tích transformed training series
+[x] Test set tiếp tục được niêm phong
+[x] Cấu hình ACF/PACF được khai báo tường minh
+[x] Bảng ACF/PACF được tạo và kiểm tra
+[x] Combined figure được tạo và kiểm tra
+[x] Diễn giải lag dựa trên actual evidence
+[x] Một hoặc hai ARIMA candidate có rationale truy vết được
+[x] Kế thừa đúng d = 1 và natural_log
+[x] Không fit model hoặc tạo forecast
+[x] Test đạt
+[x] Canonical setup + E4 chạy từ kernel sạch, không có lỗi
+[x] Output khớp giá trị notebook
+[x] Raw data không đổi
+[x] Không sửa E5/E6
 ```
 
-## 13. Stop Conditions
+## 13. Điều kiện dừng
 
 Phải dừng E04 nếu:
 
@@ -379,9 +381,9 @@ Khi dừng:
 5. Chờ Human approval.
 ```
 
-## 14. Risks and Limitations
+## 14. Rủi ro và giới hạn
 
-| Risk | Control |
+| Rủi ro | Biện pháp kiểm soát |
 |---|---|
 | Dùng nhầm full series hoặc raw difference | Validate identity, length, timestamps và E03 ADF handoff |
 | Diễn giải ACF/PACF quá chắc chắn | Ghi candidates là provisional và yêu cầu E05 diagnostics |
@@ -390,7 +392,7 @@ Khi dừng:
 | Notebook trở lại quá nhiều chữ | Chỉ giữ figure, bảng cần thiết và kết luận ngắn |
 | Output và notebook lệch nhau | Clean-kernel execution và CSV/notebook comparison |
 
-## 15. Downstream Handoff to E05
+## 15. Handoff sang E5
 
 E04 chỉ được mở handoff sang E05 khi:
 
@@ -415,17 +417,17 @@ one or two provisional ARIMA candidates
 remaining seasonal-lag limitation when applicable
 ```
 
-## 16. Approval Gate
+## 16. Approval gate
 
 ```text
 EXERCISE_04_BEFORE_PROCESS_CREATED=true
-EXERCISE_04_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_04_BEFORE_PROCESS_APPROVED=false
-EXERCISE_04_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_04_IMPLEMENTED=false
-EXERCISE_04_VALIDATED=false
-EXERCISE_04_COMPLETED=false
-EXERCISE_05_HANDOFF_OPEN=false
+EXERCISE_04_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_04_BEFORE_PROCESS_APPROVED=true
+EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_04_IMPLEMENTED=true
+EXERCISE_04_VALIDATED=true
+EXERCISE_04_COMPLETED=true
+EXERCISE_05_HANDOFF_OPEN=true
 ```
 
-Human approval is required before any E04 implementation begins.
+Approval gate của E4 đã được Human thông qua trước khi implementation bắt đầu.

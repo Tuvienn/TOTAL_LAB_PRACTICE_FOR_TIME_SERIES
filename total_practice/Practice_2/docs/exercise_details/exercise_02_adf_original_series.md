@@ -1,6 +1,6 @@
-# EXERCISE 02 — ADF TEST ON ORIGINAL SERIES
+# EXERCISE 02 — KIỂM ĐỊNH ADF TRÊN CHUỖI GỐC
 
-## 1. Exercise Identity
+## 1. Thông tin bài tập
 
 ```text
 Practice: Practice_2
@@ -15,7 +15,7 @@ Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_02_execution.md
 ```
 
-## 2. Objective
+## 2. Mục tiêu
 
 Mục tiêu của bài tập:
 
@@ -28,7 +28,7 @@ Mục tiêu của bài tập:
 
 Exercise 2 không differencing, không chọn `d`, không chạy ACF/PACF và không fit model.
 
-## 3. Input
+## 3. Dữ liệu đầu vào
 
 ```text
 Source: validated original training series from Exercise 1
@@ -42,7 +42,7 @@ Significance level α: 0.05
 ADF phải chạy trên original untransformed training series, không chạy trên full series
 khi test observations đã bị sealed và không chạy trên differenced series.
 
-## 4. Required Steps
+## 4. Các bước bắt buộc
 
 1. Verify Exercise 1 handoff, training boundary và sealed test set.
 2. Load original training series từ validated working representation.
@@ -53,7 +53,7 @@ khi test observations đã bị sealed và không chạy trên differenced serie
 7. Kết luận original training series là stationary hoặc non-stationary.
 8. Lưu actual result và narrative interpretation.
 
-## 5. Scientific Method
+## 5. Phương pháp khoa học
 
 ADF kiểm tra null hypothesis rằng chuỗi có unit root. Với `α = 0.05`:
 
@@ -65,7 +65,7 @@ p-value > 0.05 → fail to reject H₀ → insufficient evidence of stationarity
 “Fail to reject” không được diễn giải thành proof tuyệt đối rằng chuỗi non-stationary.
 Kết luận phải dựa trên actual ADF output.
 
-## 6. Scientific Parameters
+## 6. Tham số khoa học
 
 ```text
 Test: Augmented Dickey-Fuller
@@ -79,7 +79,7 @@ Model training: NO
 Forecast generation: NO
 ```
 
-## 7. Expected Outputs
+## 7. Output dự kiến
 
 ```text
 outputs/results/adf_original_series.csv
@@ -102,7 +102,7 @@ Narrative output phải trả lời đúng ba câu hỏi của đề.
 Execution result phải được truy vết qua `docs/logs/exercise_02_execution.md` và
 `docs/status/current_status.md`; specification này không thay thế execution evidence.
 
-## 8. Interpretation Questions
+## 8. Câu hỏi diễn giải
 
 1. `H₀` của ADF là gì?
 2. p-value cho biết điều gì?
@@ -110,7 +110,7 @@ Execution result phải được truy vết qua `docs/logs/exercise_02_execution
 
 Không được viết kết luận trước khi actual ADF result được tạo và inspect.
 
-## 9. Validation Criteria
+## 9. Tiêu chí xác nhận
 
 ```text
 [ ] Exercise 1 handoff được xác minh
@@ -129,7 +129,7 @@ Không được viết kết luận trước khi actual ADF result được tạ
 [ ] Không fabricate statistical result
 ```
 
-## 10. Stop Conditions
+## 10. Điều kiện dừng
 
 Phải dừng nếu Exercise 1 chưa có validated training series, test leakage xảy ra,
 ADF input không đúng original series, ADF computation fail, output thiếu thông tin
@@ -137,7 +137,7 @@ cần thiết, significance level cần đổi ngoài specification hoặc depen
 
 Khi dừng: `STOP → document issue → explain impact → propose next action → wait for approval`.
 
-## 11. Completion Condition
+## 11. Điều kiện hoàn thành
 
 ```text
 original training series validated
@@ -149,7 +149,7 @@ AND output inspected
 AND no unresolved blocking issue
 ```
 
-## 12. Downstream Role
+## 12. Vai trò đối với bước sau
 
-Kết quả Exercise 2 cung cấp stationarity evidence cho Exercise 3 — Differencing and
-ADF Retest. Exercise 2 không tự chọn `d` và không xác nhận ARIMA model.
+Kết quả E2 cung cấp stationarity evidence cho E3 — Differencing và kiểm định lại
+ADF. E2 không tự chọn `d` và không xác nhận ARIMA model.

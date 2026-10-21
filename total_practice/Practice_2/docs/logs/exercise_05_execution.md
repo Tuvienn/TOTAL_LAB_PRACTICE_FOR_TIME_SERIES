@@ -1,111 +1,123 @@
-# EXERCISE 05 — ARIMA EXECUTION EVIDENCE LOG
+# EXERCISE 05 — NHẬT KÝ THỰC THI
 
-## Record Status
-
-```text
-record type: retrospective record of persisted notebook output
-execution owner: Human-reported notebook run
-execution timestamp: not available in the persisted evidence reviewed
-assistant rerun in this documentation task: no
-formal E05 completion: not established
-upstream E04 handoff/status reconciliation: pending
-```
-
-This log records the E05 results available in
-`notebooks/Practice_2_present.ipynb`. It does not claim clean-kernel
-reproducibility or formal approval. The E05 specification and before-process plan
-remain drafts, and `docs/status/current_status.md` continues to record the E04
-handoff discrepancy.
-
-## Scope and Setup
+## Trạng thái
 
 ```text
-dataset: Monthly Retail Sales (a10.csv)
-observations: 204
-train: 163 observations, 1991-07 through 2005-01
-test: 41 observations, 2005-02 through 2008-06
-split: chronological 80/20; no shuffle
-model fitting input: natural_log of training levels
-ARIMA differencing order: d = 1
-forecast evaluation scale: original sales scale
+execution date: 2026-10-20
+implementation: completed
+validation: passed
+formal completion: confirmed by Human
 ```
 
-The persisted E01 split evidence gives the boundary above. The notebook results
-show two fitted candidates, ARIMA(1,1,1) and ARIMA(2,1,1), and a seasonal-naive
-baseline with period 12. The E04 candidate table available in the same notebook
-contains three provisional candidates, while the E04 specification allows one
-or two. This upstream inconsistency remains unresolved.
+## Input và evaluation contract
 
-## Fit Results
+```text
+dataset: datasets/raw/a10.csv
+full observations: 204
+training observations: 163
+test observations: 41
+train period: 1991-07 through 2005-01
+test period: 2005-02 through 2008-06
+split: chronological 80/20
+shuffle: false
+candidate source: outputs/results/arima_candidates.csv
+candidates: ARIMA(1,1,1), ARIMA(2,1,1)
+fit input: natural log of 163 training levels
+regular differencing order: d=1 inside ARIMA
+trend policy: no drift (`trend='n'`)
+seasonal-naive period: 12
+forecast horizon: 41
+metric scale: original sales scale
+inverse policy: exp(predicted log mean), no bias correction
+test used for candidate selection or fitting: false
+```
 
-| Model | Converged | AIC | BIC | Captured warnings |
-|---|---|---:|---:|---|
-| ARIMA(1,1,1) | Yes | -131.048881 | -121.786092 | None recorded |
-| ARIMA(2,1,1) | Yes | -129.532608 | -117.182223 | None recorded |
+Inverse policy gần tương ứng với conditional-median forecast trên thang gốc và có
+thể thấp hơn conditional mean vì không áp dụng log-normal bias correction. Policy
+này đã được khóa trước formal evaluation run.
 
-Among these two fits, ARIMA(1,1,1) has lower AIC and BIC. This fit criterion
-alone does not establish that it is the better forecasting model.
+## Kết quả fit
 
-## Residual Diagnostics
+| Model | Trend | Drift | Hội tụ | AIC | BIC | Warning |
+|---|---|---:|---:|---:|---:|---|
+| `ARIMA(1,1,1)` | `n` | Không | Có | -131.048881 | -121.786092 | none |
+| `ARIMA(2,1,1)` | `n` | Không | Có | -129.532608 | -117.182223 | none |
 
-| Model | Residual mean | Ljung–Box p-value, lag 12 | Ljung–Box p-value, lag 24 |
-|---|---:|---:|---:|
-| ARIMA(1,1,1) | 0.044193 | 5.969958e-14 | 1.216551e-20 |
-| ARIMA(2,1,1) | 0.044555 | 2.961168e-14 | 1.118366e-20 |
+`ARIMA(1,1,1)` có AIC và BIC thấp hơn. Fit criteria không đủ để khẳng định chất
+lượng forecast hoặc residual adequacy.
 
-At the 0.05 significance level, both models' Ljung–Box results reject the
-no-autocorrelation null at lags 12 and 24. Residual means near zero do not
-override this evidence; neither model's residuals are supported as white noise
-at the tested lags.
+## Residual diagnostics
 
-## Forecast Evaluation
+Quan sát khởi tạo đầu tiên (`loglikelihood_burn=1`) được loại trước khi tính
+residual mean, ACF và Ljung–Box. Mỗi model còn 162 residual observations.
 
-Metrics are reported on the original sales scale for the 41-observation test
-horizon:
+| Model | Residual mean | Lag | model_df | Ljung–Box statistic | p-value | Hỗ trợ white noise |
+|---|---:|---:|---:|---:|---:|---:|
+| `ARIMA(1,1,1)` | 0.036686 | 12 | 2 | 141.289874 | 2.292669e-25 | Không |
+| `ARIMA(1,1,1)` | 0.036686 | 24 | 2 | 253.225577 | 3.259832e-41 | Không |
+| `ARIMA(2,1,1)` | 0.037050 | 12 | 3 | 140.169457 | 9.517944e-26 | Không |
+| `ARIMA(2,1,1)` | 0.037050 | 24 | 3 | 251.126441 | 2.439552e-41 | Không |
+
+Tại `alpha=0.05`, tất cả kiểm định Ljung–Box đều bác bỏ H0 không có
+autocorrelation. Residual ACF cũng có seasonal spike mạnh; chưa candidate nào có
+residual được hỗ trợ là white noise.
+
+## Đánh giá forecast
+
+Tất cả forecast có 41 giá trị và index trùng khớp hoàn toàn với test index.
 
 | Model | MAE | RMSE | MAPE |
 |---|---:|---:|---:|
-| ARIMA(1,1,1) | 3.833290 | 4.865821 | 18.493973% |
-| ARIMA(2,1,1) | 3.806130 | 4.834506 | 18.357607% |
+| `ARIMA(1,1,1)` | 3.833269 | 4.865791 | 18.493908% |
+| `ARIMA(2,1,1)` | 3.806140 | 4.834521 | 18.357642% |
 | Seasonal naive (12) | 4.256436 | 5.186466 | 20.097262% |
 
-Both ARIMA candidates have lower recorded test metrics than the seasonal-naive
-baseline in this holdout. ARIMA(2,1,1) has slightly lower MAE, RMSE, and MAPE;
-ARIMA(1,1,1) has lower AIC and BIC. The multi-step forecasts tend toward a
-near-flat level and do not follow the test-period increase and seasonal peaks
-well.
+Hai ARIMA candidate có MAE, RMSE và MAPE thấp hơn seasonal-naive baseline trên
+holdout này. `ARIMA(2,1,1)` nhỉnh hơn trên ba forecast metrics, còn
+`ARIMA(1,1,1)` tốt hơn theo AIC/BIC.
 
-Largest absolute error recorded for each ARIMA candidate:
+## Sai lệch tuyệt đối lớn nhất
 
 | Model | Timestamp | Actual | Forecast | Absolute error |
 |---|---|---:|---:|---:|
-| ARIMA(1,1,1) | 2008-01-01 | 29.665356 | 17.032661 | 12.632695 |
-| ARIMA(2,1,1) | 2008-01-01 | 29.665356 | 17.073772 | 12.591584 |
+| `ARIMA(1,1,1)` | 2008-01-01 | 29.665356 | 17.032717 | 12.632639 |
+| `ARIMA(2,1,1)` | 2008-01-01 | 29.665356 | 17.073746 | 12.591610 |
+| Seasonal naive (12) | 2008-04-01 | 23.107677 | 12.882645 | 10.225032 |
 
-## Outputs and Validation
+## Diễn giải
 
-Fit, diagnostics, metrics, and largest-error tables are available as persisted
-notebook cell outputs. At the time of this record, dedicated E05 result CSVs and
-exported E05 figures were not present in `outputs/results/` or
-`outputs/figures/`.
+- Giữ nguyên thứ tự thời gian để tránh future leakage; test chỉ là final holdout.
+- Residual mean nhỏ trên log scale nhưng autocorrelation mạnh nên không thể kết luận
+  white noise.
+- Hai ARIMA forecast gần như phẳng và bỏ lỡ level tăng cùng seasonal peak của holdout.
+- RMSE nhạy với lỗi lớn hơn vì sai số được bình phương.
+- RMSE tốt nhất khoảng 4.83 đơn vị sales, tương đương khoảng 24.8% test mean 19.51;
+  sai số vẫn đáng kể dù tốt hơn baseline.
+- Seasonal structure hoặc order mới chỉ nên được nghiên cứu trong phạm vi phê duyệt riêng.
+- Không candidate nào được công bố là final adequate ARIMA model.
+
+## Output
+
+- `outputs/figures/05_arima_residual_diagnostics.png`
+- `outputs/figures/05_arima_forecast_comparison.png`
+- `outputs/results/05_arima_fit_summary.csv`
+- `outputs/results/05_arima_residual_diagnostics.csv`
+- `outputs/results/05_arima_forecasts.csv`
+- `outputs/results/05_arima_metrics.csv`
+
+## Xác nhận
 
 ```text
-relevant persisted notebook cells: recorded as executed successfully
-clean-kernel notebook execution: not verified
-forecast/test index equality: not independently reproduced in this task
-targeted E05 tests: not run
-E04 candidate handoff reconciled: no
-formal approval and current-status reconciliation: pending
+targeted and full tests at formal E05 review: 26 passed
+dependency check: passed
+notebook path: notebooks/Practice_2_present.ipynb
+E05 notebook errors: 0
+CSV parity with reusable source: passed
+figures inspected: passed
+raw SHA-256: 4baa700091ba43f59d762ed7112e203134467ecde3f7bc88da3b153040d384cb
+E01-E04 artifacts modified by formal E05 execution: false
+E06 executed or modified: false
 ```
 
-## Decision and Limitations
-
-The saved outputs support a limited comparison on this particular holdout: both
-ARIMA models outperform the seasonal-naive baseline on the listed metrics, but
-both retain significant residual autocorrelation at lags 12 and 24. The slightly
-better test metrics of ARIMA(2,1,1) do not remove the need to resolve the
-candidate handoff and residual limitations.
-
-This is a record of notebook evidence, not a formal completion claim. Do not
-update E05 to completed until the upstream E04 discrepancy, approval records,
-validation, and current status have been reconciled.
+Hai `adfuller` FutureWarning trong test E2/E3 không ảnh hưởng kết quả E5. Lần kiểm
+tra toàn bộ gần nhất của Practice 2 đạt 30/30 test.

@@ -1,6 +1,6 @@
-# EXERCISE 05 — ARIMA TRAINING, DIAGNOSTICS, FORECASTING AND EVALUATION
+# EXERCISE 05 — HUẤN LUYỆN, DIAGNOSTICS, FORECAST VÀ ĐÁNH GIÁ ARIMA
 
-## 1. Exercise Identity
+## 1. Thông tin bài tập
 
 ```text
 Practice: Practice_2
@@ -10,32 +10,32 @@ Dataset: Monthly Retail Sales
 Input: E01 chronological holdout + E04 provisional ARIMA candidates
 Inherited transformation: natural_log
 Inherited regular differencing order: d = 1
-Specification status: DRAFT_WAITING_HUMAN_REVIEW
-Implementation authorized: NO
+Specification status: APPROVED
+Implementation authorized: YES
+Current execution result: COMPLETED_AND_VALIDATED
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_05_execution.md
 ```
 
-This specification defines E05's scientific and reporting contract. It does not
-authorize implementation, notebook edits, model fitting, output creation, or an
-E05 completion status until the specification and applicable execution scope have
-been approved.
+Specification này định nghĩa contract khoa học và báo cáo của E5. Implementation và
+trạng thái hoàn thành chỉ hợp lệ sau khi phạm vi thực thi tương ứng được Human phê
+duyệt. Các approval gate này hiện đã đạt.
 
-## 2. Objective
+## 2. Mục tiêu
 
-- fit one or two ARIMA candidates handed off by E04;
-- compare candidates using training-fit evidence, convergence, residual diagnostics,
-  and out-of-sample evaluation;
-- compare ARIMA forecasts with an approved seasonal-naive baseline;
-- preserve the E01 chronological train/test boundary;
-- report MAE, RMSE, and MAPE on the original sales scale;
-- identify the largest absolute forecast error for each evaluated model;
-- make a final assessment limited to the observed holdout and evidence.
+- Fit một hoặc hai ARIMA candidate do E4 bàn giao.
+- So sánh candidate bằng training-fit evidence, convergence, residual diagnostics và
+  out-of-sample evaluation.
+- So sánh ARIMA forecast với seasonal-naive baseline đã phê duyệt.
+- Bảo toàn chronological train/test boundary từ E1.
+- Báo cáo MAE, RMSE và MAPE trên original sales scale.
+- Xác định forecast error tuyệt đối lớn nhất của từng model.
+- Kết luận trong đúng phạm vi holdout và evidence quan sát được.
 
-E05 is the core ARIMA exercise. SARIMA on AirPassengers belongs to the separate
-advanced E06 exercise and must not be added to this E05 scope.
+E5 là bài ARIMA chính. SARIMA trên AirPassengers thuộc E6 nâng cao và không được thêm
+vào phạm vi E5.
 
-## 3. Upstream Dependencies
+## 3. Dependency từ các bài trước
 
 ```text
 E01: validated Monthly Retail Sales + chronological train/test boundary
@@ -45,11 +45,9 @@ E04: ACF/PACF evidence + 1–2 provisional ARIMA candidates
 E05: fit + residual diagnostics + forecast + evaluation
 ```
 
-E05 may proceed only when the upstream handoffs and their evidence are verified.
-The current status record and approval records must be reconciled before E05 is
-formally treated as started or completed.
+E5 chỉ bắt đầu sau khi các handoff trước đó và evidence tương ứng được xác nhận.
 
-## 4. Input Contract
+## 4. Input contract
 
 ```text
 Source: datasets/raw/a10.csv
@@ -72,45 +70,45 @@ Missing monthly intervals: 0
 ```text
 Analysis scale: natural_log
 ARIMA regular differencing order: d = 1
+Trend policy: no drift (`trend='n'`)
 Model-fit input: log(training level series)
 Order-identification input: E03 log-first-differenced training series
 Forecast metric scale: original sales scale
 ```
 
-ARIMA must be fit to the log-transformed training **level** series with `d=1`.
-Do not pass the already differenced E03 series to an ARIMA model with `d=1`, as
-that would apply differencing twice. The E03 differenced series is used for
-stationarity evidence and E04 order identification.
+ARIMA phải fit trên chuỗi **level** của train sau log transformation với `d=1`.
+Không đưa chuỗi E3 đã differencing vào ARIMA có `d=1`, vì như vậy sẽ differencing
+hai lần. Chuỗi E3 chỉ dùng làm stationarity evidence và input nhận diện order ở E4.
 
-The test set remains sealed for E02–E04, scale decisions, candidate selection,
-and model fitting. It may be used only after candidates and the evaluation
-protocol have been fixed, for final forecast evaluation.
+Test set được niêm phong trong E2–E4, scale decision, candidate selection và model
+fitting. Chỉ sau khi candidate cùng evaluation protocol đã khóa, test mới được dùng
+cho final forecast evaluation.
 
-## 5. Required Steps
+## 5. Các bước bắt buộc
 
-1. Verify E01–E04 completion evidence and current approval/status state.
-2. Load the validated Monthly Retail Sales series without changing the raw file.
-3. Reproduce and verify the E01 chronological 163/41 train/test split.
-4. Confirm that E02–E04 did not use test observations.
-5. Verify the E03 natural-log transformation and selected `d = 1`.
-6. Verify one or two provisional ARIMA candidates and their rationale from E04.
-7. Create a seasonal-naive baseline with seasonal lag 12 using training data.
-8. Fit each approved ARIMA candidate on log-transformed training levels.
-9. Record convergence, fitting warnings, AIC, and BIC for each candidate.
-10. Inspect residual mean, residual time plot, residual ACF, and Ljung–Box results.
-11. Lock the candidate/evaluation setup before opening test values.
-12. Forecast exactly 41 monthly observations for every candidate and baseline.
-13. Verify forecast timestamps match the test index exactly.
-14. Invert the log transformation using the approved, explicitly recorded policy.
-15. Compute MAE, RMSE, and MAPE on the same original-scale test observations.
-16. Compare all candidates against each other and the seasonal-naive baseline.
-17. Compute the largest absolute error timestamp and value for each candidate.
-18. Answer the required interpretation questions from actual outputs.
-19. Record execution evidence and update current status only after validation.
+1. Xác minh evidence hoàn thành E1–E4 và trạng thái approval.
+2. Nạp Monthly Retail Sales mà không sửa raw file.
+3. Tái tạo và xác nhận split 163/41 theo thời gian từ E1.
+4. Xác nhận E2–E4 không sử dụng test observation.
+5. Xác nhận natural-log transformation và `d=1` từ E3.
+6. Đọc một hoặc hai provisional candidate cùng rationale từ E4.
+7. Tạo seasonal-naive baseline chu kỳ 12 chỉ từ train.
+8. Fit mỗi candidate trên log-transformed training levels.
+9. Ghi convergence, warning, AIC, BIC và no-drift trend policy tường minh.
+10. Kiểm tra residual mean, residual time plot, residual ACF và Ljung–Box.
+11. Khóa candidate/evaluation setup trước khi mở test.
+12. Forecast đúng 41 tháng cho mọi candidate và baseline.
+13. Xác nhận forecast timestamp trùng hoàn toàn test index.
+14. Inverse log bằng policy đã phê duyệt.
+15. Tính MAE, RMSE và MAPE trên cùng original-scale test observation.
+16. So sánh candidate với nhau và với seasonal-naive baseline.
+17. Tính timestamp và giá trị absolute error lớn nhất của từng model.
+18. Trả lời các câu hỏi diễn giải từ actual output.
+19. Chỉ cập nhật execution evidence và current status sau khi validation đạt.
 
-## 6. Scientific Method
+## 6. Phương pháp khoa học
 
-### 6.1 Chronological Split and Holdout Protection
+### 6.1. Chronological split và bảo vệ holdout
 
 ```text
 Split method: chronological 80/20
@@ -123,28 +121,26 @@ Forecast horizon: exactly 41 monthly observations
 Test usage: final evaluation only
 ```
 
-Do not recompute a different split in E05. Reuse the E01 boundary. Any test
-information used for transformation, order selection, or candidate changes
-invalidates the evaluation and requires a new approved procedure.
+Không tạo split mới trong E5. Mọi test information tham gia transformation, order
+selection hoặc thay candidate đều làm evaluation mất hiệu lực và cần quy trình mới
+được phê duyệt.
 
-### 6.2 Candidate Models
+### 6.2. Candidate model
 
-- Use one or two candidates supplied by the E04 handoff.
-- Preserve each candidate's stated rationale and inherited `d = 1`.
-- Do not add candidates based on test metrics.
-- Do not select a final model solely from AIC/BIC.
-- Record any convergence failure or warning explicitly; do not present an
-  unsuccessful fit as a valid result.
+- Chỉ dùng một hoặc hai candidate từ E4 handoff.
+- Giữ rationale và `d=1` của từng candidate.
+- Không thêm candidate từ test metric.
+- Không chọn final model chỉ bằng AIC/BIC.
+- Ghi rõ convergence failure hoặc warning; không trình bày failed fit như valid result.
 
-### 6.3 Seasonal-Naive Baseline
+### 6.3. Seasonal-naive baseline
 
-Use a seasonal-naive baseline with seasonal lag 12, generated from the training
-series and extended to the same 41-month horizon. Evaluate it on the same test
-timestamps and original target scale as the ARIMA candidates.
+Baseline dùng seasonal lag 12, sinh hoàn toàn từ training series và có cùng horizon
+41 tháng. Baseline được đánh giá trên cùng timestamp và original target scale với ARIMA.
 
-### 6.4 Residual Diagnostics
+### 6.4. Residual diagnostics
 
-For each fitted ARIMA candidate, record:
+Mỗi fitted candidate phải ghi:
 
 ```text
 residual mean
@@ -154,21 +150,20 @@ Ljung–Box test statistic and p-value
 Ljung–Box lag(s), model degrees of freedom, and significance level
 ```
 
-Use `alpha = 0.05` for Ljung–Box unless a separately approved protocol specifies
-otherwise. Choose statistically valid lags and record them. A residual mean near
-zero or visual inspection alone is not sufficient to claim white noise.
+Dùng `alpha=0.05` nếu chưa có protocol khác được phê duyệt. Loại
+`loglikelihood_burn` trước diagnostics, chọn lag hợp lệ và ghi rõ. Residual mean gần
+0 hoặc visual inspection không đủ để kết luận white noise. Autocorrelation còn lại
+ngăn final-model-adequacy claim, nhưng không phủ nhận việc hoàn thành forecast
+comparison nếu giới hạn được báo cáo trung thực.
 
-### 6.5 Forecast Inverse Transformation
+### 6.5. Inverse transformation của forecast
 
-Models are fitted on the natural-log scale, but required metrics are reported on
-the original sales scale. The inverse-transform method must be explicit and
-consistent for every candidate. Record whether exponentiating the predicted log
-mean is used and state its interpretation/limitations; do not silently apply a
-bias correction or change inverse-transform policy after viewing test metrics.
+Model fit trên natural-log scale nhưng metrics được báo cáo trên original sales scale.
+E5 dùng `exp(predicted log mean)` không bias correction. Giá trị này gần với
+conditional median trên thang gốc và có thể thấp hơn conditional mean. Không được
+đổi policy sau khi xem test metric.
 
-### 6.6 Evaluation Metrics
-
-Compute the required metrics using identical actual/forecast index pairs:
+### 6.6. Evaluation metrics
 
 ```text
 MAE  = mean absolute error
@@ -176,29 +171,25 @@ RMSE = square root of mean squared error
 MAPE = mean absolute percentage error × 100
 ```
 
-The target values are expected to be positive. If any actual value is zero, MAPE
-is undefined for that observation and the issue must be explicitly reported; do
-not silently drop observations.
+Mọi metric dùng cùng actual/forecast index pair. Nếu actual bằng 0, MAPE không xác
+định tại quan sát đó; phải báo cáo thay vì silently drop.
 
-## 7. Required Interpretation Questions
+## 7. Câu hỏi diễn giải bắt buộc
 
-Answer all questions from execution evidence:
+1. Vì sao không được shuffle chuỗi thời gian và test set dùng để làm gì?
+2. `p`, `d`, `q` đã chọn biểu diễn điều gì?
+3. Từng model có hội tụ không và có fitting warning không?
+4. Residual có evidence white noise không? Residual ACF và Ljung–Box cho biết gì?
+5. Nếu còn residual autocorrelation, hướng model nào cần được nghiên cứu tiếp?
+6. Forecast có bám observed behavior trong test period không?
+7. Absolute error lớn nhất của mỗi model xảy ra tại timestamp nào?
+8. Metric nào nhạy với lỗi lớn/outlier nhất và vì sao?
+9. RMSE quan sát được có ý nghĩa gì theo đơn vị target?
 
-1. Why must the time series not be shuffled, and what is the test set for?
-2. What do the selected `p`, `d`, and `q` represent?
-3. Did each model converge? Were fitting warnings emitted?
-4. Do residuals show evidence of white noise? What do residual ACF and
-   Ljung–Box indicate?
-5. If residual autocorrelation remains, what model change should be investigated?
-6. Does the forecast follow the observed test-period behavior?
-7. At which timestamp does each model have its largest absolute error?
-8. Which metric is most sensitive to large errors/outliers, and why?
-9. What does the observed RMSE indicate in the target's units?
+Phải phân biệt evidence và interpretation; không suy rộng chất lượng forecast ra
+ngoài dataset và holdout đã kiểm tra.
 
-Distinguish evidence from interpretation. Do not claim forecast quality beyond
-the tested dataset and holdout period.
-
-## 8. Expected Outputs
+## 8. Output dự kiến
 
 ```text
 outputs/figures/05_arima_residual_diagnostics.png
@@ -211,61 +202,60 @@ docs/logs/exercise_05_execution.md
 docs/status/current_status.md
 ```
 
-Exact filenames may be aligned with existing approved outputs during planning;
-do not overwrite E01–E04 evidence. Machine-readable forecast output must retain
-model name, timestamp, actual value, forecast, and error so the largest-error
-claim is reproducible.
+Không ghi đè evidence E1–E4. Machine-readable forecast output phải giữ model name,
+timestamp, actual, forecast và error để tái tạo largest-error claim.
 
-## 9. Validation Criteria
+## 9. Tiêu chí xác nhận
 
 ```text
-[ ] E01–E04 handoffs and approval/status state verified
-[ ] Raw input remains unchanged
-[ ] Split matches E01: 163 train / 41 test, chronological, no shuffle
-[ ] Test observations excluded from E02–E04 and all fitting/model selection
-[ ] E03 natural-log transformation and d=1 are inherited correctly
-[ ] ARIMA fit uses log(training levels), not an already differenced series with d=1
-[ ] One or two candidates have traceable E04 rationale
-[ ] Seasonal-naive baseline uses lag 12 and training-only history
-[ ] Convergence, warnings, AIC, and BIC are recorded
-[ ] Residual mean, time plot, ACF, and Ljung–Box are inspected
-[ ] Evaluation setup is locked before opening test values
-[ ] Each forecast has exactly 41 observations
-[ ] Forecast indices equal the test index
-[ ] Inverse-log policy is explicit and consistent
-[ ] MAE, RMSE, and MAPE use the same original-scale test observations
-[ ] Candidates are compared with the seasonal-naive baseline
-[ ] Largest-error timestamp is computed, not estimated visually
-[ ] All required questions are answered from actual evidence
-[ ] Notebook runs sequentially from a clean kernel
-[ ] Outputs are inspected and execution evidence is recorded
+[x] E01–E04 handoffs and approval/status state verified
+[x] Raw input remains unchanged
+[x] Split matches E01: 163 train / 41 test, chronological, no shuffle
+[x] Test observations excluded from E02–E04 and all fitting/model selection
+[x] E03 natural-log transformation and d=1 are inherited correctly
+[x] ARIMA fit uses log(training levels), not an already differenced series with d=1
+[x] ARIMA no-drift policy is explicit and reproducible
+[x] One or two candidates have traceable E04 rationale
+[x] Seasonal-naive baseline uses lag 12 and training-only history
+[x] Convergence, warnings, AIC, and BIC are recorded
+[x] Residual mean, time plot, ACF, and Ljung–Box are inspected
+[x] Evaluation setup is locked before opening test values
+[x] Each forecast has exactly 41 observations
+[x] Forecast indices equal the test index
+[x] Inverse-log policy is explicit and consistent
+[x] MAE, RMSE, and MAPE use the same original-scale test observations
+[x] Candidates are compared with the seasonal-naive baseline
+[x] Largest-error timestamp is computed, not estimated visually
+[x] All required questions are answered from actual evidence
+[x] Canonical setup + E05 runs from a clean kernel without E06
+[x] Outputs are inspected and execution evidence is recorded
 ```
 
-## 10. Stop Conditions
+## 10. Điều kiện dừng
 
-Stop E05 if:
+Dừng E5 nếu:
 
-- E04 handoff or its candidate rationale is missing or unresolved;
-- the E01 boundary cannot be reproduced;
-- any test observation influenced fitting or candidate selection;
-- the model input scale or differencing contract is ambiguous;
-- an ARIMA candidate does not converge or has an unresolved fitting warning;
-- residual diagnostics or forecast/test alignment cannot be reproduced;
-- actual and forecast indices differ;
-- a metric is computed on mismatched observations or scales;
-- completing E05 requires an unapproved dependency, architecture, or scope change.
+- E4 handoff hoặc candidate rationale thiếu/chưa giải quyết;
+- không tái tạo được boundary E1;
+- test observation ảnh hưởng fit hoặc candidate selection;
+- input scale hay differencing contract không rõ;
+- ARIMA không hội tụ hoặc còn fitting warning chưa xử lý;
+- residual diagnostics hoặc forecast/test alignment không tái tạo được;
+- actual và forecast index khác nhau;
+- metric dùng observation hoặc scale không khớp;
+- cần dependency, architecture hoặc scope chưa được phê duyệt.
 
-When blocked:
+Khi bị chặn:
 
 ```text
 STOP
-→ record observed evidence and expected behavior
-→ explain impact
-→ propose the next action
-→ wait for Human approval where required
+→ ghi observed evidence và expected behavior
+→ giải thích tác động
+→ đề xuất hành động tiếp theo
+→ chờ Human phê duyệt khi cần
 ```
 
-## 11. Completion Condition
+## 11. Điều kiện hoàn thành
 
 ```text
 upstream handoffs verified
@@ -280,14 +270,14 @@ AND execution log and current status updated
 AND no unresolved blocking issue
 ```
 
-## 12. Approval Gate
+## 12. Approval gate
 
 ```text
 EXERCISE_05_SPECIFICATION_CREATED=true
-EXERCISE_05_SPECIFICATION_REVIEWED=false
-EXERCISE_05_SPECIFICATION_APPROVED=false
-EXERCISE_05_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_05_IMPLEMENTED=false
-EXERCISE_05_VALIDATED=false
-EXERCISE_05_COMPLETED=false
+EXERCISE_05_SPECIFICATION_REVIEWED=true
+EXERCISE_05_SPECIFICATION_APPROVED=true
+EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_05_IMPLEMENTED=true
+EXERCISE_05_VALIDATED=true
+EXERCISE_05_COMPLETED=true
 ```

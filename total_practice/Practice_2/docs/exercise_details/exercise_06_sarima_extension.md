@@ -1,6 +1,6 @@
-# EXERCISE 06 — AIRPASSENGERS SARIMA EXTENSION
+# EXERCISE 06 — MỞ RỘNG SARIMA TRÊN AIRPASSENGERS
 
-## 1. Exercise Identity
+## 1. Thông tin bài tập
 
 ```text
 Practice: Practice_2
@@ -11,18 +11,23 @@ Frequency: Monthly
 Seasonal period: s = 12
 Chronological split: 80% train / 20% test
 Model training required: YES, after approval
-Specification status: DRAFT_WAITING_E5_COMPLETION_AND_HUMAN_REVIEW
+Specification status: REVIEWED_RESIDUAL_FIX_SCOPE_APPROVED
 Direct data dependency on E01–E05: NO
-Process gate: EXERCISE_05_NOT_COMPLETED
+Process gate: EXERCISE_05_COMPLETED
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_06_execution.md
+Canonical presentation notebook: notebooks/Practice_2_advanced_sarima.ipynb
 ```
 
-Specification này định nghĩa yêu cầu khoa học của E06. Nó không cho phép triển khai
-code, chỉnh notebook, tạo output hoặc cập nhật trạng thái E06 khi E05 chưa hoàn thành
-và chưa có Human approval riêng cho E06.
+Specification này định nghĩa yêu cầu khoa học của E06. Human đã mở implementation
+gate riêng cho residual diagnostics fix; các phần mở rộng E06 ngoài phạm vi fix vẫn
+cần approval riêng trước khi triển khai.
 
-## 2. Objective
+Theo Phương án A đã được Human chọn, E6 hiện được giữ ở mức exploratory. Các điều
+kiện formal completion bên dưới được lưu làm contract tham chiếu và không được xem
+là phạm vi implementation đã mở.
+
+## 2. Mục tiêu
 
 Mục tiêu của bài tập:
 
@@ -40,7 +45,10 @@ Mục tiêu của bài tập:
 E06 không được dùng model order, transformation, fitted model hoặc metrics của
 Dataset 1 làm kết quả cho AirPassengers.
 
-## 3. Input Contract
+E06 được trình bày riêng trong `notebooks/Practice_2_advanced_sarima.ipynb`.
+`notebooks/Practice_2_present.ipynb` chỉ trình bày core Practice E01–E05.
+
+## 3. Input contract
 
 ```text
 File: datasets/raw/airline-passengers.csv
@@ -62,7 +70,7 @@ Raw file là immutable source evidence. Parsing, sorting, splitting, scale
 transformation và differencing chỉ được thực hiện trên working objects hoặc approved
 derived artifacts.
 
-## 4. Relationship with Core Practice
+## 4. Quan hệ với Core Practice
 
 ```text
 E01–E05: Core Practice on datasets/raw/a10.csv
@@ -76,7 +84,7 @@ E06 phải xác định lại train/test boundary, scale, `d`, `D`, `p`, `q`, `P
 model results từ AirPassengers evidence. E06 completion không thay thế trạng thái
 của E01–E05.
 
-## 5. Required Steps
+## 5. Các bước bắt buộc của phạm vi formal
 
 1. Verify E05 completion, E06 approval state và reusable interfaces.
 2. Load, inspect và validate AirPassengers schema/time index/data quality.
@@ -97,9 +105,9 @@ của E01–E05.
 17. Tính MAE/RMSE trên cùng test observations; MAPE chỉ là metric bổ sung.
 18. So sánh model và kết luận từ actual evidence.
 
-## 6. Scientific Method
+## 6. Phương pháp khoa học
 
-### 6.1. Chronological Holdout
+### 6.1. Chronological holdout
 
 ```text
 Split method: chronological 80/20
@@ -114,7 +122,7 @@ Forecast horizon: 29 months
 ADF, scale decision, differencing, ACF/PACF, order selection và fitting chỉ dùng
 training data. Test values chỉ được mở ở final evaluation.
 
-### 6.2. Stationarity and Differencing
+### 6.2. Stationarity và differencing
 
 ADF kiểm tra null hypothesis rằng chuỗi có unit root. Với `alpha = 0.05`:
 
@@ -127,7 +135,7 @@ p-value > 0.05 → fail to reject H0 → insufficient stationarity evidence
 evidence của regular differencing, seasonal differencing và combined transformed
 series; không over-difference để đạt p-value mong muốn.
 
-### 6.3. Scale Decision
+### 6.3. Quyết định scale
 
 Nếu training evidence cho thấy variance tăng cùng level, E06 được phép đánh giá
 natural-log scale. Khi log được chọn:
@@ -137,13 +145,13 @@ natural-log scale. Khi log được chọn:
 - forecast phải trở lại target scale trước khi so sánh với test;
 - không được silently đổi scale sau khi xem test performance.
 
-### 6.4. Order Identification
+### 6.4. Nhận diện order
 
 ACF/PACF trên stationary transformed training series cung cấp evidence để đề xuất
 `p`, `q`, `P`, `Q`. Các lag 12, 24 và 36 phải được inspect. Candidate order chỉ là
 provisional cho đến khi có fitting, convergence và residual evidence.
 
-### 6.5. Model Comparison
+### 6.5. So sánh model
 
 ARIMA và SARIMA phải dùng cùng:
 
@@ -160,7 +168,7 @@ Primary comparison nên giữ non-seasonal structure tương đương khi eviden
 để quan sát tác động của seasonal terms. Không chọn model bằng test metric trước khi
 evaluation setup được khóa.
 
-## 7. Scientific Parameters
+## 7. Tham số khoa học
 
 ```text
 ADF alpha: 0.05
@@ -184,7 +192,7 @@ Optional supplementary metric: MAPE
 
 Không hard-code final `(p,d,q)(P,D,Q,12)` trước actual E06 evidence.
 
-## 8. Expected Outputs
+## 8. Output dự kiến của phạm vi formal
 
 ```text
 outputs/figures/06_airpassengers_original_series.png
@@ -216,7 +224,7 @@ MAE/RMSE comparison
 Execution result phải được truy vết qua `docs/logs/exercise_06_execution.md` và
 `docs/status/current_status.md`; specification này không thay thế execution evidence.
 
-## 9. Interpretation Questions
+## 9. Câu hỏi diễn giải
 
 1. AirPassengers có trend và annual seasonality không?
 2. Original training series có stationary không?
@@ -235,7 +243,7 @@ Execution result phải được truy vết qua `docs/logs/exercise_06_execution
 
 Không viết kết luận hoặc metrics trước khi actual outputs được tạo và inspect.
 
-## 10. Validation Criteria
+## 10. Tiêu chí xác nhận
 
 ```text
 [ ] E05 completion và E06 approval state được xác minh
@@ -260,7 +268,7 @@ Không viết kết luận hoặc metrics trước khi actual outputs được t
 [ ] Notebook chạy từ clean kernel và outputs được inspect
 ```
 
-## 11. Stop Conditions
+## 11. Điều kiện dừng
 
 Phải dừng nếu E05 chưa hoàn thành, E06 chưa approved, dataset contract sai, xuất hiện
 test leakage, scale/inverse-transform policy chưa rõ, differencing thiếu evidence,
@@ -269,7 +277,7 @@ hai model không dùng cùng setup hoặc scope/dependency cần mở rộng.
 
 Khi dừng: `STOP → document issue → explain impact → propose next action → wait for approval`.
 
-## 12. Completion Condition
+## 12. Điều kiện formal completion
 
 ```text
 AirPassengers validated
@@ -285,18 +293,22 @@ AND tests and clean notebook execution pass
 AND no unresolved blocking issue
 ```
 
-## 13. Downstream Role
+## 13. Vai trò đối với bước sau
 
-E06 hoàn thành Advanced Extension và cung cấp kết luận về tác động của seasonal
-modeling trên AirPassengers. E06 không thay thế, sửa lại hoặc che lấp completion state
-của Core Practice E01–E05.
+Nếu được formalize trong một phạm vi tương lai, E6 sẽ hoàn thành Advanced Extension
+và cung cấp kết luận về tác động của seasonal modeling trên AirPassengers. Trong
+phạm vi hiện tại, E6 chỉ là exploratory evidence và không thay thế, sửa lại hoặc che
+lấp completion state của Core Practice E1–E5.
 
-## 14. Approval Gate
+## 14. Approval gate
 
 ```text
 EXERCISE_06_SPECIFICATION_CREATED=true
-EXERCISE_06_SPECIFICATION_REVIEWED=false
+EXERCISE_06_SPECIFICATION_REVIEWED=true
 EXERCISE_06_SPECIFICATION_APPROVED=false
+EXERCISE_06_RESIDUAL_FIX_SCOPE_APPROVED=true
 EXERCISE_06_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_06_WAITING_FOR_E05=true
+EXERCISE_06_RESIDUAL_FIX_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_06_WAITING_FOR_E05=false
+EXERCISE_06_SCOPE=EXPLORATORY_ONLY
 ```

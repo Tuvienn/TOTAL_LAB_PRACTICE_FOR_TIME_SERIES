@@ -1,6 +1,6 @@
-# EXERCISE 02 — BEFORE-PROCESS PLAN
+# EXERCISE 02 — KẾ HOẠCH TRƯỚC KHI THỰC THI
 
-## 1. Plan Identity
+## 1. Thông tin kế hoạch
 
 ```text
 Practice: Practice_2
@@ -18,7 +18,7 @@ Execution evidence: docs/logs/exercise_02_execution.md
 Plan và implementation scope của Exercise 2 đã được Human phê duyệt. Mọi lần chạy lại
 phải tiếp tục tuân thủ đúng scope, validation và stop conditions trong file này.
 
-## 2. Objective
+## 2. Mục tiêu
 
 - xác minh E01 handoff và sealed test boundary;
 - chạy ADF trên original training series;
@@ -27,7 +27,7 @@ phải tiếp tục tuân thủ đúng scope, validation và stop conditions tro
 - lưu actual result;
 - không differencing, không ACF/PACF và không fit model.
 
-## 3. Required Documents
+## 3. Tài liệu bắt buộc
 
 ```text
 working_rule.md
@@ -47,7 +47,7 @@ total_practice/Practice_2/docs/status/current_status.md nếu đã tồn tại
 
 Nếu thiếu tài liệu, E01 evidence hoặc có conflict: `STOP → report issue → chờ Human quyết định`.
 
-## 4. Input
+## 4. Dữ liệu đầu vào
 
 ```text
 Original untransformed training series from Exercise 1
@@ -58,7 +58,7 @@ Significance level α: 0.05
 Test set: sealed and excluded
 ```
 
-## 5. Files Allowed to Create or Modify
+## 5. File được phép tạo hoặc chỉnh sửa
 
 ```text
 src/practice_2/analysis/
@@ -73,7 +73,7 @@ docs/fix_plans/
 
 Không tạo duplicate ADF logic nếu reusable owner tương đương đã tồn tại.
 
-## 6. Files Not to Modify
+## 6. File không được chỉnh sửa
 
 ```text
 datasets/raw/a10.csv
@@ -89,7 +89,7 @@ unrelated configuration
 
 Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → wait for approval`.
 
-## 7. Scientific Parameters
+## 7. Tham số khoa học
 
 ```text
 Test: Augmented Dickey-Fuller
@@ -103,28 +103,28 @@ Model training: NO
 Forecast generation: NO
 ```
 
-## 8. Sequential Execution Steps
+## 8. Các bước thực thi tuần tự
 
-### Step 1 — Verify Upstream Dependency
+### Bước 1 — Xác minh dependency từ bước trước
 
 Xác minh E01 đã cung cấp validated original training series, time index và sealed test boundary.
 Nếu chưa đủ evidence thì STOP.
 
-### Step 2 — Verify Repository Context
+### Bước 2 — Xác minh bối cảnh repository
 
 Xác minh Practice_2 root, active rules, Exercise 2 specification, approved plan state và current status.
 
-### Step 3 — Prepare ADF Input
+### Bước 3 — Chuẩn bị input cho ADF
 
 Load original untransformed training series từ validated working representation. Kiểm tra test
 observations không xuất hiện trong input và không thực hiện differencing.
 
-### Step 4 — Execute ADF
+### Bước 4 — Chạy ADF
 
 Chạy ADF với `α = 0.05`, `regression="c"` và `autolag="AIC"`. Ghi statistic,
 p-value, critical values, used lag và used observations khi output cung cấp.
 
-### Step 5 — Apply Decision Rule
+### Bước 5 — Áp dụng quy tắc quyết định
 
 ```text
 p-value ≤ 0.05 → reject H₀ → evidence supports stationarity
@@ -133,7 +133,7 @@ p-value > 0.05 → fail to reject H₀ → insufficient evidence of stationarity
 
 Giải thích H₀ là unit-root hypothesis và không biến “fail to reject” thành proof tuyệt đối.
 
-### Step 6 — Save and Inspect Output
+### Bước 6 — Lưu và kiểm tra output
 
 Lưu actual result tại:
 
@@ -144,11 +144,11 @@ outputs/results/adf_original_critical_values.csv
 
 Inspect result table và narrative answer cho ba câu hỏi: H₀, p-value và chuỗi có dừng không.
 
-### Step 7 — Update State
+### Bước 7 — Cập nhật trạng thái
 
 Chỉ sau khi output pass validation mới cập nhật current status và execution log. Không đánh dấu complete nếu còn blocker.
 
-## 9. Validation Checklist
+## 9. Checklist xác nhận
 
 ```text
 [ ] Required documents were read
@@ -170,14 +170,14 @@ Chỉ sau khi output pass validation mới cập nhật current status và execu
 [ ] No unrelated file modified
 ```
 
-## 10. Expected Outputs
+## 10. Output dự kiến
 
 ```text
 outputs/results/adf_original_series.csv
 outputs/results/adf_original_critical_values.csv
 ```
 
-Required narrative evidence:
+Bằng chứng diễn giải bắt buộc:
 
 ```text
 H₀ explanation
@@ -185,7 +185,7 @@ p-value explanation
 stationary/non-stationary conclusion
 ```
 
-## 11. Stop Conditions
+## 11. Điều kiện dừng
 
 Agent phải dừng khi E01 handoff thiếu, test leakage xảy ra, input không phải original
 training series, ADF fail, output thiếu statistic/p-value/critical values, parameter cần
@@ -201,7 +201,7 @@ Khi dừng:
 5. Chờ Human approval.
 ```
 
-## 12. Completion Gate
+## 12. Điều kiện hoàn thành
 
 ```text
 original training series validated
@@ -213,7 +213,7 @@ AND output inspected
 AND no unresolved blocking issue
 ```
 
-## 13. Approval Gate
+## 13. Approval gate
 
 ```text
 EXERCISE_02_BEFORE_PROCESS_CREATED=true
@@ -228,7 +228,7 @@ EXERCISE_02_COMPLETED=true
 Actual result và runtime state phải được đọc từ execution log và current status;
 before-process plan không thay thế hai evidence owner này.
 
-## 14. Agent Execution Rule
+## 14. Quy tắc thực thi dành cho Agent
 
 Sau approval:
 

@@ -1,6 +1,6 @@
-# EXERCISE 03 — DIFFERENCING AND ADF RETEST
+# EXERCISE 03 — DIFFERENCING VÀ KIỂM ĐỊNH LẠI ADF
 
-## 1. Exercise Identity
+## 1. Thông tin bài tập
 
 ```text
 Practice: Practice_2
@@ -19,7 +19,7 @@ Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_03_execution.md
 ```
 
-## 2. Objective
+## 2. Mục tiêu
 
 Mục tiêu của bài tập:
 
@@ -32,7 +32,7 @@ Mục tiêu của bài tập:
 
 Exercise 3 không chạy ACF/PACF, không fit model và không forecast.
 
-## 3. Input
+## 3. Dữ liệu đầu vào
 
 ```text
 Original training series from Exercise 1
@@ -47,7 +47,7 @@ Log transformation và sai phân chỉ áp dụng trên working copy của train
 Giá trị `NaN` phát sinh từ sai phân đầu tiên được xử lý trong working series, không
 ghi ngược vào raw file.
 
-## 4. Required Steps
+## 4. Các bước bắt buộc
 
 1. Verify E02 ADF result và original training-series handoff.
 2. Xác minh failed raw first-difference evidence.
@@ -57,7 +57,7 @@ ghi ngược vào raw file.
 6. Ghi statistic, p-value, critical values và metadata.
 7. Chỉ xác định transformation=`natural_log` và `d=1` khi evidence đạt; nếu chưa đạt thì ghi `REVIEW_REQUIRED` và dừng.
 
-## 5. Scientific Method
+## 5. Phương pháp khoa học
 
 ADF remediation phải chạy trên log first-differenced training series, không chạy trên
 test set hoặc raw data đã bị thay đổi.
@@ -69,7 +69,7 @@ p-value > 0.05 → fail to reject H₀ → remediation chưa đủ evidence stat
 
 Giá trị `d` phải được xác định từ stationarity evidence, không hard-code trước kết quả.
 
-## 6. Scientific Parameters
+## 6. Tham số khoa học
 
 ```text
 Transformation: natural logarithm
@@ -84,7 +84,7 @@ Model training: NO
 Forecast generation: NO
 ```
 
-## 7. Expected Outputs
+## 7. Output dự kiến
 
 ```text
 outputs/figures/02_first_differenced_series.png
@@ -104,7 +104,7 @@ câu trả lời hợp lệ là `selected_d = REVIEW_REQUIRED`.
 Execution result phải được truy vết qua `docs/logs/exercise_03_execution.md` và
 `docs/status/current_status.md`; specification này không thay thế execution evidence.
 
-## 8. Interpretation Questions
+## 8. Câu hỏi diễn giải
 
 1. Vì sao raw first difference chưa đạt stationarity gate?
 2. Log first-differenced training series đã dừng chưa?
@@ -113,7 +113,7 @@ Execution result phải được truy vết qua `docs/logs/exercise_03_execution
 
 Không được trả lời trước khi differenced plot và ADF result được tạo, inspect.
 
-## 9. Validation Criteria
+## 9. Tiêu chí xác nhận
 
 ```text
 [x] E02 result và original training series được xác minh
@@ -134,7 +134,7 @@ Không được trả lời trước khi differenced plot và ADF result đượ
 [x] Không fit model hoặc forecast
 ```
 
-## 10. Stop Conditions
+## 10. Điều kiện dừng
 
 Phải dừng nếu E02 chưa validated, input không phải original training series, test
 leakage xảy ra, có giá trị không dương, log/differencing fail, ADF fail, remediation
@@ -142,9 +142,9 @@ chưa stationary hoặc cần đổi parameter/scope.
 
 Khi dừng: `STOP → document issue → explain impact → propose next action → wait for approval`.
 
-## 11. Execution Completion và Scientific Handoff
+## 11. Hoàn thành thực thi và scientific handoff
 
-### 11.1. Execution Completion
+### 11.1. Hoàn thành thực thi
 
 ```text
 raw failed evidence preserved
@@ -157,7 +157,7 @@ AND d decision recorded from actual evidence
 
 Execution có thể hoàn thành về mặt kỹ thuật dù kết quả khoa học tạo blocker.
 
-### 11.2. Scientific Handoff Gate
+### 11.2. Scientific handoff gate
 
 Chỉ mở handoff sang Exercise 4 khi:
 
@@ -170,8 +170,8 @@ AND no unresolved scientific blocker
 Nếu gate chưa đạt, Exercise 3 giữ trạng thái `BLOCKED_BY_SCIENTIFIC_RESULT`,
 `selected_d = REVIEW_REQUIRED` và Exercise 4 không được bắt đầu.
 
-## 12. Downstream Role
+## 12. Vai trò đối với bước sau
 
 Khi Scientific Handoff Gate đạt, Exercise 3 cung cấp log first-differenced stationary
-training series, transformation metadata và selected `d` cho Exercise 4 — ACF/PACF
-and ARIMA Candidate Identification. Nếu gate chưa đạt, downstream handoff vẫn đóng.
+training series, transformation metadata và selected `d` cho E4 — nhận diện ACF/PACF
+và ARIMA candidate. Nếu gate chưa đạt, downstream handoff vẫn đóng.

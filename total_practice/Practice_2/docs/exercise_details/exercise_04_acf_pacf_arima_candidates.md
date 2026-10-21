@@ -1,6 +1,6 @@
-# EXERCISE 04 — ACF/PACF AND ARIMA CANDIDATE IDENTIFICATION
+# EXERCISE 04 — ACF/PACF VÀ NHẬN DIỆN ARIMA CANDIDATE
 
-## 1. Exercise Identity
+## 1. Thông tin bài tập
 
 ```text
 Practice: Practice_2
@@ -11,7 +11,8 @@ Input: Stationary log first-differenced training series from E03
 Inherited transformation: natural_log
 Inherited regular differencing order: d = 1
 Model training required: NO
-Specification status: DRAFT_WAITING_HUMAN_REVIEW
+Specification status: APPROVED
+Current execution result: COMPLETED_AND_VALIDATED
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_04_execution.md
 ```
@@ -19,7 +20,7 @@ Execution evidence: docs/logs/exercise_04_execution.md
 Specification này định nghĩa yêu cầu khoa học của E04. Nó không cho phép triển khai
 code, chỉnh notebook, tạo output hoặc mở handoff sang E05 khi chưa có Human approval.
 
-## 2. Objective
+## 2. Mục tiêu
 
 Mục tiêu của bài tập:
 
@@ -33,7 +34,7 @@ Mục tiêu của bài tập:
 Exercise 4 không fit model, không tính AIC/BIC, không kiểm tra residuals, không
 forecast và không mở test set.
 
-## 3. Input Contract
+## 3. Input contract
 
 ```text
 Source: E03 scientific handoff
@@ -52,7 +53,7 @@ Stationarity evidence: ADF reject H0 at alpha 0.05
 E04 không được dùng full series, raw first-differenced series, `df_diff1` từ notebook
 legacy hoặc bất kỳ test observation nào.
 
-## 4. Required Steps
+## 4. Các bước bắt buộc
 
 1. Verify E03 completion, transformation metadata, selected `d` và sealed test set.
 2. Reproduce đúng log first-differenced training series bằng approved reusable logic.
@@ -65,7 +66,7 @@ legacy hoặc bất kỳ test observation nào.
 9. Đề xuất từ một đến hai provisional ARIMA `(p,1,q)` candidates trên log scale.
 10. Ghi rationale, limitation và E05 handoff mà không tuyên bố final model.
 
-## 5. Scientific Method
+## 5. Phương pháp khoa học
 
 ACF/PACF phải được tính trên stationary transformed training series. Lag 0 có thể
 được giữ trong output kỹ thuật nhưng không được dùng để chọn `p` hoặc `q`.
@@ -85,7 +86,7 @@ order `p`. Đây chỉ là heuristic để đề xuất candidates, không phả
 là model tốt nhất. Final model cần E05 fitting, convergence, AIC/BIC, residuals và
 out-of-sample evaluation.
 
-## 6. Scientific Parameters
+## 6. Tham số khoa học
 
 ```text
 Input series: log_first_differenced_training
@@ -106,7 +107,7 @@ Forecast generation: NO
 SARIMA identification: NOT IN E04
 ```
 
-## 7. Expected Outputs
+## 7. Output dự kiến
 
 ```text
 outputs/figures/03_acf_pacf_log_first_differenced.png
@@ -141,7 +142,7 @@ status
 Execution result phải được truy vết qua `docs/logs/exercise_04_execution.md` và
 `docs/status/current_status.md`; specification này không thay thế execution evidence.
 
-## 8. Interpretation Questions
+## 8. Câu hỏi diễn giải
 
 1. ACF có cutoff, decay hoặc pattern nào đáng chú ý?
 2. PACF có cutoff, decay hoặc pattern nào đáng chú ý?
@@ -154,29 +155,29 @@ Execution result phải được truy vết qua `docs/logs/exercise_04_execution
 Không được trả lời bằng expected pattern hoặc kết quả notebook legacy trước khi
 actual E04 tables và figure được tạo, inspect.
 
-## 9. Validation Criteria
+## 9. Tiêu chí xác nhận
 
 ```text
-[ ] E03 handoff và selected d được xác minh
-[ ] Analysis input đúng log first-differenced training series
-[ ] Input có đúng 162 observations và không có missing values
-[ ] Test observations không xuất hiện trong E04 input
-[ ] ACF và PACF dùng maximum lag 36
-[ ] Confidence level là 95%
-[ ] PACF method là ywm
-[ ] Significant flag khớp confidence interval
-[ ] Lag 0 không được dùng để chọn p/q
-[ ] Seasonal lags 12, 24 và 36 được inspect
-[ ] Figure và machine-readable tables được tạo, inspect
-[ ] Candidate count nằm trong khoảng 1–2
-[ ] Mỗi candidate kế thừa natural_log và d = 1
-[ ] Mỗi candidate có traceable ACF/PACF rationale
-[ ] Candidates được ghi là provisional
-[ ] Không fit model, forecast hoặc mở test set
-[ ] Không fabricate lag evidence hoặc candidate result
+[x] E03 handoff và selected d được xác minh
+[x] Analysis input đúng log first-differenced training series
+[x] Input có đúng 162 observations và không có missing values
+[x] Test observations không xuất hiện trong E04 input
+[x] ACF và PACF dùng maximum lag 36
+[x] Confidence level là 95%
+[x] PACF method là ywm
+[x] Significant flag khớp confidence interval
+[x] Lag 0 không được dùng để chọn p/q
+[x] Seasonal lags 12, 24 và 36 được inspect
+[x] Figure và machine-readable tables được tạo, inspect
+[x] Candidate count nằm trong khoảng 1–2
+[x] Mỗi candidate kế thừa natural_log và d = 1
+[x] Mỗi candidate có traceable ACF/PACF rationale
+[x] Candidates được ghi là provisional
+[x] Không fit model, forecast hoặc mở test set
+[x] Không fabricate lag evidence hoặc candidate result
 ```
 
-## 10. Stop Conditions
+## 10. Điều kiện dừng
 
 Phải dừng nếu E03 handoff không tái tạo được, input không phải log first-differenced
 training series, có test leakage, missing/alignment sai, stationarity evidence không
@@ -185,7 +186,7 @@ có rationale truy vết được.
 
 Khi dừng: `STOP → document issue → explain impact → propose next action → wait for approval`.
 
-## 11. Completion Condition
+## 11. Điều kiện hoàn thành
 
 ```text
 E03 input identity validated
@@ -197,7 +198,7 @@ AND no test leakage
 AND no unresolved blocking issue
 ```
 
-## 12. Downstream Role
+## 12. Vai trò đối với bước sau
 
 Khi completion gate đạt, E04 bàn giao cho E05:
 
@@ -213,11 +214,11 @@ remaining seasonal-dependence limitation when present
 E04 không chọn final model. E05 phải fit candidates, kiểm tra convergence,
 AIC/BIC, residuals và đánh giá trên sealed test set cùng approved baseline.
 
-## 13. Approval Gate
+## 13. Approval gate
 
 ```text
 EXERCISE_04_SPECIFICATION_CREATED=true
-EXERCISE_04_SPECIFICATION_REVIEWED=false
-EXERCISE_04_SPECIFICATION_APPROVED=false
-EXERCISE_04_IMPLEMENTATION_AUTHORIZED=false
+EXERCISE_04_SPECIFICATION_REVIEWED=true
+EXERCISE_04_SPECIFICATION_APPROVED=true
+EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
 ```

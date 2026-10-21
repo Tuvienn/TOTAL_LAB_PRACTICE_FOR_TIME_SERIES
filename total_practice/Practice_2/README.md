@@ -1,17 +1,27 @@
 # Time Series Practice 2
 
-## Trạng thái
+## Trạng thái hiện tại
 
 ```text
 Practice: Practice_2
-Stage: INITIALIZED
-Dataset: chưa chốt
-Exercise scope: chưa chốt
-Implementation: chưa bắt đầu
+Dataset chính: a10.csv
+Phạm vi chính thức: Exercise 1–5
+Trạng thái E1–E5: đã triển khai và kiểm tra
+Phần nâng cao E6: exploratory, không thuộc formal completion
+Trạng thái bàn giao: HANDOFF_APPROVED
 ```
 
-Practice 2 đã có documentation, execution evidence và notebook workflow cho E01–E03.
-E03 đang bị chặn bởi stationarity evidence sau first differencing; E04 chưa được mở.
+Practice 2 thực hiện EDA, kiểm định ADF, differencing, phân tích ACF/PACF,
+huấn luyện ARIMA và đánh giá forecast trên dữ liệu tháng. E1–E5 sử dụng
+`a10.csv`; E6 sử dụng AirPassengers để so sánh ARIMA với SARIMA ở mức
+phân tích mở rộng.
+
+Kết quả chi tiết được trình bày tại:
+
+- [Notebook chính — E1 đến E5](./notebooks/Practice_2_present.ipynb)
+- [Notebook nâng cao — E6](./notebooks/Practice_2_advanced_sarima.ipynb)
+- [Báo cáo kết quả](./docs/report.md)
+- [Trạng thái thực hiện](./docs/status/current_status.md)
 
 ## Cấu trúc
 
@@ -41,9 +51,13 @@ Practice_2/
 └── tests/
 ```
 
-## Nguyên tắc khởi tạo
+## Nguyên tắc thực hiện
 
-- Không sao chép dataset, notebook, code, outputs hoặc logs của Practice khác.
-- Raw data phải được giữ bất biến sau khi nguồn dữ liệu được phê duyệt.
-- Logic tái sử dụng đặt trong `src/practice_2/`; notebook chỉ điều phối và trình bày.
-- Mọi bước triển khai phải tuân theo rule và approval workflow của repository.
+- Raw data được giữ bất biến sau khi dataset được phê duyệt.
+- Temporal split luôn giữ nguyên thứ tự thời gian và không shuffle.
+- Logic tái sử dụng của phạm vi chính thức được đặt trong `src/practice_2/`;
+  notebook dùng để điều phối và trình bày kết quả.
+- Kết luận thống kê phải nêu rõ giả thuyết, ngưỡng `alpha` và giới hạn của bằng chứng.
+- E6 được giữ ở mức exploratory: kết quả có thể trình bày nhưng không được ghi là
+  một Exercise đã formalize hoặc hoàn thành chính thức.
+- Mọi thay đổi tiếp theo phải tuân theo rule và approval workflow của repository.

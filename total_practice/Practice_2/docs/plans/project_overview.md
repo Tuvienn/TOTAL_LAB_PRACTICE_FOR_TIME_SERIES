@@ -1,6 +1,6 @@
-# PROJECT OVERVIEW — PRACTICE 2
+# TỔNG QUAN DỰ ÁN — PRACTICE 2
 
-## 1. Practice Identity
+## 1. Thông tin Practice
 
 **Practice:** Practice 2  
 **Topic:** Kiểm định ADF và chuẩn bị mô hình ARIMA/SARIMA  
@@ -12,7 +12,7 @@ Practice 2 xây dựng một workflow từ kiểm tra tính dừng đến huấn
 
 ---
 
-## 2. Problem Definition
+## 2. Định nghĩa bài toán
 
 Practice 2 cần giải quyết các câu hỏi chính:
 
@@ -46,7 +46,7 @@ Mọi quyết định phải dựa trên kết quả thực tế của dữ li�
 
 ---
 
-## 3. Learning Objectives
+## 3. Mục tiêu học tập
 
 Theo đề bài, Practice 2 có sáu mục tiêu:
 
@@ -59,7 +59,7 @@ Theo đề bài, Practice 2 có sáu mục tiêu:
 
 ---
 
-## 4. Datasets
+## 4. Dataset
 
 ### 4.1. Dataset 1 — Monthly Retail Sales
 
@@ -103,7 +103,7 @@ Dataset 2 được sử dụng để thực hành sai phân mùa vụ, SARIMA v�
 
 ---
 
-## 5. Practice Scope
+## 5. Phạm vi Practice
 
 ### 5.1. Core Practice — Exercise 01–05
 
@@ -124,9 +124,9 @@ Core Practice bao gồm:
 - tính MAE, RMSE và MAPE;
 - so sánh candidate models và đưa ra kết luận.
 
-### 5.2. Advanced Extension — Exercise 06
+### 5.2. Phần mở rộng exploratory — Exercise 06
 
-Advanced Extension bao gồm:
+Phần mở rộng exploratory bao gồm:
 
 - sử dụng Dataset 2 — AirPassengers;
 - nhận diện mùa vụ;
@@ -136,9 +136,10 @@ Advanced Extension bao gồm:
 - forecast và đánh giá bằng MAE/RMSE;
 - so sánh SARIMA với ARIMA.
 
-Exercise 06 không thay thế việc hoàn thành Exercise 01–05.
+Exercise 06 không thay thế việc hoàn thành Exercise 01–05 và không thuộc formal
+completion theo Phương án A đã được Human chọn.
 
-### 5.3. Out of Scope
+### 5.3. Ngoài phạm vi
 
 Practice 2 không đặt mục tiêu:
 
@@ -151,7 +152,7 @@ Practice 2 không đặt mục tiêu:
 
 ---
 
-## 6. Exercise Overview
+## 6. Tổng quan Exercise
 
 | Exercise | Mục tiêu chính | Kết quả chính |
 |---|---|---|
@@ -166,7 +167,7 @@ Chi tiết input, output, dependency, exit condition và stop condition của t�
 
 ---
 
-## 7. Scientific Workflow
+## 7. Workflow khoa học
 
 Practice phải duy trì thứ tự khoa học:
 
@@ -195,7 +196,7 @@ Các nguyên tắc bắt buộc:
 
 ---
 
-## 8. Expected Deliverables
+## 8. Sản phẩm bàn giao dự kiến
 
 Core Practice tối thiểu phải tạo được:
 
@@ -214,7 +215,7 @@ Core Practice tối thiểu phải tạo được:
 13. Candidate comparison.
 14. Final ARIMA conclusion.
 
-Advanced Extension bổ sung:
+Phần E6 exploratory hiện có thể trình bày:
 
 1. Seasonal differencing evidence.
 2. SARIMA specification và fitted model.
@@ -224,7 +225,7 @@ Advanced Extension bổ sung:
 
 ---
 
-## 9. Definition of Done
+## 9. Định nghĩa hoàn thành
 
 ### 9.1. Core Practice
 
@@ -252,9 +253,9 @@ Practice 2 core được xem là hoàn thành khi:
 [ ] Final ARIMA conclusion được ghi lại
 ```
 
-### 9.2. Advanced Extension
+### 9.2. Formal Advanced Extension — chỉ dùng làm tham chiếu
 
-Exercise 06 được xem là hoàn thành khi:
+Nếu E6 được formalize trong tương lai, Exercise 06 chỉ được xem là hoàn thành khi:
 
 ```text
 [ ] AirPassengers được chuẩn bị đúng theo monthly frequency
@@ -271,7 +272,7 @@ Một Practice vẫn đạt mục tiêu học tập nếu model chưa có sai s�
 
 ---
 
-## 10. Related Documents
+## 10. Tài liệu liên quan
 
 - [Đề bài Practice 2](../../../../references/excercise_stats_models.pdf)
 - [Kế hoạch triển khai cấp cao](plan_overview.md)

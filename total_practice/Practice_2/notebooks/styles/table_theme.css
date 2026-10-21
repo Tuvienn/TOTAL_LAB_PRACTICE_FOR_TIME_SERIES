@@ -1,0 +1,123 @@
+:root {
+  --practice2-table-bg: #ffffff;
+  --practice2-table-text: #1f2937;
+  --practice2-table-index: #374151;
+  --practice2-table-border: #d7dee8;
+  --practice2-table-stripe: #edf1f5;
+  --practice2-table-header-bg: #285a86;
+  --practice2-table-header-text: #ffffff;
+  --practice2-table-highlight-bg: #17427f;
+  --practice2-table-highlight-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --practice2-table-bg: #1e1e1e;
+    --practice2-table-text: #d4d4d4;
+    --practice2-table-index: #c8c8c8;
+    --practice2-table-border: #343434;
+    --practice2-table-stripe: #292929;
+    --practice2-table-header-bg: #285a86;
+    --practice2-table-header-text: #ffffff;
+    --practice2-table-highlight-bg: #123d7c;
+    --practice2-table-highlight-text: #ffffff;
+  }
+}
+
+body.vscode-dark,
+body.vscode-high-contrast,
+body[data-jp-theme-light="false"] {
+  --practice2-table-bg: #1e1e1e;
+  --practice2-table-text: #d4d4d4;
+  --practice2-table-index: #c8c8c8;
+  --practice2-table-border: #343434;
+  --practice2-table-stripe: #292929;
+  --practice2-table-header-bg: #285a86;
+  --practice2-table-header-text: #ffffff;
+  --practice2-table-highlight-bg: #123d7c;
+  --practice2-table-highlight-text: #ffffff;
+}
+
+table.dataframe,
+table.practice2-table {
+  width: 100%;
+  border: 0 !important;
+  border-collapse: collapse !important;
+  background: var(--practice2-table-bg) !important;
+  color: var(--practice2-table-text) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+table.dataframe thead th,
+table.practice2-table thead th {
+  padding: 0.7rem 0.85rem !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--practice2-table-border) !important;
+  background: var(--practice2-table-header-bg) !important;
+  color: var(--practice2-table-header-text) !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  white-space: nowrap;
+}
+
+table.dataframe tbody tr,
+table.practice2-table tbody tr {
+  background: var(--practice2-table-bg) !important;
+}
+
+table.dataframe tbody tr:nth-child(even),
+table.practice2-table tbody tr:nth-child(even) {
+  background: var(--practice2-table-stripe) !important;
+}
+
+table.dataframe tbody th,
+table.dataframe tbody td,
+table.practice2-table tbody th,
+table.practice2-table tbody td {
+  padding: 0.65rem 0.85rem !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--practice2-table-border) !important;
+  background: transparent !important;
+  color: inherit !important;
+  vertical-align: middle !important;
+}
+
+table.dataframe tbody th,
+table.practice2-table tbody th {
+  color: var(--practice2-table-index) !important;
+  font-weight: 500 !important;
+  text-align: right !important;
+}
+
+table.dataframe tbody td,
+table.practice2-table tbody td {
+  text-align: right !important;
+}
+
+table.dataframe tbody td:first-of-type,
+table.practice2-table tbody td:first-of-type {
+  text-align: left !important;
+}
+
+table.dataframe tbody td.metric-best,
+table.practice2-table tbody td.metric-best {
+  background: var(--practice2-table-highlight-bg) !important;
+  color: var(--practice2-table-highlight-text) !important;
+  font-weight: 600 !important;
+}
+
+table.dataframe tbody tr:last-child th,
+table.dataframe tbody tr:last-child td,
+table.practice2-table tbody tr:last-child th,
+table.practice2-table tbody tr:last-child td {
+  border-bottom: 0 !important;
+}
+
+table.dataframe caption,
+table.practice2-table caption {
+  padding: 0.5rem 0 0.75rem;
+  color: var(--practice2-table-text);
+  font-weight: 600;
+  text-align: left;
+}

@@ -1,89 +1,94 @@
-# EXERCISE 04 — EXECUTION EVIDENCE LOG
+# EXERCISE 04 — NHẬT KÝ THỰC THI
 
-## Record Status
-
-```text
-record type: retrospective record of persisted notebook output
-execution owner: Human-reported notebook run
-execution timestamp: not available in the persisted evidence reviewed
-assistant rerun in this documentation task: no
-formal E04 completion: not established
-E04-to-E05 handoff: remains open pending reconciliation
-```
-
-This log records evidence available in `notebooks/Practice_2_present.ipynb`. It does
-not claim that E04 was run from a clean kernel or that its formal approval and
-completion gates were met. The E04 specification and before-process plan remain
-drafts; see `docs/status/current_status.md`.
-
-## Scope
-
-ACF/PACF and provisional ARIMA candidate evidence for Dataset 1, Monthly Retail
-Sales (`a10.csv`). E04 does not fit models, calculate AIC/BIC, diagnose model
-residuals, forecast, or open the test set.
-
-## Expected Input and Evidence Limitations
+## Trạng thái
 
 ```text
-expected input: E03 log_first_differenced_training
-expected transformation: natural_log
-expected regular differencing order: d = 1
-expected observations: 162
-expected missing values: 0
-test set: 41 observations, must remain excluded
+execution date: 2026-10-20
+implementation: completed
+validation: passed
+E04-to-E05 handoff: completed
 ```
 
-The persisted notebook candidate table labels its analysis scale as
-`natural_log`, but the reviewed outputs do not establish that every ACF/PACF
-diagnostic was computed from the exact E03 `log_first_differenced_training`
-series. The input identity, timestamp boundary, and test-set exclusion therefore
-remain unverified for E04.
-
-## Persisted Notebook Results
-
-The candidate table contains three provisional entries:
-
-| Candidate | Order | Persisted rationale summary | Status |
-|---|---|---|---|
-| ARIMA(1,1,1) | (1,1,1) | ACF described as cutting after lag 1; PACF has a strong lag-1 spike | Provisional |
-| ARIMA(2,1,1) | (2,1,1) | ACF described as cutting after lag 1; PACF lags 1–2 cited | Provisional |
-| ARIMA(4,1,1) | (4,1,1) | PACF signal through lag 4 cited | Provisional |
-
-The current E04 specification permits one or two candidates, so the recorded
-three-row table does not satisfy that candidate-count requirement.
-
-A separate persisted seasonal-reference output reports:
-
-| Lag | ACF | ACF significant | PACF | PACF significant |
-|---:|---:|---|---:|---|
-| 12 | 0.8444 | Yes | 0.5121 | Yes |
-| 24 | 0.7044 | Yes | -0.0571 | No |
-| 36 | 0.6052 | Yes | -0.0273 | No |
-
-The saved printout does not establish that this seasonal-reference result came
-from the required log first-differenced training input. Treat it as recorded
-notebook output, not as validated evidence for the E04 handoff.
-
-## Outputs
-
-Notebook plots and tables are present as persisted cell outputs. At the time of
-this record, no dedicated E04 ACF/PACF figure or result CSV was present in
-`outputs/figures/` or `outputs/results/`.
-
-## Validation and Decision
+## Input contract
 
 ```text
-E03 input identity reproduced: not verified
-162-observation / no-missing input contract: not verified for ACF/PACF execution
-test-set exclusion: not independently verified
-ACF/PACF configuration and confidence level: not fully traceable from saved evidence
-candidate count within 1–2: no, three candidates recorded
-candidate rationale traceable to approved input: not established
-clean-kernel notebook run: not performed
-targeted E04 tests: not run
+dataset: datasets/raw/a10.csv
+full observations: 204
+training observations: 163
+sealed test observations: 41
+analysis series: log_first_differenced_training
+analysis observations: 162
+missing values: 0
+analysis start: 1991-08-01
+analysis end: 2005-01-01
+test start: 2005-02-01
+analysis scale: natural_log
+regular differencing order: d=1
+E03 ADF statistic: -3.659486
+E03 ADF p-value: 0.004720
+test values used for E04 selection: false
 ```
 
-The notebook output is useful as exploratory evidence, but does not establish a
-validated E04 handoff. The formal E04 handoff remains open. Do not treat these
-candidates as approved inputs to a formally completed E05 without reconciling
-the input provenance, candidate count, approval state, and current status.
+## Cấu hình ACF/PACF
+
+```text
+maximum lag: 36
+confidence level: 95%
+alpha: 0.05
+ACF FFT: false
+PACF method: ywm
+lag 0 used for p/q interpretation: false
+seasonal reference lags: 12, 24, 36
+```
+
+Significance được xác định từ confidence interval của `statsmodels` cho từng lag.
+Phép xấp xỉ cố định `1.96 / sqrt(n)` không còn được sử dụng.
+
+## Bằng chứng thực tế
+
+```text
+significant ACF lags above 0: 1, 11, 12, 24, 36
+significant PACF lags above 0: 1, 2, 4, 5, 9, 10, 11, 12, 13, 14
+ACF lag 12: 0.844390, significant
+ACF lag 24: 0.704369, significant
+ACF lag 36: 0.605161, significant
+PACF lag 12: 0.512103, significant
+PACF lag 24: -0.057087, not significant
+PACF lag 36: -0.027328, not significant
+```
+
+ACF không cắt cụt đơn giản sau lag 1. ACF mạnh tại lag 12, 24 và 36 cho thấy
+seasonal dependence vẫn tồn tại sau natural-log first differencing.
+
+## Candidate tạm thời
+
+| Candidate | Bằng chứng | Trạng thái |
+|---|---|---|
+| `ARIMA(1,1,1)` | ACF lag 1 và PACF lag 1 có ý nghĩa | provisional |
+| `ARIMA(2,1,1)` | PACF lag 1 và 2 có ý nghĩa; cần so sánh với candidate gọn hơn | provisional |
+
+Cả hai candidate kế thừa `natural_log` và `d=1`. Chúng là input cho bước fit và
+diagnostics ở E5, không phải final-model conclusion. Seasonal dependence còn lại
+được ghi nhận là giới hạn; E4 không tự mở rộng sang SARIMA.
+
+## Output
+
+- `outputs/figures/03_acf_pacf_log_first_differenced.png`
+- `outputs/results/acf_log_first_differenced.csv`
+- `outputs/results/pacf_log_first_differenced.csv`
+- `outputs/results/arima_candidates.csv`
+
+## Xác nhận
+
+```text
+targeted and full tests: 18 passed
+notebook path: notebooks/Practice_2_present.ipynb
+E04 notebook errors: 0
+figure inspected: true
+CSV outputs matched reusable computation: true
+raw SHA-256: 4baa700091ba43f59d762ed7112e203134467ecde3f7bc88da3b153040d384cb
+E05/E06 executed or modified by E04 validation: false
+```
+
+Tại thời điểm xác nhận E4, chỉ các cell thuộc phạm vi E4 được chạy. E5 sau đó đã
+được phê duyệt, triển khai và kiểm tra độc lập.

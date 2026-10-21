@@ -1,6 +1,6 @@
-# EXERCISE 03 — BEFORE-PROCESS PLAN
+# EXERCISE 03 — KẾ HOẠCH TRƯỚC KHI THỰC THI
 
-## 1. Plan Identity
+## 1. Thông tin kế hoạch
 
 ```text
 Practice: Practice_2
@@ -20,7 +20,7 @@ Execution evidence: docs/logs/exercise_03_execution.md
 Plan và implementation scope của Exercise 3 đã được Human phê duyệt. Mọi lần chạy lại
 phải tiếp tục tuân thủ đúng scope, validation và stop conditions trong file này.
 
-## 2. Objective
+## 2. Mục tiêu
 
 - xác minh E02 ADF result và original training series;
 - giữ raw first-difference failure làm evidence;
@@ -31,7 +31,7 @@ phải tiếp tục tuân thủ đúng scope, validation và stop conditions tro
 - xác định transformation và `d` từ actual evidence;
 - không sửa raw data, không dùng test set và không fit model.
 
-## 3. Required Documents
+## 3. Tài liệu bắt buộc
 
 ```text
 working_rule.md
@@ -51,7 +51,7 @@ total_practice/Practice_2/docs/status/current_status.md nếu đã tồn tại
 
 Nếu thiếu E02 evidence hoặc có conflict: `STOP → report issue → chờ Human quyết định`.
 
-## 4. Input
+## 4. Dữ liệu đầu vào
 
 ```text
 Original training series from Exercise 1
@@ -62,7 +62,7 @@ Regular differencing order: 1
 Significance level α: 0.05
 ```
 
-## 5. Files Allowed to Create or Modify
+## 5. File được phép tạo hoặc chỉnh sửa
 
 ```text
 src/practice_2/data/
@@ -80,7 +80,7 @@ docs/fix_plans/
 
 Không tạo duplicate differencing hoặc ADF function nếu owner tương đương đã tồn tại.
 
-## 6. Files Not to Modify
+## 6. File không được chỉnh sửa
 
 ```text
 datasets/raw/a10.csv
@@ -95,7 +95,7 @@ unrelated configuration
 
 Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → wait for approval`.
 
-## 7. Scientific Parameters
+## 7. Tham số khoa học
 
 ```text
 Transformation: natural logarithm
@@ -110,24 +110,24 @@ Model training: NO
 Forecast generation: NO
 ```
 
-## 8. Sequential Execution Steps
+## 8. Các bước thực thi tuần tự
 
-### Step 1 — Verify Upstream Dependency
+### Bước 1 — Xác minh dependency từ bước trước
 
 Xác minh E02 đã có original-series ADF result, training boundary và sealed test set.
 Nếu chưa đủ evidence thì STOP.
 
-### Step 2 — Preserve Raw First-Difference Evidence
+### Bước 2 — Giữ bằng chứng first difference trên raw scale
 
 Xác minh raw first-difference attempt và ADF blocker hiện tại; không trình bày attempt
 này như stationary evidence.
 
-### Step 3 — Create Log First-Differenced Working Series
+### Bước 3 — Tạo working series sau log và first difference
 
 Xác minh training values đều dương, áp dụng natural log rồi regular first difference.
 Không ghi transformation hoặc xử lý `NaN` ngược vào raw file.
 
-### Step 4 — Plot Transformed Differenced Series
+### Bước 4 — Vẽ transformed differenced series
 
 Tạo và inspect:
 
@@ -136,13 +136,13 @@ outputs/figures/02_first_differenced_series.png
 outputs/figures/02_log_first_differenced_series.png
 ```
 
-### Step 5 — Run ADF Remediation
+### Bước 5 — Chạy ADF sau remediation
 
 Chạy ADF trên log first-differenced training series với `α = 0.05`, `regression="c"`
 và `autolag="AIC"`; ghi statistic, p-value, critical values, used lag và observations
 khi output cung cấp.
 
-### Step 6 — Decide Stationarity, Transformation and d
+### Bước 6 — Quyết định stationarity, transformation và d
 
 ```text
 p-value ≤ 0.05 → evidence supports stationarity → transformation=natural_log, d=1
@@ -152,7 +152,7 @@ p-value > 0.05 → transformation and selected_d = REVIEW_REQUIRED → handoff �
 Nếu scientific handoff đóng, phải STOP trước E04 và report issue. Không tự tăng
 differencing hoặc đổi protocol nếu chưa được approve.
 
-### Step 7 — Save and Inspect Outputs
+### Bước 7 — Lưu và kiểm tra output
 
 ```text
 outputs/results/adf_differenced_series.csv
@@ -165,12 +165,12 @@ outputs/results/differencing_decision.csv
 
 Inspect plots, tables và narrative answer cho hai câu hỏi chính của bài.
 
-### Step 8 — Update State
+### Bước 8 — Cập nhật trạng thái
 
 Sau khi technical execution validation hoàn thành, cập nhật current status và execution
 log bằng actual outcome. Scientific handoff chỉ được mở khi stationarity và `d` có evidence.
 
-## 9. Validation Checklist
+## 9. Checklist xác nhận
 
 ```text
 [x] Required documents were read
@@ -194,7 +194,7 @@ log bằng actual outcome. Scientific handoff chỉ được mở khi stationari
 [x] No unrelated file modified
 ```
 
-## 10. Expected Outputs
+## 10. Output dự kiến
 
 ```text
 outputs/figures/02_first_differenced_series.png
@@ -210,7 +210,7 @@ outputs/results/differencing_decision.csv
 Required narrative evidence: stationarity after differencing và `d` decision. Nếu
 evidence chưa đủ để chọn một giá trị số, `REVIEW_REQUIRED` là kết quả hợp lệ.
 
-## 11. Stop Conditions
+## 11. Điều kiện dừng
 
 Agent phải dừng khi E02 evidence thiếu, input sai, test leakage xảy ra, giá trị train
 không dương, log/differencing hoặc ADF fail, remediation chưa stationary,
@@ -226,9 +226,9 @@ Khi dừng:
 5. Chờ Human approval.
 ```
 
-## 12. Execution Completion và Scientific Handoff
+## 12. Hoàn thành thực thi và scientific handoff
 
-### 12.1. Technical Execution Gate
+### 12.1. Điều kiện hoàn thành kỹ thuật
 
 ```text
 raw failed evidence preserved
@@ -241,7 +241,7 @@ AND d decision recorded from actual evidence
 
 Technical execution có thể hoàn thành dù kết quả khoa học tạo blocker.
 
-### 12.2. Scientific Handoff Gate
+### 12.2. Scientific handoff gate
 
 Chỉ mở handoff sang Exercise 4 khi:
 
@@ -254,7 +254,7 @@ AND no unresolved scientific blocker
 Nếu gate chưa đạt, `selected_d = REVIEW_REQUIRED`, Exercise 3 chưa complete và
 Exercise 4 không được bắt đầu.
 
-## 13. Approval Gate
+## 13. Approval gate
 
 ```text
 EXERCISE_03_BEFORE_PROCESS_CREATED=true
@@ -271,7 +271,7 @@ EXERCISE_04_HANDOFF_OPEN=true
 Actual result và runtime state phải được đọc từ execution log và current status;
 before-process plan không thay thế hai evidence owner này.
 
-## 14. Agent Execution Rule
+## 14. Quy tắc thực thi dành cho Agent
 
 Sau approval:
 

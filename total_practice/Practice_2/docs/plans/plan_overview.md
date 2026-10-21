@@ -1,6 +1,6 @@
-# PLAN OVERVIEW — PRACTICE 2
+# TỔNG QUAN KẾ HOẠCH — PRACTICE 2
 
-## 1. Document Identity
+## 1. Thông tin tài liệu
 
 **Document:** `plan_overview.md`  
 **Practice:** Practice 2 — ADF and ARIMA/SARIMA  
@@ -13,7 +13,7 @@ Tài liệu này xác định trình tự, input, nhiệm vụ, evidence, output
 
 ---
 
-## 2. Purpose and Source Basis
+## 2. Mục đích và cơ sở yêu cầu
 
 Plan được xây dựng từ các yêu cầu trong [đề bài Practice 2](../../../../references/excercise_stats_models.pdf):
 
@@ -33,9 +33,9 @@ Plan không mô tả implementation ở mức tên hàm hoặc code cell. Chi ti
 
 ---
 
-## 3. Planning Principles
+## 3. Nguyên tắc lập kế hoạch
 
-### 3.1. Sequential Dependency
+### 3.1. Dependency tuần tự
 
 ```text
 Dataset 1
@@ -49,12 +49,12 @@ Dataset 1
 
 Dataset 2
 → E06: ARIMA baseline and SARIMA comparison
-→ Advanced complete
+→ Exploratory evidence only
 ```
 
 Không thực hiện downstream Exercise nếu upstream Exercise chưa cung cấp đủ input và evidence.
 
-### 3.2. Evidence Before Decision
+### 3.2. Evidence trước quyết định
 
 ```text
 ADF evidence → stationarity decision → selected d
@@ -64,7 +64,7 @@ Convergence + AIC/BIC + residual diagnostics + forecast metrics → model assess
 
 Không được hard-code kết luận, thay đổi candidate model âm thầm hoặc đánh giá model chỉ bằng một metric.
 
-### 3.3. Chronology and Holdout Protection
+### 3.3. Bảo vệ chronology và holdout
 
 - Dữ liệu phải giữ nguyên thứ tự thời gian.
 - Không shuffle train/test observations.
@@ -74,16 +74,16 @@ Không được hard-code kết luận, thay đổi candidate model âm thầm h
 - E05 mới được sử dụng test set để đánh giá forecast ngoài mẫu.
 - Notebook có thể trình bày train/test split chính thức trong E05, nhưng boundary phải được xác định trước E02 để ngăn leakage.
 
-### 3.4. Raw-Data Integrity
+### 3.4. Toàn vẹn raw data
 
 - Không ghi đè `datasets/raw/a10.csv`.
 - Không âm thầm sort, fill, interpolate, deduplicate, resample hoặc đổi tên cột trong raw file.
 - Mọi xử lý chỉ áp dụng trên working copy.
 - Các vấn đề time index phải được ghi nhận trước khi xử lý.
 
-### 3.5. One Exercise, One Main Decision
+### 3.5. Mỗi Exercise có một quyết định chính
 
-| Exercise | Main decision |
+| Exercise | Quyết định chính |
 |---|---|
 | E01 | Dữ liệu đã sẵn sàng cho phân tích chưa? |
 | E02 | Original training series có stationary không? |
@@ -94,7 +94,7 @@ Không được hard-code kết luận, thay đổi candidate model âm thầm h
 
 ---
 
-## 4. Exercise Flow
+## 4. Luồng Exercise
 
 ```text
 E01 — EDA and Time-Series Preparation
@@ -112,17 +112,18 @@ CORE COMPLETE
 E06 — Advanced SARIMA Extension
 ```
 
-Exercise 01–05 tạo thành Core Practice. Exercise 06 là Advanced Extension và không thay thế Core Practice.
+Exercise 01–05 tạo thành Core Practice. Exercise 06 là phần exploratory theo Phương
+án A đã được Human chọn và không thay thế Core Practice.
 
 ---
 
-## 5. Exercise 01 — EDA and Time-Series Preparation
+## 5. Exercise 01 — EDA và chuẩn bị chuỗi thời gian
 
-### 5.1. Objective
+### 5.1. Mục tiêu
 
 Chuẩn bị Dataset 1 thành monthly time series hợp lệ, quan sát cấu trúc ban đầu và xác lập chronological holdout boundary.
 
-### 5.2. Input
+### 5.2. Dữ liệu đầu vào
 
 ```text
 datasets/raw/a10.csv
@@ -130,7 +131,7 @@ date column: date
 target column: value
 ```
 
-### 5.3. Required Tasks
+### 5.3. Nhiệm vụ bắt buộc
 
 - load dữ liệu mà không thay đổi raw file;
 - kiểm tra schema và kiểu dữ liệu;
@@ -145,7 +146,7 @@ target column: value
 - xác định ranh giới chronological train 80% và test 20%;
 - niêm phong test set cho đến E05.
 
-### 5.4. Required Evidence
+### 5.4. Evidence bắt buộc
 
 - số quan sát và schema;
 - date range và frequency;
@@ -156,7 +157,7 @@ target column: value
 - nhận xét stationarity ban đầu;
 - train/test boundary và số quan sát mỗi tập.
 
-### 5.5. Required Output
+### 5.5. Output bắt buộc
 
 ```text
 Validated full monthly series
@@ -168,7 +169,7 @@ EDA observations
 Sealed chronological train/test boundary
 ```
 
-### 5.6. Exit Condition
+### 5.6. Điều kiện hoàn thành bước
 
 ```text
 [ ] Dataset load thành công
@@ -180,30 +181,30 @@ Sealed chronological train/test boundary
 [ ] Test set được đánh dấu không sử dụng trước E05
 ```
 
-### 5.7. Stop Condition
+### 5.7. Điều kiện dừng
 
 Dừng trước E02 nếu timestamp không parse được, frequency không xác định, có duplicate hoặc missing interval chưa được giải thích, hoặc train/test boundary chưa được xác lập.
 
-### 5.8. Downstream Handoff
+### 5.8. Handoff cho bước sau
 
 E01 cung cấp original training series chưa biến đổi cho E02 và giữ test set niêm phong đến E05.
 
 ---
 
-## 6. Exercise 02 — ADF on Original Series
+## 6. Exercise 02 — ADF trên chuỗi gốc
 
-### 6.1. Objective
+### 6.1. Mục tiêu
 
 Kiểm định stationarity của original training series bằng Augmented Dickey-Fuller test.
 
-### 6.2. Input
+### 6.2. Dữ liệu đầu vào
 
 ```text
 Original untransformed training series from E01
 Significance level α = 0.05
 ```
 
-### 6.3. Required Tasks
+### 6.3. Nhiệm vụ bắt buộc
 
 - chạy ADF trên original training series;
 - ghi ADF statistic;
@@ -214,7 +215,7 @@ Significance level α = 0.05
 - so sánh p-value với `α = 0.05`;
 - kết luận stationary hoặc non-stationary.
 
-### 6.4. Required Evidence
+### 6.4. Evidence bắt buộc
 
 Phải trả lời:
 
@@ -222,7 +223,7 @@ Phải trả lời:
 - p-value cho biết điều gì?
 - Original training series có stationary không?
 
-### 6.5. Required Output
+### 6.5. Output bắt buộc
 
 ```text
 Original-series ADF result
@@ -230,7 +231,7 @@ Original-series ADF result
 Stationarity conclusion
 ```
 
-### 6.6. Exit Condition
+### 6.6. Điều kiện hoàn thành bước
 
 ```text
 [ ] ADF đã chạy trên original training series
@@ -239,23 +240,23 @@ Stationarity conclusion
 [ ] Stationarity conclusion có bằng chứng
 ```
 
-### 6.7. Stop Condition
+### 6.7. Điều kiện dừng
 
 Dừng trước E03 nếu ADF input không đúng chuỗi train nguyên bản, test observations bị sử dụng hoặc kết luận không truy vết được đến output.
 
-### 6.8. Downstream Handoff
+### 6.8. Handoff cho bước sau
 
 E02 cung cấp original-series stationarity conclusion cho E03.
 
 ---
 
-## 7. Exercise 03 — Differencing and ADF Retest
+## 7. Exercise 03 — Differencing và kiểm định lại ADF
 
-### 7.1. Objective
+### 7.1. Mục tiêu
 
 Thực hiện first-order differencing trên training series, kiểm định lại stationarity và xác định tham số `d`.
 
-### 7.2. Input
+### 7.2. Dữ liệu đầu vào
 
 ```text
 Original training series
@@ -263,7 +264,7 @@ Original training series
 Stationarity conclusion from E02
 ```
 
-### 7.3. Required Tasks
+### 7.3. Nhiệm vụ bắt buộc
 
 - tạo first-differenced working series;
 - loại giá trị `NaN` sinh trực tiếp từ phép sai phân trên working copy;
@@ -274,7 +275,7 @@ Stationarity conclusion from E02
 - kết luận chuỗi sau sai phân đã stationary chưa;
 - xác định và giải thích `d`.
 
-### 7.4. Required Evidence
+### 7.4. Evidence bắt buộc
 
 Phải trả lời:
 
@@ -282,7 +283,7 @@ Phải trả lời:
 - ADF evidence trước và sau sai phân khác nhau như thế nào?
 - Giá trị `d` được chọn là bao nhiêu và vì sao?
 
-### 7.5. Required Output
+### 7.5. Output bắt buộc
 
 ```text
 Differenced training series
@@ -296,7 +297,7 @@ Selected d
 Stationary working series
 ```
 
-### 7.6. Exit Condition
+### 7.6. Điều kiện hoàn thành bước
 
 ```text
 [ ] First-order differencing hoàn thành trên working copy
@@ -306,23 +307,23 @@ Stationary working series
 [ ] d được xác định có căn cứ
 ```
 
-### 7.7. Stop Condition
+### 7.7. Điều kiện dừng
 
 Dừng trước E04 nếu working series chưa stationary, `d` chưa xác định hoặc test observations đã tham gia transformation/model identification.
 
-### 7.8. Downstream Handoff
+### 7.8. Handoff cho bước sau
 
 E03 cung cấp stationary training series và selected `d` cho E04.
 
 ---
 
-## 8. Exercise 04 — ACF/PACF and ARIMA Candidate Identification
+## 8. Exercise 04 — ACF/PACF và nhận diện ARIMA candidate
 
-### 8.1. Objective
+### 8.1. Mục tiêu
 
 Phân tích ACF/PACF của stationary training series để đề xuất `p`, `q` và 1–2 ARIMA candidates.
 
-### 8.2. Input
+### 8.2. Dữ liệu đầu vào
 
 ```text
 Stationary training series
@@ -330,7 +331,7 @@ Stationary training series
 Selected d from E03
 ```
 
-### 8.3. Required Tasks
+### 8.3. Nhiệm vụ bắt buộc
 
 - vẽ ACF của stationary training series;
 - vẽ PACF của stationary training series;
@@ -340,7 +341,7 @@ Selected d from E03
 - kết hợp `p`, `d`, `q`;
 - xác định 1–2 ARIMA candidates để fit trong E05.
 
-### 8.4. Required Evidence
+### 8.4. Evidence bắt buộc
 
 Phải trả lời:
 
@@ -351,7 +352,7 @@ Phải trả lời:
 
 ACF/PACF chỉ dùng để đề xuất candidates, không tự động xác nhận final model.
 
-### 8.5. Required Output
+### 8.5. Output bắt buộc
 
 ```text
 ACF plot and interpretation
@@ -363,7 +364,7 @@ Candidate p/q values
 1–2 ARIMA candidates
 ```
 
-### 8.6. Exit Condition
+### 8.6. Điều kiện hoàn thành bước
 
 ```text
 [ ] ACF/PACF được tạo từ stationary training series
@@ -372,23 +373,23 @@ Candidate p/q values
 [ ] 1–2 ARIMA candidates được xác định
 ```
 
-### 8.7. Stop Condition
+### 8.7. Điều kiện dừng
 
 Dừng trước E05 nếu ACF/PACF được tính trên full series, raw non-stationary series hoặc ARIMA candidates được chọn tùy ý.
 
-### 8.8. Downstream Handoff
+### 8.8. Handoff cho bước sau
 
 E04 cung cấp 1–2 ARIMA candidates cho E05.
 
 ---
 
-## 9. Exercise 05 — ARIMA Training, Diagnostics, Forecasting and Evaluation
+## 9. Exercise 05 — Huấn luyện, diagnostics, forecast và đánh giá ARIMA
 
-### 9.1. Objective
+### 9.1. Mục tiêu
 
 Fit các ARIMA candidates trên train set, kiểm tra model và residuals, forecast trên sealed test set và đánh giá out-of-sample performance.
 
-### 9.2. Input
+### 9.2. Dữ liệu đầu vào
 
 ```text
 Chronological train/test boundary from E01
@@ -398,9 +399,9 @@ Chronological train/test boundary from E01
 Sealed test set
 ```
 
-### 9.3. Required Tasks
+### 9.3. Nhiệm vụ bắt buộc
 
-#### Stage A — Chronological Split Report
+#### Giai đoạn A — Báo cáo chronological split
 
 - trình bày train 80% và test 20%;
 - xác nhận time order;
@@ -408,7 +409,7 @@ Sealed test set
 - giải thích vai trò của test set;
 - xác nhận test set chưa được dùng trong E02–E04.
 
-#### Stage B — Baseline and Model Fitting
+#### Giai đoạn B — Baseline và model fitting
 
 - tạo seasonal-naive baseline với seasonal lag 12;
 - fit từng ARIMA candidate trên train set;
@@ -417,7 +418,7 @@ Sealed test set
 - giải thích ý nghĩa của `p`, `d`, `q`;
 - không chọn final model chỉ bằng AIC/BIC.
 
-#### Stage C — Residual Diagnostics
+#### Giai đoạn C — Residual diagnostics
 
 Với mỗi fitted candidate:
 
@@ -429,7 +430,7 @@ Với mỗi fitted candidate:
 - dùng Ljung–Box như kiểm định bổ sung khi phù hợp;
 - ghi hướng điều chỉnh nếu residual còn autocorrelation.
 
-#### Stage D — Forecasting and Evaluation
+#### Giai đoạn D — Forecast và đánh giá
 
 - forecast đúng test horizon;
 - căn chỉnh forecast index với test index;
@@ -440,7 +441,7 @@ Với mỗi fitted candidate:
 - xác định timestamp có absolute error lớn nhất;
 - đưa ra final ARIMA assessment từ tổng hợp evidence.
 
-### 9.4. Required Evidence
+### 9.4. Evidence bắt buộc
 
 Phải trả lời đủ các câu hỏi của đề:
 
@@ -454,7 +455,7 @@ Phải trả lời đủ các câu hỏi của đề:
 8. Chỉ số nào nhạy với outlier nhất?
 9. RMSE lớn hoặc nhỏ nói lên điều gì?
 
-### 9.5. Required Output
+### 9.5. Output bắt buộc
 
 ```text
 Chronological train/test evidence
@@ -476,7 +477,7 @@ Largest-error evidence
 Final ARIMA assessment
 ```
 
-### 9.6. Exit Condition
+### 9.6. Điều kiện hoàn thành bước
 
 ```text
 [ ] Train/test split được trình bày và không shuffle
@@ -492,23 +493,23 @@ Final ARIMA assessment
 [ ] Final assessment có evidence
 ```
 
-### 9.7. Stop Condition
+### 9.7. Điều kiện dừng
 
 Dừng và ghi nhận issue nếu model không hội tụ, forecast index lệch test index, metric dùng sai observations, residual còn cấu trúc chưa được giải thích hoặc test leakage được phát hiện.
 
-### 9.8. Downstream Handoff
+### 9.8. Handoff cho bước sau
 
 E05 hoàn thành Core Practice. Kết quả ARIMA trên Dataset 1 không được dùng trực tiếp để so metric với SARIMA trên Dataset 2.
 
 ---
 
-## 10. Exercise 06 — Advanced SARIMA Extension
+## 10. Exercise 06 — Phần mở rộng SARIMA exploratory
 
-### 10.1. Objective
+### 10.1. Mục tiêu
 
 Fit ARIMA baseline và SARIMA trên cùng AirPassengers setup để đánh giá tác động của seasonal modeling.
 
-### 10.2. Input
+### 10.2. Dữ liệu đầu vào
 
 ```text
 Dataset 2 — AirPassengers
@@ -523,7 +524,7 @@ Suggested differencing: d = 1, D = 1
 
 Các giá trị `d = 1` và `D = 1` là gợi ý của đề, không thay thế việc kiểm tra evidence.
 
-### 10.3. Required Tasks
+### 10.3. Nhiệm vụ của phạm vi formal tham chiếu
 
 - load và validate AirPassengers;
 - vẽ original series và nhận diện seasonality;
@@ -537,7 +538,7 @@ Các giá trị `d = 1` và `D = 1` là gợi ý của đề, không thay thế 
 - tính MAE và RMSE cho cả hai model;
 - so sánh ARIMA và SARIMA trên cùng test observations.
 
-### 10.4. Required Evidence
+### 10.4. Evidence dự kiến
 
 - seasonality evidence;
 - original-series ADF evidence;
@@ -548,7 +549,7 @@ Các giá trị `d = 1` và `D = 1` là gợi ý của đề, không thay thế 
 - MAE/RMSE của ARIMA và SARIMA;
 - kết luận về lợi ích hoặc hạn chế của seasonal modeling.
 
-### 10.5. Required Output
+### 10.5. Output dự kiến
 
 ```text
 AirPassengers validation and seasonality evidence
@@ -566,7 +567,7 @@ MAE/RMSE comparison
 Final ARIMA–SARIMA conclusion
 ```
 
-### 10.6. Exit Condition
+### 10.6. Điều kiện formal completion tham chiếu
 
 ```text
 [ ] AirPassengers được validate
@@ -578,17 +579,18 @@ Final ARIMA–SARIMA conclusion
 [ ] ARIMA–SARIMA comparison có kết luận
 ```
 
-### 10.7. Stop Condition
+### 10.7. Điều kiện dừng
 
 Dừng nếu hai model không dùng cùng dataset, split, horizon hoặc metrics; nếu model không hội tụ mà chưa được ghi nhận; hoặc nếu test leakage được phát hiện.
 
-### 10.8. Downstream Handoff
+### 10.8. Handoff cho bước sau
 
-E06 hoàn thành Advanced Extension và cung cấp kết luận về seasonal modeling trên Dataset 2.
+Trong phạm vi hiện tại, E6 cung cấp exploratory evidence về seasonal modeling trên
+Dataset 2 nhưng không được đánh dấu formal completion.
 
 ---
 
-## 11. Dependency Map
+## 11. Sơ đồ dependency
 
 ```text
 Dataset 1: Monthly Retail Sales
@@ -609,14 +611,14 @@ Dataset 2: AirPassengers
         ↓
 E06: same-data ARIMA baseline + SARIMA comparison
         ↓
-ADVANCED COMPLETE
+EXPLORATORY EVIDENCE
 ```
 
 ---
 
-## 12. Exercise Interface Summary
+## 12. Tóm tắt interface giữa các Exercise
 
-| Exercise | Main Input | Main Decision | Main Output |
+| Exercise | Input chính | Quyết định chính | Output chính |
 |---|---|---|---|
 | E01 | Dataset 1 | Dữ liệu có sẵn sàng và holdout boundary có hợp lệ không? | Validated series + sealed boundary |
 | E02 | Original training series | Chuỗi gốc có stationary không? | ADF evidence + conclusion |
@@ -627,7 +629,7 @@ ADVANCED COMPLETE
 
 ---
 
-## 13. Core vs Advanced Boundary
+## 13. Ranh giới Core và Advanced
 
 ### Core Practice
 
@@ -637,19 +639,20 @@ E01 → E02 → E03 → E04 → E05
 
 Core Practice sử dụng Dataset 1 và hoàn thành toàn bộ yêu cầu ARIMA chính.
 
-### Advanced Extension
+### Phần mở rộng exploratory
 
 ```text
 E06
 ```
 
-Exercise 06 sử dụng Dataset 2. Completion của E06 không thay thế hoặc che lấp trạng thái của E01–E05.
+Exercise 06 sử dụng Dataset 2 và giữ trạng thái exploratory. Kết quả E6 không thay
+thế hoặc che lấp trạng thái của E01–E05.
 
 ---
 
-## 14. Approval Gates
+## 14. Approval gate
 
-### Gate 1 — Overview Approval
+### Gate 1 — Phê duyệt overview
 
 ```text
 PROJECT_OVERVIEW approved
@@ -657,7 +660,7 @@ PROJECT_OVERVIEW approved
 PLAN_OVERVIEW approved
 ```
 
-### Gate 2 — Exercise Design Approval
+### Gate 2 — Phê duyệt thiết kế Exercise
 
 Trước khi code một Exercise:
 
@@ -669,7 +672,7 @@ input contract available
 scientific protocol understood
 ```
 
-### Gate 3 — Implementation Approval
+### Gate 3 — Phê duyệt implementation
 
 ```text
 approved implementation scope
@@ -679,7 +682,7 @@ entry condition satisfied
 upstream evidence available
 ```
 
-### Gate 4 — Exercise Completion Approval
+### Gate 4 — Phê duyệt hoàn thành Exercise
 
 ```text
 required output generated
@@ -695,13 +698,9 @@ Không chuyển Exercise nếu gate hiện tại chưa đạt.
 
 ---
 
-## 15. Optional Exercise Detail Files
+## 15. File thiết kế chi tiết của từng Exercise
 
-Không bắt buộc tạo một file riêng cho từng Exercise khi scope, input, output và
-validation trong plan này đã đủ rõ. Chỉ tạo specification riêng khi Human yêu cầu
-hoặc khi Exercise cần quyết định bổ sung trước implementation.
-
-Nếu được tạo, dùng các tên:
+Các specification riêng đã được tạo và phê duyệt với các tên:
 
 ```text
 exercise_01_eda_time_series_preparation.md
@@ -712,42 +711,38 @@ exercise_05_arima_training_forecasting_evaluation.md
 exercise_06_sarima_extension.md
 ```
 
-Các file tùy chọn này thuộc `docs/exercise_details/`.
+Các file này thuộc `docs/exercise_details/`.
 
-Mỗi exercise detail dự kiến bao gồm:
+Mỗi exercise detail bao gồm:
 
 ```text
-1. Exercise Identity
-2. Objective
-3. Input Contract
-4. Required Steps
-5. Scientific Parameters
-6. Expected Outputs
-7. Interpretation Questions
-8. Validation Criteria
-9. Stop Conditions
-10. Completion Condition
+1. Thông tin Exercise
+2. Mục tiêu
+3. Input contract
+4. Các bước bắt buộc
+5. Tham số khoa học
+6. Output dự kiến
+7. Câu hỏi diễn giải
+8. Tiêu chí xác nhận
+9. Điều kiện dừng
+10. Điều kiện hoàn thành
 ```
 
 ---
 
-## 16. Current Status and Next Step
+## 16. Trạng thái hiện tại và bước tiếp theo
 
 ```text
-PROJECT_OVERVIEW
-        ↓
-     APPROVED
-        ↓
-PLAN_OVERVIEW
-        ↓
-     APPROVED
+E01–E05: COMPLETED_AND_VALIDATED
+E06: EXPLORATORY_ONLY
+E06 residual diagnostics fix: VALIDATED
 ```
 
-Trạng thái tiếp theo:
+Các việc hoàn thiện còn lại:
 
-1. Không tự động triển khai Exercise.
-2. Hoàn thành readiness cleanup đã được Human yêu cầu.
-3. Code tuần tự từ E01 khi implementation scope tương ứng được phê duyệt.
-4. Chỉ tạo exercise specification riêng khi Human yêu cầu hoặc plan chưa đủ rõ.
+1. Chuẩn hóa ngôn ngữ và presentation của tài liệu/notebook.
+2. Bổ sung 5W1H và dataset provenance cho hai notebook.
+3. Style các bảng output mà không thêm chart mới.
+4. Clean-run, test và review lần cuối.
 
 Commit và push Git không thuộc phạm vi của plan này.

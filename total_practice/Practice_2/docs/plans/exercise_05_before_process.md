@@ -1,6 +1,6 @@
-# EXERCISE 05 — BEFORE-PROCESS PLAN
+# EXERCISE 05 — KẾ HOẠCH TRƯỚC KHI THỰC THI
 
-## 1. Plan Identity
+## 1. Thông tin kế hoạch
 
 ```text
 Practice: Practice_2
@@ -8,33 +8,31 @@ Exercise ID: EXERCISE_05
 Topic: ARIMA Training, Residual Diagnostics, Forecasting and Evaluation
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: DRAFT_WAITING_HUMAN_REVIEW
-Implementation authorized: NO
-Human-reported execution: YES, notebook evidence requires formal reconciliation
-Upstream handoff: E04 ARIMA candidates; formal status discrepancy remains
+Status: COMPLETED_AND_VALIDATED
+Implementation authorized: YES
+Previous notebook execution: retained as exploratory history and formally rerun
+Upstream handoff: E04 COMPLETED_AND_VALIDATED
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_05_execution.md
 ```
 
-This plan governs review and reproducible validation of E05. Existing notebook
-outputs are exploratory evidence and do not by themselves approve implementation
-or establish formal Exercise completion.
+Kế hoạch này quản lý việc review và xác nhận E5 theo cách tái tạo được. Output cũ
+trong notebook chỉ là exploratory evidence và không tự tạo quyền implementation
+hoặc trạng thái formal completion. E5 hiện đã được Human review và hoàn thành.
 
-## 2. Objective
+## 2. Mục tiêu
 
-- verify the E01 chronological holdout and the E04 candidate handoff;
-- fit the approved one or two ARIMA candidates on training data;
-- compare each candidate with a seasonal-naive baseline using seasonal lag 12;
-- inspect convergence, fitting warnings, AIC/BIC, and residual diagnostics;
-- forecast the sealed test horizon and evaluate MAE, RMSE, and MAPE;
-- answer the E05 interpretation questions from inspected execution evidence;
-- reconcile the human-reported E04/E05 completion with formal status and approval
-  records before marking E05 complete.
+- Xác minh chronological holdout E1 và candidate handoff E4.
+- Fit một hoặc hai ARIMA candidate đã phê duyệt chỉ trên train.
+- So sánh từng candidate với seasonal-naive baseline có lag 12.
+- Kiểm tra convergence, fitting warning, AIC/BIC và residual diagnostics.
+- Forecast sealed test horizon và đánh giá MAE, RMSE, MAPE.
+- Trả lời câu hỏi E5 từ execution evidence đã kiểm tra.
+- Đồng bộ formal status trước khi đánh dấu hoàn thành.
 
-E05 covers ARIMA on Monthly Retail Sales. SARIMA on AirPassengers is E06 and is
-outside this plan.
+E5 chỉ bao phủ ARIMA trên Monthly Retail Sales. SARIMA trên AirPassengers thuộc E6.
 
-## 3. Required Documents
+## 3. Tài liệu bắt buộc
 
 ```text
 working_rule.md
@@ -57,33 +55,24 @@ E01–E04 validated evidence, execution logs, and outputs
 notebooks/Practice_2_present.ipynb
 ```
 
-If required upstream evidence is missing or status/approval records conflict,
-stop and report the discrepancy before formal execution or completion.
+Nếu upstream evidence thiếu hoặc approval/status mâu thuẫn, phải dừng và báo sai lệch
+trước khi formal execution hoặc completion.
 
-## 4. Entry Gate and Current State
+## 4. Entry gate và trạng thái hiện tại
 
-The current status records that the Human reported E04/E05 completed and that
-notebook execution evidence exists. It also preserves `EXERCISE_04_HANDOFF_OPEN=true`
-and says formal E04/E05 execution logs and status reconciliation are pending.
-The E05 specification is currently a draft and says implementation is not
-authorized.
-
-Therefore:
+E4 đã hoàn thành với hai provisional candidate. Human phê duyệt E5 implementation
+plan ngày 2026-10-20. Lần chạy notebook trước đó được giữ như exploratory history;
+formal result được tạo lại từ reusable source và verified artifact.
 
 ```text
-Human-reported E05 notebook run: present
-Formal E04 handoff state: unresolved
-E05 specification approval: pending
-E05 plan approval: pending
-Formal E05 completion: not established
+Previous E05 notebook run: exploratory history
+Formal E04 handoff state: completed and open for E05
+E05 specification approval: approved
+E05 plan approval: approved
+Formal E05 state: completed and validated
 ```
 
-Before treating the run as official, review the approval state with the Human,
-resolve the E04 status discrepancy, verify the notebook outputs against the
-specification, and obtain approval for any required rerun or changes. Do not
-silently promote exploratory notebook output to approved evidence.
-
-## 5. Upstream Input Contract
+## 5. Input contract từ bước trước
 
 ```text
 Dataset: datasets/raw/a10.csv
@@ -101,19 +90,19 @@ E04 handoff: one or two provisional ARIMA(p,1,q) candidates with rationale
 Test set: sealed until final evaluation
 ```
 
-The ARIMA fitting input is the natural-log transform of the training **level**
-series, with `d=1` supplied to the model. The already log-differenced E03 series
-is for stationarity evidence and E04 order identification; do not fit ARIMA with
-`d=1` to that pre-differenced series.
+ARIMA fit trên chuỗi **level** train sau natural-log transformation và nhận `d=1`
+trong model. Chuỗi E3 đã log-difference chỉ dùng cho stationarity evidence và nhận
+diện order ở E4; không fit ARIMA có `d=1` trên chuỗi đã differencing đó.
 
-Reuse the E01 split exactly. Do not sort, repair, fill, interpolate, resample,
-or modify the raw CSV as part of this plan.
+Phải dùng chính xác split E1. Không sort, repair, fill, interpolate, resample hoặc
+sửa raw CSV trong kế hoạch này.
 
-## 6. Scientific and Evaluation Parameters
+## 6. Tham số khoa học và đánh giá
 
 ```text
 Analysis scale: natural_log
 ARIMA d: 1, inherited from E03
+ARIMA trend policy: no drift (`trend='n'`)
 Candidate count: 1–2, inherited from E04
 Seasonal-naive period: 12
 Forecast horizon: 41
@@ -123,21 +112,20 @@ Residual significance level: 0.05
 Residual diagnostics: mean, time plot, ACF, Ljung–Box
 ```
 
-The inverse transformation from log predictions to original sales scale must be
-explicit and consistent across candidates. Record the chosen policy and its
-limitations. Do not change this policy after inspecting test metrics.
+Inverse transformation từ log prediction về original sales scale phải tường minh và
+nhất quán giữa các candidate. Policy được khóa trước khi xem test metric. Nếu actual
+bằng 0, MAPE không xác định và phải được báo cáo, không silently drop.
 
-MAPE is undefined at zero actual values. If any are present, report the issue
-explicitly; do not silently remove those observations.
-
-## 7. Files Allowed to Create or Modify
-
-After this plan and the E05 specification are approved, work may create or update
-only the following, as needed:
+## 7. File được phép tạo hoặc chỉnh sửa
 
 ```text
 docs/exercise_details/exercise_05_arima_forecasting_evaluation.md
 docs/plans/exercise_05_before_process.md
+docs/error_analysis/exercise_05_notebook_alignment_issue.md
+src/practice_2/analysis/forecasting.py
+src/practice_2/analysis/__init__.py
+src/practice_2/visualization/plots.py
+tests/test_exercise_05.py
 notebooks/Practice_2_present.ipynb
 outputs/figures/05_arima_residual_diagnostics.png
 outputs/figures/05_arima_forecast_comparison.png
@@ -149,11 +137,10 @@ docs/logs/exercise_05_execution.md
 docs/status/current_status.md
 ```
 
-Reuse existing package owners and interfaces. Do not add a duplicate model,
-diagnostic, visualization, or metric module. If reusable code changes are needed,
-first identify the approved owner and update the file scope with Human approval.
+Phải dùng owner và interface sẵn có; không tạo module model, diagnostic,
+visualization hoặc metric trùng trách nhiệm.
 
-## 8. Files Not to Modify
+## 8. File không được chỉnh sửa
 
 ```text
 datasets/raw/a10.csv
@@ -169,28 +156,20 @@ README.md before the approved final-documentation stage
 unrelated Practice/Lab files
 ```
 
-If the work requires modifying an excluded file, changing the E01 split,
-changing the dataset or metrics, or expanding architecture/dependencies:
+Nếu cần chỉnh file ngoài phạm vi, thay split/dataset/metric hoặc mở rộng architecture:
 
 ```text
-STOP → explain reason and impact → propose scope update → wait for approval
+STOP → giải thích lý do và tác động → đề xuất scope update → chờ approval
 ```
 
-## 9. Sequential Execution Steps
+## 9. Các bước thực thi tuần tự
 
-### Step 0 — Verify Approval and Reconcile Existing State
+### Bước 0 — Xác minh approval và trạng thái
 
-Review the E05 specification and this plan approval state. Confirm E04 handoff
-evidence and reconcile the existing `EXERCISE_04_HANDOFF_OPEN=true` status with
-the Human-reported E04/E05 completion. Determine whether the existing notebook
-run is to be retained as exploratory evidence or formally validated/rerun.
+Xác nhận E4 formal validation và E5 approval. Không tự nâng exploratory notebook
+output thành formal result.
 
-If approval or upstream status remains unresolved, do not perform a formal E05
-execution, update completion state, or describe the run as approved.
-
-### Step 1 — Verify the Dataset and E01 Boundary
-
-Use the approved data loader and validate the raw dataset contract. Verify:
+### Bước 1 — Xác minh dataset và boundary E1
 
 ```text
 rows = 204
@@ -203,42 +182,34 @@ chronological order = true
 shuffle = false
 ```
 
-Keep the raw file immutable. Stop if schema, date range, frequency, missing
-values, duplicates, or monthly continuity differ from the contract.
+Giữ raw file bất biến. Dừng nếu schema, date range, frequency, missing value,
+duplicate hoặc monthly continuity khác contract.
 
-### Step 2 — Verify E03/E04 Handoffs
+### Bước 2 — Xác minh handoff E3/E4
 
-Reproduce the natural-log and first-difference training transformation through
-approved reusable logic. Confirm the selected `d=1`, expected 162 transformed
-observations, no remaining missing values, and correct timestamp alignment.
-Verify that E04 candidates are limited to one or two orders with actual
-training-only ACF/PACF rationale.
+Tái tạo natural-log và first-difference transformation bằng reusable logic đã duyệt.
+Xác nhận `d=1`, 162 transformed observations, không còn missing value và timestamp
+alignment đúng. Candidate E4 phải giới hạn 1–2 order có training-only ACF/PACF rationale.
 
-Do not use E04 candidates from legacy notebook output unless the approved E04
-handoff confirms them.
+### Bước 3 — Khóa model và evaluation setup
 
-### Step 3 — Lock the Model and Evaluation Setup
+Trước khi mở test:
 
-Before opening test values:
+- khóa candidate order và rationale từ E4;
+- khóa seasonal-naive period 12;
+- khóa training series và log-scale fit input;
+- ghi inverse-log policy;
+- khóa test horizon và metric definition.
 
-- fix the candidate orders and rationale from E04;
-- fix the seasonal-naive period at 12;
-- fix the training series and log-scale fit input;
-- document the inverse-log policy;
-- fix the test horizon and metric definitions.
+Không dùng test metric để thêm, xóa hoặc thay candidate.
 
-Do not use test metrics to add, remove, or change candidates.
+### Bước 4 — Fit baseline và ARIMA candidate
 
-### Step 4 — Fit Seasonal-Naive Baseline and ARIMA Candidates
+Tạo seasonal-naive forecast chỉ từ train. Fit mỗi ARIMA candidate trên log-transformed
+training levels với `d=1` và `trend='n'`. Ghi convergence, warning/failure, AIC và
+BIC; không silently discard warning hoặc failed candidate.
 
-Create the seasonal-naive forecast using training data only. Fit each approved
-ARIMA candidate to log-transformed training levels with its inherited `d=1`.
-Record convergence, fitting warnings or failures, AIC, and BIC. Do not silently
-discard a warning or failed candidate.
-
-### Step 5 — Inspect Residual Diagnostics
-
-For every fitted ARIMA candidate, inspect and record:
+### Bước 5 — Kiểm tra residual diagnostics
 
 ```text
 residual mean
@@ -247,139 +218,111 @@ residual ACF and confidence level
 Ljung–Box statistic, p-value, lag, model_df, and alpha
 ```
 
-Use statistical evidence together with plots. Do not conclude that residuals are
-white noise from the residual mean or visual plot alone. If diagnostics reveal
-unresolved structure, stop before asserting a final model and document the issue.
+Loại `loglikelihood_burn` trước khi tính residual evidence. Không suy ra white noise
+chỉ từ residual mean hoặc visual plot. Nếu còn autocorrelation, vẫn hoàn thành required
+comparison nhưng không tuyên bố final model diagnostically adequate.
 
-### Step 6 — Forecast and Evaluate
+### Bước 6 — Forecast và đánh giá
 
-After the setup is locked, evaluate the test set:
+- Forecast đúng 41 tháng cho từng candidate và baseline.
+- Assert forecast index bằng test index.
+- Chuyển forecast về original sales scale theo policy đã khóa.
+- Tính MAE, RMSE, MAPE trên cùng 41 actual/forecast pair.
+- Tính absolute error theo timestamp và lấy maximum của từng model.
+- Kiểm tra Train/Test/Forecast figure và metric table.
 
-- forecast exactly 41 months for each ARIMA candidate and baseline;
-- assert forecast index equals the test index;
-- transform model forecasts back to the original sales scale using the locked
-  policy;
-- calculate MAE, RMSE, and MAPE over the same 41 actual/forecast pairs;
-- compute absolute error by timestamp and identify its maximum for each model;
-- inspect the Train/Test/Forecast figure and metric tables.
+Không dùng forecast lệch index hoặc so sánh metric khác scale/horizon.
 
-Do not use an unaligned forecast, omit test points without an approved reason, or
-compare metrics computed on different scales or horizons.
+### Bước 7 — Trả lời câu hỏi E5
 
-### Step 7 — Answer the E05 Questions
+1. Vì sao không shuffle và test set dùng để làm gì?
+2. `p`, `d`, `q` biểu diễn điều gì?
+3. Từng model có hội tụ và phát sinh warning không?
+4. Residual có hỗ trợ kết luận white noise không?
+5. Nếu còn residual autocorrelation, cần nghiên cứu gì tiếp?
+6. Forecast có bám test-period behavior không?
+7. Largest error của mỗi model ở đâu?
+8. Metric nào nhạy nhất với lỗi lớn và vì sao?
+9. RMSE quan sát được có ý nghĩa gì theo đơn vị target?
 
-Answer all nine questions in the E05 specification using actual outputs:
+Kết luận chỉ áp dụng cho Monthly Retail Sales và holdout hiện tại. Không tuyên bố
+model hữu ích chỉ vì AIC/BIC thấp hơn.
 
-1. Why no shuffle, and what is the test set for?
-2. What do the selected `p`, `d`, and `q` mean?
-3. Did each model converge, and were warnings emitted?
-4. Do residuals support a white-noise conclusion?
-5. What should be investigated if residual autocorrelation remains?
-6. Does the forecast follow the test-period behavior?
-7. Where is the largest error for each model?
-8. Which metric is most sensitive to large errors, and why?
-9. What does the observed RMSE mean in target units?
+### Bước 8 — Ghi evidence và cập nhật trạng thái
 
-Limit conclusions to Monthly Retail Sales and this holdout. Compare candidates
-with the seasonal-naive baseline; do not claim a model is useful solely because
-it has a lower AIC/BIC.
+Cập nhật execution log bằng input identity, split, parameter, warning, diagnostics,
+forecast, metrics, largest error và validation result. Chỉ ghi verified state vào
+`current_status.md`.
 
-### Step 8 — Record Evidence and Update Status
-
-After all checks pass, create `docs/logs/exercise_05_execution.md` with input
-identity, split, model parameters, warnings, diagnostics, forecasts, metrics,
-largest errors, and validation outcomes. Update `current_status.md` only with
-verified state and reconcile the upstream E04 discrepancy. Human review remains
-required for formal completion.
-
-## 10. Test and Validation Plan
+## 10. Kế hoạch test và validation
 
 ```text
-[ ] E04 candidate handoff and E05 approval state reviewed
-[ ] Dataset schema, monthly continuity, and raw immutability verified
-[ ] E01 split reproduced exactly as 163/41 with no shuffle
-[ ] Test data excluded from order selection and model fitting
-[ ] E03 natural-log transform and selected d=1 reproduced
-[ ] ARIMA fitted on log(training levels), avoiding double differencing
-[ ] One or two candidate orders traceable to E04 evidence
-[ ] Seasonal-naive baseline uses lag 12 and training-only history
-[ ] Convergence, warnings, AIC, and BIC recorded per candidate
-[ ] Residual mean, plot, ACF, and Ljung–Box inspected
-[ ] Forecast horizon is 41 and forecast index equals test index
-[ ] Inverse transformation is explicit and consistent
-[ ] MAE, RMSE, and MAPE use the same original-scale holdout pairs
-[ ] Largest-error timestamp is computed from aligned errors
-[ ] Candidate comparison includes seasonal-naive baseline
-[ ] Notebook runs sequentially from a clean kernel
-[ ] Required outputs are inspected against notebook values
-[ ] Execution log and status update match verified evidence
-[ ] E01–E04 and E06 artifacts remain unchanged
+[x] E04 candidate handoff and E05 approval state reviewed
+[x] Dataset schema, monthly continuity, and raw immutability verified
+[x] E01 split reproduced exactly as 163/41 with no shuffle
+[x] Test data excluded from order selection and model fitting
+[x] E03 natural-log transform and selected d=1 reproduced
+[x] ARIMA fitted on log(training levels), avoiding double differencing
+[x] No-drift policy is explicit in source, notebook, and fit evidence
+[x] One or two candidate orders traceable to E04 evidence
+[x] Seasonal-naive baseline uses lag 12 and training-only history
+[x] Convergence, warnings, AIC, and BIC recorded per candidate
+[x] Residual mean, plot, ACF, and Ljung–Box inspected
+[x] Forecast horizon is 41 and forecast index equals test index
+[x] Inverse transformation is explicit and consistent
+[x] MAE, RMSE, and MAPE use the same original-scale holdout pairs
+[x] Largest-error timestamp is computed from aligned errors
+[x] Candidate comparison includes seasonal-naive baseline
+[x] Canonical setup + E05 runs from a clean kernel without E06
+[x] Required outputs are inspected against notebook values
+[x] Execution log and status update match verified evidence
+[x] E01–E04 and E06 artifacts remain unchanged
 ```
 
-## 11. Stop Conditions
+## 11. Điều kiện dừng
 
-Stop and report the issue if:
+Dừng và báo Human nếu E4 handoff/approval chưa rõ, dataset contract hoặc split sai,
+có test leakage, không tái tạo được E3 transformation, candidate thiếu rationale,
+model không hội tụ, diagnostics/alignment không tái tạo được, metric scale không rõ
+hoặc cần thay đổi ngoài approved scope.
 
-- E04 handoff, E05 approval, or formal E04/E05 status reconciliation is unresolved;
-- dataset or E01 split contract fails;
-- test leakage is detected;
-- the E03 transformation or selected `d` cannot be reproduced;
-- candidate rationale is missing or inconsistent with actual E04 evidence;
-- a model fails to converge or has unresolved fitting warnings;
-- residual diagnostics reveal structure that blocks an evidence-based conclusion;
-- forecast timestamps do not align exactly with test timestamps;
-- inverse transformation or metric scale is unclear;
-- a required file or architecture change is outside this approved scope.
+## 12. Rủi ro và biện pháp kiểm soát
 
-When blocked:
-
-```text
-STOP
-→ document observed and expected behavior
-→ explain impact
-→ propose the next action
-→ wait for Human approval when required
-```
-
-## 12. Risks and Controls
-
-| Risk | Control |
+| Rủi ro | Biện pháp kiểm soát |
 |---|---|
-| Treating an exploratory notebook run as formally approved | Reconcile approval and status records before claiming completion |
-| E04 handoff remains formally open | Verify candidate evidence and update status only after review |
-| Double differencing the ARIMA input | Fit `ARIMA(log(train levels), order=(p,1,q))` |
-| Test leakage during candidate selection | Lock orders and evaluation setup before opening test values |
-| Comparing candidates without a baseline | Include seasonal-naive lag-12 forecast |
-| Inverse-log scale bias is hidden | Record inverse-transform policy and limitations |
-| White noise inferred from plots alone | Include Ljung–Box and report its lags/alpha |
-| Forecast/actual timestamps misalign | Assert exact index equality before metrics |
-| MAPE undefined for zero actual values | Check target and report undefined cases explicitly |
-| Stale notebook outputs presented as current | Run from a clean kernel and inspect refreshed outputs |
+| Nhầm exploratory run là formal result | Đối chiếu approval và status trước completion |
+| E4 candidate artifact lệch handoff | Đọc trực tiếp approved E4 CSV |
+| Double differencing ARIMA input | Fit `ARIMA(log(train levels), order=(p,1,q))` |
+| Test leakage khi chọn candidate | Khóa order và evaluation setup trước khi mở test |
+| So sánh thiếu baseline | Bổ sung seasonal-naive lag 12 |
+| Che giấu inverse-log bias | Ghi policy và limitation |
+| Suy ra white noise chỉ từ plot | Dùng Ljung–Box và ghi lag/alpha |
+| Forecast/actual lệch timestamp | Assert exact index equality trước metrics |
+| MAPE không xác định khi actual bằng 0 | Kiểm tra target và báo trường hợp undefined |
+| Trình bày stale notebook output | Clean-run và kiểm tra output mới |
 
-## 13. E05 Completion Handoff
-
-E05 is complete only when:
+## 13. Handoff hoàn thành E5
 
 ```text
-E01–E04 handoffs and approvals are reconciled
-AND approved ARIMA candidates and seasonal-naive baseline are evaluated
-AND convergence and residual evidence are recorded
+E01–E04 handoffs and approvals reconciled
+AND ARIMA candidates and seasonal-naive baseline evaluated
+AND convergence and residual evidence recorded
 AND forecast indices match the 41-observation test horizon
-AND MAE/RMSE/MAPE are reproducible on the same original-scale observations
-AND all required questions are answered from actual evidence
-AND tests and clean-kernel notebook validation pass
+AND MAE/RMSE/MAPE are reproducible on the same observations
+AND required questions answered from actual evidence
+AND tests and clean-kernel validation pass
 AND execution log and status reflect verified state
-AND Human reviews the final result
+AND Human review completed
 ```
 
-## 14. Approval Gate
+## 14. Approval gate
 
 ```text
 EXERCISE_05_BEFORE_PROCESS_CREATED=true
-EXERCISE_05_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_05_BEFORE_PROCESS_APPROVED=false
-EXERCISE_05_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_05_IMPLEMENTED=false
-EXERCISE_05_VALIDATED=false
-EXERCISE_05_COMPLETED=false
+EXERCISE_05_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_05_BEFORE_PROCESS_APPROVED=true
+EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_05_IMPLEMENTED=true
+EXERCISE_05_VALIDATED=true
+EXERCISE_05_COMPLETED=true
 ```

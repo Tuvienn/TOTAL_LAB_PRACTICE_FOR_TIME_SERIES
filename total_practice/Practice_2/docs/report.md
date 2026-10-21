@@ -1,7 +1,7 @@
 # Báo cáo thực hành phân tích chuỗi thời gian
 
 **Chủ đề:** EDA, kiểm định ADF, sai phân và dự báo bằng ARIMA/SARIMA
-**Nguồn kết quả:** các output hiện được lưu trong [Practice_2_present.ipynb](../notebooks/Practice_2_present.ipynb). Các nhận xét dưới đây phân biệt kết quả đã quan sát với kết luận còn chờ rà soát; không thay thế việc chạy lại notebook trong kernel sạch.
+**Nguồn kết quả:** notebook chính, notebook nâng cao và các artifact trong `outputs/` sau clean-run ngày 2026-10-21 bằng môi trường Python 3.12 của Practice 2. Các nhận xét dưới đây phân biệt kết quả đã quan sát với giới hạn của bằng chứng.
 
 ## Tổng quan dữ liệu
 
@@ -54,9 +54,9 @@ Sai phân bậc 1 trên giá trị gốc chưa đủ bằng chứng để kết 
 
 ### Bài 4 — ACF/PACF và đề xuất bậc
 
-Không có kết luận “ACF cắt sau lag 1” hoặc “PACF cắt chính xác sau lag 4” đủ tin cậy để ghi là kết quả cuối cùng cho chuỗi mô hình hóa. Các giá trị lag mùa vụ đang được lưu trong notebook thuộc phần phân tích sai phân thô: ACF tại lag 12/24/36 lần lượt là 0.8444/0.7044/0.6052; PACF tương ứng là 0.5121/-0.0571/-0.0273. Đây là dấu hiệu phụ thuộc mùa vụ, nhưng không phải bằng chứng cho một điểm cắt ngắn hạn rõ ràng trên chuỗi log-sai phân đã chọn ở Bài 3.
+Không có kết luận “ACF cắt sau lag 1” hoặc “PACF cắt chính xác sau lag 4” đủ tin cậy để ghi là kết quả cuối cùng cho chuỗi mô hình hóa. ACF/PACF trong notebook được tính trên đúng chuỗi `log(train).diff().dropna()` đã chọn ở Bài 3. ACF tại lag 12/24/36 lần lượt là 0.8444/0.7044/0.6052; PACF tương ứng là 0.5121/-0.0571/-0.0273. Đây là dấu hiệu phụ thuộc mùa vụ còn lại, nhưng không phải bằng chứng cho một điểm cắt ngắn hạn duy nhất.
 
-Bảng candidate hiện có ghi `ARIMA(1,1,1)`, `ARIMA(2,1,1)` và `ARIMA(4,1,1)` ở trạng thái provisional. Trong E05, hai mô hình được fit thực tế là **ARIMA(1,1,1)** và **ARIMA(2,1,1)**; `ARIMA(4,1,1)` không nằm trong bảng kết quả fit. Do đó, kết quả E04 nên được hiểu là gợi ý thăm dò, không phải quyết định cuối cùng về cutoff hoặc order.
+Hai candidate được chuyển sang E5 là **ARIMA(1,1,1)** và **ARIMA(2,1,1)**. Kết quả E4 là gợi ý thăm dò dựa trên ACF/PACF của đúng chuỗi log-sai phân train, không phải quyết định cuối cùng về cutoff hoặc order.
 
 **Trả lời:**
 
@@ -64,7 +64,7 @@ Bảng candidate hiện có ghi `ARIMA(1,1,1)`, `ARIMA(2,1,1)` và `ARIMA(4,1,1)
 - **PACF cắt cụt ở lag nào?** Các lag có ý nghĩa không tạo thành một cutoff duy nhất có thể khẳng định từ bằng chứng hiện có.
 - **Gợi ý ARIMA(p,d,q)?** Hai candidate được đưa sang bước fit là `(1,1,1)` và `(2,1,1)`, với `d=1`. Cần đọc/ghi nhận ACF-PACF trên đúng chuỗi log-sai phân train trước khi coi các bậc `p,q` là kết luận chính thức.
 
-> **Trạng thái bằng chứng:** current status vẫn ghi nhận discrepancy ở E04 handoff. Vì vậy báo cáo không biến các candidate provisional thành lựa chọn đã được phê duyệt; xem [current_status.md](./status/current_status.md).
+> **Trạng thái bằng chứng:** E4 đã được kiểm tra và hoàn thành; hai candidate vẫn mang ý nghĩa provisional cho tới khi được fit và đánh giá ở E5. Xem [current_status.md](./status/current_status.md).
 
 ### Bài 5 — Fit, chẩn đoán residual, forecast và đánh giá
 
@@ -81,8 +81,8 @@ Theo AIC/BIC, ARIMA(1,1,1) được ưu tiên hơn trong hai candidate. `p` là 
 
 | Mô hình | Trung bình residual | Ljung–Box p-value (lag 12) | Ljung–Box p-value (lag 24) |
 |---|---:|---:|---:|
-| ARIMA(1,1,1) | 0.044193 | 5.97 × 10⁻¹⁴ | 1.22 × 10⁻²⁰ |
-| ARIMA(2,1,1) | 0.044555 | 2.96 × 10⁻¹⁴ | 1.12 × 10⁻²⁰ |
+| ARIMA(1,1,1) | 0.036686 | 2.29 × 10⁻²⁵ | 3.26 × 10⁻⁴¹ |
+| ARIMA(2,1,1) | 0.037050 | 9.52 × 10⁻²⁶ | 2.44 × 10⁻⁴¹ |
 
 Residual mean gần 0 nhưng không đủ để kết luận white noise. Các p-value Ljung–Box rất nhỏ ở cả hai lag cho thấy bác bỏ giả thuyết không có tự tương quan đến lag đang kiểm tra; residuals còn cấu trúc chưa được mô hình giải thích.
 
@@ -92,8 +92,8 @@ Residual mean gần 0 nhưng không đủ để kết luận white noise. Các p
 
 | Mô hình | MAE | RMSE | MAPE |
 |---|---:|---:|---:|
-| ARIMA(1,1,1) | 3.833290 | 4.865821 | 18.493973% |
-| ARIMA(2,1,1) | 3.806130 | 4.834506 | 18.357607% |
+| ARIMA(1,1,1) | 3.833269 | 4.865791 | 18.493908% |
+| ARIMA(2,1,1) | 3.806140 | 4.834521 | 18.357642% |
 | Seasonal naive (12) | 4.256436 | 5.186466 | 20.097262% |
 
 Hai ARIMA có metric test thấp hơn seasonal-naive baseline trong lần chạy này. ARIMA(2,1,1) nhỉnh hơn một chút về MAE/RMSE/MAPE test, trong khi ARIMA(1,1,1) có AIC/BIC thấp hơn và ít bậc AR hơn. Chênh lệch metric giữa hai candidate nhỏ; không nên suy rộng kết quả holdout này thành bảo đảm hiệu quả ở giai đoạn khác.
@@ -102,8 +102,8 @@ Forecast nhiều bước của các ARIMA tiến dần thành đường gần nh
 
 | Mô hình | Actual | Forecast | Absolute error |
 |---|---:|---:|---:|
-| ARIMA(1,1,1) | 29.665356 | 17.032661 | 12.632695 |
-| ARIMA(2,1,1) | 29.665356 | 17.073772 | 12.591584 |
+| ARIMA(1,1,1) | 29.665356 | 17.032717 | 12.632639 |
+| ARIMA(2,1,1) | 29.665356 | 17.073746 | 12.591610 |
 
 **Trả lời các câu hỏi đánh giá:**
 
@@ -158,26 +158,26 @@ Cả hai mô hình hội tụ và output không ghi warning:
 | Mô hình | Order | Seasonal order | AIC | BIC |
 |---|---|---|---:|---:|
 | ARIMA | (1,1,1) | — | -197.221464 | -189.012869 |
-| SARIMA | (1,1,1) | (0,1,1,12) | -369.862160 | -359.362269 |
+| SARIMA | (1,1,1) | (0,1,1,12) | -369.862481 | -359.362590 |
 
 Residual diagnostics bằng Ljung–Box:
 
 | Mô hình | p-value lag 12 | p-value lag 24 | Diễn giải |
 |---|---:|---:|---|
-| ARIMA | 0.999957 | 1.000000 | Không bác bỏ giả thuyết không tự tương quan ở các lag đã kiểm tra |
-| SARIMA | 0.010010 | 0.408396 | Còn dấu hiệu tự tương quan ở lag 12; không bác bỏ tại lag 24 |
+| ARIMA | 2.944816 × 10⁻¹⁶ | 2.308263 × 10⁻²⁷ | Còn residual autocorrelation tại cả hai lag |
+| SARIMA | 0.573996 | 0.473545 | Chưa phát hiện residual autocorrelation tại hai lag đã kiểm tra |
 
-Các p-value không chứng minh residuals hoàn toàn là white noise; riêng SARIMA còn dấu hiệu ở lag 12 và cần được xem xét nếu tiếp tục hiệu chỉnh. Residual mean không được ghi trong bảng output hiện có nên không nêu con số.
+Các p-value không chứng minh residuals hoàn toàn là white noise ở mọi lag. Trong phạm vi hai lag đã kiểm tra, ARIMA còn autocorrelation rõ rệt; SARIMA chưa cho thấy bằng chứng autocorrelation sau khi loại đúng burn-in.
 
 Đánh giá trên test, theo đơn vị số hành khách:
 
 | Mô hình | MAE | RMSE |
 |---|---:|---:|
-| ARIMA(1,1,1) | 84.254386 | 96.327568 |
-| SARIMA(1,1,1)(0,1,1,12) | 12.165113 | 14.917604 |
+| ARIMA(1,1,1) | 84.254030 | 96.327159 |
+| SARIMA(1,1,1)(0,1,1,12) | 12.164590 | 14.917399 |
 
-Trong holdout hiện tại, SARIMA có MAE và RMSE thấp hơn đáng kể và forecast bám xu hướng/mùa vụ tốt hơn ARIMA. ARIMA nhiều bước gần như không theo kịp biến động mùa vụ. Sai lệch lớn nhất của ARIMA xảy ra ngày **1958-11-01** (actual 310, forecast 496.108123, absolute error 186.108123); của SARIMA vào **1960-03-01** (actual 419, forecast 452.003028, absolute error 33.003028).
+Trong holdout hiện tại, SARIMA có MAE và RMSE thấp hơn đáng kể và forecast bám xu hướng/mùa vụ tốt hơn ARIMA. ARIMA nhiều bước gần như không theo kịp biến động mùa vụ. Sai lệch lớn nhất của ARIMA xảy ra vào **1958-11** với absolute error `186.107318`; của SARIMA xảy ra vào **1960-03** với absolute error `33.013766`.
 
 **Kết luận:** Trên đúng lần chia train/test và các candidate đã thử, SARIMA cải thiện rõ MAE/RMSE so với ARIMA. Kết luận này chỉ áp dụng cho holdout hiện tại; không loại bỏ nhu cầu kiểm tra residual mùa vụ còn lại hoặc đánh giá trên giai đoạn khác. Không đưa MAPE vào bảng vì output nâng cao hiện có chỉ yêu cầu và lưu MAE/RMSE.
 
-> **Trạng thái:** số liệu E06 phản ánh lần chạy exploratory trong notebook; chưa được xem là clean-kernel validation hoặc hoàn tất phê duyệt formal. Xem [current_status.md](./status/current_status.md).
+> **Trạng thái:** E6 được Human chọn giữ ở mức exploratory. Residual diagnostics fix và clean-kernel run đã được kiểm tra, nhưng E6 không thuộc formal completion và không được đánh dấu `COMPLETED`. Xem [current_status.md](./status/current_status.md).

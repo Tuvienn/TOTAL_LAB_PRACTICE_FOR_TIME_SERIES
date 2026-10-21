@@ -1,6 +1,6 @@
-# EXERCISE 01 — BEFORE-PROCESS PLAN
+# EXERCISE 01 — KẾ HOẠCH TRƯỚC KHI THỰC THI
 
-## 1. Plan Identity
+## 1. Thông tin kế hoạch
 
 ```text
 Practice: Practice_2
@@ -18,7 +18,7 @@ Execution evidence: docs/logs/exercise_01_execution.md
 Plan và implementation scope của Exercise 1 đã được Human phê duyệt. Mọi lần chạy lại
 phải tiếp tục tuân thủ đúng scope, validation và stop conditions trong file này.
 
-## 2. Objective
+## 2. Mục tiêu
 
 - xác minh input `datasets/raw/a10.csv`;
 - chuyển cột `date` thành time index;
@@ -29,7 +29,7 @@ phải tiếp tục tuân thủ đúng scope, validation và stop conditions tro
 - không chạy ADF, differencing, model training hoặc forecast;
 - không thay đổi raw dataset.
 
-## 3. Required Documents
+## 3. Tài liệu bắt buộc
 
 ```text
 working_rule.md
@@ -49,7 +49,7 @@ total_practice/Practice_2/docs/status/current_status.md nếu đã tồn tại
 
 Nếu thiếu tài liệu hoặc có conflict: `STOP → report missing/conflict → chờ Human quyết định`.
 
-## 4. Input
+## 4. Dữ liệu đầu vào
 
 ```text
 Raw file: datasets/raw/a10.csv
@@ -62,7 +62,7 @@ Các check tối thiểu: readable file, schema, date parsing, chronological ord
 monthly frequency, missing values, duplicate timestamps, missing monthly intervals,
 observation count và date range.
 
-## 5. Files Allowed to Create or Modify
+## 5. File được phép tạo hoặc chỉnh sửa
 
 ```text
 src/practice_2/data/
@@ -80,7 +80,7 @@ docs/fix_plans/
 
 Không tạo duplicate module nếu owner tương đương đã tồn tại.
 
-## 6. Files Not to Modify
+## 6. File không được chỉnh sửa
 
 ```text
 datasets/raw/a10.csv
@@ -96,7 +96,7 @@ unrelated repository configuration
 
 Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → wait for approval`.
 
-## 7. Scientific Parameters
+## 7. Tham số khoa học
 
 ```text
 Dataset: Monthly Retail Sales
@@ -113,29 +113,29 @@ ADF and differencing: NOT IN THIS EXERCISE
 
 Boundary thực tế phải được ghi bằng timestamp và observation count sau validation.
 
-## 8. Sequential Execution Steps
+## 8. Các bước thực thi tuần tự
 
-### Step 1 — Verify Repository Context
+### Bước 1 — Xác minh bối cảnh repository
 
 Xác minh Practice_2 root, folder structure, required docs, active rules và current execution state.
 
-### Step 2 — Verify Dataset Availability
+### Bước 2 — Xác minh dataset sẵn sàng
 
 Xác minh `datasets/raw/a10.csv` tồn tại và ghi nhận source/path, schema, data types,
 observation count, date range, timestamp meaning và monthly frequency. Không thay raw file.
 
-### Step 3 — Load Dataset
+### Bước 3 — Nạp dataset
 
 Dùng reusable loader nếu đã tồn tại; nếu chưa, tạo logic tối thiểu trong
 `src/practice_2/data/`. Loader phải preserve raw values, parse date trên working object
 và return validated structure.
 
-### Step 4 — Convert Date to Time Index and Validate Data Quality
+### Bước 4 — Chuyển ngày thành time index và kiểm tra chất lượng dữ liệu
 
 Parse `date`, set `date` làm `DatetimeIndex`, sau đó kiểm tra chronological order, monthly frequency, missing values, duplicate
 timestamps, missing monthly intervals và date range. Nếu có unresolved issue thì STOP.
 
-### Step 5 — Create Original-Series Plot
+### Bước 5 — Tạo biểu đồ chuỗi gốc
 
 Tạo và inspect:
 
@@ -145,23 +145,23 @@ outputs/figures/01_original_time_series.png
 
 Plot phải có title, time axis, observed-value axis và readable labels.
 
-### Step 6 — Record EDA Questions and Observations
+### Bước 6 — Ghi câu hỏi và nhận xét EDA
 
 Sau actual checks và figure inspection, trả lời: chuỗi có xu hướng không, có dấu hiệu
 mùa vụ không, và chuỗi có khả năng dừng không dựa trên EDA. Ghi variance và visual
 limitations. Không kết luận ADF, `d`, `p`, `q` hoặc model.
 
-### Step 7 — Establish Chronological Holdout Boundary
+### Bước 7 — Thiết lập chronological holdout boundary
 
 Tạo approximately 80/20 split theo thời gian, không shuffle. Ghi train/test start,
 end, counts và downstream forecast horizon. Đánh dấu test set sealed; E02–E04 chỉ dùng train.
 
-### Step 8 — Validate and Update State
+### Bước 8 — Xác nhận và cập nhật trạng thái
 
 Inspect required outputs, xác nhận boundary và sealed test set, cập nhật current status
 và append concise progress log. Không đánh dấu complete nếu còn blocker.
 
-## 9. Validation Checklist
+## 9. Checklist xác nhận
 
 ```text
 [ ] Required documents were read
@@ -187,7 +187,7 @@ và append concise progress log. Không đánh dấu complete nếu còn blocker
 [ ] No unrelated file modified
 ```
 
-## 10. Expected Outputs
+## 10. Output dự kiến
 
 ```text
 outputs/figures/01_original_time_series.png
@@ -197,7 +197,7 @@ outputs/results/train_test_boundary.csv
 
 Required narrative evidence: validated schema/time index, EDA observations và sealed boundary.
 
-## 11. Stop Conditions
+## 11. Điều kiện dừng
 
 Agent phải dừng khi plan chưa được approve, required document missing, rule conflict,
 schema/date/frequency unexpected, duplicate hoặc missing interval chưa giải quyết,
@@ -214,7 +214,7 @@ Khi dừng:
 5. Chờ Human approval.
 ```
 
-## 12. Completion Gate
+## 12. Điều kiện hoàn thành
 
 ```text
 input validated
@@ -227,7 +227,7 @@ AND raw data unchanged
 AND no unresolved blocking issue
 ```
 
-## 13. Approval Gate
+## 13. Approval gate
 
 ```text
 EXERCISE_01_BEFORE_PROCESS_CREATED=true
@@ -242,7 +242,7 @@ EXERCISE_01_COMPLETED=true
 Actual result và runtime state phải được đọc từ execution log và current status;
 before-process plan không thay thế hai evidence owner này.
 
-## 14. Agent Execution Rule
+## 14. Quy tắc thực thi dành cho Agent
 
 Sau approval:
 

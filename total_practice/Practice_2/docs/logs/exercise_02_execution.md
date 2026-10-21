@@ -1,11 +1,11 @@
-# EXERCISE 02 — EXECUTION LOG
+# EXERCISE 02 — NHẬT KÝ THỰC THI
 
-## Scope
+## Phạm vi
 
-ADF test on the original training series from E01. No differencing, ACF/PACF,
-model fitting or forecasting was performed.
+Chạy kiểm định ADF trên chuỗi train gốc từ E1. Không thực hiện differencing,
+ACF/PACF, fit model hoặc forecast.
 
-## Evidence
+## Bằng chứng
 
 ```text
 input: original training series only
@@ -19,16 +19,15 @@ n observations: 148
 decision: fail to reject H0
 ```
 
-H0 states that the series has a unit root. Since p-value is greater than 0.05,
-there is insufficient evidence to reject H0; the original training series is
-not supported as stationary by this test.
+H0 phát biểu rằng chuỗi có unit root. Vì p-value lớn hơn `0.05`, chưa đủ bằng
+chứng để bác bỏ H0; kiểm định này chưa hỗ trợ kết luận chuỗi train gốc là stationary.
 
-## Outputs
+## Output
 
 - `outputs/results/adf_original_series.csv`
 - `outputs/results/adf_original_critical_values.csv`
 
-## Validation
+## Xác nhận
 
-`python -m pytest -q`: 3 passed.
-Notebook execution completed successfully.
+- `python -m pytest -q`: 3 test đạt.
+- Notebook thực thi thành công.

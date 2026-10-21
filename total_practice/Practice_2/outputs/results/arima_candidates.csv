@@ -1,0 +1,3 @@
+candidate,p,d,q,analysis_scale,acf_evidence,pacf_evidence,status
+"ARIMA(1,1,1)",1,1,1,natural_log,"ACF lag 1 significant; seasonal dependence remains at lags 12, 24, 36",PACF lag 1 significant; supports a parsimonious AR term,provisional
+"ARIMA(2,1,1)",2,1,1,natural_log,"ACF lag 1 significant; seasonal dependence remains at lags 12, 24, 36",PACF lags 1 and 2 significant; supports testing p=2,provisional

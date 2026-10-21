@@ -1,12 +1,12 @@
-# EXERCISE 03 — EXECUTION LOG
+# EXERCISE 03 — NHẬT KÝ THỰC THI
 
-## Scope
+## Phạm vi
 
-Raw first-order differencing was retained as failed evidence. The approved remediation
-applied natural log and regular first differencing to the original training series,
-then reran ADF. No ACF/PACF, model fitting or forecasting was performed.
+Giữ lại first-order differencing trên thang gốc làm bằng chứng chưa đạt. Biện pháp
+đã được phê duyệt là áp dụng natural log rồi regular first differencing trên chuỗi
+train gốc và chạy lại ADF. Không thực hiện ACF/PACF, fit model hoặc forecast.
 
-## Evidence
+## Bằng chứng
 
 ```text
 original training observations: 163
@@ -32,7 +32,7 @@ selected d: 1
 E04 handoff: OPEN_FOR_REVIEW
 ```
 
-## Outputs
+## Output
 
 - `outputs/figures/02_first_differenced_series.png`
 - `outputs/figures/02_log_first_differenced_series.png`
@@ -43,19 +43,19 @@ E04 handoff: OPEN_FOR_REVIEW
 - `outputs/results/e03_transformation_comparison.csv`
 - `outputs/results/differencing_decision.csv`
 
-## Decision
+## Quyết định
 
-The raw first difference did not reject the ADF unit-root null hypothesis. The approved
-log first-difference remediation rejected H0 at `alpha=0.05`, so E03 selects natural-log
-transformation and regular `d=1` for the training series. Test observations were not used.
+First difference trên thang gốc không bác bỏ H0 của ADF. Chuỗi sau natural-log
+transformation và first difference bác bỏ H0 tại `alpha=0.05`. Vì vậy E3 chọn
+natural log và regular `d=1` cho chuỗi train. Không sử dụng quan sát test.
 
-## Limitation
+## Giới hạn
 
-The transformed plot retains recurring annual spikes. ADF supports stationarity against
-the tested non-seasonal unit root but does not establish that seasonal dependence is absent.
-E04 must inspect and report the seasonal lag structure without changing the E03 scale.
+Biểu đồ transformed series vẫn có các spike lặp lại theo năm. ADF hỗ trợ
+stationarity đối với unit root phi mùa vụ đã kiểm tra nhưng không chứng minh seasonal
+dependence đã biến mất. E4 phải phân tích cấu trúc seasonal lag trên đúng scale của E3.
 
-## Validation
+## Xác nhận
 
 ```text
 python -m pytest -q: 11 passed
