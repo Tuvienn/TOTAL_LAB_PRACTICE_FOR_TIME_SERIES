@@ -34,10 +34,38 @@ def _save_figure(figure: plt.Figure, output_path: Path) -> None:
 def plot_time_series(frame: pd.DataFrame, output_path: Path) -> None:
     figure, axis = plt.subplots(figsize=(12, 5))
     axis.plot(frame.index, frame["passengers_thousands"], color="#1769aa", linewidth=1.8)
-    axis.set_title("AirPassengers Monthly International Airline Passengers")
+    min_val = frame["passengers_thousands"].min()
+    max_val = frame["passengers_thousands"].max()
+    axis.axhline(
+        min_val,
+        color="#d32f2f",
+        linestyle="--",
+        linewidth=1.125,
+        label=f"Min ({min_val:.1f})",
+    )
+    yearly_avg = frame["passengers_thousands"].resample("YE").mean()
+    axis.plot(
+        yearly_avg.index,
+        yearly_avg.values,
+        color="#f59e0b",
+        linestyle="--",
+        linewidth=1.3,
+        marker="o",
+        markersize=5,
+        label="Annual Average",
+    )
+    axis.axhline(
+        max_val,
+        color="#85db87",
+        linestyle="--",
+        linewidth=1.125,
+        label=f"Max ({max_val:.1f})",
+    )
+    axis.set_title("Monthly International Airline Passengers (1949–1960)")
     axis.set_xlabel("Date")
     axis.set_ylabel("Passengers (thousands)")
     axis.grid(alpha=0.25)
+    axis.legend(loc="upper left")
     _save_figure(figure, output_path)
 
 
