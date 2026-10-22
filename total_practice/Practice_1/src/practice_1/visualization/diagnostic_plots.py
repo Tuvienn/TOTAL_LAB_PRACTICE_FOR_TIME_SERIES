@@ -37,12 +37,12 @@ def plot_time_series(frame: pd.DataFrame, output_path: Path) -> None:
     min_val = frame["passengers_thousands"].min()
     max_val = frame["passengers_thousands"].max()
     axis.axhline(
-        min_val,
-        color="#d32f2f",
+        max_val,
+        color="#85db87",
         linestyle="--",
         linewidth=1.125,
-        label=f"Min ({min_val:.1f})",
-    )
+        label=f"Max ({int(max_val)})",
+    )  
     yearly_avg = frame["passengers_thousands"].resample("YE").mean()
     axis.plot(
         yearly_avg.index,
@@ -55,11 +55,11 @@ def plot_time_series(frame: pd.DataFrame, output_path: Path) -> None:
         label="Annual Average",
     )
     axis.axhline(
-        max_val,
-        color="#85db87",
+        min_val,
+        color="#d32f2f",
         linestyle="--",
         linewidth=1.125,
-        label=f"Max ({max_val:.1f})",
+        label=f"Min ({int(min_val)})",
     )
     axis.set_title("Monthly International Airline Passengers (1949–1960)")
     axis.set_xlabel("Date")
