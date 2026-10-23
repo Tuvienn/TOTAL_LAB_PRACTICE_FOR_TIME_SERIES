@@ -1,0 +1,1239 @@
+{
+  "phase": "phase_07_interpretation_final_analysis",
+  "evidence_inventory": {
+    "phase_01": {
+      "path": "outputs/results/phase_01_data_quality.json",
+      "sha256": "81cefdd80e48278658a620c6e6ef7e214d30ef8644b766ea37e0795ce59edc9b",
+      "status": "PASS"
+    },
+    "phase_02": {
+      "path": "outputs/results/phase_02_feature_quality.json",
+      "sha256": "3f91620e279a483887439502d6b44063e1e4d061e0c0a996d923d68a273ae0ca",
+      "status": "PASS"
+    },
+    "phase_03": {
+      "path": "outputs/results/phase_03_supervised_quality.json",
+      "sha256": "ccc87afd05aca7add3dbe533cc09efcf7805eb77a2152eb0b1fd0ef8a81084b3",
+      "status": "PASS"
+    },
+    "phase_04": {
+      "path": "outputs/results/phase_04_split_audit.json",
+      "sha256": "d1281334d5140321b19cf4c76465a25c38ce8b6ed08fc33e5c5479e040280ea7",
+      "status": "PASS"
+    },
+    "screening": {
+      "path": "outputs/results/phase_05_screening_results.json",
+      "sha256": "8f8102371857429a3848e66345fe956a66b0b147721f68099cdae28c7e0f2c91",
+      "status": "PASS"
+    },
+    "cv_results": {
+      "path": "outputs/results/phase_05_cv_results.json",
+      "sha256": "02159768a681ead1dd1892d1d87cb08af43b105582c1f4ad91a036505a9d9933",
+      "status": "PASS"
+    },
+    "model_lock": {
+      "path": "outputs/results/phase_05_model_lock.json",
+      "sha256": "d88354aebf6e41cad481387c9eec07b4079b89b6653a447af9a3058c58c5103f",
+      "status": "PASS"
+    },
+    "phase_06_audit": {
+      "path": "outputs/results/phase_06_evaluation_audit.json",
+      "sha256": "1539d38b6ae8397198f9a30ee67c744fb0d352e24876dd36f7402aac461c5f3c",
+      "status": "PASS"
+    },
+    "one_step_metrics": {
+      "path": "outputs/results/phase_06_one_step_metrics.json",
+      "sha256": "fbfcb29efc143a8d1b4480ec25cd96fbdfda617ce300b237d90d064ccdb82eda",
+      "status": "PASS"
+    },
+    "multi_step_metrics": {
+      "path": "outputs/results/phase_06_multistep_metrics.json",
+      "sha256": "8043fb91cbeb11db0651ec025fdf4136403717e7f6ac077bd22ce72290a9bb6d",
+      "status": "PASS"
+    },
+    "one_step_predictions": {
+      "path": "outputs/results/phase_06_one_step_predictions.csv",
+      "sha256": "c676c9464101b6886ef7bb502037ba8767dc89729ae46617871a7d760ba4c566",
+      "status": "PASS"
+    },
+    "multi_step_predictions": {
+      "path": "outputs/results/phase_06_multistep_predictions.csv",
+      "sha256": "4a7cb7af34e6a611f7f7302fa684e19692456251f391d4ef418d36576dc1689e",
+      "status": "PASS"
+    }
+  },
+  "cv_selection": {
+    "selected_feature_configuration": "lag_only_p168",
+    "cv_selected_candidate": "xgboost_tuned",
+    "selection_rule": {
+      "best_mean_mae": 115.47817211009837,
+      "relative_mae_tolerance": 0.01,
+      "mae_threshold": 116.63295383119936,
+      "tolerance_candidates": [
+        "xgboost_tuned"
+      ],
+      "simplicity_order": [
+        "seasonal_naive_24",
+        "persistence",
+        "xgboost_baseline",
+        "random_forest",
+        "xgboost_tuned"
+      ],
+      "selected_candidate": "xgboost_tuned",
+      "selected_mean_mae": 115.47817211009837,
+      "selected_mean_rmse": 151.39813012056203,
+      "status": "PASS"
+    },
+    "evidence_scope": "TRAIN_ONLY_CV"
+  },
+  "final_test": {
+    "one_step_protocol": "one_step_rolling_observed_history",
+    "one_step_candidates": {
+      "seasonal_naive_24": {
+        "mae": 935.8021415270018,
+        "rmse": 1212.2738424880054,
+        "n_observations": 8592,
+        "evaluation_start": "2017-08-03 00:00:00",
+        "evaluation_end": "2018-08-03 00:00:00",
+        "status": "PASS"
+      },
+      "persistence": {
+        "mae": 408.97881750465547,
+        "rmse": 520.9398734235388,
+        "n_observations": 8592,
+        "evaluation_start": "2017-08-03 00:00:00",
+        "evaluation_end": "2018-08-03 00:00:00",
+        "status": "PASS"
+      },
+      "xgboost_baseline": {
+        "mae": 131.58799791957634,
+        "rmse": 172.59693181247906,
+        "n_observations": 8592,
+        "evaluation_start": "2017-08-03 00:00:00",
+        "evaluation_end": "2018-08-03 00:00:00",
+        "status": "PASS"
+      },
+      "xgboost_tuned": {
+        "mae": 113.32779925184765,
+        "rmse": 150.24441909058146,
+        "n_observations": 8592,
+        "evaluation_start": "2017-08-03 00:00:00",
+        "evaluation_end": "2018-08-03 00:00:00",
+        "status": "PASS"
+      },
+      "random_forest": {
+        "mae": 130.7309340083799,
+        "rmse": 176.6541945209513,
+        "n_observations": 8592,
+        "evaluation_start": "2017-08-03 00:00:00",
+        "evaluation_end": "2018-08-03 00:00:00",
+        "status": "PASS"
+      }
+    },
+    "multi_step_protocol": "recursive_24_hour",
+    "multi_step_population": {
+      "candidate_count": 5,
+      "origin_count": 350,
+      "horizon": 24,
+      "predictions_per_candidate": 8400,
+      "shared_origins": true,
+      "shared_actual": true,
+      "status": "PASS"
+    },
+    "multi_step_candidates": {
+      "seasonal_naive_24": {
+        "per_horizon": [
+          {
+            "horizon": 1,
+            "mae": 752.1342857142857,
+            "rmse": 977.4612670440853,
+            "n_origins": 350
+          },
+          {
+            "horizon": 2,
+            "mae": 742.5485714285714,
+            "rmse": 968.4103233060428,
+            "n_origins": 350
+          },
+          {
+            "horizon": 3,
+            "mae": 753.6314285714286,
+            "rmse": 982.6372837566115,
+            "n_origins": 350
+          },
+          {
+            "horizon": 4,
+            "mae": 761.2,
+            "rmse": 997.3891259540724,
+            "n_origins": 350
+          },
+          {
+            "horizon": 5,
+            "mae": 770.6171428571429,
+            "rmse": 1013.5069074399895,
+            "n_origins": 350
+          },
+          {
+            "horizon": 6,
+            "mae": 824.1714285714286,
+            "rmse": 1072.9027781810296,
+            "n_origins": 350
+          },
+          {
+            "horizon": 7,
+            "mae": 948.1714285714286,
+            "rmse": 1211.3197195031305,
+            "n_origins": 350
+          },
+          {
+            "horizon": 8,
+            "mae": 1165.557142857143,
+            "rmse": 1506.1793338491555,
+            "n_origins": 350
+          },
+          {
+            "horizon": 9,
+            "mae": 1243.1885714285713,
+            "rmse": 1621.6092360016066,
+            "n_origins": 350
+          },
+          {
+            "horizon": 10,
+            "mae": 1132.357142857143,
+            "rmse": 1470.0420528484406,
+            "n_origins": 350
+          },
+          {
+            "horizon": 11,
+            "mae": 1020.5771428571428,
+            "rmse": 1327.8136895987006,
+            "n_origins": 350
+          },
+          {
+            "horizon": 12,
+            "mae": 1009.9628571428572,
+            "rmse": 1306.4954616945945,
+            "n_origins": 350
+          },
+          {
+            "horizon": 13,
+            "mae": 989.1371428571429,
+            "rmse": 1274.918897140408,
+            "n_origins": 350
+          },
+          {
+            "horizon": 14,
+            "mae": 990.9142857142857,
+            "rmse": 1277.9604509865376,
+            "n_origins": 350
+          },
+          {
+            "horizon": 15,
+            "mae": 1011.32,
+            "rmse": 1298.6389072519626,
+            "n_origins": 350
+          },
+          {
+            "horizon": 16,
+            "mae": 1005.8714285714286,
+            "rmse": 1289.1649091009042,
+            "n_origins": 350
+          },
+          {
+            "horizon": 17,
+            "mae": 987.0285714285715,
+            "rmse": 1250.4992534412577,
+            "n_origins": 350
+          },
+          {
+            "horizon": 18,
+            "mae": 971.0828571428572,
+            "rmse": 1226.5083110777755,
+            "n_origins": 350
+          },
+          {
+            "horizon": 19,
+            "mae": 947.0942857142857,
+            "rmse": 1192.4360432085475,
+            "n_origins": 350
+          },
+          {
+            "horizon": 20,
+            "mae": 926.2514285714286,
+            "rmse": 1169.754196401962,
+            "n_origins": 350
+          },
+          {
+            "horizon": 21,
+            "mae": 909.8857142857142,
+            "rmse": 1144.903703998101,
+            "n_origins": 350
+          },
+          {
+            "horizon": 22,
+            "mae": 887.84,
+            "rmse": 1118.1395696168063,
+            "n_origins": 350
+          },
+          {
+            "horizon": 23,
+            "mae": 868.5542857142857,
+            "rmse": 1087.8271842793517,
+            "n_origins": 350
+          },
+          {
+            "horizon": 24,
+            "mae": 791.9028571428571,
+            "rmse": 1015.9592174042083,
+            "n_origins": 350
+          }
+        ],
+        "pooled_mae": 933.7916666666666,
+        "pooled_rmse": 1212.2697340506518,
+        "n_predictions": 8400,
+        "status": "PASS"
+      },
+      "persistence": {
+        "per_horizon": [
+          {
+            "horizon": 1,
+            "mae": 862.68,
+            "rmse": 915.1598517667361,
+            "n_origins": 350
+          },
+          {
+            "horizon": 2,
+            "mae": 1510.9885714285715,
+            "rmse": 1617.9301238663818,
+            "n_origins": 350
+          },
+          {
+            "horizon": 3,
+            "mae": 1911.8228571428572,
+            "rmse": 2073.568122825966,
+            "n_origins": 350
+          },
+          {
+            "horizon": 4,
+            "mae": 2137.3342857142857,
+            "rmse": 2350.0208625213763,
+            "n_origins": 350
+          },
+          {
+            "horizon": 5,
+            "mae": 2214.2742857142857,
+            "rmse": 2482.8264112844113,
+            "n_origins": 350
+          },
+          {
+            "horizon": 6,
+            "mae": 2071.7085714285713,
+            "rmse": 2417.807422320597,
+            "n_origins": 350
+          },
+          {
+            "horizon": 7,
+            "mae": 1648.722857142857,
+            "rmse": 2089.8514116695337,
+            "n_origins": 350
+          },
+          {
+            "horizon": 8,
+            "mae": 1502.0228571428572,
+            "rmse": 1842.2296723574632,
+            "n_origins": 350
+          },
+          {
+            "horizon": 9,
+            "mae": 1472.7428571428572,
+            "rmse": 1750.366818698298,
+            "n_origins": 350
+          },
+          {
+            "horizon": 10,
+            "mae": 1209.7742857142857,
+            "rmse": 1446.5734063641569,
+            "n_origins": 350
+          },
+          {
+            "horizon": 11,
+            "mae": 949.6514285714286,
+            "rmse": 1169.1730044290769,
+            "n_origins": 350
+          },
+          {
+            "horizon": 12,
+            "mae": 882.0857142857143,
+            "rmse": 1093.0932518055617,
+            "n_origins": 350
+          },
+          {
+            "horizon": 13,
+            "mae": 968.4257142857143,
+            "rmse": 1191.3973008914484,
+            "n_origins": 350
+          },
+          {
+            "horizon": 14,
+            "mae": 1191.82,
+            "rmse": 1448.2198027726513,
+            "n_origins": 350
+          },
+          {
+            "horizon": 15,
+            "mae": 1411.7428571428572,
+            "rmse": 1724.9363516207945,
+            "n_origins": 350
+          },
+          {
+            "horizon": 16,
+            "mae": 1547.8142857142857,
+            "rmse": 1897.4797774190602,
+            "n_origins": 350
+          },
+          {
+            "horizon": 17,
+            "mae": 1618.4314285714286,
+            "rmse": 1998.2105773487867,
+            "n_origins": 350
+          },
+          {
+            "horizon": 18,
+            "mae": 1665.2314285714285,
+            "rmse": 2067.647369078476,
+            "n_origins": 350
+          },
+          {
+            "horizon": 19,
+            "mae": 1688.8342857142857,
+            "rmse": 2071.28302542858,
+            "n_origins": 350
+          },
+          {
+            "horizon": 20,
+            "mae": 1650.1142857142856,
+            "rmse": 1986.614209438475,
+            "n_origins": 350
+          },
+          {
+            "horizon": 21,
+            "mae": 1523.3714285714286,
+            "rmse": 1816.5486128527205,
+            "n_origins": 350
+          },
+          {
+            "horizon": 22,
+            "mae": 1360.3914285714286,
+            "rmse": 1632.3972231922332,
+            "n_origins": 350
+          },
+          {
+            "horizon": 23,
+            "mae": 1081.597142857143,
+            "rmse": 1338.2608639573975,
+            "n_origins": 350
+          },
+          {
+            "horizon": 24,
+            "mae": 791.9028571428571,
+            "rmse": 1015.9592174042083,
+            "n_origins": 350
+          }
+        ],
+        "pooled_mae": 1453.0619047619048,
+        "pooled_rmse": 1781.2955546722835,
+        "n_predictions": 8400,
+        "status": "PASS"
+      },
+      "xgboost_baseline": {
+        "per_horizon": [
+          {
+            "horizon": 1,
+            "mae": 114.58554966517858,
+            "rmse": 145.5699482720868,
+            "n_origins": 350
+          },
+          {
+            "horizon": 2,
+            "mae": 190.9863783482143,
+            "rmse": 262.42625613197424,
+            "n_origins": 350
+          },
+          {
+            "horizon": 3,
+            "mae": 250.5335267857143,
+            "rmse": 337.7164022964235,
+            "n_origins": 350
+          },
+          {
+            "horizon": 4,
+            "mae": 295.7885630580357,
+            "rmse": 397.40726615393174,
+            "n_origins": 350
+          },
+          {
+            "horizon": 5,
+            "mae": 345.5556919642857,
+            "rmse": 460.59083825000334,
+            "n_origins": 350
+          },
+          {
+            "horizon": 6,
+            "mae": 402.31643136160716,
+            "rmse": 540.8106806439177,
+            "n_origins": 350
+          },
+          {
+            "horizon": 7,
+            "mae": 492.9514536830357,
+            "rmse": 669.6066356365608,
+            "n_origins": 350
+          },
+          {
+            "horizon": 8,
+            "mae": 632.2086635044643,
+            "rmse": 840.1379583254983,
+            "n_origins": 350
+          },
+          {
+            "horizon": 9,
+            "mae": 659.0526032366072,
+            "rmse": 886.9900135340288,
+            "n_origins": 350
+          },
+          {
+            "horizon": 10,
+            "mae": 591.0196595982143,
+            "rmse": 796.3730730038161,
+            "n_origins": 350
+          },
+          {
+            "horizon": 11,
+            "mae": 557.7742075892858,
+            "rmse": 741.5377192362151,
+            "n_origins": 350
+          },
+          {
+            "horizon": 12,
+            "mae": 579.4858705357143,
+            "rmse": 768.8840360114242,
+            "n_origins": 350
+          },
+          {
+            "horizon": 13,
+            "mae": 628.9013950892858,
+            "rmse": 815.7689721377276,
+            "n_origins": 350
+          },
+          {
+            "horizon": 14,
+            "mae": 684.0605831473214,
+            "rmse": 879.6646007712679,
+            "n_origins": 350
+          },
+          {
+            "horizon": 15,
+            "mae": 745.7517271205357,
+            "rmse": 944.7250889750165,
+            "n_origins": 350
+          },
+          {
+            "horizon": 16,
+            "mae": 791.2834402901785,
+            "rmse": 997.5180455979099,
+            "n_origins": 350
+          },
+          {
+            "horizon": 17,
+            "mae": 828.4151785714286,
+            "rmse": 1041.1931387169009,
+            "n_origins": 350
+          },
+          {
+            "horizon": 18,
+            "mae": 853.8948660714286,
+            "rmse": 1070.5946929146214,
+            "n_origins": 350
+          },
+          {
+            "horizon": 19,
+            "mae": 876.0146875,
+            "rmse": 1088.3721316111212,
+            "n_origins": 350
+          },
+          {
+            "horizon": 20,
+            "mae": 866.4623883928572,
+            "rmse": 1078.9201963389337,
+            "n_origins": 350
+          },
+          {
+            "horizon": 21,
+            "mae": 844.3547600446428,
+            "rmse": 1058.2183288659767,
+            "n_origins": 350
+          },
+          {
+            "horizon": 22,
+            "mae": 802.97494140625,
+            "rmse": 1005.0495593019245,
+            "n_origins": 350
+          },
+          {
+            "horizon": 23,
+            "mae": 777.1284095982143,
+            "rmse": 975.0897706406245,
+            "n_origins": 350
+          },
+          {
+            "horizon": 24,
+            "mae": 758.8736997767858,
+            "rmse": 958.5104010858256,
+            "n_origins": 350
+          }
+        ],
+        "pooled_mae": 607.0989448474702,
+        "pooled_rmse": 828.8571074862415,
+        "n_predictions": 8400,
+        "status": "PASS"
+      },
+      "xgboost_tuned": {
+        "per_horizon": [
+          {
+            "horizon": 1,
+            "mae": 100.78127790178571,
+            "rmse": 126.46036980763967,
+            "n_origins": 350
+          },
+          {
+            "horizon": 2,
+            "mae": 166.02402901785715,
+            "rmse": 232.6253236728934,
+            "n_origins": 350
+          },
+          {
+            "horizon": 3,
+            "mae": 210.49044642857143,
+            "rmse": 284.88192580365717,
+            "n_origins": 350
+          },
+          {
+            "horizon": 4,
+            "mae": 243.4503208705357,
+            "rmse": 327.92957915849064,
+            "n_origins": 350
+          },
+          {
+            "horizon": 5,
+            "mae": 278.59002790178573,
+            "rmse": 376.36061862078526,
+            "n_origins": 350
+          },
+          {
+            "horizon": 6,
+            "mae": 334.9926953125,
+            "rmse": 445.12069871063323,
+            "n_origins": 350
+          },
+          {
+            "horizon": 7,
+            "mae": 417.2106556919643,
+            "rmse": 560.2171625675751,
+            "n_origins": 350
+          },
+          {
+            "horizon": 8,
+            "mae": 541.2400669642857,
+            "rmse": 728.7367433738751,
+            "n_origins": 350
+          },
+          {
+            "horizon": 9,
+            "mae": 552.9085993303571,
+            "rmse": 766.142105626808,
+            "n_origins": 350
+          },
+          {
+            "horizon": 10,
+            "mae": 492.11601283482145,
+            "rmse": 675.3173616540614,
+            "n_origins": 350
+          },
+          {
+            "horizon": 11,
+            "mae": 465.6556891741071,
+            "rmse": 635.5678704337572,
+            "n_origins": 350
+          },
+          {
+            "horizon": 12,
+            "mae": 504.6940094866071,
+            "rmse": 677.2152787046699,
+            "n_origins": 350
+          },
+          {
+            "horizon": 13,
+            "mae": 561.1099916294643,
+            "rmse": 730.9838359572217,
+            "n_origins": 350
+          },
+          {
+            "horizon": 14,
+            "mae": 614.2623688616071,
+            "rmse": 797.722564131841,
+            "n_origins": 350
+          },
+          {
+            "horizon": 15,
+            "mae": 681.44443359375,
+            "rmse": 870.9800546734648,
+            "n_origins": 350
+          },
+          {
+            "horizon": 16,
+            "mae": 738.1292466517857,
+            "rmse": 932.8594499900798,
+            "n_origins": 350
+          },
+          {
+            "horizon": 17,
+            "mae": 783.0515262276786,
+            "rmse": 984.2299569278466,
+            "n_origins": 350
+          },
+          {
+            "horizon": 18,
+            "mae": 807.3518833705357,
+            "rmse": 1015.5568297278185,
+            "n_origins": 350
+          },
+          {
+            "horizon": 19,
+            "mae": 826.8177650669643,
+            "rmse": 1037.2513266852386,
+            "n_origins": 350
+          },
+          {
+            "horizon": 20,
+            "mae": 826.0920340401785,
+            "rmse": 1035.1226229025258,
+            "n_origins": 350
+          },
+          {
+            "horizon": 21,
+            "mae": 802.4529241071428,
+            "rmse": 1012.1786249131492,
+            "n_origins": 350
+          },
+          {
+            "horizon": 22,
+            "mae": 755.7224776785714,
+            "rmse": 965.0426097057473,
+            "n_origins": 350
+          },
+          {
+            "horizon": 23,
+            "mae": 732.79673828125,
+            "rmse": 940.0480220418492,
+            "n_origins": 350
+          },
+          {
+            "horizon": 24,
+            "mae": 702.6645368303572,
+            "rmse": 914.6163164713694,
+            "n_origins": 350
+          }
+        ],
+        "pooled_mae": 547.5020732189361,
+        "pooled_rmse": 763.0003296040213,
+        "n_predictions": 8400,
+        "status": "PASS"
+      },
+      "random_forest": {
+        "per_horizon": [
+          {
+            "horizon": 1,
+            "mae": 119.78455238095243,
+            "rmse": 156.25388299998002,
+            "n_origins": 350
+          },
+          {
+            "horizon": 2,
+            "mae": 201.08539047619044,
+            "rmse": 274.0962868090191,
+            "n_origins": 350
+          },
+          {
+            "horizon": 3,
+            "mae": 264.3925333333333,
+            "rmse": 362.3219438373548,
+            "n_origins": 350
+          },
+          {
+            "horizon": 4,
+            "mae": 317.5488047619048,
+            "rmse": 436.1426214464695,
+            "n_origins": 350
+          },
+          {
+            "horizon": 5,
+            "mae": 370.53080476190485,
+            "rmse": 509.1594412255391,
+            "n_origins": 350
+          },
+          {
+            "horizon": 6,
+            "mae": 450.21445714285716,
+            "rmse": 612.0567765428303,
+            "n_origins": 350
+          },
+          {
+            "horizon": 7,
+            "mae": 542.4693904761905,
+            "rmse": 737.6360215101573,
+            "n_origins": 350
+          },
+          {
+            "horizon": 8,
+            "mae": 651.5597619047619,
+            "rmse": 883.5493374920109,
+            "n_origins": 350
+          },
+          {
+            "horizon": 9,
+            "mae": 683.857161904762,
+            "rmse": 934.7683401119333,
+            "n_origins": 350
+          },
+          {
+            "horizon": 10,
+            "mae": 648.5021523809522,
+            "rmse": 867.9078321081123,
+            "n_origins": 350
+          },
+          {
+            "horizon": 11,
+            "mae": 620.7157523809524,
+            "rmse": 827.5057307510573,
+            "n_origins": 350
+          },
+          {
+            "horizon": 12,
+            "mae": 651.6328190476189,
+            "rmse": 862.8982179071304,
+            "n_origins": 350
+          },
+          {
+            "horizon": 13,
+            "mae": 701.2981428571429,
+            "rmse": 910.202600568268,
+            "n_origins": 350
+          },
+          {
+            "horizon": 14,
+            "mae": 759.0808952380953,
+            "rmse": 973.2714021097601,
+            "n_origins": 350
+          },
+          {
+            "horizon": 15,
+            "mae": 814.996476190476,
+            "rmse": 1025.4603081818952,
+            "n_origins": 350
+          },
+          {
+            "horizon": 16,
+            "mae": 857.1110000000001,
+            "rmse": 1063.8764142002524,
+            "n_origins": 350
+          },
+          {
+            "horizon": 17,
+            "mae": 893.4561714285716,
+            "rmse": 1095.5604339390693,
+            "n_origins": 350
+          },
+          {
+            "horizon": 18,
+            "mae": 912.0102380952382,
+            "rmse": 1116.812708465451,
+            "n_origins": 350
+          },
+          {
+            "horizon": 19,
+            "mae": 922.4337523809522,
+            "rmse": 1129.7426762281923,
+            "n_origins": 350
+          },
+          {
+            "horizon": 20,
+            "mae": 915.7056952380952,
+            "rmse": 1127.7897526295926,
+            "n_origins": 350
+          },
+          {
+            "horizon": 21,
+            "mae": 899.4721142857143,
+            "rmse": 1122.0561870614965,
+            "n_origins": 350
+          },
+          {
+            "horizon": 22,
+            "mae": 864.0680857142856,
+            "rmse": 1075.050307659223,
+            "n_origins": 350
+          },
+          {
+            "horizon": 23,
+            "mae": 851.4255999999999,
+            "rmse": 1061.7953270985204,
+            "n_origins": 350
+          },
+          {
+            "horizon": 24,
+            "mae": 843.1424761904761,
+            "rmse": 1058.3033791874407,
+            "n_origins": 350
+          }
+        ],
+        "pooled_mae": 656.5205928571429,
+        "pooled_rmse": 890.9993855902527,
+        "n_predictions": 8400,
+        "status": "PASS"
+      }
+    }
+  },
+  "feature_importance": {
+    "candidate_id": "xgboost_tuned",
+    "feature_configuration": "lag_only_p168",
+    "importance_type": "gain",
+    "training_population": "full_top_level_train",
+    "fit_evidence": {
+      "candidate_id": "xgboost_tuned",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "n_estimators": 800,
+        "max_depth": 7,
+        "learning_rate": 0.05,
+        "subsample": 0.85,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 5,
+        "reg_alpha": 0.1,
+        "reg_lambda": 1.0,
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1
+      },
+      "train_rows": 108083,
+      "feature_count": 168,
+      "training_seconds": 7.7639359591994435,
+      "warnings": [],
+      "final_test_used_for_fit": false,
+      "prediction_executed": false,
+      "binary_model_persisted": false,
+      "status": "PASS"
+    },
+    "top_20": [
+      {
+        "feature": "lag_1",
+        "rank": 1,
+        "gain": 1390764800.0,
+        "normalized_gain": 0.8021766599223907,
+        "possible_interpretation": "Consistent with short-term dependence/persistence.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_166",
+        "rank": 2,
+        "gain": 39837540.0,
+        "normalized_gain": 0.022977821107296244,
+        "possible_interpretation": "Consistent with predictive dependence on the value 166 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_22",
+        "rank": 3,
+        "gain": 35602368.0,
+        "normalized_gain": 0.02053502407277478,
+        "possible_interpretation": "Consistent with predictive dependence on the value 22 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_23",
+        "rank": 4,
+        "gain": 23325856.0,
+        "normalized_gain": 0.013454077393899139,
+        "possible_interpretation": "Consistent with predictive dependence on the value 23 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_21",
+        "rank": 5,
+        "gain": 22945400.0,
+        "normalized_gain": 0.01323463488045083,
+        "possible_interpretation": "Consistent with predictive dependence on the value 21 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_3",
+        "rank": 6,
+        "gain": 20631352.0,
+        "normalized_gain": 0.011899919409121612,
+        "possible_interpretation": "Consistent with predictive dependence on the value 3 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_2",
+        "rank": 7,
+        "gain": 17715554.0,
+        "normalized_gain": 0.010218121666866137,
+        "possible_interpretation": "Consistent with predictive dependence on the value 2 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_142",
+        "rank": 8,
+        "gain": 13173461.0,
+        "normalized_gain": 0.0075982962357099325,
+        "possible_interpretation": "Consistent with predictive dependence on the value 142 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_27",
+        "rank": 9,
+        "gain": 12339740.0,
+        "normalized_gain": 0.00711741584019866,
+        "possible_interpretation": "Consistent with predictive dependence on the value 27 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_26",
+        "rank": 10,
+        "gain": 9989907.0,
+        "normalized_gain": 0.00576206000482275,
+        "possible_interpretation": "Consistent with predictive dependence on the value 26 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_4",
+        "rank": 11,
+        "gain": 8756418.0,
+        "normalized_gain": 0.005050598163056975,
+        "possible_interpretation": "Consistent with predictive dependence on the value 4 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_28",
+        "rank": 12,
+        "gain": 8063030.0,
+        "normalized_gain": 0.004650660179387653,
+        "possible_interpretation": "Consistent with predictive dependence on the value 28 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_10",
+        "rank": 13,
+        "gain": 7115779.5,
+        "normalized_gain": 0.004104297313287063,
+        "possible_interpretation": "Consistent with predictive dependence on the value 10 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_20",
+        "rank": 14,
+        "gain": 6618028.5,
+        "normalized_gain": 0.003817200433460201,
+        "possible_interpretation": "Consistent with predictive dependence on the value 20 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_141",
+        "rank": 15,
+        "gain": 5349108.5,
+        "normalized_gain": 0.003085302410653814,
+        "possible_interpretation": "Consistent with predictive dependence on the value 141 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_9",
+        "rank": 16,
+        "gain": 4530206.0,
+        "normalized_gain": 0.002612969150384288,
+        "possible_interpretation": "Consistent with predictive dependence on the value 9 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_165",
+        "rank": 17,
+        "gain": 3610119.75,
+        "normalized_gain": 0.0020822743018624403,
+        "possible_interpretation": "Consistent with predictive dependence on the value 165 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_12",
+        "rank": 18,
+        "gain": 3131650.0,
+        "normalized_gain": 0.0018062986186060755,
+        "possible_interpretation": "Consistent with predictive dependence on the value 12 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_146",
+        "rank": 19,
+        "gain": 3093470.25,
+        "normalized_gain": 0.0017842769911305513,
+        "possible_interpretation": "Consistent with predictive dependence on the value 146 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      },
+      {
+        "feature": "lag_140",
+        "rank": 20,
+        "gain": 2869927.25,
+        "normalized_gain": 0.001655340037097036,
+        "possible_interpretation": "Consistent with predictive dependence on the value 140 hours earlier.",
+        "limitation": "Gain alone does not prove seasonality or causality; correlated features can share importance."
+      }
+    ],
+    "interpretation_boundary": "Gain describes fitted-tree usage, not causality."
+  },
+  "rolling_contribution": [
+    {
+      "p": 24,
+      "reference_configuration": "lag_only_p24",
+      "candidate_configuration": "lag_rolling_p24",
+      "reference_mean_mae": 141.92728370949072,
+      "candidate_mean_mae": 141.38083839699073,
+      "relative_mae_improvement_percent": 0.3850178050462166,
+      "classification": "NEUTRAL",
+      "evidence_scope": "TRAIN_ONLY_CV"
+    },
+    {
+      "p": 72,
+      "reference_configuration": "lag_only_p72",
+      "candidate_configuration": "lag_rolling_p72",
+      "reference_mean_mae": 134.99386646412037,
+      "candidate_mean_mae": 134.62281810619214,
+      "relative_mae_improvement_percent": 0.27486312352335723,
+      "classification": "NEUTRAL",
+      "evidence_scope": "TRAIN_ONLY_CV"
+    },
+    {
+      "p": 168,
+      "reference_configuration": "lag_only_p168",
+      "candidate_configuration": "lag_rolling_p168",
+      "reference_mean_mae": 132.15004928023728,
+      "candidate_mean_mae": 131.7834318938079,
+      "relative_mae_improvement_percent": 0.2774250849138528,
+      "classification": "NEUTRAL",
+      "evidence_scope": "TRAIN_ONLY_CV"
+    }
+  ],
+  "lag_p_analysis": {
+    "lag_only": {
+      "configurations": [
+        {
+          "p": 24,
+          "configuration": "lag_only_p24",
+          "feature_count": 24,
+          "mean_mae": 141.92728370949072,
+          "std_mae": 8.714188019338447,
+          "mean_rmse": 188.18513159901903,
+          "std_rmse": 14.39200825130638,
+          "training_seconds": 3.989148624939844
+        },
+        {
+          "p": 72,
+          "configuration": "lag_only_p72",
+          "feature_count": 72,
+          "mean_mae": 134.99386646412037,
+          "std_mae": 7.1257085156518425,
+          "mean_rmse": 177.25576575250176,
+          "std_rmse": 11.508577143102675,
+          "training_seconds": 7.316610583104193
+        },
+        {
+          "p": 168,
+          "configuration": "lag_only_p168",
+          "feature_count": 168,
+          "mean_mae": 132.15004928023728,
+          "std_mae": 5.357124250337573,
+          "mean_rmse": 172.58556958279266,
+          "std_rmse": 8.309441062429547,
+          "training_seconds": 11.788753709872253
+        }
+      ],
+      "best_configuration_by_mean_mae": "lag_only_p168",
+      "p24_to_p168_mae_improvement_percent": 6.888904073769456,
+      "evidence_scope": "TRAIN_ONLY_CV"
+    },
+    "lag_rolling": {
+      "configurations": [
+        {
+          "p": 24,
+          "configuration": "lag_rolling_p24",
+          "feature_count": 28,
+          "mean_mae": 141.38083839699073,
+          "std_mae": 8.61722371057958,
+          "mean_rmse": 187.44312738545224,
+          "std_rmse": 14.856585516903477,
+          "training_seconds": 4.542599626118317
+        },
+        {
+          "p": 72,
+          "configuration": "lag_rolling_p72",
+          "feature_count": 76,
+          "mean_mae": 134.62281810619214,
+          "std_mae": 6.648487337281807,
+          "mean_rmse": 176.78085821809276,
+          "std_rmse": 10.486410361976734,
+          "training_seconds": 6.803882958018221
+        },
+        {
+          "p": 168,
+          "configuration": "lag_rolling_p168",
+          "feature_count": 172,
+          "mean_mae": 131.7834318938079,
+          "std_mae": 5.570622688321802,
+          "mean_rmse": 171.94023643520018,
+          "std_rmse": 8.88399318320131,
+          "training_seconds": 12.756475710077211
+        }
+      ],
+      "best_configuration_by_mean_mae": "lag_rolling_p168",
+      "p24_to_p168_mae_improvement_percent": 6.788336108344311,
+      "evidence_scope": "TRAIN_ONLY_CV"
+    }
+  },
+  "required_questions": {
+    "xgboost_vs_linear_regression": "THEORETICAL_EXPLANATION",
+    "effect_of_increasing_lag_p": "EMPIRICAL_RESULT",
+    "xgboost_vs_arima": "THEORETICAL_EXPLANATION"
+  },
+  "limitations": [
+    "Source timestamps have no timezone or UTC offset.",
+    "Duplicate timestamps were aggregated by mean.",
+    "Missing timestamps and targets reduce evaluation population.",
+    "The common maximal mask discards extra usable samples.",
+    "Gain importance is not causality.",
+    "Correlated features can share or distort gain importance.",
+    "One-step rolling evaluation assumes observed prior actuals.",
+    "Recursive multi-step forecasting accumulates error.",
+    "Complete daily blocks reduce multi-step origin count.",
+    "Linear Regression and ARIMA were not trained.",
+    "The final test represents one selected historical period.",
+    "Prediction intervals and uncertainty calibration were not tested."
+  ],
+  "validation_checks": {
+    "importance_row_count": 168,
+    "expected_importance_row_count": 168,
+    "normalized_gain_sum": 1.0,
+    "importance_finite": true,
+    "comparison_row_count": 21,
+    "cv_final_test_separated": true,
+    "one_step_multi_step_separated": true,
+    "theoretical_models_have_no_metrics": true,
+    "status": "PASS"
+  },
+  "status": "PASS"
+}

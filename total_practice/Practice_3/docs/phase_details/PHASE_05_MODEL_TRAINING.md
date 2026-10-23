@@ -5,8 +5,8 @@
 **Phase:** 05  
 **Name:** Model Training & Selection  
 **Practice:** Practice 3 — Machine Learning Time Series Forecasting  
-**Status:** `APPROVED_WAITING_PHASE_04_PASS`  
-**Implementation authorized:** `YES_AFTER_PHASE_04_PASS`  
+**Status:** `PASS`
+**Implementation authorized:** `YES`
 **Approved by:** `Human`  
 **Approval date:** `2026-10-16`
 
@@ -310,6 +310,83 @@ Tổng hợp baseline/model CV results, áp dụng deterministic decision rule v
 
 Ghi package versions, parameters, seeds, configuration names, fold identities, runtime, warnings và final-test sealing state.
 
+### 10.8 Run Logging, Checkpoint and Resume
+
+Feature screening phải tạo một run cục bộ có định danh dạng:
+
+```text
+runs/P5_xgb_screening_<timestamp>_<hash>/
+```
+
+Mỗi run chứa:
+
+```text
+<run_id>.log
+run_metadata.json
+config_snapshot.json
+checkpoint.json
+training_progress.png
+fold_duration.png
+screening_results.json sau khi hoàn tất
+```
+
+Checkpoint phải được ghi atomically sau từng fold. Khi Human dừng bằng `Ctrl+C`, run chuyển sang `INTERRUPTED`, giữ nguyên fold đã `PASS` và không tạo official screening result. Resume phải kiểm tra execution identity trước khi bỏ qua fold đã hoàn thành; fold đang chạy dở được chạy lại từ đầu.
+
+Hai lệnh thực thi:
+
+```bash
+python -m practice_3.analysis.model_training --run-screening
+python -m practice_3.analysis.model_training --resume-screening runs/<run_id>
+```
+
+### 10.9 Tuning Execution Boundary
+
+Tuning dùng đúng `RandomizedSearchCV` đã duyệt và tạo run cục bộ dạng:
+
+```text
+runs/P5_xgb_tuning_<timestamp>_<hash>/
+```
+
+Dry-run và execution commands:
+
+```bash
+python -m practice_3.analysis.model_training --dry-run-tuning
+python -m practice_3.analysis.model_training --run-tuning
+```
+
+Tuning run ghi `run_metadata.json`, `config_snapshot.json`, `tuning_manifest.json`, `<run_id>.log` và `tuning_results.json` sau khi hoàn tất. `tuning_results.json` phải chứa đủ 24 candidates, fold-level MAE/RMSE, aggregate metrics, selected parameters, full reconstruction parameters, warnings, runtime và final-test sealing state.
+
+`RandomizedSearchCV` nguyên bản không hỗ trợ checkpoint/resume theo từng fold. Nếu Human dừng tuning, run được ghi `INTERRUPTED`, không tạo `tuning_results.json` và lần sau phải chạy lại tuning từ đầu. Không thay bằng custom search protocol nếu chưa có phê duyệt riêng.
+
+### 10.10 Random Forest Execution Boundary
+
+Random Forest comparison tạo run cục bộ dạng:
+
+```text
+runs/P5_random_forest_<timestamp>_<hash>/
+```
+
+Dry-run, execution và resume commands:
+
+```bash
+python -m practice_3.analysis.model_training --dry-run-random-forest --tuning-result runs/<tuning_run_id>/tuning_results.json
+python -m practice_3.analysis.model_training --run-random-forest --tuning-result runs/<tuning_run_id>/tuning_results.json
+python -m practice_3.analysis.model_training --resume-random-forest runs/<random_forest_run_id> --tuning-result runs/<tuning_run_id>/tuning_results.json
+```
+
+Run ghi log, metadata, configuration snapshot, manifest, checkpoint theo từng CV fold và `random_forest_results.json` sau khi hoàn tất. Resume phải xác minh source, configuration, upstream inputs, tuning result và fold identity; fold đã `PASS` không được train lại. Kết quả vẫn chỉ thuộc local run cho đến khi được review và tổng hợp vào official Phase 5 outputs.
+
+### 10.11 Model Comparison, Refit and Lock Boundary
+
+Sau khi Random Forest result qua review, dry-run và execution commands:
+
+```bash
+python -m practice_3.analysis.model_training --dry-run-model-lock --tuning-result runs/<tuning_run_id>/tuning_results.json --random-forest-result runs/<random_forest_run_id>/random_forest_results.json
+python -m practice_3.analysis.model_training --run-model-lock --tuning-result runs/<tuning_run_id>/tuning_results.json --random-forest-result runs/<random_forest_run_id>/random_forest_results.json
+```
+
+Runner tổng hợp đủ năm candidates, kiểm tra cùng folds/population, áp dụng deterministic selection rule và refit candidate được CV chọn trên full TRAIN. Refit không predict, không truy cập final test và không lưu model binary. Chỉ khi refit thành công mới tạo `phase_05_cv_results.json` và `phase_05_model_lock.json`. Nếu bị gián đoạn, không promote official output và Human phải chạy lại bước refit.
+
 ## 11. Expected Output Contract
 
 Machine-readable outputs:
@@ -355,6 +432,14 @@ src/practice_3/analysis/model_training.py
 outputs/results/phase_05_cv_results.json
 outputs/results/phase_05_model_lock.json
 ```
+
+Run history cục bộ:
+
+```text
+runs/P5_xgb_screening_<timestamp>_<hash>/
+```
+
+`runs/` được Git ignore và không thay thế source of truth. `outputs/results/phase_05_screening_results.json` chỉ được tạo atomically sau khi screening hoàn thành đủ mọi fold và deterministic selection đạt. Run bị `INTERRUPTED` hoặc `FAILED` không được promote.
 
 Không tạo thư mục `models/` và không lưu binary model mặc định trong Phase 5. Khả năng tái tạo đến từ approved inputs, configurations, source code, seeds, package versions và model lock.
 
@@ -408,6 +493,8 @@ Các owner dự kiến sau khi upstream gates đã `PASS`:
 config/model_training.json
 src/practice_3/analysis/model_training.py
 tests/test_model_training.py
+src/practice_3/visualization/training_progress.py
+runs/ generated local run history
 outputs/results/phase_05_cv_results.json
 outputs/results/phase_05_model_lock.json
 docs/logs/PHASE_05_EXECUTION.md
@@ -418,6 +505,7 @@ Dependencies dự kiến khi triển khai:
 ```text
 numpy
 pandas
+matplotlib
 scikit-learn
 xgboost
 pytest
@@ -448,6 +536,7 @@ STOP nếu:
 - baseline không alignment đúng validation timestamps;
 - candidate sử dụng split hoặc metric khác nhau;
 - training/tuning phát sinh lỗi hoặc non-finite prediction/metric;
+- resume identity không khớp configuration, upstream artifacts, runtime, source hoặc folds của run cũ;
 - search vượt giới hạn compute/memory chưa được Human phê duyệt;
 - kết quả không deterministic trong tolerance đã định;
 - selected candidate không thể được dựng lại hoặc selected ML model không thể refit trên full TRAIN;

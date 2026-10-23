@@ -3,12 +3,12 @@
 ## 1. Danh tính tài liệu
 
 ```text
-Document ID: TS-PRACTICE-03-ARCHITECTURE-v1.0
+Document ID: TS-PRACTICE-03-ARCHITECTURE-v1.1
 Phạm vi repository: total_practice/Practice_3
 Chủ đề: Dự báo chuỗi thời gian bằng Machine Learning
 Dataset chính: datasets/raw/AEP_hourly.csv
 Trạng thái: APPROVED_AND_ACTIVE
-Ngày cập nhật: 2026-10-15
+Ngày cập nhật: 2026-10-21
 ```
 
 Tài liệu này quy định kiến trúc, trách nhiệm thư mục, vòng đời dữ liệu, hướng dependency, ranh giới notebook/source code, quyền sở hữu output và các validation gate cho `Practice_3`.
@@ -84,6 +84,7 @@ Practice_3/
 │   ├── status/
 │   └── logs/
 ├── notebooks/
+├── runs/
 ├── src/
 │   └── practice_3/
 │       ├── data/
@@ -159,6 +160,14 @@ Không bắt buộc tạo tài liệu chi tiết cho từng exercise nếu plan 
 ### 4.7 `tests/`
 
 Sở hữu kiểm tra tự động cho schema, timestamp, feature alignment, chronology, leakage, split boundary, shape, metric và hành vi deterministic phù hợp với từng bước.
+
+### 4.8 `runs/`
+
+`runs/` lưu lịch sử execution cục bộ của các training job có thể bị gián đoạn. Mỗi run phải có định danh riêng và chỉ chứa log, metadata, configuration snapshot, checkpoint, biểu đồ tiến độ và kết quả tạm của chính run đó.
+
+`runs/` là generated local state và phải được Git ignore. Artifact trong `runs/` không tự trở thành kết quả chính thức. Chỉ run đã hoàn thành đủ validation gate mới được promote kết quả machine-readable sang `outputs/results/`.
+
+Không lưu binary model trong `runs/` nếu chưa có phê duyệt riêng về serialization và Git policy.
 
 ---
 

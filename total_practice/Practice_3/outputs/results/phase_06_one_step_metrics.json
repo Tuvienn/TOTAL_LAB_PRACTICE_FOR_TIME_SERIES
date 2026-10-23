@@ -1,0 +1,53 @@
+{
+  "protocol": "one_step_rolling_observed_history",
+  "population": {
+    "candidate_count": 5,
+    "rows_per_candidate": 8592,
+    "shared_timestamps": true,
+    "shared_actual": true,
+    "status": "PASS"
+  },
+  "candidates": {
+    "seasonal_naive_24": {
+      "mae": 935.8021415270018,
+      "rmse": 1212.2738424880054,
+      "n_observations": 8592,
+      "evaluation_start": "2017-08-03 00:00:00",
+      "evaluation_end": "2018-08-03 00:00:00",
+      "status": "PASS"
+    },
+    "persistence": {
+      "mae": 408.97881750465547,
+      "rmse": 520.9398734235388,
+      "n_observations": 8592,
+      "evaluation_start": "2017-08-03 00:00:00",
+      "evaluation_end": "2018-08-03 00:00:00",
+      "status": "PASS"
+    },
+    "xgboost_baseline": {
+      "mae": 131.58799791957634,
+      "rmse": 172.59693181247906,
+      "n_observations": 8592,
+      "evaluation_start": "2017-08-03 00:00:00",
+      "evaluation_end": "2018-08-03 00:00:00",
+      "status": "PASS"
+    },
+    "xgboost_tuned": {
+      "mae": 113.32779925184765,
+      "rmse": 150.24441909058146,
+      "n_observations": 8592,
+      "evaluation_start": "2017-08-03 00:00:00",
+      "evaluation_end": "2018-08-03 00:00:00",
+      "status": "PASS"
+    },
+    "random_forest": {
+      "mae": 130.7309340083799,
+      "rmse": 176.6541945209513,
+      "n_observations": 8592,
+      "evaluation_start": "2017-08-03 00:00:00",
+      "evaluation_end": "2018-08-03 00:00:00",
+      "status": "PASS"
+    }
+  },
+  "status": "PASS"
+}

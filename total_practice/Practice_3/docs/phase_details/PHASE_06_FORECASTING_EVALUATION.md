@@ -5,8 +5,8 @@
 **Phase:** 06  
 **Name:** Forecasting & Evaluation  
 **Practice:** Practice 3 — Machine Learning Time Series Forecasting  
-**Status:** `APPROVED_WAITING_PHASE_05_PASS`  
-**Implementation authorized:** `YES_AFTER_PHASE_05_PASS`  
+**Status:** `PASS`
+**Implementation authorized:** `YES`
 **Approved by:** `Human`  
 **Approval date:** `2026-10-16`
 
@@ -398,6 +398,18 @@ Tạo ba core figures theo Section 10, không cherry-pick window.
 
 Ghi identities, package versions, candidate specs, population counts, missing/exclusion reasons, timestamp ranges, metric definitions và final-test opening event.
 
+### 11.10 Run Logging, Checkpoint and Resume
+
+Official evaluation phải tạo một local run có định danh:
+
+```text
+runs/P6_final_evaluation_<timestamp>_<hash>/
+```
+
+Run lưu manifest, configuration snapshot, metadata, log và checkpoint theo candidate/protocol unit. Final-test opening event chỉ được ghi sau khi entry gate đạt. Khi Human dừng execution, run chuyển sang `INTERRUPTED`; resume phải xác minh source, configuration, upstream identities, model lock và split identity trước khi giữ lại unit đã `PASS`.
+
+Không tạo một opening event mới khi resume cùng run. Run `INTERRUPTED` hoặc `FAILED` không được promote output vào `outputs/results/` hoặc `outputs/figures/`.
+
 ## 12. Expected Output Contract
 
 ### 12.1 One-step Predictions
@@ -474,6 +486,7 @@ Source of truth dự kiến:
 config/forecasting.json
 src/practice_3/analysis/forecasting.py
 src/practice_3/analysis/evaluation.py
+src/practice_3/visualization/forecast_evaluation.py
 tests/test_forecasting.py
 tests/test_evaluation.py
 ```
@@ -542,6 +555,7 @@ Các owner dự kiến sau khi upstream gates đã `PASS`:
 config/forecasting.json
 src/practice_3/analysis/forecasting.py
 src/practice_3/analysis/evaluation.py
+src/practice_3/visualization/forecast_evaluation.py
 tests/test_forecasting.py
 tests/test_evaluation.py
 outputs/results/phase_06_one_step_predictions.csv

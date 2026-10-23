@@ -1,0 +1,164 @@
+{
+  "phase": "phase_06_forecasting_evaluation",
+  "run_id": "P6_final_evaluation_20261022_234000_26d167d7",
+  "execution_identity": "3c368a8e4d54fab3e35f73f97439f26810913d969726774b4da043da66b4a585",
+  "entry_gate": {
+    "phase": "phase_06_entry_gate",
+    "upstream_phases": {
+      "phase_01": {
+        "path": "outputs/results/phase_01_data_quality.json",
+        "sha256": "81cefdd80e48278658a620c6e6ef7e214d30ef8644b766ea37e0795ce59edc9b",
+        "status": "PASS"
+      },
+      "phase_02": {
+        "path": "outputs/results/phase_02_feature_quality.json",
+        "sha256": "3f91620e279a483887439502d6b44063e1e4d061e0c0a996d923d68a273ae0ca",
+        "status": "PASS"
+      },
+      "phase_03": {
+        "path": "outputs/results/phase_03_supervised_quality.json",
+        "sha256": "ccc87afd05aca7add3dbe533cc09efcf7805eb77a2152eb0b1fd0ef8a81084b3",
+        "status": "PASS"
+      },
+      "phase_04": {
+        "path": "outputs/results/phase_04_split_audit.json",
+        "sha256": "d1281334d5140321b19cf4c76465a25c38ce8b6ed08fc33e5c5479e040280ea7",
+        "status": "PASS"
+      }
+    },
+    "forecasting_config": {
+      "approved_contract": true,
+      "status": "PASS"
+    },
+    "split_identity": {
+      "test_rows": 8592,
+      "test_start": "2017-08-03 00:00:00",
+      "test_end": "2018-08-03 00:00:00"
+    },
+    "candidate_order": [
+      "seasonal_naive_24",
+      "persistence",
+      "xgboost_baseline",
+      "xgboost_tuned",
+      "random_forest"
+    ],
+    "selected_feature_configuration": "lag_only_p168",
+    "cv_selected_candidate": "xgboost_tuned",
+    "final_test_state": "SEALED",
+    "target_values_accessed": false,
+    "metrics_computed": false,
+    "input_identities": {
+      "forecasting_config": {
+        "path": "config/forecasting.json",
+        "sha256": "ee55ad6cac0ca0aa5bf63d5101043a5a85befd655f25518cacad143e37776d90"
+      },
+      "phase_05_cv_results": {
+        "path": "outputs/results/phase_05_cv_results.json",
+        "sha256": "02159768a681ead1dd1892d1d87cb08af43b105582c1f4ad91a036505a9d9933"
+      },
+      "phase_05_model_lock": {
+        "path": "outputs/results/phase_05_model_lock.json",
+        "sha256": "d88354aebf6e41cad481387c9eec07b4079b89b6653a447af9a3058c58c5103f"
+      },
+      "phase_01": {
+        "path": "outputs/results/phase_01_data_quality.json",
+        "sha256": "81cefdd80e48278658a620c6e6ef7e214d30ef8644b766ea37e0795ce59edc9b",
+        "status": "PASS"
+      },
+      "phase_02": {
+        "path": "outputs/results/phase_02_feature_quality.json",
+        "sha256": "3f91620e279a483887439502d6b44063e1e4d061e0c0a996d923d68a273ae0ca",
+        "status": "PASS"
+      },
+      "phase_03": {
+        "path": "outputs/results/phase_03_supervised_quality.json",
+        "sha256": "ccc87afd05aca7add3dbe533cc09efcf7805eb77a2152eb0b1fd0ef8a81084b3",
+        "status": "PASS"
+      },
+      "phase_04": {
+        "path": "outputs/results/phase_04_split_audit.json",
+        "sha256": "d1281334d5140321b19cf4c76465a25c38ce8b6ed08fc33e5c5479e040280ea7",
+        "status": "PASS"
+      }
+    },
+    "status": "PASS"
+  },
+  "final_test_opening_event": {
+    "state_before": "SEALED",
+    "purpose": "FINAL_EVALUATION_ONLY",
+    "opened_after_phase_05_lock": true,
+    "opened_at": "2026-10-22T23:40:00+07:00",
+    "locked_candidate_registry_identity": "d88354aebf6e41cad481387c9eec07b4079b89b6653a447af9a3058c58c5103f",
+    "split_identity": {
+      "test_rows": 8592,
+      "test_start": "2017-08-03 00:00:00",
+      "test_end": "2018-08-03 00:00:00"
+    },
+    "state_after": "OPENED_FOR_FINAL_EVALUATION"
+  },
+  "candidate_reconstruction": {
+    "seasonal_naive_24": {
+      "model_fit_required": false,
+      "status": "PASS"
+    },
+    "persistence": {
+      "model_fit_required": false,
+      "status": "PASS"
+    },
+    "xgboost_baseline": {
+      "model_fit_required": true,
+      "train_rows": 108083,
+      "feature_count": 168,
+      "training_seconds": 2.4145436252001673,
+      "warnings": [],
+      "binary_model_persisted": false,
+      "status": "PASS"
+    },
+    "xgboost_tuned": {
+      "model_fit_required": true,
+      "train_rows": 108083,
+      "feature_count": 168,
+      "training_seconds": 7.24971150001511,
+      "warnings": [],
+      "binary_model_persisted": false,
+      "status": "PASS"
+    },
+    "random_forest": {
+      "model_fit_required": true,
+      "train_rows": 108083,
+      "feature_count": 168,
+      "training_seconds": 208.67287866701372,
+      "warnings": [],
+      "binary_model_persisted": false,
+      "status": "PASS"
+    }
+  },
+  "one_step_population": {
+    "candidate_count": 5,
+    "rows_per_candidate": 8592,
+    "shared_timestamps": true,
+    "shared_actual": true,
+    "status": "PASS"
+  },
+  "multi_step_population": {
+    "candidate_count": 5,
+    "origin_count": 350,
+    "horizon": 24,
+    "predictions_per_candidate": 8400,
+    "shared_origins": true,
+    "shared_actual": true,
+    "status": "PASS"
+  },
+  "multi_step_origin_audit": {
+    "scheduled_origins": 365,
+    "incomplete_target_block": 0,
+    "non_finite_target_block": 8,
+    "insufficient_or_non_finite_history": 7,
+    "eligible_origins": 350,
+    "excluded_origins": 15
+  },
+  "cv_selected_candidate": "xgboost_tuned",
+  "post_test_model_change": false,
+  "binary_models_persisted": false,
+  "status": "PASS"
+}

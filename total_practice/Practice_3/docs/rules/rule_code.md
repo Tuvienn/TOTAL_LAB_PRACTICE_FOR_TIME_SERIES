@@ -3,10 +3,10 @@
 ## 1. Danh tính và mục đích
 
 ```text
-Document ID: TS-PRACTICE-03-CODE-v1.0
+Document ID: TS-PRACTICE-03-CODE-v1.1
 Phạm vi: total_practice/Practice_3
 Trạng thái: APPROVED_AND_ACTIVE
-Ngày cập nhật: 2026-10-15
+Ngày cập nhật: 2026-10-21
 ```
 
 File này quy định cách thay đổi file, viết code, chạy notebook, xử lý dữ liệu, tạo feature, train model, tuning, dự báo, đánh giá và báo cáo trong Practice 3.
@@ -203,6 +203,10 @@ hyperparameters
 metric definitions
 runtime errors or warnings that affect interpretation
 ```
+
+Training job dài phải lưu log và checkpoint theo đơn vị công việc đã duyệt. Với Phase 5 feature screening, checkpoint được ghi atomically sau từng CV fold; resume chỉ được phép khi configuration, upstream inputs, runtime contract, source identity và fold identity còn khớp. Fold đã `PASS` không được train lại khi resume.
+
+Kết quả tạm trong `runs/` không được promote sang `outputs/results/` trước khi toàn bộ run hoàn thành và validation tương ứng đạt. Khi Human dừng execution, trạng thái phải ghi `INTERRUPTED`; không được báo `PASS` hoặc tạo official result.
 
 Tuning chỉ dùng training set với `TimeSeriesSplit`. Test set cuối không được tham gia chọn hyperparameter, lag, rolling window, feature set, early stopping decision hoặc model winner.
 
