@@ -1,11 +1,11 @@
-# MASTER EXPERIMENT PLAN — PRACTICE 2 (TOPIC 5)
+# MASTER EXPERIMENT PLAN — PRESENTATION-24.10.2026 (TOPIC 5)
 
 ## 1. Mục tiêu thực nghiệm
 
 Thực hiện chuỗi thí nghiệm từ E1 đến E6 trên một dataset Time Series thực tế để minh họa sinh động và khoa học cho chủ đề:
 **Đánh giá mô hình dự báo đúng cách: Data Leakage và Backtesting**.
 
-Toàn bộ kết quả thực nghiệm sẽ tạo ra các bằng chứng số liệu và biểu đồ phục vụ trực tiếp cho bài thuyết trình. Tuyệt đối không giả định trước kết quả; mọi kết luận phải bắt nguồn từ dữ liệu chạy thực tế.
+Toàn bộ kết quả thực nghiệm sẽ tạo ra các bằng chứng số liệu và biểu đồ phục vụ trực tiếp cho bài thuyết trình trong `Presentation_practice.ipynb`. Tuyệt đối không giả định trước kết quả; mọi kết luận phải bắt nguồn từ dữ liệu chạy thực tế.
 
 ## 2. Quy trình thực nghiệm (E1 đến E6)
 

@@ -1,8 +1,8 @@
-# PRACTICE 2 — TOPIC 5: ĐÁNH GIÁ MÔ HÌNH DỰ BÁO ĐÚNG CÁCH: DATA LEAKAGE VÀ BACKTESTING
+# PRESENTATION-24.10.2026 — TOPIC 5: ĐÁNH GIÁ MÔ HÌNH DỰ BÁO ĐÚNG CÁCH: DATA LEAKAGE VÀ BACKTESTING
 
 ## 1. Giới thiệu tổng quan
 
-Tài liệu này là đặc tả tiền dự án cho **Practice 2** (thuộc Topic 5 theo tài liệu hướng dẫn: *"Đánh giá mô hình dự báo đúng cách: Data Leakage và Backtesting"*).
+Tài liệu này là đặc tả tiền dự án cho **Presentation-24.10.2026** (thuộc Topic 5 theo tài liệu hướng dẫn: *"Đánh giá mô hình dự báo đúng cách: Data Leakage và Backtesting"*). Đây là bài thuyết trình đột xuất chuyên đề, không phải bài thực hành lab dài hạn.
 
 Dự án tập trung vào phương pháp luận và kỹ thuật đánh giá mô hình chuỗi thời gian (Time Series) một cách khoa học, trung thực và không bị sai lệch (unbiased), ngăn ngừa triệt để rò rỉ dữ liệu tương lai (Data Leakage) và đánh giá độ ổn định qua thời gian thông qua Backtesting.
 
@@ -28,15 +28,15 @@ Dự án tập trung vào phương pháp luận và kỹ thuật đánh giá mô
    - **E5 — Backtesting**: Đánh giá mô hình qua nhiều fold với Expanding Window (bắt buộc) và Rolling Window (mở rộng).
    - **E6 — Forecast Horizon Evaluation**: Đo lường sai số phân rã theo từng bước dự báo $h = 1, 2, \dots, H$.
 
-## 3. Cấu trúc thư mục Practice 2
+## 3. Cấu trúc thư mục Presentation-24.10.2026
 
 ```text
-Practice_2/
+Presentation-24.10.2026/
 ├── .gitignore
 ├── README.md
 ├── pyproject.toml
 ├── config/
-│   └── practice_2_config.json
+│   └── presentation_config.json
 ├── datasets/
 │   ├── README.md
 │   ├── raw/
@@ -46,12 +46,12 @@ Practice_2/
 │   ├── plans/             # Master plan và 6 kế hoạch chi tiết cho E1..E6
 │   └── status/            # Trạng thái tiến độ dự án
 ├── notebooks/
-│   └── 01_topic_5_data_leakage_and_backtesting.ipynb
+│   └── Presentation_practice.ipynb   # File notebook duy nhất gói gọn thuyết trình
 ├── outputs/
 │   ├── figures/           # 7 visual artifacts cho thuyết trình
 │   └── results/           # Bảng số liệu, metrics, comparison tables
 ├── src/
-│   └── practice_2/
+│   └── presentation_24_10_2026/
 │       ├── data/          # Loader & split modules
 │       ├── preprocessing/ # Scaling modules (leakage vs correct)
 │       ├── models/        # Baseline & forecaster modules
@@ -67,3 +67,4 @@ Practice_2/
 - **Tôn trọng tính tuần tự thời gian**: Tuyệt đối không xáo trộn ngẫu nhiên dữ liệu chuỗi thời gian khi đánh giá dự báo.
 - **Phòng ngừa Data Leakage**: Bất kỳ bước học tham số nào (imputation, scaling, feature selection) chỉ được fit trên tập train quá khứ.
 - **Tiền dự án (Pre-project phase)**: Mã nguồn tại thư mục `src/` hiện tại chỉ chứa các khai báo hàm nguyên mẫu với thân hàm `pass` và dòng ghi chú nhiệm vụ đầu file; chưa tiến hành huấn luyện hay chạy thực nghiệm cho đến khi được Human phê duyệt.
+- **Gói gọn thuyết trình**: Toàn bộ luồng thuyết trình và kết quả demo thực tế được hợp nhất trong `notebooks/Presentation_practice.ipynb`.
