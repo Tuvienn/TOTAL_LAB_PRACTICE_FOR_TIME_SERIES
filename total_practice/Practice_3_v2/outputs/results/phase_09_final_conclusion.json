@@ -1,0 +1,320 @@
+{
+  "phase": "phase_09_final_conclusion_handoff",
+  "contract_version": "1.0.0",
+  "upstream_sha256": {
+    "phase_01_data_quality": "d53235227f6375c2b75e9e695848a953151823daa8c1a3af16834ce36bf8fe0a",
+    "phase_02_temporal_split": "f18452573cedd321ea8097539560899bc5dbce43ba0b47cda3b51dc504bcf735",
+    "phase_03_eda": "5d542d5c8cc9f2436ef817646d0413765a62dee6805ee41556991c1c0e125dd7",
+    "phase_04_features": "3d4c94bf2a260669c982a3d867bcda6d39aeb3067cd3f2c08ceb7bf607584760",
+    "phase_05_supervised": "21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5",
+    "phase_06_cv": "1c1647a458b9261956e831045ed1c4b2f84791fd9843839bd088b31a239d31d4",
+    "phase_06_model_lock": "ad31cb65daa36c394d7d5afc2cf0af333760c8e75ba718e702368e260db70eee",
+    "supplemental_linear": "a84bf3b3a9fd7d788727a3a28e534616a7fa692fc71a8235cd40241a4fb6320b",
+    "supplemental_lag": "b85d899bce896655bb11abbeffddaf448929d64911d6563d8a4c6e61b1c0c1ff",
+    "supplemental_audit": "0251607ed0d65b2de1823de4cea9073f2f55ab4bbc82aa4ba33a85493d200da5",
+    "phase_07_audit": "441dc33389d90e18902fae0d1ffc7e18aec46e9f130bc55284baef4abfd82adf",
+    "phase_07_one_step": "336cdd18a6441c5a05efa76e65a280553e7166cbca190230453efe79525449b5",
+    "phase_07_recursive": "7cab2c6943cb0df9f034f78ebe82254bf60270ddcc6f53830fa09db51915db07",
+    "phase_08_error_analysis": "0a6c6aa352b18731ba9277ba5b56e0219c76e1f1bd05de54886fba44d5dbdfc0",
+    "phase_08_feature_importance": "5e5c98a3159ae49f3703bdcd3d4c8e0c50c2656f10bdb229972fb37c3ad74ed1"
+  },
+  "workflow": [
+    "problem_definition",
+    "structural_data_preparation",
+    "temporal_split_validation",
+    "train_only_eda",
+    "feature_engineering",
+    "xy_construction",
+    "development_only_model_selection",
+    "historical_holdout_evaluation",
+    "error_interpretation_analysis",
+    "final_conclusion_handoff"
+  ],
+  "dataset_summary": {
+    "prepared_rows": 121296,
+    "missing_targets_preserved": 27,
+    "timeline_continuous_hourly": true,
+    "development_timestamps": 112535,
+    "development_observed_targets": 112509,
+    "eligible_supervised_samples": 108083
+  },
+  "validation_summary": {
+    "method": "expanding_window",
+    "folds": 5,
+    "shuffle": false,
+    "holdout_label": "historical_re_evaluation_holdout",
+    "holdout_claimed_unseen": false
+  },
+  "official_model": {
+    "selected_candidate": "xgboost_tuned",
+    "feature_count": 22,
+    "feature_order": [
+      "lag_1h",
+      "lag_2h",
+      "lag_3h",
+      "lag_23h",
+      "lag_24h",
+      "lag_25h",
+      "lag_48h",
+      "lag_168h",
+      "rolling_mean_24h",
+      "rolling_std_24h",
+      "rolling_mean_168h",
+      "rolling_std_168h",
+      "hour",
+      "day_of_week",
+      "month",
+      "is_weekend",
+      "hour_sin",
+      "hour_cos",
+      "day_of_week_sin",
+      "day_of_week_cos",
+      "month_sin",
+      "month_cos"
+    ],
+    "locked_parameters": {
+      "objective": "reg:squarederror",
+      "tree_method": "hist",
+      "random_state": 42,
+      "n_jobs": -1,
+      "n_estimators": 500,
+      "max_depth": 7,
+      "learning_rate": 0.1,
+      "subsample": 0.7,
+      "colsample_bytree": 0.7,
+      "min_child_weight": 1,
+      "reg_alpha": 1.0,
+      "reg_lambda": 10.0
+    },
+    "development_cv": {
+      "folds": 5,
+      "validation_samples": 42413,
+      "mean_cv_mae": 108.2540671538879,
+      "mean_cv_rmse": 143.85014890804808,
+      "cv_mae_standard_deviation": 3.144268983936756,
+      "cv_rmse_standard_deviation": 6.356808611526542,
+      "standard_deviation_ddof": 0
+    },
+    "model_lock_changed_after_selection": false
+  },
+  "final_evaluation": {
+    "one_step": {
+      "protocol": "one_step_rolling_observed_history",
+      "candidate_metrics": [
+        {
+          "candidate": "persistence",
+          "mae": 408.97881750465547,
+          "rmse": 520.9398734235388,
+          "n_observations": 8592
+        },
+        {
+          "candidate": "seasonal_naive_24",
+          "mae": 935.8021415270018,
+          "rmse": 1212.2738424880054,
+          "n_observations": 8592
+        },
+        {
+          "candidate": "xgboost_tuned",
+          "mae": 102.84078405511667,
+          "rmse": 137.92923461760375,
+          "n_observations": 8592
+        }
+      ],
+      "xgboost_conclusion": {
+        "mae": 102.84078405511667,
+        "rmse": 137.92923461760375,
+        "n_observations": 8592,
+        "assessment": "best_of_evaluated_candidates_for_one_step_historical_re_evaluation"
+      }
+    },
+    "recursive_24h": {
+      "protocol": "recursive_24_hour",
+      "candidate_metrics": [
+        {
+          "candidate": "persistence",
+          "pooled_mae": 1446.3476890756303,
+          "pooled_rmse": 1773.0569876861355,
+          "n_predictions": 8568,
+          "n_origins": 357
+        },
+        {
+          "candidate": "seasonal_naive_24",
+          "pooled_mae": 934.655345471522,
+          "pooled_rmse": 1211.547129264302,
+          "n_predictions": 8568,
+          "n_origins": 357
+        },
+        {
+          "candidate": "xgboost_tuned",
+          "pooled_mae": 509.6515496660904,
+          "pooled_rmse": 720.4508483972869,
+          "n_predictions": 8568,
+          "n_origins": 357
+        }
+      ],
+      "xgboost_conclusion": {
+        "pooled_mae": 509.6515496660904,
+        "pooled_rmse": 720.4508483972869,
+        "n_predictions": 8568,
+        "n_origins": 357,
+        "hardest_horizon_by_mae": 19,
+        "hardest_horizon_mae": 813.3586254814426,
+        "assessment": "better_than_both_evaluated_baselines_at_all_24_horizons_but_error_accumulates"
+      }
+    }
+  },
+  "error_interpretation": {
+    "residual_sign": "prediction_minus_actual",
+    "xgboost_mean_error": -1.1920974134732891,
+    "xgboost_under_forecast_rate": 0.5144320297951583,
+    "xgboost_absolute_error_p95": 273.0970703125,
+    "residual_acf_lag_1": 0.2750493254637968,
+    "residual_acf_lag_1_reference_band": 0.021147522195145683,
+    "residual_white_noise_claim_allowed": false,
+    "feature_importance_method": "xgboost_gain_normalized",
+    "feature_group_normalized_gain": {
+      "calendar": 0.061946117813718234,
+      "lag": 0.9346708086410112,
+      "rolling": 0.0033830735452705534
+    },
+    "causal_claim_allowed": false
+  },
+  "assignment_answers": {
+    "xgboost_vs_linear_regression": {
+      "evidence_type": "post_hoc_development_cv",
+      "same_validation_population": true,
+      "validation_samples": 42413,
+      "linear_regression": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 136.76168798928603,
+        "mean_cv_rmse": 186.09584170705494,
+        "cv_mae_standard_deviation": 4.701352930402765,
+        "cv_rmse_standard_deviation": 7.064187237716774,
+        "standard_deviation_ddof": 0
+      },
+      "xgboost_tuned": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 108.2540671538879,
+        "mean_cv_rmse": 143.85014890804808,
+        "cv_mae_standard_deviation": 3.144268983936756,
+        "cv_rmse_standard_deviation": 6.356808611526542,
+        "standard_deviation_ddof": 0
+      },
+      "xgboost_mae_improvement_percent": 20.844741867789338,
+      "conclusion": "XGBoost had lower development CV error on the same validation population, consistent with useful nonlinearities or interactions.",
+      "universal_superiority_claim_allowed": false
+    },
+    "lag_p_sensitivity": {
+      "evidence_type": "post_hoc_development_cv_fixed_xgboost_parameters",
+      "results": [
+        {
+          "p": 1,
+          "natural_eligible_samples": 112482,
+          "mean_cv_mae": 418.0242790272914,
+          "mean_cv_rmse": 537.4152337469949,
+          "mean_train_mae": 443.0752382861377,
+          "mean_generalization_gap_mae": -25.050959258846262,
+          "total_fit_duration_seconds": 5.752732833148912
+        },
+        {
+          "p": 6,
+          "natural_eligible_samples": 112347,
+          "mean_cv_mae": 181.47995725899392,
+          "mean_cv_rmse": 253.1825055020469,
+          "mean_train_mae": 157.88255777011318,
+          "mean_generalization_gap_mae": 23.59739948888074,
+          "total_fit_duration_seconds": 6.130469706840813
+        },
+        {
+          "p": 12,
+          "natural_eligible_samples": 112185,
+          "mean_cv_mae": 164.37708950045496,
+          "mean_cv_rmse": 228.72308346796203,
+          "mean_train_mae": 129.41913014154784,
+          "mean_generalization_gap_mae": 34.95795935890712,
+          "total_fit_duration_seconds": 6.560668167192489
+        },
+        {
+          "p": 24,
+          "natural_eligible_samples": 111861,
+          "mean_cv_mae": 135.70639906797516,
+          "mean_cv_rmse": 185.067310260552,
+          "mean_train_mae": 100.40274226045467,
+          "mean_generalization_gap_mae": 35.30365680752048,
+          "total_fit_duration_seconds": 7.861141666769981
+        },
+        {
+          "p": 48,
+          "natural_eligible_samples": 111213,
+          "mean_cv_mae": 132.15653082232237,
+          "mean_cv_rmse": 177.09139783850748,
+          "mean_train_mae": 89.12787934226921,
+          "mean_generalization_gap_mae": 43.028651480053156,
+          "total_fit_duration_seconds": 10.448235501069576
+        },
+        {
+          "p": 168,
+          "natural_eligible_samples": 108083,
+          "mean_cv_mae": 135.62027498758897,
+          "mean_cv_rmse": 180.43769177026562,
+          "mean_train_mae": 77.68961322972726,
+          "mean_generalization_gap_mae": 57.930661757861714,
+          "total_fit_duration_seconds": 24.397787833120674
+        }
+      ],
+      "best_observed_p_by_mean_cv_mae": 48,
+      "conclusion": "Error improved strongly through p=24, improved slightly at p=48, and degraded at p=168; more lags were not always better.",
+      "global_optimum_claim_allowed": false,
+      "official_feature_schema_changed": false
+    },
+    "xgboost_vs_arima": {
+      "evidence_type": "conceptual_only",
+      "arima_empirically_benchmarked": false,
+      "xgboost_may_be_advantageous_when": [
+        "many lag, rolling, and calendar predictors are available",
+        "feature-target relations or interactions are nonlinear",
+        "multiple seasonal signals must be combined",
+        "sufficient data and time-safe validation control model complexity"
+      ],
+      "arima_may_be_advantageous_when": [
+        "the series is short and approximately linear after stationarity treatment",
+        "a compact AR/MA statistical structure is preferred",
+        "model-based probabilistic intervals are required under validated assumptions"
+      ],
+      "conclusion": "Practice 3 v2 has no empirical evidence that XGBoost outperforms ARIMA; a fair comparison requires a separate ARIMA benchmark on identical folds, timestamps, and metrics.",
+      "head_to_head_superiority_claim_allowed": false
+    }
+  },
+  "scientific_limitations": [
+    "The holdout is a historical re-evaluation holdout, not a claimed unseen test set.",
+    "No prediction interval or uncertainty calibration was implemented.",
+    "Recursive 24-hour error grows materially across the forecast horizon.",
+    "Residual autocorrelation remains, including short-lag and daily structure.",
+    "XGBoost gain importance is model-specific and is not causal importance.",
+    "Linear Regression and lag-p experiments are post-hoc development-only evidence.",
+    "ARIMA was not empirically benchmarked in Practice 3 v2.",
+    "Findings are limited to this AEP dataset, period, and temporal protocol.",
+    "No external validation or production drift monitoring was performed."
+  ],
+  "claim_boundary": {
+    "primary_supported_use": "one_step_hourly_historical_re_evaluation_with_observed_history",
+    "secondary_supported_use": "recursive_24_hour_historical_re_evaluation_with_material_error_accumulation",
+    "production_readiness_claimed": false,
+    "external_generalization_claimed": false,
+    "arima_superiority_claimed": false,
+    "causal_interpretation_claimed": false
+  },
+  "handoff_readiness": {
+    "phase_01_through_phase_08_official_evidence_verified": true,
+    "supplemental_evidence_verified": true,
+    "model_lock_unchanged": true,
+    "training_performed_in_phase_09": false,
+    "prediction_performed_in_phase_09": false,
+    "holdout_re_evaluated_in_phase_09": false,
+    "notebook_and_readme_pending_at_artifact_creation": true,
+    "human_final_review_required": true
+  },
+  "status": "PASS"
+}

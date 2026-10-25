@@ -1,0 +1,81 @@
+{
+  "phase": "phase_04_feature_engineering",
+  "contract_version": "1.0.0",
+  "prepared_input": "datasets/processed/aep_hourly_prepared.csv",
+  "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+  "split_audit": "outputs/results/phase_02_temporal_split.json",
+  "eda_audit": "outputs/results/phase_03_eda_summary.json",
+  "eda_audit_sha256": "5d542d5c8cc9f2436ef817646d0413765a62dee6805ee41556991c1c0e125dd7",
+  "time_semantics": {
+    "feature_timestamp": "target_timestamp",
+    "forecast_origin_offset_hours": 1,
+    "available_target_history": "through_target_minus_1_hour"
+  },
+  "lag_hours": [1, 2, 3, 23, 24, 25, 48, 168],
+  "rolling": {
+    "windows_hours": [24, 168],
+    "statistics": ["mean", "std"],
+    "shift_before_rolling_hours": 1,
+    "min_periods_equals_window": true,
+    "std_ddof": 1,
+    "centered": false
+  },
+  "calendar": {
+    "integer_features": ["hour", "day_of_week", "month", "is_weekend"],
+    "cyclical_features": [
+      "hour_sin",
+      "hour_cos",
+      "day_of_week_sin",
+      "day_of_week_cos",
+      "month_sin",
+      "month_cos"
+    ],
+    "periods": {
+      "hour": 24,
+      "day_of_week": 7,
+      "month": 12
+    }
+  },
+  "feature_order": [
+    "lag_1h",
+    "lag_2h",
+    "lag_3h",
+    "lag_23h",
+    "lag_24h",
+    "lag_25h",
+    "lag_48h",
+    "lag_168h",
+    "rolling_mean_24h",
+    "rolling_std_24h",
+    "rolling_mean_168h",
+    "rolling_std_168h",
+    "hour",
+    "day_of_week",
+    "month",
+    "is_weekend",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week_sin",
+    "day_of_week_cos",
+    "month_sin",
+    "month_cos"
+  ],
+  "missing_policy": {
+    "imputation": "none",
+    "drop_rows": false,
+    "eligibility_owner": "phase_05"
+  },
+  "forbidden_features": [
+    "current_target",
+    "future_target",
+    "quality_flag_at_target",
+    "source_count_at_target",
+    "phase_03_anomaly_flag",
+    "centered_rolling",
+    "holdout_derived_statistic"
+  ],
+  "outputs": {
+    "audit": "outputs/results/phase_04_feature_validation.json"
+  },
+  "status": "APPROVED"
+}

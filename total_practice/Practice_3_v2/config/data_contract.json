@@ -1,0 +1,19 @@
+{
+  "project": "Practice_3_v2",
+  "dataset_name": "AEP Hourly Energy Consumption",
+  "source_platform": "Kaggle",
+  "source_url": "https://www.kaggle.com/datasets/robikscube/hourly-energy-consumption?select=AEP_hourly.csv",
+  "raw_path": "datasets/raw/AEP_hourly.csv",
+  "raw_sha256": "109d122f7b485555c609eecdec2cd5a03172e0a08acd358d863acc93eb452585",
+  "expected_columns": [
+    "Datetime",
+    "AEP_MW"
+  ],
+  "timestamp_column": "Datetime",
+  "target_column": "AEP_MW",
+  "target_unit": "MW",
+  "expected_frequency": "h",
+  "timezone_policy": "timezone_naive_source_no_offset",
+  "raw_data_policy": "immutable",
+  "status": "APPROVED"
+}

@@ -1,0 +1,36 @@
+{
+  "phase": "phase_01_structural_data_preparation",
+  "contract_version": "1.0.0",
+  "datetime_format": "%Y-%m-%d %H:%M:%S",
+  "expected": {
+    "raw_rows": 121273,
+    "raw_columns": 2,
+    "fully_duplicated_rows": 0,
+    "duplicate_rows": 8,
+    "duplicate_timestamps": 4,
+    "missing_hourly_timestamps": 27,
+    "prepared_rows": 121296,
+    "source_count_distribution": {
+      "0": 27,
+      "1": 121265,
+      "2": 4
+    },
+    "quality_flag_distribution": {
+      "observed": 121265,
+      "missing_timestamp": 27,
+      "duplicate_aggregated": 4
+    }
+  },
+  "policies": {
+    "duplicate_treatment": "mean",
+    "missing_target_treatment": "preserve_nan",
+    "outlier_treatment": "none",
+    "timezone": "timezone_naive_source_no_offset",
+    "sort": "stable_ascending"
+  },
+  "outputs": {
+    "prepared_dataset": "datasets/processed/aep_hourly_prepared.csv",
+    "audit": "outputs/results/phase_01_data_quality.json"
+  },
+  "status": "APPROVED"
+}
