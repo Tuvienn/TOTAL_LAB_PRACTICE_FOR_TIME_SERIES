@@ -1,5 +1,5 @@
-# Nhiệm vụ: Triển khai các phương pháp chia tập dữ liệu: Temporal Split (chuẩn) và Random Split (sai lệch để so sánh trong E2).
 from typing import Optional, Tuple
+import numpy as np
 import pandas as pd
 
 
@@ -15,12 +15,28 @@ def temporal_train_test_split(
     Args:
         df: DataFrame đầu vào.
         test_ratio: Tỷ lệ tập test (mặc định 0.2).
-        timestamp_col: Cột thời gian dùng để xác nhận thứ tự.
+        timestamp_col: Cột thời gian dùng để sắp xếp/xác nhận thứ tự.
         
     Returns:
         Tuple gồm (train_df, test_df).
     """
-    pass
+    if not 0.0 < test_ratio < 1.0:
+        raise ValueError(f"test_ratio must be strictly between 0 and 1, got {test_ratio}")
+
+    sorted_df = df.copy()
+    if timestamp_col is not None and timestamp_col in sorted_df.columns:
+        sorted_df = sorted_df.sort_values(by=timestamp_col)
+    elif isinstance(sorted_df.index, pd.DatetimeIndex):
+        sorted_df = sorted_df.sort_index()
+
+    n = len(sorted_df)
+    split_idx = int(n * (1.0 - test_ratio))
+    if split_idx <= 0 or split_idx >= n:
+        raise ValueError(f"Invalid split index {split_idx} for dataset length {n}")
+
+    train_df = sorted_df.iloc[:split_idx].copy()
+    test_df = sorted_df.iloc[split_idx:].copy()
+    return train_df, test_df
 
 
 def random_train_test_split(
@@ -38,4 +54,17 @@ def random_train_test_split(
     Returns:
         Tuple gồm (train_df, test_df) bị xáo trộn vị trí thời gian.
     """
-    pass
+    if not 0.0 < test_ratio < 1.0:
+        raise ValueError(f"test_ratio must be strictly between 0 and 1, got {test_ratio}")
+
+    rng = np.random.RandomState(random_state)
+    n = len(df)
+    perm = rng.permutation(n)
+    split_idx = int(n * (1.0 - test_ratio))
+
+    train_indices = perm[:split_idx]
+    test_indices = perm[split_idx:]
+
+    train_df = df.iloc[train_indices].copy()
+    test_df = df.iloc[test_indices].copy()
+    return train_df, test_df

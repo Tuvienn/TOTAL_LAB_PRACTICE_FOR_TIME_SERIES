@@ -2,7 +2,8 @@
   "project_name": "presentation_24_10_2026_topic_5",
   "topic_title": "Đánh giá mô hình dự báo đúng cách: Data Leakage và Backtesting",
   "dataset": {
-    "recommended_dataset": "AirPassengers or Electricity/Energy/StoreSales",
+    "recommended_dataset": "AirPassengers",
+    "raw_path": "datasets/raw/air_passengers.csv",
     "timestamp_col": "date",
     "target_col": "value",
     "frequency": "MS"
@@ -27,12 +28,12 @@
     "expanding_window": {
       "initial_train_size": 72,
       "horizon": 12,
-      "step_size": 6
+      "step_size": 12
     },
     "rolling_window": {
       "window_size": 72,
       "horizon": 12,
-      "step_size": 6
+      "step_size": 12
     }
   },
   "horizon_evaluation": {

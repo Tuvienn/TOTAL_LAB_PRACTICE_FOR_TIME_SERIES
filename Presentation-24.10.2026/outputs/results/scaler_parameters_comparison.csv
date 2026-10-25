@@ -1,0 +1,3 @@
+pipeline,fitted_on,mean,std
+Pipeline A (Leakage),Toàn bộ chuỗi (Train + Test),280.2986111111111,119.54904153277147
+Pipeline B (Correct),Chỉ tập Train,239.94782608695652,90.94975617036043

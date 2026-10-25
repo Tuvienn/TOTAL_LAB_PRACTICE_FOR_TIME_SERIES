@@ -1,0 +1,2 @@
+dataset_name,total_periods,start_date,end_date,frequency,is_regular,has_duplicates,missing_timestamps
+AirPassengers,144,1949-01-01 00:00:00,1960-12-01 00:00:00,MS,True,False,0

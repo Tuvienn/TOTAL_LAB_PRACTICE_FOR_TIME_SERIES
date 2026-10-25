@@ -1,0 +1,2 @@
+total_rows,missing_values,min,max,mean,std,q25,median,q75,iqr,outlier_count
+144,0,104.0,622.0,280.2986111111111,119.9663169429432,180.0,265.5,360.5,180.5,0

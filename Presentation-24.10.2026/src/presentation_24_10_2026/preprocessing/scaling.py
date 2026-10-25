@@ -1,6 +1,15 @@
-# Nhiệm vụ: Triển khai 2 pipeline scaling: Pipeline A (Data Leakage) và Pipeline B (Correct) để so sánh trong thực nghiệm E3.
 from typing import Any, List, Tuple
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+
+
+def _get_scaler(scaler_type: str = "standard") -> Any:
+    if scaler_type == "standard":
+        return StandardScaler()
+    elif scaler_type == "minmax":
+        return MinMaxScaler()
+    else:
+        raise ValueError(f"Unsupported scaler_type '{scaler_type}'. Choose 'standard' or 'minmax'.")
 
 
 def scale_with_leakage(
@@ -9,20 +18,18 @@ def scale_with_leakage(
     feature_cols: List[str],
     scaler_type: str = "standard",
 ) -> Tuple[pd.DataFrame, pd.DataFrame, Any]:
-    """Pipeline A (SAI PHẠM - LEAKAGE): Fit scaler trên toàn bộ dữ liệu trước khi chia hoặc dùng thông tin test.
-    
-    Quy trình sai: Toàn bộ dữ liệu -> Fit Scaler -> Transform -> Đưa vào đánh giá.
-    
-    Args:
-        train_df: DataFrame tập train.
-        test_df: DataFrame tập test.
-        feature_cols: Danh sách các cột cần scale.
-        scaler_type: Loại scaler ('standard' hoặc 'minmax').
-        
-    Returns:
-        Tuple gồm (train_scaled, test_scaled, scaler_object).
-    """
-    pass
+    """Pipeline A (SAI PHẠM - LEAKAGE): Fit scaler trên toàn bộ dữ liệu trước khi chia hoặc dùng thông tin test."""
+    scaler = _get_scaler(scaler_type)
+    combined = pd.concat([train_df[feature_cols], test_df[feature_cols]], axis=0)
+    scaler.fit(combined)
+
+    train_scaled = train_df.copy()
+    test_scaled = test_df.copy()
+
+    train_scaled[feature_cols] = scaler.transform(train_df[feature_cols])
+    test_scaled[feature_cols] = scaler.transform(test_df[feature_cols])
+
+    return train_scaled, test_scaled, scaler
 
 
 def scale_without_leakage(
@@ -31,17 +38,14 @@ def scale_without_leakage(
     feature_cols: List[str],
     scaler_type: str = "standard",
 ) -> Tuple[pd.DataFrame, pd.DataFrame, Any]:
-    """Pipeline B (CHUẨN - CORRECT): Fit scaler CHỈ trên tập train, sau đó dùng tham số đã học để transform test.
-    
-    Quy trình chuẩn: Chia dữ liệu theo thời gian -> Fit Scaler trên Train -> Transform Train & Test.
-    
-    Args:
-        train_df: DataFrame tập train.
-        test_df: DataFrame tập test.
-        feature_cols: Danh sách các cột cần scale.
-        scaler_type: Loại scaler ('standard' hoặc 'minmax').
-        
-    Returns:
-        Tuple gồm (train_scaled, test_scaled, scaler_object).
-    """
-    pass
+    """Pipeline B (CHUẨN - CORRECT): Fit scaler CHỈ trên tập train, sau đó dùng tham số đã học để transform test."""
+    scaler = _get_scaler(scaler_type)
+    scaler.fit(train_df[feature_cols])
+
+    train_scaled = train_df.copy()
+    test_scaled = test_df.copy()
+
+    train_scaled[feature_cols] = scaler.transform(train_df[feature_cols])
+    test_scaled[feature_cols] = scaler.transform(test_df[feature_cols])
+
+    return train_scaled, test_scaled, scaler

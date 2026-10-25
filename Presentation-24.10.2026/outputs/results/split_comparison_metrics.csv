@@ -1,0 +1,3 @@
+setup,MAE,RMSE,MAPE,description
+Random Split (Leakage/Interpolation),13.851007158630434,17.598070544165648,4.716851825675348,Lạc quan giả tạo do rò rỉ quan sát lân cận
+Temporal Split (Correct/Forecasting),14.125458123170391,18.227474399255915,3.408364394392125,Phản ánh đúng độ khó dự báo tương lai thực tế
