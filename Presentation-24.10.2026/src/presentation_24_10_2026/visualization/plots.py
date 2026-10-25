@@ -176,7 +176,7 @@ def plot_backtest_folds(
     ax.set_xlabel("Timeline Steps (t)", fontsize=11)
     ax.set_title(title, fontsize=12, fontweight="bold", pad=10)
     ax.grid(True, axis="x", linestyle="--", alpha=0.5)
-    ax.legend(loc="lower right")
+    ax.legend(loc="upper right")
     plt.tight_layout()
     _save_fig_if_needed(fig, save_path)
     plt.close(fig)
