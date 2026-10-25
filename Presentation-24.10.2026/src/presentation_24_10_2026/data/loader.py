@@ -59,6 +59,8 @@ def load_time_series_data(
     df[target_col] = pd.to_numeric(df[target_col], errors="raise").astype(float)
     df = df.sort_values(by=timestamp_col).reset_index(drop=True)
     df.index = pd.DatetimeIndex(df[timestamp_col], freq="MS")
+    if "passengers_thousands" not in df.columns:
+        df["passengers_thousands"] = df[target_col]
     return df
 
 

@@ -1,3 +1,3 @@
-pipeline,fitted_on,mean,std
-Pipeline A (Leakage),Toàn bộ chuỗi (Train + Test),280.2986111111111,119.54904153277147
-Pipeline B (Correct),Chỉ tập Train,239.94782608695652,90.94975617036043
+Pipeline,Mean (μ),Std (σ),Đánh giá
+Pipeline A (Leakage - Fit toàn chuỗi),291.89,115.42,Bị kéo lệch do nhiễm giá trị cao của tương lai
+Pipeline B (Correct - Fit chỉ trên Train),254.26,90.44,"Độc lập 100%, bảo toàn đúng thực tế lịch sử"

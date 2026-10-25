@@ -33,6 +33,8 @@ def expanding_window_backtest(
             "val_end": str(val_fold.index[-1]),
             "train_size": int(len(train_fold)),
             "val_size": int(len(val_fold)),
+            "train_start_idx": 0,
+            "val_start_idx": train_end,
         }
 
         eval_res = model_trainer_fn(train_fold, val_fold, horizon)
@@ -72,6 +74,8 @@ def rolling_window_backtest(
             "val_end": str(val_fold.index[-1]),
             "train_size": int(len(train_fold)),
             "val_size": int(len(val_fold)),
+            "train_start_idx": train_start,
+            "val_start_idx": train_end,
         }
 
         eval_res = model_trainer_fn(train_fold, val_fold, horizon)
