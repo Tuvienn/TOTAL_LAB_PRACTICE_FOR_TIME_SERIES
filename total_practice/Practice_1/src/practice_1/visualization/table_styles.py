@@ -31,7 +31,7 @@ def visualise_table(
     caption: str,
     *,
     hide_index: bool = True,
-    precision: int = 4,
+    precision: int = 10,
     gradient_columns: Sequence[Hashable] | None = None,
     gradient_axis: int | None = 0,
     gradient_cmap: str = "Blues",
