@@ -270,3 +270,39 @@ Human result review: APPROVED
 ```
 
 Phase 4 đã triển khai đúng approved contract và được Human duyệt. Phase 5 được phép bắt đầu ở bước thảo luận và thiết kế; implementation vẫn cần phase-detail được Human duyệt.
+
+## 15. Presentation extension
+
+Theo Human approval, notebook giải thích Phase 4 theo chuỗi lập luận tinh gọn:
+
+```text
+feature được tạo
+→ feature availability
+→ correlation context
+→ leakage và forecasting compatibility
+```
+
+Phần trình bày gồm:
+
+- một feature dictionary gồm ba nhóm và đủ 22 features;
+- công thức lag, shifted rolling và cyclical encoding;
+- một bảng availability rút gọn theo nhóm lag, rolling và calendar;
+- số rows có đủ toàn bộ feature và timestamp khả dụng đầu tiên;
+- một heatmap đầy đủ `13 × 13` gồm target, tám lag và bốn rolling features;
+- xác nhận ngắn về leakage controls và one-step/recursive compatibility;
+- limitation: core feature set không dùng `year` hoặc explicit trend feature.
+
+Heatmap được source owner tạo từ Development bằng pairwise Pearson correlation.
+Calendar features không đưa vào heatmap vì integer calendar và từng thành phần
+sin/cos riêng lẻ dễ gây diễn giải sai. Correlation chỉ là descriptive linear
+association, không phải causal evidence hoặc XGBoost feature importance.
+
+```text
+src/practice_3_v2/analysis/feature_presentation.py
+outputs/results/phase_04_feature_presentation.json
+outputs/figures/phase_04_temporal_feature_correlation.png
+tests/test_feature_presentation.py
+```
+
+Notebook chỉ đọc Phase 3–4 artifacts; không tính lại feature matrix, không mở
+Final Test và không thay đổi approved feature schema hoặc model evidence.

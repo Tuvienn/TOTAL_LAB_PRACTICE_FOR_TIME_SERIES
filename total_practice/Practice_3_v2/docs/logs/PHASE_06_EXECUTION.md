@@ -113,7 +113,14 @@ Official artifacts:
 - `outputs/results/phase_06_cv_results.json`
 - `outputs/results/phase_06_model_lock.json`
 - `outputs/figures/phase_06_cv_comparison.png`
+- `outputs/results/phase_06_training_diagnostics.json`
+- `outputs/figures/phase_06_tuning_candidates.png`
+- `outputs/figures/phase_06_selected_candidate_folds.png`
 - `notebooks/Practice_3_v2_present.ipynb`
+
+Presentation diagnostics được tạo từ completed tuning JSON, kiểm tra chéo với
+official CV result và model lock; không retrain, không đổi selection authority và
+không mở historical holdout. Hai figure mới không phải epoch learning curves.
 
 ## 10. Human sign-off
 

@@ -355,3 +355,30 @@ Phase 3 chỉ được đánh dấu `PASS` khi:
 - Human review kết quả Phase 3.
 
 Sau Phase 3 mới được thiết kế Phase 4 — Feature Engineering.
+
+## 20. Presentation extension
+
+Theo Human approval, phần trình bày EDA được mở rộng để người xem hiểu dữ liệu
+trước khi đọc Feature Engineering. Extension không thay đổi canonical Phase 3
+audit và không làm mất hiệu lực checksum mà Phase 4–9 đang tham chiếu.
+
+```text
+src/practice_3_v2/analysis/eda_presentation.py
+outputs/results/phase_03_eda_presentation.json
+outputs/figures/phase_03_annual_stability.png
+tests/test_eda_presentation.py
+```
+
+Presentation evidence bổ sung:
+
+- data profile và Development boundary;
+- data-quality recap từ Phase 1 và Phase 3;
+- descriptive statistics đầy đủ;
+- annual mean, annual standard deviation và coverage theo năm;
+- Top 10 lag correlations;
+- Top 10 robust anomaly candidates;
+- bảng nối phát hiện EDA với feature đã được Phase 4 xác nhận.
+
+Năm 2004 và 2017 là partial years nên phải được đánh dấu khi diễn giải annual
+stability. Extension chỉ dùng Development và phải ghi rõ
+`holdout_target_values_inspected = false`.

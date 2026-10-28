@@ -411,3 +411,21 @@ lag-`p` sensitivity để trả lời câu hỏi bài tập. Thiết kế nằm 
 Addendum được thiết kế sau khi historical holdout đã được xem. Vì vậy nó chỉ là
 `post_hoc_supplemental_evidence`, không thuộc model selection ban đầu, không được
 thay đổi model lock và không sửa official Phase 6 result ở trên.
+
+## 20. Presentation diagnostics addendum
+
+Phần trình bày Phase 6 được bổ sung từ execution evidence đã hoàn tất, không chạy
+training lại và không thay đổi model lock:
+
+```text
+outputs/results/phase_06_training_diagnostics.json
+outputs/figures/phase_06_tuning_candidates.png
+outputs/figures/phase_06_selected_candidate_folds.png
+```
+
+Diagnostic bundle kiểm tra chéo 24 tuning candidates × 5 folds với official CV
+result và model lock. Hai figure trình bày mean CV MAE/RMSE của 24 candidates và
+fold-level MAE/RMSE của candidate 22. Fold là temporal validation window, không
+phải epoch. Execution evidence hiện tại không lưu per-boosting-round metrics nên
+không được diễn giải thành learning curve hoặc best boosting round. Historical
+holdout không được truy cập trong addendum này.
