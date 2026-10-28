@@ -28,6 +28,9 @@ def test_presentation_artifacts_load_and_validate() -> None:
         is False
     )
     assert artifacts.phase_06_lock["selected_candidate"] == "xgboost_tuned"
+    assert artifacts.phase_05_presentation["status"] == "PASS"
+    assert artifacts.phase_05_presentation["matrix_summary"]["x_shape"] == [108083, 22]
+    assert artifacts.phase_05_conversion_figure_path.is_file()
     assert artifacts.phase_06_training_diagnostics["status"] == "PASS"
     assert (
         artifacts.phase_06_training_diagnostics["training_summary"]

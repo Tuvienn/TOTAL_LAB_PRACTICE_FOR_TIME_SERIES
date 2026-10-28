@@ -20,12 +20,14 @@ class PresentationArtifacts:
     phase_04_audit: dict[str, Any]
     phase_04_presentation: dict[str, Any]
     phase_05_audit: dict[str, Any]
+    phase_05_presentation: dict[str, Any]
     phase_06_cv: dict[str, Any]
     phase_06_lock: dict[str, Any]
     phase_06_training_diagnostics: dict[str, Any]
     phase_06_supplemental_linear: dict[str, Any]
     phase_06_supplemental_lag: dict[str, Any]
     phase_06_supplemental_audit: dict[str, Any]
+    phase_05_conversion_figure_path: Path
     phase_06_figure_path: Path
     phase_06_tuning_figure_path: Path
     phase_06_fold_figure_path: Path
@@ -51,6 +53,7 @@ def validate_presentation_artifacts(artifacts: PresentationArtifacts) -> None:
     phase_04 = artifacts.phase_04_audit
     phase_04_presentation = artifacts.phase_04_presentation
     phase_05 = artifacts.phase_05_audit
+    phase_05_presentation = artifacts.phase_05_presentation
     phase_06_cv = artifacts.phase_06_cv
     phase_06_lock = artifacts.phase_06_lock
     training_diagnostics = artifacts.phase_06_training_diagnostics
@@ -138,6 +141,28 @@ def validate_presentation_artifacts(artifacts: PresentationArtifacts) -> None:
         "Phase 4 correlation figure checksum mismatch.",
     )
     _require(phase_06_cv["status"] == "PASS", "Phase 6 CV result is not PASS.")
+    _require(
+        phase_05_presentation["status"] == "PASS",
+        "Phase 5 presentation evidence is not PASS.",
+    )
+    _require(
+        phase_05_presentation["upstream_evidence"]["phase_05_audit_sha256"]
+        == calculate_sha256(
+            artifacts.project_root / "outputs/results/phase_05_supervised_dataset.json"
+        ),
+        "Phase 5 presentation evidence references a different audit.",
+    )
+    _require(
+        phase_05_presentation["scope"]["holdout_target_values_inspected"] is False,
+        "Phase 5 presentation evidence inspected holdout targets.",
+    )
+    phase_05_figure = artifacts.project_root / phase_05_presentation["figure"]["path"]
+    _require(phase_05_figure.is_file(), "Phase 5 conversion figure is missing.")
+    _require(
+        calculate_sha256(phase_05_figure)
+        == phase_05_presentation["figure"]["sha256"],
+        "Phase 5 conversion figure checksum mismatch.",
+    )
     _require(phase_06_lock["status"] == "PASS", "Phase 6 model lock is not PASS.")
     _require(
         calculate_sha256(artifacts.project_root / "outputs/results/phase_06_cv_results.json")
@@ -241,6 +266,8 @@ def load_presentation_artifacts(
         "phase_04_presentation": project_root
         / "outputs/results/phase_04_feature_presentation.json",
         "phase_05": project_root / "outputs/results/phase_05_supervised_dataset.json",
+        "phase_05_presentation": project_root
+        / "outputs/results/phase_05_supervised_presentation.json",
         "phase_06_cv": project_root / "outputs/results/phase_06_cv_results.json",
         "phase_06_lock": project_root / "outputs/results/phase_06_model_lock.json",
         "phase_06_training_diagnostics": project_root
@@ -252,6 +279,8 @@ def load_presentation_artifacts(
         "supplemental_audit": project_root
         / "outputs/results/phase_06_supplemental_audit.json",
         "phase_06_figure": project_root / "outputs/figures/phase_06_cv_comparison.png",
+        "phase_05_conversion_figure": project_root
+        / "outputs/figures/phase_05_time_series_to_supervised.png",
         "phase_06_tuning_figure": project_root
         / "outputs/figures/phase_06_tuning_candidates.png",
         "phase_06_fold_figure": project_root
@@ -280,12 +309,14 @@ def load_presentation_artifacts(
         phase_04_audit=_load_json(paths["phase_04"]),
         phase_04_presentation=_load_json(paths["phase_04_presentation"]),
         phase_05_audit=_load_json(paths["phase_05"]),
+        phase_05_presentation=_load_json(paths["phase_05_presentation"]),
         phase_06_cv=_load_json(paths["phase_06_cv"]),
         phase_06_lock=_load_json(paths["phase_06_lock"]),
         phase_06_training_diagnostics=_load_json(paths["phase_06_training_diagnostics"]),
         phase_06_supplemental_linear=_load_json(paths["supplemental_linear"]),
         phase_06_supplemental_lag=_load_json(paths["supplemental_lag"]),
         phase_06_supplemental_audit=_load_json(paths["supplemental_audit"]),
+        phase_05_conversion_figure_path=paths["phase_05_conversion_figure"],
         phase_06_figure_path=paths["phase_06_figure"],
         phase_06_tuning_figure_path=paths["phase_06_tuning_figure"],
         phase_06_fold_figure_path=paths["phase_06_fold_figure"],

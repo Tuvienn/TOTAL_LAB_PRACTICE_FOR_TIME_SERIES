@@ -219,3 +219,19 @@ Human result review: APPROVED
 ```
 
 Phase 5 đã triển khai đúng approved contract và được Human duyệt. Phase 6 được phép bắt đầu ở bước thảo luận và lập plan; implementation vẫn cần phase-detail được Human duyệt.
+
+## 19. Presentation addendum
+
+Notebook trình bày phép chuyển Time Series sang supervised learning bằng official
+presentation evidence, không chạy lại feature engineering hoặc X/y construction:
+
+```text
+outputs/results/phase_05_supervised_presentation.json
+outputs/figures/phase_05_time_series_to_supervised.png
+```
+
+Figure dùng ký hiệu thống nhất: forecast origin `t`, target timestamp
+`T = t + 1 giờ`, `X(T)` chỉ dùng target history đến `t`, còn `y(T)` là `AEP_MW`
+tại `T`. Artifact chứa một eligible Development sample thực tế, X/y dimensions,
+exclusion counts và checksum của canonical Phase 5 audit. Historical holdout không
+được materialize hoặc đọc target trong presentation addendum.

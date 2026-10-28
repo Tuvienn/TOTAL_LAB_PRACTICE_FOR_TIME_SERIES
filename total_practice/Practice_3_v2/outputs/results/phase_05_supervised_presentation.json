@@ -1,0 +1,81 @@
+{
+  "phase": "phase_05_supervised_presentation",
+  "contract_version": "1.0.0",
+  "upstream_evidence": {
+    "phase_05_audit_path": "outputs/results/phase_05_supervised_dataset.json",
+    "phase_05_audit_sha256": "21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5",
+    "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587"
+  },
+  "scope": {
+    "partition": "development_train_validation_only",
+    "holdout_features_materialized": false,
+    "holdout_target_values_inspected": false,
+    "training_executed": false
+  },
+  "notation": {
+    "forecast_origin": "t",
+    "target_timestamp": "T = t + 1 hour",
+    "feature_semantics": "X(T) uses target history through t",
+    "label_semantics": "y(T) is AEP_MW at target timestamp T"
+  },
+  "feature_groups": {
+    "lag": 8,
+    "rolling": 4,
+    "calendar": 10,
+    "total": 22
+  },
+  "example_sample": {
+    "target_timestamp": "2004-10-08 01:00:00",
+    "forecast_origin": "2004-10-08 00:00:00",
+    "feature_values": {
+      "lag_1h": 13271.0,
+      "lag_2h": 14359.0,
+      "lag_3h": 15407.0,
+      "lag_23h": 12054.0,
+      "lag_24h": 12484.0,
+      "lag_25h": 13249.0,
+      "lag_48h": 12764.0,
+      "lag_168h": 12379.0,
+      "rolling_mean_24h": 14450.333333333334,
+      "rolling_std_24h": 1475.5484659482643,
+      "rolling_mean_168h": 13870.315476190477,
+      "rolling_std_168h": 1602.8403984778363,
+      "hour": 1.0,
+      "day_of_week": 4.0,
+      "month": 10.0,
+      "is_weekend": 0.0,
+      "hour_sin": 0.25881904510252074,
+      "hour_cos": 0.9659258262890683,
+      "day_of_week_sin": -0.433883739117558,
+      "day_of_week_cos": -0.9009688679024191,
+      "month_sin": -1.0,
+      "month_cos": -1.8369701987210297e-16
+    },
+    "target_name": "AEP_MW",
+    "target_value": 12468.0
+  },
+  "matrix_summary": {
+    "candidate_rows": 112535,
+    "eligible_samples": 108083,
+    "feature_count": 22,
+    "x_shape": [
+      108083,
+      22
+    ],
+    "y_shape": [
+      108083
+    ],
+    "excluded_samples": 4452,
+    "invalid_feature_vector": 4427,
+    "missing_target_with_valid_features": 25,
+    "imputation": "none",
+    "shuffle": false
+  },
+  "status": "PASS",
+  "figure": {
+    "name": "time_series_to_supervised",
+    "path": "outputs/figures/phase_05_time_series_to_supervised.png",
+    "sha256": "cf13c601345cd6560963c053bef5bfe81ee22626ec458371e0a882ac3d0e0a52",
+    "bytes": 117733
+  }
+}
