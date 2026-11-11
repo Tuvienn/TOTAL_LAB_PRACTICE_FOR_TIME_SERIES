@@ -61,6 +61,29 @@ EXPECTED_ONE_STEP_ROWS = 8_592
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
+def seasonal_naive_24_values(
+    target: pd.Series,
+    target_timestamps: pd.DatetimeIndex,
+    *,
+    forecast_origin: pd.Timestamp | None = None,
+) -> pd.Series:
+    """Return the 24-hour seasonal-naive source value for each target timestamp.
+
+    The lookup is timestamp-based (``y[t - 24h]``), never positional.  For a
+    recursive forecast, ``forecast_origin`` additionally guards against using
+    a source timestamp that occurs after the forecast origin.
+    """
+
+    timestamps = pd.DatetimeIndex(target_timestamps)
+    source_timestamps = timestamps - pd.Timedelta(hours=24)
+    if forecast_origin is not None and len(source_timestamps):
+        if source_timestamps.max() > pd.Timestamp(forecast_origin):
+            raise ValueError(
+                "Seasonal-naive 24h lookup would use a value after the forecast origin."
+            )
+    return target.reindex(source_timestamps)
+
+
 def _canonical_json(payload: Any) -> bytes:
     return json.dumps(
         payload,
@@ -426,9 +449,19 @@ def build_one_step_predictions(
             f"One-step common population must contain {EXPECTED_ONE_STEP_ROWS} rows; "
             f"got {len(timestamps)}."
         )
+    target_by_timestamp = pd.Series(
+        target.to_numpy(dtype="float64"),
+        index=pd.DatetimeIndex(prepared[data_contract["timestamp_column"]]),
+    )
+    seasonal_values = seasonal_naive_24_values(target_by_timestamp, timestamps)
+    lag_24_values = selected_features["lag_24h"].to_numpy(dtype="float64")
+    if not np.array_equal(
+        seasonal_values.to_numpy(dtype="float64"), lag_24_values, equal_nan=True
+    ):
+        raise ValueError("Seasonal-naive 24h lookup is misaligned with lag_24h.")
     prediction_by_candidate = {
         "persistence": selected_features["lag_1h"].to_numpy(dtype="float64"),
-        "seasonal_naive_24": selected_features["lag_24h"].to_numpy(dtype="float64"),
+        "seasonal_naive_24": seasonal_values.to_numpy(dtype="float64"),
         "xgboost_tuned": np.asarray(estimator.predict(selected_features), dtype="float64"),
     }
     records: list[pd.DataFrame] = []
@@ -478,7 +511,9 @@ def eligible_recursive_origins(
     for origin in scheduled_origins:
         targets = pd.date_range(origin + pd.Timedelta(hours=1), periods=horizon, freq="h")
         actual = target.reindex(targets)
-        seasonal = target.reindex(targets - pd.Timedelta(hours=24))
+        seasonal = seasonal_naive_24_values(
+            target, targets, forecast_origin=origin
+        )
         if not np.isfinite(actual.to_numpy(dtype="float64")).all():
             continue
         if not np.isfinite(seasonal.to_numpy(dtype="float64")).all():
@@ -527,8 +562,8 @@ def build_recursive_predictions(
         actual_values = target.reindex(target_timestamps).to_numpy(dtype="float64")
         predictions: dict[str, list[float]] = {
             "persistence": [float(target.loc[origin])] * horizon,
-            "seasonal_naive_24": target.reindex(
-                target_timestamps - pd.Timedelta(hours=24)
+            "seasonal_naive_24": seasonal_naive_24_values(
+                target, target_timestamps, forecast_origin=origin
             ).to_numpy(dtype="float64").tolist(),
             "xgboost_tuned": [],
         }

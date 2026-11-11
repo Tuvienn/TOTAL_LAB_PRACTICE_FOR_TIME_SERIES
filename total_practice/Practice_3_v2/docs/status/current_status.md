@@ -115,12 +115,12 @@ Raw file đã được copy nguyên trạng từ legacy project và checksum hai
 | Phase 9 focused tests | 23/23 PASS |
 | Table-style focused tests | 2/2 PASS |
 | Presentation-loader focused tests | 2/2 PASS |
-| Full v2 regression suite after presentation refactor | 203/203 PASS |
+| Full v2 regression suite after presentation refactor | 212/212 PASS |
 | Phase 9 README local-link validation | PASS |
 | Presentation notebook | PASS — READY THROUGH PHASE 9 |
-| Notebook clean-kernel execution | PASS — 34/34 code cells, no errors |
-| Styled notebook tables | PASS — 36/36 HTML tables, light/dark aware |
-| Notebook setup refactor | PASS — 116 → 24 lines |
+| Notebook clean-kernel execution | PASS — 27/27 code cells, no errors |
+| Styled notebook tables | PASS — 28/28 HTML outputs, light/dark aware |
+| Notebook setup refactor | PASS — 116 → 30 lines |
 | Phase 9 technical review | PASS |
 | Human final review and handoff | PENDING |
 

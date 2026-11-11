@@ -106,10 +106,10 @@ Phase 9 đã đạt technical validation:
 - focused tests: `23/23 PASS`;
 - table-style focused tests: `2/2 PASS`;
 - presentation-loader focused tests: `2/2 PASS`;
-- full regression suite: `203/203 PASS`;
-- notebook clean execution: `34/34` code cells, không có error;
-- setup cell đã giảm từ `116` xuống `24` dòng;
-- toàn bộ `36` bảng HTML dùng chung theme light/dark;
+- full regression suite: `212/212 PASS`;
+- notebook clean execution: `27/27` code cells, không có error;
+- setup cell đã giảm từ `116` xuống `30` dòng;
+- toàn bộ `28` HTML table outputs dùng chung theme light/dark;
 - local links trong README: `PASS`.
 
 Project đang chờ Human final review và handoff approval. Chưa có commit hoặc push

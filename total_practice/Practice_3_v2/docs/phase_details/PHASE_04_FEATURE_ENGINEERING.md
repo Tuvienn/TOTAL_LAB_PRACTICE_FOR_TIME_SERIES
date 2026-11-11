@@ -305,4 +305,5 @@ tests/test_feature_presentation.py
 ```
 
 Notebook chỉ đọc Phase 3–4 artifacts; không tính lại feature matrix, không mở
-Final Test và không thay đổi approved feature schema hoặc model evidence.
+Historical Re-evaluation Holdout và không thay đổi approved feature schema hoặc
+model evidence.

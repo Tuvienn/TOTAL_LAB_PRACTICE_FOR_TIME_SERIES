@@ -84,8 +84,11 @@ def style_table(
     dataframe: pd.DataFrame,
     formats: Mapping[str, Any] | None = None,
     row_highlighter: Callable[[pd.Series], list[str]] | None = None,
+    caption: str | None = None,
 ) -> Styler:
     styled = dataframe.style.hide(axis="index").set_table_styles(TABLE_STYLES)
+    if caption:
+        styled = styled.set_caption(caption)
     if formats:
         styled = styled.format(formats)
     numeric_columns = list(dataframe.select_dtypes(include="number").columns)

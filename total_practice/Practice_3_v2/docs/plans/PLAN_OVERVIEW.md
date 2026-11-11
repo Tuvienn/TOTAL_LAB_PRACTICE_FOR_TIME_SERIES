@@ -92,7 +92,7 @@ Phase 9 đã hoàn tất phạm vi kỹ thuật được duyệt:
   cập nhật notebook/README và tạo official final JSON.
 - Phase 9 không train, predict, thay model lock hoặc đánh giá lại holdout.
 - Focused tests 23/23, table-style tests 2/2, presentation-loader tests 2/2,
-  full regression 203/203 và notebook 34/34 code cells đều
+  full regression 212/212 và notebook 27/27 code cells đều
   PASS; Human final review vẫn đang chờ.
 
 Các quyết định chi tiết cho từng phase chỉ được viết khi phase đó chuẩn bị triển khai.
@@ -119,8 +119,8 @@ Phase 9 design: APPROVED
 Phase 9 implementation: COMPLETED — TECHNICAL PASS
 Phase 9 official artifact: PASS
 Phase 9 focused tests: 23/23 PASS
-Full regression suite: 203/203 PASS
-Notebook clean execution: 34/34 code cells, 0 errors
+Full regression suite: 212/212 PASS
+Notebook clean execution: 27/27 code cells, 0 errors
 Human final review and handoff: PENDING
 ```
 

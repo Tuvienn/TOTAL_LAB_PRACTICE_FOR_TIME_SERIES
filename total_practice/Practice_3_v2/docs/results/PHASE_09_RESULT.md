@@ -80,10 +80,10 @@ Official JSON: PASS
 Focused tests: 23/23 PASS
 Table-style focused tests: 2/2 PASS
 Presentation-loader focused tests: 2/2 PASS
-Full regression suite: 203/203 PASS
-Notebook clean execution: 34/34 code cells, 0 errors
-Styled HTML tables: 36/36
-Notebook setup cell: 116 → 24 lines
+Full regression suite: 212/212 PASS
+Notebook clean execution: 27/27 code cells, 0 errors
+Styled HTML outputs: 28/28
+Notebook setup cell: 116 → 30 lines
 README local links: PASS
 AI technical review: PASS
 Human final review: PENDING

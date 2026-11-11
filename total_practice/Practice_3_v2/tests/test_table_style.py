@@ -11,7 +11,11 @@ def test_style_table_adds_theme_aware_presentation() -> None:
         [["Development", 112535], ["Holdout", 8761]],
         columns=["Partition", "Rows"],
     )
-    html = style_table(dataframe, formats={"Rows": "{:,}"}).to_html()
+    html = style_table(
+        dataframe,
+        formats={"Rows": "{:,}"},
+        caption="Dữ liệu ban đầu",
+    ).to_html()
     assert "light-dark(#f8fafc, #1f1f1f)" in html
     assert "background-color: #1f4e78" in html
     assert "border: 1px solid #5b9bd5" in html
@@ -20,6 +24,7 @@ def test_style_table_adds_theme_aware_presentation() -> None:
     assert "font-variant-numeric: tabular-nums" in html
     assert "112,535" in html
     assert "row_heading" not in html
+    assert "Dữ liệu ban đầu" in html
 
 
 def test_style_table_applies_selected_row_highlight() -> None:

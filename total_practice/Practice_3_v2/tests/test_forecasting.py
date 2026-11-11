@@ -15,6 +15,7 @@ from practice_3_v2.analysis.forecasting import (
     load_phase_07_preflight_inputs,
     run_preflight,
     scheduled_recursive_origins,
+    seasonal_naive_24_values,
     validate_final_evaluation_contract,
     validate_resume_identity,
 )
@@ -130,6 +131,33 @@ def test_recursive_predictions_do_not_use_actual_future_values() -> None:
     second_predictions = second[["candidate", "horizon", "prediction"]]
     pd.testing.assert_frame_equal(first_predictions, second_predictions)
     assert not first["actual"].equals(second["actual"])
+
+
+def test_seasonal_naive_24_is_timestamp_aligned_and_origin_safe() -> None:
+    timestamps = pd.date_range("2024-01-01 00:00:00", periods=72, freq="h")
+    target = pd.Series(np.arange(len(timestamps), dtype="float64"), index=timestamps)
+    forecast_timestamps = pd.DatetimeIndex(
+        [pd.Timestamp("2024-01-03 00:00:00"), pd.Timestamp("2024-01-03 01:00:00")]
+    )
+    values = seasonal_naive_24_values(
+        target,
+        forecast_timestamps,
+        forecast_origin=pd.Timestamp("2024-01-02 23:00:00"),
+    )
+    expected = pd.Series(
+        [
+            target.loc[pd.Timestamp("2024-01-02 00:00:00")],
+            target.loc[pd.Timestamp("2024-01-02 01:00:00")],
+        ],
+        index=forecast_timestamps - pd.Timedelta(hours=24),
+    )
+    pd.testing.assert_series_equal(values, expected)
+    with pytest.raises(ValueError, match="after the forecast origin"):
+        seasonal_naive_24_values(
+            target,
+            pd.DatetimeIndex([pd.Timestamp("2024-01-03 23:00:00")]),
+            forecast_origin=pd.Timestamp("2024-01-02 22:00:00"),
+        )
 
 
 def test_incomplete_recursive_block_is_excluded() -> None:

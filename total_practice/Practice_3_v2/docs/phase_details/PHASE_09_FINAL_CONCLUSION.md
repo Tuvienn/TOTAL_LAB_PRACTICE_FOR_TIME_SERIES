@@ -355,8 +355,8 @@ Official final conclusion JSON: PASS
 Focused tests: 23/23 PASS
 Table-style focused tests: 2/2 PASS
 Presentation-loader focused tests: 2/2 PASS
-Full regression suite: 203/203 PASS
-Notebook clean execution: 34/34 code cells, 0 errors
+Full regression suite: 212/212 PASS
+Notebook clean execution: 27/27 code cells, 0 errors
 README local-link validation: PASS
 AI technical review: PASS
 Human final review: PENDING
