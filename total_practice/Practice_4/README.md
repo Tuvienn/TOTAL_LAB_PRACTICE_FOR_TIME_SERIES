@@ -1,6 +1,6 @@
 # Practice 4
 
-Trạng thái hiện tại: `WAITING_APPROVAL` — Phase 1 được duyệt; B01 chờ core environment.
+Trạng thái hiện tại: `IN_PROGRESS` — Phase 1 đã đóng; đang soạn Phase 2 specification.
 
 Đề bài và quy tắc repository đã được rà soát. Human đã chọn bộ dữ liệu
 **Hourly energy demand, generation and weather** làm dataset chính. Kiến trúc
@@ -27,4 +27,7 @@ Tài liệu điều phối:
 - `docs/logs/A02_20261117_document_review.md`: evidence và giới hạn của A02.
 - `docs/phase_details/phase_01.md`: Phase 1 specification và plan đã duyệt.
 - `docs/plans/b01_core_environment.md`: đề xuất environment B01 đang chuẩn bị.
+- `docs/results/data_audit.md`: B01 audit và policy B02 đề xuất.
+- `docs/results/data_contract.md`: B02 canonical contract đã được Human chấp nhận.
+- `docs/phase_details/phase_02.md`: Phase 2 specification draft chờ Human review.
 - `docs/status/current_status.md`: trạng thái thực tế hiện tại.

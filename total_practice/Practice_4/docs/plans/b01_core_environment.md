@@ -1,9 +1,18 @@
 # B01 — Core environment proposal
 
-Trạng thái: **DRAFT — CHƯA ĐỦ EVIDENCE ĐỂ DUYỆT**, 2026-11-17. Đây là proposal,
-không phải lock file, không cho phép cài package. Phase 1 specification được
-Human duyệt qua tin nhắn `APPROVED` trong cuộc hội thoại hiện tại; specification
-vẫn yêu cầu approval riêng cho exact dependency versions trước cài đặt.
+Trạng thái: **SYSTEM ENVIRONMENT SNAPSHOT**, cập nhật 2026-11-18. Human yêu cầu
+dùng system Python 3.12 không virtualenv, chỉ định core dependencies và cho phép
+editable install. `requirements.lock.txt` ghi exact installed core versions;
+không chứng minh resolution/clean-environment reproduction trên máy khác.
+Phần candidate bên dưới là lịch sử đề xuất trước khi kiểm environment thực tế,
+không phải các version đã cài trong run B01.
+
+System Python 3.12.10, Windows 11 AMD64: pandas 2.3.3, numpy 2.5.5,
+pytest 9.2.0, setuptools 84.2.1, wheel 0.48.0, jsonschema 4.26.0; các
+transitive pins hiện có được ghi trong `requirements.lock.txt`. `pip check` đạt;
+editable install dùng `--no-deps --no-build-isolation`, không tạo virtualenv.
+Source/version/units/time semantics do Human xác nhận; metadata Kaggle chưa thể
+kiểm chứng độc lập. Không có B02 policy approval.
 
 ## Target và candidate versions
 

@@ -1,6 +1,6 @@
 # Phase 1 — Data Preparation: specification và before-process plan
 
-Trạng thái: **APPROVED — chờ approval core environment**, ngày 2026-11-17.
+Trạng thái: **COMPLETED — Human đã duyệt B02 và Phase 1 ngày 2026-11-18**.
 Người duyệt: Human; approval reference: tin nhắn `APPROVED` trong cuộc hội thoại
 hiện tại, trả lời bản Phase 1 specification. Human đã đóng Phase 0 qua
 tin nhắn `Close Phase 0 (Gate A02) & Draft Phase 1 Specification` trong cuộc hội
@@ -26,7 +26,7 @@ training, tuning hoặc mở test. Không sửa raw hay tự chuyển nguồn.
 | Input | Trạng thái hiện tại |
 |---|---|
 | Problem definition, A01/A02 approval | Đã được Human chấp nhận; bootstrap bằng hash tài liệu và approval record. |
-| Hai CSV từ nguồn Spain | Chưa có trong `datasets/raw/`; archive, version, quyền sử dụng, checksum, units và timestamp semantics chưa xác minh. |
+| Hai CSV từ nguồn Spain | Human đã đặt trong `datasets/raw/`; hash và audit sơ bộ đã ghi, archive/version, quyền sử dụng, units và timestamp semantics nguồn chưa xác minh. |
 | Counts và schema preliminary | Chỉ là historical inspection; không dùng làm evidence mới hoặc giả định bất biến. |
 | Environment/CLI/ingestion | Chưa có; versions, compatibility và core dependency lock phải được review trước cài đặt. |
 
@@ -174,6 +174,29 @@ failed evidence, xử lý repeated failures theo repository rules. Nếu không 
   A02) & Draft Phase 1 Specification` trong cuộc hội thoại hiện tại.
 - Phase 1 specification/B01: **Human duyệt 2026-11-17**, tin nhắn `APPROVED`
   trong cuộc hội thoại hiện tại, trả lời bản specification.
+- Human yêu cầu dùng môi trường có sẵn, Python 3.12 recommended, và cho biết đã
+  đặt hai CSV trong `datasets/raw/` (tin nhắn hiện tại, 2026-11-17). Không cần
+  cài dependency để làm inspection read-only; yêu cầu này không chứng minh clean
+  install hoặc các tests đã pass.
+- 2026-11-18 Human chỉ định interpreter Python 3.12 và xác nhận nguồn Kaggle,
+  version 1, CC0, ngày tải 2026-11-17; xem `datasets/raw/source_manifest.json`.
+- 2026-11-18 Human yêu cầu hoàn tất B01 bằng system Python 3.12, không dùng
+  virtualenv. Các kiểm tra clean-environment vẫn chưa có bằng chứng và không
+  được coi là pass chỉ từ yêu cầu này.
+- 2026-11-18 Human yêu cầu `Unblock & Complete Stage B01 (Provenance, Pipeline,
+  Tests & Audit)` và xác nhận provenance, units, offsets/DST; chấp thuận core
+  dependencies hiện có và editable install system Python. B01 acceptance và B02
+  policy vẫn chờ Human review.
 - Core environment/dependency proposal: xem [draft](../plans/b01_core_environment.md);
   **chưa giải quyết dependency closure, chưa duyệt**.
-- B01 acceptance, B02 policy, B02/Phase 1 acceptance: **chưa thực hiện**.
+- B01 run `20261118_system312_01`: **Human APPROVED 2026-11-18**, theo yêu cầu
+  `Close Gate B01 & Execute Stage B02 (Canonical Dataset & Data Contract)`.
+- B02 policy: **Human APPROVED 2026-11-18** cùng tin nhắn trên: strip city,
+  validate 5-city set, dedup chỉ khi weather fields nhất quán, mean không trọng
+  số, UTC hourly 1:1, giữ 36 missing load và raw extremes.
+- B02 run `20261118_system312_b02_01`, canonical dataset, data contract và
+  Phase 1: **Human APPROVED / COMPLETED 2026-11-18**, theo tin nhắn `Close Phase 1
+  (Gate B02) & Draft Phase 2 Specification` trong cuộc hội thoại hiện tại.
+- B02 run manifest lưu hash của tài liệu này và data contract tại thời điểm run;
+  việc ghi approval sau run làm hai file hiện tại khác hash lịch sử. Không sửa
+  manifest để giả rằng approval đã tồn tại lúc run.

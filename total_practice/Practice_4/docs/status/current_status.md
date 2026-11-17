@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Trạng thái dự án: `WAITING_APPROVAL` — Phase 1 được duyệt; B01 chờ core environment.
+Trạng thái dự án: `IN_PROGRESS` — Phase 1 đã đóng; đang soạn Phase 2 specification.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -26,19 +26,31 @@ Trạng thái dự án: `WAITING_APPROVAL` — Phase 1 được duyệt; B01 ch�
   Phase 0 — Stage A02`; chi tiết tại `docs/phase_details/phase_00.md`.
 - Human đóng gate A02 / Phase 0 ngày 2026-11-17 qua tin nhắn `Close Phase 0
   (Gate A02) & Draft Phase 1 Specification`; đã soạn Phase 1 specification draft.
-- Human duyệt Phase 1 specification ngày 2026-11-17 qua tin nhắn `APPROVED`;
-  draft core environment ở `docs/plans/b01_core_environment.md` chưa được duyệt.
+- Human duyệt Phase 1 specification và yêu cầu B01 dùng system Python 3.12,
+  xác nhận metadata nguồn và core dependencies trong yêu cầu ngày 2026-11-18.
+- B01 run `20261118_system312_01` đã tạo audit, source manifest, run manifest và
+  execution log; targeted tests đạt 5/5. Human duyệt B01 và policy B02 ngày
+  2026-11-18 theo yêu cầu `Close Gate B01 & Execute Stage B02`.
+- Human duyệt B02 run `20261118_system312_b02_01`, canonical dataset, data
+  contract và đóng Phase 1 ngày 2026-11-18 theo yêu cầu `Close Phase 1 (Gate B02)
+  & Draft Phase 2 Specification`. Phase 2 specification đang soạn, chưa duyệt.
+- Approval record và contract header được cập nhật sau B02 run: hash hiện tại
+  của hai tài liệu khác hash tại thời điểm run trong B02 manifest; manifest được
+  giữ nguyên như evidence lịch sử. Raw và canonical data không đổi bởi việc này.
 
 ## Chưa thực hiện
 
-- Chưa tải hoặc lưu dataset Spain vào repository.
-- Chưa ghi checksum, provenance và bằng chứng kiểm tra có thể tái lập trong execution log.
-- Chưa khóa data contract và data-preparation policy thuộc Phase 1.
+- Human đã đặt hai CSV trong `datasets/raw/`; đã kiểm tra read-only và ghi hash,
+  counts cùng limitations trong `docs/results/data_audit.md`.
+- Human xác nhận source, version 1, CC0, units và time semantics; Kaggle page/API
+  chưa được xác minh độc lập trong môi trường này. Archive hash chưa có.
+- Data contract Phase 1 đã được Human chấp nhận; chưa duyệt Phase 2 specification.
 - Chưa khóa split boundaries và validation protocol thuộc Phase 2.
 - Chưa khóa missing-value treatment, scaling hoặc walk-forward protocol.
-- Chưa duyệt core dependency versions, cài đặt environment hoặc chạy B01 audit.
-- Đã có notebook template 12 Markdown cells, không có code cell; chưa có final
-  executable notebook, pipeline, runnable tests hoặc model training.
+- Editable install vào system Python 3.12 đã chạy; không tạo virtualenv hoặc
+  kiểm clean-environment reproduction. B01 đã được Human chấp nhận.
+- Đã có B01/B02 pipeline và tests; notebook template có 12 Markdown cells, chưa
+  có final executable notebook hoặc model training.
 
 Kiểm tra ngày 2026-11-17 không thấy `LD2011_2014.txt` trong `datasets/raw/`;
 không suy diễn nguyên nhân. UCI không phải dataset chính đã chọn.
