@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Trạng thái dự án: `PLANNING`.
+Trạng thái dự án: `WAITING_APPROVAL` — A01 chờ Human review kết quả.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -20,7 +20,10 @@ Trạng thái dự án: `PLANNING`.
   - ba trường `temp`, `humidity`, `wind_speed` không thiếu;
   - có các city-hour bị lặp do nhiều weather descriptions, nhưng ba trường weather
     bắt buộc giống nhau trong các bản lặp đã kiểm tra.
-- Hai tài liệu tổng quan đã được cập nhật theo quyết định dataset và đang chờ Human review.
+- Roadmap và project overview vẫn là draft. Phase 0 specification/before-process
+  plan đã được Human duyệt ngày 2026-11-17; xem `docs/phase_details/phase_00.md`.
+- A01 đã rà soát scope, requirements, ownership và hiện trạng; đang chờ Human
+  review scope, nguồn, R01–R09, map và architecture, chưa đạt gate A01.
 
 ## Chưa thực hiện
 
@@ -29,8 +32,9 @@ Trạng thái dự án: `PLANNING`.
 - Chưa khóa data contract và data-preparation policy thuộc Phase 1.
 - Chưa khóa split boundaries và validation protocol thuộc Phase 2.
 - Chưa khóa missing-value treatment, scaling hoặc walk-forward protocol.
-- Chưa thiết kế chi tiết hay triển khai Phase 0.
-- Chưa viết code, notebook, test hoặc huấn luyện mô hình.
+- Chưa thực hiện A02 hoặc hoàn tất Phase 0.
+- Đã có notebook template 12 Markdown cells, không có code cell; chưa có final
+  executable notebook, pipeline, runnable tests hoặc model training.
 
-Dataset UCI `LD2011_2014.txt` hiện có trong `datasets/raw/` không phải dataset chính
-của Practice 4 và được giữ nguyên như source evidence; chưa có quyết định xóa hoặc di chuyển.
+Kiểm tra ngày 2026-11-17 không thấy `LD2011_2014.txt` trong `datasets/raw/`;
+không suy diễn nguyên nhân. UCI không phải dataset chính đã chọn.

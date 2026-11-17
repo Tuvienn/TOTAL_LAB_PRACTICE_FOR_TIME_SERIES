@@ -6,7 +6,7 @@ Reviewer: subagent độc lập `/root/plan_score_reviewer`. Main agent soạn v
 
 ## 1. Phạm vi và ý nghĩa
 
-Đánh giá [plan_overview.md](plan_overview.md) và [file_map.csv](file_map.csv) dựa trên đề PDF, rules và context hiện có. Điểm áp dụng đúng revision **R1** có hashes dưới đây; main giữ nguyên plan/map sau khi chấm. Chỉ bổ sung biên bản này.
+Đánh giá [plan_overview.md](plan_overview.md) và [file_map.csv](file_map.csv) dựa trên đề PDF, rules và context hiện có. Điểm áp dụng đúng revision **R1** có hashes dưới đây. Sau lần chấm, A01 bổ sung các file thực tế vào map; map hiện tại có hash khác và chưa được reviewer chấm lại. Roadmap R1 không đổi. Biên bản và điểm lịch sử không phải review của map mới.
 
 Đây là đánh giá chất lượng roadmap, không phải Human approval cho roadmap hoặc implementation, không chứng minh dataset/pipeline/model đã được chạy.
 

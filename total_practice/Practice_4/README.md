@@ -1,6 +1,6 @@
 # Practice 4
 
-Trạng thái hiện tại: `PLANNING`.
+Trạng thái hiện tại: `WAITING_APPROVAL` — A01 chờ Human review.
 
 Đề bài và quy tắc repository đã được rà soát. Human đã chọn bộ dữ liệu
 **Hourly energy demand, generation and weather** làm dataset chính. Kiến trúc
@@ -20,4 +20,7 @@ Tài liệu điều phối:
 
 - `docs/plans/PROJECT_OVERVIEW.md`: phạm vi, yêu cầu và trạng thái quyết định.
 - `docs/plans/plan_overview.md`: bản đồ phase và approval gates.
+- `docs/plans/file_map.csv`: inventory và ownership của artifacts.
+- `docs/phase_details/phase_00.md`: specification và plan Phase 0 đã duyệt.
+- `docs/logs/A01_20261117_document_review.md`: evidence và giới hạn của A01.
 - `docs/status/current_status.md`: trạng thái thực tế hiện tại.

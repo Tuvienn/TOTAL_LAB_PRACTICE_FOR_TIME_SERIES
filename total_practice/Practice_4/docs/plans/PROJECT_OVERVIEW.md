@@ -99,7 +99,9 @@ Các kết quả trên phải được Phase 1 tái lập từ archive đã tả
 
 **Chưa được quyết định trước** cách điền giá trị thiếu, tổng hợp khi đổi tần suất, chọn thành phố, loại bỏ ngoại lai hoặc biến đổi biến mục tiêu. Các lựa chọn này chỉ được chốt sau khi kiểm tra dữ liệu và ghi nhận ảnh hưởng của chúng.
 
-Dataset UCI `LD2011_2014.txt` hiện có trong `datasets/raw/` phải được giữ nguyên. Việc chọn Spain làm dataset chính không tạo quyền xóa, di chuyển hoặc ghi đè source evidence này.
+Kiểm tra checkout ngày 2026-11-17 không thấy `LD2011_2014.txt` trong `datasets/raw/`;
+không suy diễn nguyên nhân. Việc chọn Spain làm dataset chính không tạo quyền
+xóa, di chuyển hoặc ghi đè bất kỳ raw source evidence nào.
 
 ## 5. Nguyên tắc bảo đảm tính khoa học và ngăn rò rỉ dữ liệu
 
