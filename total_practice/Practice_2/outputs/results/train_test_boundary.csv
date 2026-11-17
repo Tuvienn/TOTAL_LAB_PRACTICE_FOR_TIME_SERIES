@@ -1,3 +1,0 @@
-split,start,end,observations,forecast_horizon
-train,1991-07-01,2005-01-01,163,
-test,2005-02-01,2008-06-01,41,41.0
