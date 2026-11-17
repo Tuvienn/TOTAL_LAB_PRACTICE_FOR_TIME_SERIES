@@ -1,6 +1,8 @@
 # A02 — Document review, 2026-11-17
 
-Trạng thái: **WAITING_APPROVAL** — problem definition chờ Human review.
+Trạng thái: **COMPLETED** — Human đóng gate A02 / Phase 0 ngày 2026-11-17 qua
+tin nhắn `Close Phase 0 (Gate A02) & Draft Phase 1 Specification` trong cuộc
+hội thoại hiện tại, trả lời đề nghị review problem definition.
 Predecessor: Human đóng A01 và yêu cầu A02 bằng tin nhắn `Close Gate A01 &
 Execute Phase 0 — Stage A02` ngày 2026-11-17 trong cuộc hội thoại hiện tại;
 Phase 0 before-process plan được duyệt trước đó, xem `../phase_details/phase_00.md`.
@@ -21,6 +23,8 @@ Ngày 2026-11-17, Python script qua stdin (`python -`) dùng `csv`, `pathlib`,
   Markdown links tồn tại. Không kiểm tra anchors hoặc external links.
 - `problem_definition.md` SHA256:
   `30974b27ab359724007e996d08564b9bfddb3b5002bfc5beca178fd7d7a4abd6`.
+  Hash này áp dụng bản đã trình review trước khi cập nhật trạng thái chấp nhận;
+  không phải hash file hiện tại.
 - `file_map.csv` SHA256:
   `64e72ac21cbbbb1e46fa369ae1d1c6566267130161973f947689176187fe96ef`.
 - `git diff --check`: exit 0; Git cảnh báo LF sẽ được chuyển CRLF trong ba file
