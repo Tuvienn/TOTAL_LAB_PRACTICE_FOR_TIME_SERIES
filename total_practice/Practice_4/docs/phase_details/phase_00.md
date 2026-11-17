@@ -1,6 +1,6 @@
 # Phase 0 — Specification và before-process plan
 
-Trạng thái: **APPROVED — thực hiện A01, chờ Human review kết quả**.
+Trạng thái: **APPROVED — A01 đã đóng, A02 chờ Human review**.
 Ngày chuẩn bị và duyệt: 2026-11-17. Người duyệt: Human; tham chiếu:
 tin nhắn `APPROVED` ngay sau đề nghị duyệt Phase 0 specification/before-process
 plan trong cuộc hội thoại hiện tại. Approval này không tự phê duyệt roadmap,
@@ -95,5 +95,7 @@ Phase 1 riêng.
 
 - Phase 0 specification/before-process plan: **Human duyệt 2026-11-17**, tin nhắn
   `APPROVED` trong cuộc hội thoại hiện tại, trả lời đề nghị duyệt tài liệu này.
-- A01 scope, source, R01–R09, map và architecture: **chờ Human review**.
-- A02 problem definition / Phase 0 acceptance: **chưa thực hiện**.
+- A01 scope, source, R01–R09, map và architecture: **Human chấp nhận và đóng
+  gate ngày 2026-11-17**, tin nhắn `Close Gate A01 & Execute Phase 0 — Stage A02`
+  trong cuộc hội thoại hiện tại, trả lời đề nghị review A01.
+- A02 problem definition / Phase 0 acceptance: **chờ Human review**.

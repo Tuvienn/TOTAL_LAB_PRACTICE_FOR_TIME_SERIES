@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Trạng thái dự án: `WAITING_APPROVAL` — A01 chờ Human review kết quả.
+Trạng thái dự án: `WAITING_APPROVAL` — A01 đã đóng; A02 chờ Human review.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -22,8 +22,9 @@ Trạng thái dự án: `WAITING_APPROVAL` — A01 chờ Human review kết qu�
     bắt buộc giống nhau trong các bản lặp đã kiểm tra.
 - Roadmap và project overview vẫn là draft. Phase 0 specification/before-process
   plan đã được Human duyệt ngày 2026-11-17; xem `docs/phase_details/phase_00.md`.
-- A01 đã rà soát scope, requirements, ownership và hiện trạng; đang chờ Human
-  review scope, nguồn, R01–R09, map và architecture, chưa đạt gate A01.
+- Human đóng gate A01 ngày 2026-11-17 qua tin nhắn `Close Gate A01 & Execute
+  Phase 0 — Stage A02`; chi tiết tại `docs/phase_details/phase_00.md`.
+- Đã soạn `docs/results/problem_definition.md` cho A02; đang chờ Human review.
 
 ## Chưa thực hiện
 
@@ -32,7 +33,7 @@ Trạng thái dự án: `WAITING_APPROVAL` — A01 chờ Human review kết qu�
 - Chưa khóa data contract và data-preparation policy thuộc Phase 1.
 - Chưa khóa split boundaries và validation protocol thuộc Phase 2.
 - Chưa khóa missing-value treatment, scaling hoặc walk-forward protocol.
-- Chưa thực hiện A02 hoặc hoàn tất Phase 0.
+- Chưa được Human chấp nhận A02 và Phase 0; chưa bắt đầu Phase 1.
 - Đã có notebook template 12 Markdown cells, không có code cell; chưa có final
   executable notebook, pipeline, runnable tests hoặc model training.
 

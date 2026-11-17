@@ -1,6 +1,7 @@
 # A01 — Document review, 2026-11-17
 
-Trạng thái: **WAITING_APPROVAL** — chờ Human review; không tuyên bố A01 đạt gate.
+Trạng thái: **COMPLETED** — Human đóng gate A01 ngày 2026-11-17 bằng tin nhắn
+`Close Gate A01 & Execute Phase 0 — Stage A02`, trả lời đề nghị review A01.
 Approval thực hiện: Human gửi `APPROVED` ngày 2026-11-17 trong cuộc hội thoại
 hiện tại, ngay sau đề nghị duyệt `docs/phase_details/phase_00.md`. Approval đó
 không phải acceptance kết quả A01 hay approval A02.
@@ -15,7 +16,7 @@ không phải acceptance kết quả A01 hay approval A02.
   Các con số historical preliminary inspection không phải evidence của run này.
 - Rà soát ownership và dependencies theo roadmap mục 2 và file map: các owner là
   thiết kế đề xuất, không phải bằng chứng implementation. RV1–RV3 ở plan review
-  vẫn mở và thuộc phase tương ứng; approval kiến trúc đang chờ Human.
+  vẫn mở và thuộc phase tương ứng; Human đã chấp nhận architecture tại gate A01.
 - Checkout `datasets/raw/` chỉ có README, không thấy `LD2011_2014.txt`; không suy
   diễn nguyên nhân. Notebook template có 12 Markdown cells, không có code cell.
 - Bổ sung hai concrete files A01 vào file map, giữ family patterns cho tương lai.
