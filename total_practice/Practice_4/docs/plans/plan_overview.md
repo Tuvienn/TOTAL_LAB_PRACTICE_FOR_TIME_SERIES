@@ -1,131 +1,279 @@
-# Practice 4 — Kế hoạch tổng quan
+# Practice 4 — Kế hoạch theo cụm stage
 
-> **Trạng thái tài liệu:** BẢN NHÁP ĐÃ CẬP NHẬT THEO KIẾN TRÚC PHASE 0–10 ĐƯỢC HUMAN THỐNG NHẤT — Chờ phê duyệt làm cơ sở thiết kế Phase 0
-> **Mức độ lập kế hoạch:** Chỉ mô tả tổng quan các giai đoạn; chưa phải kế hoạch triển khai chi tiết.
-> **Tài liệu đi kèm:** `PROJECT_OVERVIEW.md`
-> **Phạm vi phê duyệt:** Việc thiết kế và triển khai từng giai đoạn phải được người dùng phê duyệt theo quy tắc quản trị áp dụng cho kho mã nguồn.
+Ngày soạn: **2026-11-17**. Revision: **R1**. Trạng thái: **PLANNING — DRAFT, CHỜ HUMAN REVIEW**.
 
-## 1. Mục đích
+Human cho phép soạn plan, file map và tối đa ba vòng subagent review. Quyền này cho phép cập nhật bộ tài liệu kế hoạch; không cho phép tải dataset, cài dependencies, triển khai pipeline hoặc huấn luyện. Điểm reviewer không thay thế Human approval.
 
-Hoàn thành Practice 4 theo trình tự: định nghĩa bài toán, chuẩn bị dữ liệu, khóa temporal split, thực hiện training-only EDA, preprocessing, feature engineering, modeling, final evaluation và cuối cùng tổng hợp notebook/report. Không tạo trước toàn bộ tài liệu chi tiết cho các phase và không triển khai phase tiếp theo khi phase hiện tại chưa được Human review.
+## 1. Mục tiêu, phạm vi và hiện trạng
 
-Kế hoạch này bám các yêu cầu của đề: bốn biến đầu vào, lịch sử 24 giờ, dự báo điện năng ở bước tiếp theo, ba mô hình VAR/XGBoost/LSTM, chia dữ liệu theo thời gian 70/15/15, đánh giá bằng RMSE/MAE/MAPE và kiểm định dự báo tiến dần theo thời gian. Human đã chọn **Hourly energy demand, generation and weather** làm dataset chính. Quyết định nguồn dữ liệu không tự phê duyệt data contract, weather aggregation, preprocessing hoặc evaluation protocol.
+Hoàn thành multivariate one-step forecasting: lịch sử điện năng và thời tiết → điện năng giờ kế tiếp; so sánh VAR, XGBoost và LSTM bằng RMSE/MAE/MAPE. Dataset Spain **Hourly energy demand, generation and weather** là nguồn chính được tài liệu hiện có ghi nhận Human đã chọn. Chọn nguồn không xác nhận schema, đơn vị, weather aggregation hoặc missing-value policy.
 
-## 2. Điều kiện tiên quyết và thẩm quyền
+Bản này thay thế roadmap cũ trong chính `plan_overview.md`, giữ thứ tự **Phase 0–10**, chia thành **9 cụm / 18 stage**. [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) giữ bối cảnh/lịch sử; [file_map.csv](file_map.csv) giữ đường dẫn/trách nhiệm; [plan_review.md](plan_review.md) giữ đánh giá. Stage dưới đây là work packages, không phải approved phase specifications. Chỉ thiết kế specification/before-process plan của phase đến lượt, không tạo trước tất cả.
 
-1. **Đọc trước:** Toàn bộ nội dung thực tế của `AGENTS.md`, `working_rule.md`, `.agents/RULES_INDEX.md`, các quy tắc có hiệu lực theo phạm vi và tệp PDF đề bài.
-2. **Kiểm tra trước khi sửa:** Xem cấu trúc thư mục Practice 4, các tài liệu dự án đã có, quyết định được duyệt và trạng thái kho mã nguồn; bảo toàn kết quả cũ, chỉ thay đổi phần cần thiết.
-3. **Xử lý xung đột:** Khi hướng dẫn mâu thuẫn với quy tắc quản trị hoặc đặc tả đã duyệt, phải báo cáo xung đột và dừng phần việc có tranh chấp cho đến khi người dùng quyết định.
-4. **Giới hạn phạm vi:** Chỉ sửa tệp trong phạm vi Practice 4 đã được chấp thuận; phải xin phép trước khi đổi quy tắc chung hoặc động đến những bài thực hành khác.
-5. **Phân biệt trạng thái:** Không đánh đồng **ĐÃ XÁC NHẬN**, **ĐỀ XUẤT**, **CHỜ QUYẾT ĐỊNH** và **ĐÃ KIỂM CHỨNG**.
-6. **Nguyên tắc phê duyệt:** Không tự nâng một bản nháp thành yêu cầu đã duyệt hoặc chuyển sang giai đoạn tiếp theo khi chưa có sự đồng ý rõ ràng của người dùng.
+Ngoài phạm vi: traffic METR-LA/PEMS-BAY, forecasting nhiều bước, web/deployment, model khác, Practice khác và rules chung. Mở rộng cần scope mới.
 
-**Tình trạng kiểm tra:** Các governance files, shared rules, cấu trúc Practice 4 và hai archive CSV công khai đã được kiểm tra read-only ở mức sơ bộ ngày 2026-11-13. Kết quả sơ bộ chỉ cung cấp context cho thiết kế; Phase 1 phải tái lập kiểm tra từ source version đã khóa, lưu checksum/provenance và tạo execution evidence theo kế hoạch được duyệt.
+### 1.1 Hiện trạng kiểm tra trực tiếp
 
-## 3. Chu trình thực hiện
+- Trước lần soạn: 23 file; bốn `__init__.py` chỉ có docstring; notebook template có 12 Markdown cells, 0 code cells.
+- Không có raw/processed dataset, runnable tests, dependency manifest, training configuration, metrics hoặc execution evidence.
+- PROJECT_OVERVIEW và current_status nói `LD2011_2014.txt` hiện có; inventory không thấy. Không suy diễn nguyên nhân/tự khôi phục.
+- Mô tả cũ “chưa viết notebook” cần sửa thành “đã có template, chưa có executable/final notebook”. Giao A01 xử lý drift.
+- Số dòng/missing từ preliminary inspection cũ chưa được tái lập; B01 đo lại từ version khóa.
+- Trong lần này chỉ sửa ba file tại docs/plans; các thay đổi source/README/status trong roadmap là tương lai.
 
-1. Kiểm tra quy tắc quản trị và các tệp đang có.
-2. Soạn `PROJECT_OVERVIEW.md` và `plan_overview.md`.
-3. Người dùng xem xét, phê duyệt cơ sở lập kế hoạch.
-4. Chỉ thiết kế chi tiết **Phase 0 — Problem Definition** rồi xin Human duyệt.
-5. Triển khai Phase 0 trong phạm vi tài liệu, validation và Human review; không xử lý dữ liệu.
-6. Chỉ thiết kế **Phase 1 — Data Preparation** sau khi Phase 0 hoàn thành.
-7. Thực hiện tuần tự từng phase theo chu trình: thiết kế → Human approval → triển khai → validation → Human review.
-8. Chỉ tạo end-to-end notebook và final report ở Phase 10 sau khi Phase 0–9 có approved artifacts.
+### 1.2 Truy vết yêu cầu từ đề [S1]
 
-**Lưu ý:** Phê duyệt hai tài liệu tổng quan chỉ cho phép **thiết kế Phase 0**, không cho phép tự động triển khai Phase 0 hoặc bất kỳ phase nào khác. Phase 0 vẫn cần specification và before-process plan được Human duyệt.
+| ID | Yêu cầu | Trang | Owner |
+|---|---|---|---|
+| R01 | 4 biến load/temperature/humidity/wind_speed; lịch sử24h; dự báo load bước sau | 1–2 | A02, B02, E01 |
+| R02 | Missing/outliers/daily-weekly seasonality; load plot, load–temperature, correlation | 1 | D01 |
+| R03 | StandardScaler, temporal split70/15/15, không shuffle | 1–2 | C01, D02 |
+| R04 | Lag24; XGB thêm mean6h, std24h, load(t)−load(t−24) | 2 | E01–E02 |
+| R05 | VAR: ADF, differencing nếu cần, AIC/BIC; chấm riêng load | 2 | F02 |
+| R06 | XGB: max_depth/n_estimators, validation early stopping | 2 | G01 |
+| R07 | LSTM: (N,24,4),64→32→Dense1, MSE/Adam | 3 | G02 |
+| R08 | Walk-forward cả3 model; RMSE/MAE/MAPE | 3 | C02, H01 |
+| R09 | Sáu câu hỏi phân tích, so sánh kết quả | 3 | H02, I01–I02 |
 
-## 4. Bản đồ tổng quan các giai đoạn (ĐỀ XUẤT)
+## 2. Kiến trúc ownership và artifacts
 
-| Giai đoạn | Mục tiêu | Kết quả và bằng chứng chính | Điều kiện bắt đầu | Điều kiện hoàn thành |
-|---|---|---|---|---|
-| **0 — Problem Definition** | Khóa business/scientific objective, forecasting contract dự kiến, scope, constraints và acceptance criteria; không xử lý dữ liệu | Problem Definition được phê duyệt, nêu rõ target, input, horizon, models, metrics và split requirement | Hai tài liệu tổng quan được Human phê duyệt; Phase 0 specification và plan được duyệt | Human review và phê duyệt Problem Definition |
-| **1 — Data Preparation** | Kiểm chứng hai raw CSV, chuẩn hóa/deduplicate weather, tạo weather proxy, join và tạo canonical hourly dataset; bảo toàn missing target | Raw provenance/checksum, data-preparation audit, canonical dataset và verified data contract | Phase 0 hoàn thành; Phase 1 specification và plan được duyệt | Human duyệt audit, canonical dataset và data contract |
-| **2 — Temporal Split và Validation Design** | Chia 70/15/15 theo thời gian, khóa test set, forecast origins, context-boundary rule và walk-forward contract | Split manifest, validation contract, overlap/leakage checks và test-access policy | Canonical dataset và data contract được duyệt | Human duyệt split và validation design |
-| **3 — Exploratory Data Analysis** | Phân tích missing/outlier, distribution, trend, daily/weekly seasonality, load–weather relationship và temporal dependence chỉ trên training set | Reproducible figures, training-only EDA findings và preprocessing proposals | Temporal split được khóa | Human review EDA evidence; validation/test không bị quan sát để ra quyết định |
-| **4 — Preprocessing và Scaling** | Áp dụng missing/anomaly policy được duyệt; fit scaler và mọi learned transformation chỉ trên train | Processed splits, fitted preprocessing artifacts và leakage audit | Training-only EDA được review; preprocessing plan được duyệt | Data quality, chronology và transform-boundary checks đạt yêu cầu |
-| **5 — Feature Engineering và Supervised Conversion** | Tạo window 24 giờ, lag/rolling/trend features và model-ready inputs với cùng forecast origins | Feature dictionary, VAR/XGBoost/LSTM inputs, shape/alignment/leakage audit | Processed splits được duyệt | Human review model-ready data và alignment evidence |
-| **6 — Simple Baselines và VAR** | Đánh giá Naive/Seasonal Naive; thực hiện ADF/differencing, AIC/BIC lag selection, VAR validation và residual diagnostics | Baseline metrics, locked VAR configuration và validation evidence | Model-ready data và evaluation protocol được duyệt | Human review baseline comparison và VAR diagnostics |
-| **7 — XGBoost** | Tune `max_depth`, `n_estimators`, early stopping trên validation và weather contribution analysis | Locked XGBoost configuration, validation metrics và feature-attribution evidence | Phase 5 inputs và comparison rules được duyệt | Human review XGBoost validation evidence; cấu hình khóa trước test |
-| **8 — LSTM** | Huấn luyện kiến trúc theo đề, early stopping, learning curves và overfitting analysis | Locked LSTM configuration, validation metrics và training diagnostics | Phase 5 sequence inputs và training plan được duyệt | Human review LSTM evidence; cấu hình khóa trước test |
-| **9 — Walk-forward Evaluation và Error Analysis** | Mở test sau model lock, đánh giá cùng forecast origins bằng RMSE/MAE/MAPE và phân tích error/residual regimes; không tuning lại | Official predictions, metrics, comparison và error-analysis evidence | Baselines và ba model đã khóa; test-opening gate được duyệt | Human review tính công bằng, metric correctness và limitations |
-| **10 — End-to-End Notebook và Final Report** | Tổng hợp approved artifacts, trả lời sáu câu hỏi và trình bày conclusion; không triển khai lại pipeline | `practice_4_end_to_end.ipynb`, final report và reproducibility references | Phase 0–9 artifacts đã được Human review | Human chấp thuận notebook và final report |
+File map dùng path tương đối Practice_4 root, dấu `/`. EXISTING=đã thấy lúc soạn; PLANNED=chưa tạo. FAMILY=tập file tên biến thiên, không phải file đã tồn tại. first_stage là lần tạo/chỉnh đầu tiên, không phải consumer duy nhất.
 
-Kiến trúc và thứ tự Phase 0–10 đã được Human thống nhất ở mức tổng quan. Nội dung chi tiết, file owners, phương pháp và acceptance criteria của từng phase chỉ có hiệu lực triển khai sau khi phase specification và before-process plan tương ứng được phê duyệt.
+| Owner | Trách nhiệm | Ranh giới |
+|---|---|---|
+| src/practice_4/data/ | Ingest, canonical integration, split, causal preprocessing, model-ready data | Không fit model |
+| src/practice_4/analysis/ | EDA, metrics, baselines, VAR/XGB/LSTM, walk-forward, error analysis | Không tải raw trong notebook |
+| src/practice_4/visualization/ | Vẽ từ dữ liệu/artifacts được phép | Không tự fit/đổi split |
+| src/practice_4/pipeline.py | CLI điều phối stage và xác nhận gates | Không duplicate thuật toán modules |
+| config/ | Config được duyệt, protocol/seed/budget | Không secrets/absolute machine paths |
+| datasets/raw/ | CSV nguồn bất biến | Không sửa/fill |
+| datasets/processed/ | Derived datasets có lineage | Không ghi đè raw |
+| runs/<run_id>/ | Config/environment snapshot, scaler/model/trials | Không tự thành official results |
+| outputs/ | Official figures/tables/predictions từ accepted run | Không ghi đè ngầm |
+| docs/phase_details/ | Phase specification + before-process plan đến lượt | Không tự duyệt phase sau |
+| docs/results/, docs/logs/ | Kết luận, evidence và approval references | Không kết luận từ output chưa chạy |
+| notebooks/ | Presentation approved artifacts ở Phase10 | Không download/fit/tuning lại |
 
-## 5. Phase 0 — phase duy nhất được thiết kế chi tiết tiếp theo
+Dependency direction: notebook → official artifacts; pipeline → data/analysis/visualization; analysis → data/metrics. Modules không import notebook/pipeline. CLI import model backends khi gọi model stage, để data/tests không buộc có DL backend.
 
-### 5.1. Mục tiêu
+Mỗi Phase n có một `docs/phase_details/phase_<nn>.md`: specification, before-process plan, impacted files, validation commands, stop conditions, approval record. Chỉ tạo khi phase đến lượt. Approval phải có người duyệt, ngày và tham chiếu message/record thật; thiếu thì gate đóng.
 
-- Định nghĩa bài toán multivariate one-step forecasting.
-- Xác định provisional forecasting contract `[X(t-23), …, X(t)] → load(t+1)`.
-- Ghi rõ dataset source đã được Human chọn mà không tuyên bố schema/data contract đã kiểm chứng.
-- Khóa target dự kiến, input variables, horizon, model families, metrics, split requirement, scope và constraints.
-- Xác định acceptance criteria cho Problem Definition.
+Mỗi stage có `docs/logs/<stage_id>_<run_id>.md` ghi config/input hashes, command, exit status, counts/checks, artifact paths, limitations. Mỗi run ID duy nhất, giữ failed runs. `runs/<run_id>/manifest.json` ghi run/stage/schema_version, input/config hashes, output checksums, environment và approval reference. Chỉ promote official outputs sau validation/Human review; promotion ghi source run/checksum, không sửa trial evidence.
 
-### 5.2. Kết quả bắt buộc
+## 3. Roadmap: 9 cụm, 18 stage
 
-- Problem Definition có 5W1H và forecasting objective rõ ràng.
-- Provisional input/output contract và terminology nhất quán.
-- Danh sách confirmed requirements, proposals và decisions thuộc phase sau.
-- Phạm vi trong/ngoài bài và các ambiguity cần chuyển tới đúng phase owner.
-- Human review và phê duyệt trước khi thiết kế Phase 1.
+Chuỗi bắt buộc:
 
-### 5.3. Ranh giới Phase 0
+**A01 → A02 → B01 → B02 → C01 → C02 → D01 → D02 → E01 → E02 → F01 → F02 → G01 → G02 → H01 → H02 → I01 → I02**.
 
-Phase 0 không tải dữ liệu, không tạo checksum, không đọc hoặc join raw CSV trong execution workflow, không tạo processed dataset, không chia train/validation/test và không huấn luyện model. Preliminary inspection đã có chỉ là context cho planning, không phải output của Phase 0.
+Predecessor phải đạt gate trước khi stage sau bắt đầu. Mỗi lần chuyển Phase phải có Human review phase cũ + approved specification/before-process plan phase mới. D01→D02, F02→G01, G01→G02 cũng là chuyển phase dù chung cụm. Hiện tất cả stage NOT_STARTED; chỉ một implementation stage IN_PROGRESS tại một thời điểm.
 
-### 5.4. Ownership chuyển sang Phase 1
+### Cụm A — Bài toán và nền tảng dự án (Phase 0)
 
-Phase 1 chịu trách nhiệm kiểm chứng `energy_dataset.csv` và `weather_features.csv`, khóa provenance/schema, deduplicate và tổng hợp weather, join theo timestamp, bảo toàn missing target, tạo canonical hourly dataset và trình verified data contract cho Human review. Không đưa các trách nhiệm này trở lại Phase 0.
+| Stage | Input và việc cần làm | Output / owner | Tiêu chí đạt |
+|---|---|---|---|
+| A01 — Scope và ownership | Đề/rules/overview/inventory; sửa drift; review file map và module owners | phase_00 specification; cập nhật overview/README/status; architecture approval trong phase_00 | Human duyệt scope, dataset source, R01–R09, map; không còn mô tả file tồn tại sai |
+| A02 — Problem Definition | A01 accepted; định nghĩa5W1H, provisional I/O/origin, success criteria, risk/decision register | docs/results/problem_definition.md | Human duyệt; phân biệt requirement/proposal/việc phải đo; không xử lý dữ liệu |
 
-## 6. Các nguyên tắc đánh giá bắt buộc (cần đối chiếu với quy tắc kho mã nguồn)
+Gate A chỉ tài liệu: không tải CSV, checksum raw, cài package, split hay training. Thành công là thực nghiệm đúng protocol và giải thích có bằng chứng; không bắt buộc model phức tạp thắng baseline.
 
-- Chia dữ liệu theo thứ tự thời gian với tỷ lệ 70/15/15; không xáo trộn.
-- Khóa temporal split ở Phase 2 trước Phase 3; EDA chỉ sử dụng training set và không quan sát validation/test để ra quyết định.
-- Đánh giá Naive/Persistence và Seasonal Naive lag 24 trước các mô hình phức tạp; không thay thế ba model bắt buộc.
-- Chỉ ước lượng bộ chuẩn hóa và bộ điền dữ liệu thiếu từ thông tin huấn luyện được phép; không để thống kê từ tập xác thực/kiểm tra rò rỉ vào huấn luyện.
-- Với mỗi dự báo cho thời điểm `t+1`, chỉ sử dụng thông tin đã có khi bắt đầu dự báo. Đặc biệt kiểm tra mốc thời gian của dữ liệu thời tiết và các cửa sổ trượt.
-- Duy trì cùng khoảng dự báo, thang đo mục tiêu và các mốc kiểm tra tương đương giữa mô hình. Nếu dữ liệu buộc phải khác nhau, cần công bố sự khác biệt một cách rõ ràng.
-- Chỉ điều chỉnh tham số và thực hiện dừng sớm dựa trên tập xác thực; không chọn mô hình dựa trên điểm số của tập kiểm tra cuối cùng.
-- Xác định quy trình dự báo tiến dần theo thời gian trước khi báo cáo; phân biệt việc dùng giá trị thực mới quan sát với dùng giá trị dự báo trước đó và nêu rõ có huấn luyện lại hay không.
-- Quy định cách tính MAPE khi giá trị điện năng thực tế bằng 0 và báo cáo số điểm bị ảnh hưởng.
-- Không kết luận LSTM học chu kỳ tuần chỉ từ training loss hoặc vì dữ liệu có weekly seasonality; cửa sổ 24 giờ không trực tiếp chứa lag 168.
-- Giữ nguyên dữ liệu gốc và ghi lại nguồn gốc từng bước tiền xử lý.
+### Cụm B — Nguồn dữ liệu và tích hợp (Phase 1)
 
-Đây là các mục tiêu bảo đảm chất lượng kỹ thuật, **không thay thế** quy tắc quản trị đã có trong kho mã nguồn.
+| Stage | Input và việc cần làm | Output / owner | Tiêu chí đạt |
+|---|---|---|---|
+| B01 — Raw provenance và audit | Problem Definition; duyệt dependency setup trước tạo pyproject/lock/config/CLI; lấy2CSV Spain, kiểm version/license/retrieval/checksum/schema/unit/timezone/gaps/city-hour duplicates | data/ingestion.py; pyproject.toml, requirements.lock.txt, config/practice_4.json, pipeline.py; raw CSV/source_manifest.json; docs/results/data_audit.md | Clean-env import/smoke; raw unchanged; có unit/source evidence; đo lại counts/missing, không dùng số cũ |
+| B02 — Canonical contract | Audit; thiết kế/duyệt dedup, city normalization, weather proxy, hourly timestamp join; derived copy | data/integration.py; canonical_hourly.csv; docs/results/data_contract.md | UTC sorted unique step1h; join không nhân dòng; coverage/units rõ; giữ missing load; Human duyệt contract |
 
-## 7. Quy định về tài liệu và phạm vi thay đổi
+Đề xuất weather proxy=mean không trọng số các thành phố, chỉ áp sau kiểm duplicate consistency và coverage. Nếu weather duplicates xung đột, thiếu coverage/unit: dừng B02, chuẩn bị policy/evidence cho Human; không tự lấy dòng đầu/mean conflict/fill. UTC là index đề xuất; daily/weekly interpretation dùng timezone địa phương đã kiểm chứng. B audit metadata/quality toàn raw, chưa EDA relationships hoặc chọn treatment từ held-out distributions.
 
-- **Hiện tại:** Human review đồng thời bản cập nhật `PROJECT_OVERVIEW.md` và `plan_overview.md`; dataset source đã được chọn nhưng data contract chưa được duyệt.
-- **Tiếp theo:** Chỉ soạn **Phase 0 Problem Definition specification** và before-process plan; xin Human phê duyệt trước khi cập nhật phase artifact.
-- **Trong Phase 0:** Chỉ định nghĩa bài toán, forecasting contract dự kiến, scope, constraints và acceptance criteria; không xử lý dữ liệu.
-- **Sau Phase 0:** Chỉ thiết kế Phase 1 khi Problem Definition đã được Human review.
-- **Các phase sau:** Tạo specification gần thời điểm thực hiện từng phase, không tạo sẵn tất cả cùng lúc.
+### Cụm C — Thiết kế thực nghiệm và đánh giá (Phase 2)
 
-Không tạo tệp trùng nếu đã có tài liệu tương đương. Không tự đổi tên, di chuyển hoặc viết lại kiến trúc thư mục và quy tắc chung khi chưa được phép.
+| Stage | Input và việc cần làm | Output / owner | Tiêu chí đạt |
+|---|---|---|---|
+| C01 — Temporal partition | Canonical; split row timeline trước drop/window: train=floor(.70N),val=floor(.15N),test=phần còn lại; lưu inclusive boundaries/counts | data/splitting.py; split_manifest.json | Không overlap/mất timestamp; sum=N; split hash khóa; target timestamp quyết định sample membership |
+| C02 — Evaluation contract | C01; khóa origin eligibility, context boundary, update/refit, metric/tie/MAPE và budgets; hand-check fixtures | analysis/metrics.py, analysis/walk_forward.py; evaluation_contract.md; tests metrics/walk-forward | Human duyệt trước modeling; fixtures xác minh prediction-before-reveal, masks/original-scale metrics; chưa mở test cho selection |
 
-## 8. Danh sách kiểm tra trước khi phê duyệt
+Eligibility rule khóa ở C02; E02 hiện thực train/validation origins sau D02 theo cùng rule, không dựa model errors. Test origin list materialize sau authorization H01.
 
-- [x] Đã đọc quy tắc quản trị thực tế trong kho mã nguồn; chưa phát hiện xung đột chặn documentation update
-- [x] Đã thể hiện đúng các yêu cầu của đề bài và các ambiguity cần giải quyết
-- [x] Bộ dữ liệu Spain được ghi rõ là dataset chính do Human chọn
-- [x] Dataset selection được tách khỏi data contract và preprocessing approval
-- [x] Preliminary inspection không được trình bày như formal Phase 1 verification
-- [x] Kiến trúc Phase 0–10 và thứ tự thực hiện đã được Human thống nhất
-- [x] Phase 0 chỉ sở hữu Problem Definition; Phase 1 sở hữu Data Preparation và verified data contract
-- [x] Temporal Split là Phase 2 độc lập; EDA là Phase 3 và chỉ dùng training set
-- [x] Phase 10 sở hữu end-to-end notebook và final report
-- [x] Mỗi phase có bước thiết kế và cổng phê duyệt riêng
-- [x] Bản nháp này chưa cho phép lập trình hoặc tạo sẵn tài liệu chi tiết các giai đoạn sau
-- [ ] Người dùng duyệt cặp tài liệu làm **cơ sở lập kế hoạch ban đầu**
+### Cụm D — Hiểu và chuẩn bị dữ liệu (Phase 3–4)
 
-## 9. Tình trạng hiện tại
+| Stage | Input và việc cần làm | Output / owner | Tiêu chí đạt |
+|---|---|---|---|
+| D01 — Training-only EDA (P3) | Train và raw audit; missing/outliers, daily-weekly profiles, load–temp, correlation/temporal dependence | analysis/eda.py, visualization/plots.py; EDA figures, eda_findings.md | Inspect figures; findings có artifact/config; không causal claim; timezone rõ; Human review treatment proposals |
+| D02 — Causal preprocessing (P4) | EDA accepted; duyệt missing/anomaly/max-gap/contiguous-VAR policy; StandardScaler fit chỉ train | data/preprocessing.py; prepared_hourly.csv; scaler/state trong run; preprocessing_audit.md | Raw truth/mask bất biến; không điền scoring labels; train cutoff đúng; scan causal; không bfill/two-sided interpolation; inverse-scale fixture đạt tolerance đã khóa |
 
-**Lập kế hoạch:** BẢN NHÁP ĐÃ CẬP NHẬT THEO KIẾN TRÚC PHASE 0–10; chờ Human review.
-**Chiến lược dữ liệu:** Spain Electricity Consumption & Weather là dataset chính ĐÃ ĐƯỢC HUMAN CHỌN; verified data contract CHỜ PHASE 1.
-**Phase 0:** CHƯA BẮT ĐẦU; chỉ sở hữu Problem Definition và chưa có detailed specification.
-**Preliminary inspection:** Đã có planning context nhưng không phải output của Phase 0 hoặc formal Phase 1 evidence.
-**Thay đổi trong kho mã nguồn:** Chỉ cập nhật năm tài liệu Markdown theo kế hoạch được Human phê duyệt; không tải dữ liệu, không tạo notebook và không triển khai code.
+Giữ riêng `load_observed` và working `load_input`. Input/VAR training có thể dùng causal filling nếu policy được duyệt và bias/counts được ghi; imputed label không thành truth. Không tự xóa outlier có thật hoặc drop hàng giữa để giả VAR hourly. Nếu không có contiguous train domain đủ dài: dừng, trình phương án giữ block liên tục hoặc đổi policy. Fit-range khác biệt phải được báo trong comparison; downstream chỉ chạy sau approval.
 
-**Nguồn tham chiếu:** PDF đề bài Practice 4 do Human cung cấp; governance files thực tế; `PROJECT_OVERVIEW.md`; Kaggle dataset page; trang UCI và preliminary inspection của hai CSV công khai. Mọi quyết định ngoài dataset source và phase architecture vẫn là đề xuất hoặc vấn đề chờ phase owner kiểm chứng và Human phê duyệt.
+### Cụm E — Feature và model-ready inputs (Phase 5)
+
+| Stage | Input và việc cần làm | Output / owner | Tiêu chí đạt |
+|---|---|---|---|
+| E01 — Feature dictionary | Prepared + protocol; khóa tên/order/timestamp, lag/rolling/trend/target; synthetic ramp fixtures | data/features.py; feature_dictionary.md; feature tests | Đúng24observations; trend lag24 thật; mọi source timestamp≤origin; hand-check chống off-by-one |
+| E02 — Aligned inputs | E01; sequences, flat features, VAR contiguous vector; common eligibility/masks/timestamps | model_inputs.npz, origin_manifest.csv; alignment_audit.md | LSTM(N,24,4), XGB96lags+3derived=99 theo đề xuất; cùng targets/rawtruth/origins; exclusions có reason/count; Human review |
+
+E02 chỉ lưu train/validation arrays và schema/rule cho test. Không materialize full test tensors trước H01. XGB/LSTM chỉ fit samples có observed training labels; historic context có thể qua boundary khi hợp lệ. Không đổi chronology để ép shapes.
+
+### Cụm F — Baselines và thống kê (Phase 6)
+
+| Stage | Input và việc cần làm | Output / owner | Tiêu chí đạt |
+|---|---|---|---|
+| F01 — Simple baselines | E02; shared validation metrics/walk-forward; persistence yhat(t+1)=load(t), seasonal24 yhat(t+1)=load(t−23) | analysis/baselines.py; validation predictions/metrics trong run | Formula hand-check; causal history; original scale; đủ2baseline trước model phức tạp |
+| F02 — VAR | Baseline+E02; train-only ADF, d∈{0,1}, p∈1..24 bằng AIC hoặc BIC đã chọn trong config; forecast vector rồi inverse-diff/scale và lấy load | analysis/var_model.py; state/ADF/lag/diagnostics; var_findings.md | Không chọn từ test; inverse fixture đúng; report stationarity/stability/residual limitations; Human review/lock model hash |
+
+Không tự tăng d, seasonal difference hoặc thay model khi assumptions/singular matrix fail. Ghi failure evidence, trình phương án. Không thắng baseline vẫn là kết quả hợp lệ nếu protocol đúng.
+
+### Cụm G — Mô hình phi tuyến ML/DL (Phase 7–8)
+
+| Stage | Input và việc cần làm | Output / owner | Tiêu chí đạt |
+|---|---|---|---|
+| G01 — XGBoost (P7) | Finite grid max_depth/n_estimators, validation early stop; weather-vs-load-only ablation cùng origins/budget | analysis/xgboost_model.py; trials/booster/predictions; xgboost_findings.md | Budget trước fit; no shuffle; saved best_iteration khớp predictions; ablation chỉ validation; Human lock |
+| G02 — LSTM (P8) | Sequences; LSTM64 return_sequences=True → LSTM32 → Dense1; MSE/Adam, shuffle=False, early stop val_loss/restore_best_weights | analysis/lstm_model.py; model/history/seeds/metrics; lstm_findings.md | Architecture/shape đúng; no test early stop; saved checkpoint tái lập trong tolerance; overfit evidence; Human lock |
+
+Backend/version/hardware compatibility phải được duyệt trong design trước cài/fit. Finite candidates, seeds, epochs/patience/lr/batch/resource budget ghi trước chạy. Đề xuất official seed42; seed khác chỉ robustness đã duyệt, không chọn seed tốt nhất. Hết budget thì báo limitation, không âm thầm mở rộng search.
+
+### Cụm H — Final evaluation và giải thích (Phase 9)
+
+| Stage | Input và việc cần làm | Output / owner | Tiêu chí đạt |
+|---|---|---|---|
+| H01 — Test-opening/walk-forward | Human duyệt lock của2baseline+3model, preprocessor/config hashes; materialize test tại từng origin, predict trước reveal; metrics/promote | analysis/walk_forward.py; official predictions.csv, metrics.csv, evaluation_manifest.json | Không tuning/refit; đủ5models cùng origins/rawtruth; missing truth không chấm; masks/counts/hashes khớp; nonfinite forecast=fail |
+| H02 — Error analysis | Official predictions; error theo hour/day/season/peak/weather; bins train-defined; actual/predicted/residual plots | analysis/error_analysis.py; model_comparison.md và figures | Claim có artifact; không chọn lại config từ test; bug→invalidate run, trình fix scope, giữ run cũ |
+
+### Cụm I — Bàn giao và tái lập (Phase 10)
+
+| Stage | Input và việc cần làm | Output / owner | Tiêu chí đạt |
+|---|---|---|---|
+| I01 — Notebook/report | Approved P0–9 artifacts, phase-by-phase evidence, sáu câu hỏi | practice_4_end_to_end.ipynb; final_report.md | Chỉ đọc official artifacts; không fit/download/duplicate pipeline; limitations weather/window/metrics rõ |
+| I02 — Reproduction/handoff | Locks/hashes/manifests; chạy presentation từ local accepted artifacts, deterministic fixtures | README/status/file-map updates; docs/logs/reproduction.md | Clean-env commands; notebook run-all offline đọc artifacts; raw unchanged; Human nghiệm thu |
+
+I02 không tự rerun training/test. Scientific replay cần approval riêng, run ID mới và locked protocol; không dùng rerun để tuning sau test.
+
+## 4. Contract đề xuất cần khóa ở gate tương ứng
+
+Tất cả lựa chọn thiết kế phần này là **ĐỀ XUẤT**, chưa phải đã được Human phê duyệt hoặc đã kiểm chứng. Khi duyệt ghi version trong config/contract.
+
+### 4.1 Indexing, context và fairness
+
+Origin t là cuối giờ đã quan sát; `[X(t−23),…,X(t)] → load(t+1)` có24hourly rows. Trend XGB `load(t)−load(t−24)` cần25rows; giữ công thức đề. LSTM vẫn24rows/4vars; XGB có derived features theo đề. Report khác biệt information set này, không claim exact feature parity.
+
+Đề xuất mean load(t−5:t), std load(t−23:t), ddof0, tính trên train-scaled working load; flatten time-major, variable order [load,temperature,humidity,wind_speed]. Không dùng weather(t+1). E01 khóa bằng hand-check fixture.
+
+VAR d≤1,p≤24 có thể cần25rawrows cho24differences. Common warm-up đề xuất25 cho mọi model; nếu F02 đổi requirement thì quay C02/E02 xin duyệt, rebuild manifests trước dependent fits. Target timestamp quyết định split; context≤origin có thể qua boundary. Báo cả raw row ratios và sample counts sau masks.
+
+### 4.2 Validation/test và cập nhật thông tin
+
+Đề xuất rolling-origin one-step với **fixed weights, fixed train-fitted transformations**, không refit train+val trước test. Mỗi bước: history đã reveal → predict → score nếu raw target observed → reveal observation cho bước sau. Không đưa forecast thay truth vào history trong protocol chính. Weather/load được giả định có ngay cuối giờ; đây là lab availability assumption, không claim production-ready.
+
+Validation: fit train, chọn hyperparameters/early stopping từ val, cùng history semantics. Test không dùng EDA/tuning; transform test causal chỉ sau H01. B được audit toàn raw schema/missing coverage; C01 dùng timestamps/counts; không dùng held-out target distributions/correlation chọn treatment/model.
+
+Common mask: raw target observed AND đủ causal input context theo approved policy. Tất cả models phải forecast được trên cùng origin set; model failure/nonfinite **không** được silently drop để giao lại common mask mà làm H01 fail. Eligibility quyết định trước scoring, không theo errors. Missing truth/input exclusions có reason/count; zero eligible points=fail. Model-specific training exclusions công bố.
+
+### 4.3 Metrics/selection
+
+Original verified load unit: MAE=mean(abs(y−yhat)); RMSE=sqrt(mean((y−yhat)^2)); MAPE=100×mean(abs((y−yhat)/y)) trên y≠0. Báo n_scored/n_zero_excluded/n_missing_excluded/n_input_excluded. All scored y=0→MAPE=NA có lý do; không epsilon bí mật. Near-zero sensitivity báo riêng, không đổi threshold sau test.
+
+Đề xuất primary=validation RMSE; nếu abs(deltaRMSE)≤1e−6 load unit dùng MAE; vẫn hòa ưu tiên persistence→seasonal24→VAR→XGB→LSTM. Trials cùng model hòa thì ít parameters/trees/epochs hơn rồi trial_id nhỏ hơn. MAPE bổ sung. C02 khóa trước fit; report test ranking chỉ mô tả, không chọn lại configuration từ test.
+
+### 4.4 Missing và inverse transforms
+
+Raw truth/mask bất biến; D02 chỉ chọn causal max-gap/anomaly policy từ train EDA rồi Human duyệt. Không impute labels để scoring. StandardScaler fit train working four-var levels; val/test dùng cùng state. F02 lưu d-map cho từng biến; differences trên scaled levels được inverse-diff với last prepared history về scaled level rồi inverse-scale về unit gốc. d0 không cộng history. Kiểm bằng numerical fixture. Không clip predictions âm/đổi unit ngầm.
+
+## 5. Decision register
+
+| ID | Quyết định | Owner / deadline | Evidence / block |
+|---|---|---|---|
+| Q01 | Source Spain thay UCI, scope/R01–09, owners/map | A01–A02 trước B01 | Existing decision record + Human approval; UCI không đủ weather[S2] |
+| Q02 | Archive/license/units/timestamp availability | B01 trước B02 | Source manifest/unit evidence; chưa rõ→block |
+| Q03 | Dedup/proxy/timezone/DST/join | B02 trước canonical release | Audit+policy+Human; không lấy số cũ làm evidence |
+| Q04 | Split rounding/context/common eligibility rule | C01–C02 trước D01 | Toy timeline, boundary/nonoverlap tests |
+| Q05 | Update/refit/metrics/MAPE/ties và budgets | C02 trước F01 | Approved evaluation contract; không để đến test mới chọn |
+| Q06 | Missing/anomaly/max-gap/VAR contiguous domain | D02 trước E01 | Train-only EDA+causal fixtures |
+| Q07 | Exact24rows/extra trend context/order/ddof | E01 trước samples | Approved dictionary+ramp fixtures |
+| Q08 | ADF options/d-map/lag criterion/search bound | F02 design trước fit | Train diagnostics/finite candidates |
+| Q09 | XGB trials/early stop, LSTM backend/hyperparams/seeds/budget | G01/G02 design trước fit | Compatibility+approved finite trial registry |
+| Q10 | Model lock/test access/eligibility version | H01 trước test scoring | Model+config hashes/Human approval; thiếu model→block |
+
+Không ép Human đoán Q02/Q03/Q06 trước audit. Stage phải chuẩn bị evidence và alternatives cho review. Thay upstream locked contract→change request, xác định downstream invalidation, xin duyệt rebuild; không dùng mixed artifact versions.
+
+## 6. Validation và execution
+
+### 6.1 Interface dự kiến, chưa có code
+
+B01 mới tạo CLI sau approved phase design:
+
+```text
+python -m pip install -r requirements.lock.txt
+python -m pip install --no-deps -e .
+python -m pytest tests/test_ingestion.py tests/test_pipeline.py
+python -m practice_4.pipeline --stage B01 --config config/practice_4.json --run-id <unique_id>
+```
+
+Lệnh từ Practice_4 root trong env đã tạo. CLI nhận từng execution stage thuộc B01–I02 ở mục3, từ chối ID không map; A01/A02 là documentation review. Trước run xác nhận phase approval/predecessor manifest/input hashes, không tự ghi approved=true. Exact validation commands thuộc phase specification khi source đến lượt, không pretend chúng đang chạy được hôm nay.
+
+B01 pin Python/package/backend versions đã kiểm tra, dependency resolution, CPU/GPU và env commands; /stable/ docs không phải version pin. Data fixture tests không cần DL backend. Tests trọng tâm: DST/duplicate conflicts/join cardinality/split boundary/causal filling/feature offset/inverse transforms/streaming reveal/metric masks. Model smoke train-save-load-predict trên tiny train-only fixtures; không dùng test thật.
+
+### 6.2 Gate chung
+
+1. Approved current-phase specification/before-process plan, predecessor accepted, scope/file map đúng.
+2. Relevant tests/commands thành công; inspect schema/shapes/time boundaries và figures.
+3. Raw checksum trước/sau data work; git diff --check khi đổi tracked files.
+4. Log/manifest/limitations/approval references; cập nhật status/map khi file đã tạo thật.
+5. Human review trước chuyển Phase; static inspection không là model-execution evidence.
+
+Stop: rules conflict, source license/unit/schema unclear, input hash drift, causal availability violated, unapproved dependency, unexplained test fail, quality case chưa có policy, hoặc hết budget. Không đổi dataset/method/treatment âm thầm. Giữ failed run; ba materially similar failures theo repository escalation.
+
+## 7. Evidence trả lời sáu câu hỏi
+
+| Câu hỏi | Evidence | Owner |
+|---|---|---|
+| Weather nào liên hệ mạnh nhất? | Train relationships+validation ablation; predictive association không causality | D01,G01,H02 |
+| VAR thất bại khi nào? | ADF/stability/residuals/error regimes so baseline | F02,H02 |
+| XGB học gì từ weather? | Load-only vs weather validation ablation, ranking có correlation limitations | G01 |
+| LSTM học ngày/tuần? | Train profiles/held-out temporal errors; có thể kết luận chưa đủ evidence tuần | D01,G02,H02 |
+| LSTM overfit? | Train/val curves, gap/best checkpoint | G02 |
+| ML và DL khác gì? | Original-scale metrics/input structure/run time/hardware/budget/interpretability | G01–I02 |
+
+Không bắt buộc LSTM thắng hoặc học tuần. Kết luận âm tính có evidence vẫn hợp lệ.
+
+## 8. Nguồn tham khảo để lập kế hoạch
+
+Web sources mở ngày **2026-11-17**. Fixed weights, weather mean, warm-up25 và thresholds là đề xuất của plan, không phải quy định nguyên văn của sources.
+
+| ID | Nguồn | Dùng cho phần nào / giới hạn |
+|---|---|---|
+| S1 | [Đề Practice4](../../../../references/practice%204.pdf),trang1–3 | R01–R09; indexing/walk-forward có ambiguity cần contract |
+| S2 | [UCI ElectricityLoadDiagrams](https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014) | 370clients/15min; xác định mismatch dataset bốn biến theo giờ |
+| S3 | [Spain energy/weather — tác giả Kaggle](https://www.kaggle.com/datasets/nicholasjhana/energy-consumption-generation-prices-and-weather) | Link nguồn repo chọn; mở được nhưng không readable body lần này; archive/version/license/units chưa kiểm, giao B01 |
+| S4 | [pandas time series](https://pandas.pydata.org/docs/user_guide/timeseries.html) | Parsing/timezone/DST/frequency B; không tự quyết raw policy |
+| S5 | [scikit-learn pitfalls12.2](https://scikit-learn.org/stable/common_pitfalls.html#data-leakage) | Split trước learned preprocessing, train-only fit ở C/D |
+| S6 | [statsmodels VAR](https://www.statsmodels.org/stable/vector_ar.html) | Stationarity/lag/forecast/diagnostics F02; không chứng minh data này stationary |
+| S7 | [XGBoost Early Stopping](https://xgboost.readthedocs.io/en/stable/python/sklearn_estimator.html#early-stopping) | Validation eval_set/best iteration G01. Không copy random split/test-named eval_set của ví dụ docs |
+| S8 | [Keras LSTM](https://keras.io/api/layers/recurrent_layers/lstm/),[EarlyStopping](https://keras.io/api/callbacks/early_stopping/) | Stacked output/checkpoint G02; chưa pin backend/version |
+| S9 | [Forecasting: Principles and Practice,chương5](https://otexts.com/fpp3/toolbox.html) | 5.2 naive/seasonal;5.8 accuracy;5.10 rolling-origin C/F/H; links tscv/accuracy cũ redirect về đây |
+| S10 | [AGENTS](../../../../AGENTS.md),[working_rule](../../../../working_rule.md),[RULES_INDEX](../../../../.agents/RULES_INDEX.md) | Governance/approval/scope/routing |
+| S11 | [GENERAL](../../../../.agents/rules/GENERAL_RULES.md),[CODE](../../../../.agents/rules/CODE_RULES.md),[TIME_SERIES](../../../../.agents/rules/TIME_SERIES_RULES.md),[WORKFLOW](../../../../.agents/workflows/WORKFLOW.md) | Stage gates/raw integrity/chronology/baseline/evidence |
+| S12 | [PROJECT_OVERVIEW](PROJECT_OVERVIEW.md),[notebooks README](../../notebooks/README.md) | Source selection/Phase0–10/presentation-only notebook; drift mục1.1 giao A01 |
+
+## 9. Chấm độc lập tối đa ba vòng
+
+Một reviewer subagent chấm plan+map theo đề/rules; main sửa trong scope. Một vòng=reviewer chấm một revision đã lưu. Startup và main CSV checks không tính vòng; không đổi rubric để lấy điểm.
+
+- 1: rời rạc, thiếu architecture/cohesion/info.
+- 5: đủ thông tin nhưng ambiguous để thực thi.
+- 8: ổn nhưng còn flaws cần giải quyết trước thực hiện.
+- >8: đủ rõ đường đi/architecture để tiếp tục approval gates; không phải implementation approval.
+- 10: đầy đủ/nhất quán/truy vết tốt; không hứa hết rủi ro thực nghiệm.
+
+Năm tiêu chí tối đa2đ mỗi tiêu chí: coverage/source fidelity; architecture/cohesion/file ownership; dependency/I-O/acceptance; scientific correctness/leakage/evaluation; reproducibility/decision closure. Tổng1–10, có thập phân. Blocker chronology/test leakage/ownership conflict→tối đa8 cho đến khi giải quyết.
+
+Lưu điểm/findings thực nhận, revision và SHA256 plan/map trong plan_review.md. **Score>8 có thể dừng; score≤8 sửa rồi chấm lại; hết vòng3 luôn dừng**, còn issues thì báo rõ. Substantive edit sau lần chấm cuối làm điểm chỉ áp dụng revision cũ, phải công bố chưa re-review; không chạy vòng4.
+
+## 10. Acceptance của lần soạn này
+
+- Có9cụm/18stage, ánh xạ đủ Phase0–10 và R01–R09.
+- File map phủ toàn existing files và planned owners, lifecycle/dependencies/verification; không gán PLANNED thành EXISTING.
+- Sources có link/mục đích/mức kiểm; không bịa data/performance.
+- Có1–3vòng review thực tế và stop đúng rule.
+- CSV parse được; paths unique/relative; inventory coverage100%; stage IDs/dependencies không dangling; local links tồn tại hoặc mapped PLANNED.
+- Chỉ thay docs/plans/plan_overview.md, file_map.csv, plan_review.md; không triển khai source/data/tests.
+
+Change R1: roadmap theo cụm stage, thêm contracts/ownership/references/review loop. Reason: skeleton cần đường đi truy vết. Impact: chỉ planning documents, chưa data/model execution.
