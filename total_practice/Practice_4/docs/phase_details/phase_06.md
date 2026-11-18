@@ -1,6 +1,6 @@
 # Phase 6 — Baselines and VAR/VECM statistical models (F01–F02)
 
-Status **DRAFT — PENDING HUMAN REVIEW**. The Human approved Phase 5 closure and authorized this specification and before-process plan on 2026-11-18 via Director review. Execution requires separate stage authorization.
+Status **SPECIFICATION APPROVED** and F01 execution **COMPLETED**. Human approved the Phase 6 specification and before-process plan and authorized F01 on 2026-11-18 via Director review. F01 acceptance is pending Human review.
 
 The forecast target is the observed raw load at hour `t+1` in MW. F01 establishes two zero-parameter reference forecasts. F02 evaluates a four-variable statistical model against them using the same eligible validation origins and truths.
 
@@ -92,5 +92,5 @@ git diff --check
 ## 7. Approval record
 
 - E02 run `20261118_system312_e02_01`, Phase 5 RV2 schema v1 and Phase 5 completion were **Human APPROVED / COMPLETED** on 2026-11-18 via Director review.
-- Phase 6 specification and before-process plan **PENDING HUMAN APPROVAL**. Review status **PENDING HUMAN REVIEW**.
-- F01 execution and acceptance, F02 execution and model lock, and Phase 6 completion each require Human approval. H01 test opening has its own gate.
+- Phase 6 specification and before-process plan **Human APPROVED** on 2026-11-18 via Director review. F01 execution authorized.
+- F01 gate acceptance and F02 execution approval **PENDING HUMAN REVIEW**. F02 model lock, Phase 6 completion and H01 test opening retain separate gates.

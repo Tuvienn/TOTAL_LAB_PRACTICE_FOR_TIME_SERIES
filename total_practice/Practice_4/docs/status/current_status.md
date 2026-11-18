@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Status: E02, Phase 5 RV2 schema v1 and Phase 5 **APPROVED / COMPLETED** (Human, 2026-11-18 via Director review). [Phase 6 Specification Drafting](../phase_details/phase_06.md) is **IN_PROGRESS**. The draft and before-process plan are **PENDING HUMAN REVIEW**.
+Status: E02, Phase 5 RV2 schema v1 and Phase 5 **APPROVED / COMPLETED** (Human, 2026-11-18 via Director review). [Phase 6 specification and before-process plan](../phase_details/phase_06.md) **APPROVED** by Human on 2026-11-18 via Director review. Stage F01 execution is **COMPLETED**. F01 acceptance and F02 execution approval are **PENDING HUMAN REVIEW**.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -92,6 +92,12 @@ không suy diễn nguyên nhân. UCI không phải dataset chính đã chọn.
 - Independent before/after SHA256 checks matched both raw CSVs, canonical CSV, split manifest, prepared CSV and D02 scaler. All 12 manifest input and 9 output SHA256 values were verified after promotion. Raw and canonical access consisted of byte hashing only. Parsed dataset records ended at prepared row 29,802. No test tensors were created and no models were fitted.
 - Human approved the run, promoted CSV and NPZ, alignment audit, Phase 5 RV2 schema v1 and Phase 5 completion on 2026-11-18 via Director review. The Phase 5 approval record and audit header were updated after the run. The historical manifest and staged audit retain the run-time hashes and wording.
 
-## Phase 6 specification drafting
+## Phase 6 approval and F01
 
-- Human authorized the F01/F02 specification and before-process plan on 2026-11-18. [Phase 6](../phase_details/phase_06.md) is ready for Human review. F01 execution, F02 execution and H01 test opening each retain their approval gate.
+- Human approved the [Phase 6 specification and before-process plan](../phase_details/phase_06.md) and authorized F01 execution on 2026-11-18 via Director review. F01 gate acceptance, F02 execution and H01 test opening retain separate approval gates.
+
+## F01 evidence for Human review
+
+- Run `20261118_system312_f01_01` completed. [Baseline report](../results/baseline_results.md), [execution log](../logs/F01_20261118_system312_f01_01.md) and [run manifest](../../runs/20261118_system312_f01_01/manifest.json) record the evidence.
+- The targeted pytest command passed 10 tests. Prediction keys matched and metrics were recomputed within relative tolerance 1e-12. Upstream hashes matched before and after the run.
+- F01 gate acceptance and F02 execution approval are **PENDING HUMAN REVIEW**.
