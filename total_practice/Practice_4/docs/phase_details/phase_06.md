@@ -1,6 +1,6 @@
 # Phase 6 — Baselines and VAR/VECM statistical models (F01–F02)
 
-Status **SPECIFICATION APPROVED** and F01 execution **COMPLETED**. Human approved the Phase 6 specification and before-process plan and authorized F01 on 2026-11-18 via Director review. F01 acceptance is pending Human review.
+Status **SPECIFICATION APPROVED**, F01 **APPROVED / COMPLETED**, and F02 and Phase 6 **APPROVED / COMPLETED**. Human approved F02 and its VAR(24) model lock on 2026-11-18 via Director review.
 
 The forecast target is the observed raw load at hour `t+1` in MW. F01 establishes two zero-parameter reference forecasts. F02 evaluates a four-variable statistical model against them using the same eligible validation origins and truths.
 
@@ -36,6 +36,8 @@ Use only `var_train_levels` from the approved NPZ for stationarity tests, lag an
 Proposed for Human approval: lock **BIC** in the immutable run config before fitting, with `p = 1..24`, a constant and no trend in the VAR, and the diagnostic settings below. AIC requires an approved config revision before fitting. BIC penalizes increasing lag dimension more strongly and keeps the search bounded. Record the config SHA256 plus exact Python, NumPy, statsmodels and implementation versions. Validation performance does not choose the criterion, `d`, lag, rank or retry policy.
 
 ### 3.2 Stationarity, lag and cointegration
+
+Human resolved the conflicting diagnostics on 2026-11-18 via Director review. For this F02 run use ADF at 5% as the primary integration-order rule and set all four entries of the d-map to zero. This decision supersedes the conflicting-evidence stop in step 1 for the recorded diagnostics. Retain KPSS results as diagnostics. Human attributes the weather disagreement to annual seasonal variation and considers differencing potentially excessive. This proposed explanation is not established by the two tests alone.
 
 1. Use ADF with a constant, `maxlag=24`, `autolag=BIC` and KPSS with a constant and `nlags=24`, both at 5%. ADF's null is a unit root. KPSS's null is stationarity around a constant. On each column's levels, accept `d=0` when ADF rejects and KPSS does not reject. If ADF does not reject and KPSS rejects, apply the same checks to the first differences of that column within the block and accept `d=1` only if both support stationarity there. Record statistics, p-values, critical values, chosen lags, sample sizes and warnings, including bounded KPSS p-values. Stop for conflicting, unusable or unresolved evidence. Persist the four-entry `d` map.
 2. Search the 24 VAR lag orders on the transformed four-column matrix, aligning all candidate response windows to block-relative index 25 through 9,270 inclusive so every BIC compares the same response hours. Use the same deterministic terms for all candidates. Record the BIC and fit status for each `p`. Choose minimum finite BIC, with smaller `p` for exact ties. No silent candidate drops. A singular or invalid search stops for review.
@@ -93,4 +95,7 @@ git diff --check
 
 - E02 run `20261118_system312_e02_01`, Phase 5 RV2 schema v1 and Phase 5 completion were **Human APPROVED / COMPLETED** on 2026-11-18 via Director review.
 - Phase 6 specification and before-process plan **Human APPROVED** on 2026-11-18 via Director review. F01 execution authorized.
-- F01 gate acceptance and F02 execution approval **PENDING HUMAN REVIEW**. F02 model lock, Phase 6 completion and H01 test opening retain separate gates.
+- F01 run `20261118_system312_f01_01`, baseline report and both RV2 baseline model hashes **Human APPROVED / COMPLETED** on 2026-11-18 via Director review. F02 execution authorized with BIC locked before fitting.
+- Q08 conflicting ADF/KPSS results resolved by Human on 2026-11-18 via Director review. The authorized d-map is [0, 0, 0, 0] and F02 resumes under BIC.
+- F02 run `20261118_system312_f02_02`, its report, VAR(24) model lock SHA256 `0b3820731f3369f57699adaa64a7b1f4a5cbbf659c48331fc5721335572d3e26` and Phase 6 completion were **Human APPROVED / COMPLETED** on 2026-11-18 via Director review. Human accepted the model artifact as-is. Its feature order and scaler hash are not directly embedded. The F02 run manifest separately records the scaler hash.
+- Human authorized preparation of the Phase 7 specification and before-process plan. G01 execution and H01 test opening retain separate gates.

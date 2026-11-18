@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Status: E02, Phase 5 RV2 schema v1 and Phase 5 **APPROVED / COMPLETED** (Human, 2026-11-18 via Director review). [Phase 6 specification and before-process plan](../phase_details/phase_06.md) **APPROVED** by Human on 2026-11-18 via Director review. Stage F01 execution is **COMPLETED**. F01 acceptance and F02 execution approval are **PENDING HUMAN REVIEW**.
+Status: F02, the VAR(24) model lock and Phase 6 **APPROVED / COMPLETED** by Human on 2026-11-18 via Director review. Phase 7 Specification Drafting is **IN_PROGRESS** and the [draft](../phase_details/phase_07.md) is **PENDING HUMAN REVIEW**.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -100,4 +100,18 @@ không suy diễn nguyên nhân. UCI không phải dataset chính đã chọn.
 
 - Run `20261118_system312_f01_01` completed. [Baseline report](../results/baseline_results.md), [execution log](../logs/F01_20261118_system312_f01_01.md) and [run manifest](../../runs/20261118_system312_f01_01/manifest.json) record the evidence.
 - The targeted pytest command passed 10 tests. Prediction keys matched and metrics were recomputed within relative tolerance 1e-12. Upstream hashes matched before and after the run.
-- F01 gate acceptance and F02 execution approval are **PENDING HUMAN REVIEW**.
+- Human approved the F01 run, baseline report and both RV2 model hashes on 2026-11-18 via Director review and authorized F02. The F01 manifest retains the baseline report hash from before this approval edit.
+
+## F02 stationarity stop
+
+- Run 20261118_system312_f02_01 stopped under the original rule for conflicting ADF/KPSS evidence. [Diagnostics](../../runs/20261118_system312_f02_01/stationarity.json), [locked config](../../runs/20261118_system312_f02_01/config.json), and [log](../logs/F02_20261118_system312_f02_01.md) contain the evidence. Human resolved Q08 by specifying d=[0,0,0,0] on 2026-11-18 via Director review.
+- The stop was resolved by Human under Q08. F02 and Phase 6 were subsequently accepted on 2026-11-18 via Director review.
+
+## F02 evidence for Human review
+
+- Run 20261118_system312_f02_02 completed with VAR(24). [Results](../results/var_results.md), [log](../logs/F02_20261118_system312_f02_02.md), and [manifest](../../runs/20261118_system312_f02_02/manifest.json) record results and hashes. Model SHA256 0b3820731f3369f57699adaa64a7b1f4a5cbbf659c48331fc5721335572d3e26.
+- Targeted tests passed 14 cases. Forecast keys and truths match F01. Residual whiteness was rejected at 5%. Human approved F02, the VAR(24) model lock and Phase 6 completion on 2026-11-18 via Director review.
+
+## Phase 7 specification drafting
+
+- Human authorized G01 specification and before-process planning. [Phase 7](../phase_details/phase_07.md) is pending Human review. F02 model artifact was accepted as-is, with feature-order and scaler-hash direct embedding recorded as a limitation. The F02 manifest and run-time report hash remain historical evidence.

@@ -1,0 +1,102 @@
+{
+  "load": {
+    "adf_stat": -16.264599393564765,
+    "adf_p": 3.5376486004892143e-29,
+    "adf_lags": 24,
+    "adf_nobs": 9246,
+    "adf_critical": {
+      "1%": -3.431057453646652,
+      "5%": -2.8618526496210386,
+      "10%": -2.5669364183221988
+    },
+    "adf_icbest": -8787.810913283494,
+    "kpss_stat": 0.330654450591906,
+    "kpss_p": 0.1,
+    "kpss_lags": 24,
+    "kpss_critical": {
+      "10%": 0.347,
+      "5%": 0.463,
+      "2.5%": 0.574,
+      "1%": 0.739
+    },
+    "warnings": [
+      "The test statistic is outside of the range of p-values available in the\nlook-up table. The actual p-value is greater than the p-value returned.\n"
+    ],
+    "decision": "d=0"
+  },
+  "temperature": {
+    "adf_stat": -3.0186686036812107,
+    "adf_p": 0.03318738644556592,
+    "adf_lags": 24,
+    "adf_nobs": 9246,
+    "adf_critical": {
+      "1%": -3.431057453646652,
+      "5%": -2.8618526496210386,
+      "10%": -2.5669364183221988
+    },
+    "adf_icbest": -22990.20429761585,
+    "kpss_stat": 23.534859611538412,
+    "kpss_p": 0.01,
+    "kpss_lags": 24,
+    "kpss_critical": {
+      "10%": 0.347,
+      "5%": 0.463,
+      "2.5%": 0.574,
+      "1%": 0.739
+    },
+    "warnings": [
+      "The test statistic is outside of the range of p-values available in the\nlook-up table. The actual p-value is smaller than the p-value returned.\n"
+    ],
+    "decision": "unresolved"
+  },
+  "humidity": {
+    "adf_stat": -4.242871587950168,
+    "adf_p": 0.0005570423092485917,
+    "adf_lags": 24,
+    "adf_nobs": 9246,
+    "adf_critical": {
+      "1%": -3.431057453646652,
+      "5%": -2.8618526496210386,
+      "10%": -2.5669364183221988
+    },
+    "adf_icbest": -1476.0928636349886,
+    "kpss_stat": 20.604151976162818,
+    "kpss_p": 0.01,
+    "kpss_lags": 24,
+    "kpss_critical": {
+      "10%": 0.347,
+      "5%": 0.463,
+      "2.5%": 0.574,
+      "1%": 0.739
+    },
+    "warnings": [
+      "The test statistic is outside of the range of p-values available in the\nlook-up table. The actual p-value is smaller than the p-value returned.\n"
+    ],
+    "decision": "unresolved"
+  },
+  "wind_speed": {
+    "adf_stat": -7.8864018117241645,
+    "adf_p": 4.557444755770706e-12,
+    "adf_lags": 24,
+    "adf_nobs": 9246,
+    "adf_critical": {
+      "1%": -3.431057453646652,
+      "5%": -2.8618526496210386,
+      "10%": -2.5669364183221988
+    },
+    "adf_icbest": 12859.439587377616,
+    "kpss_stat": 1.0904483689974422,
+    "kpss_p": 0.01,
+    "kpss_lags": 24,
+    "kpss_critical": {
+      "10%": 0.347,
+      "5%": 0.463,
+      "2.5%": 0.574,
+      "1%": 0.739
+    },
+    "warnings": [
+      "The test statistic is outside of the range of p-values available in the\nlook-up table. The actual p-value is smaller than the p-value returned.\n"
+    ],
+    "decision": "unresolved"
+  }
+}

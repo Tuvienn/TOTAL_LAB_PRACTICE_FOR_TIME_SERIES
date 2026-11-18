@@ -1,6 +1,6 @@
 # F01 Baseline Results
 
-Run `20261118_system312_f01_01` · **PENDING HUMAN REVIEW**.
+Run `20261118_system312_f01_01` · **APPROVED / COMPLETED** by Human on 2026-11-18 via Director review. The F01 manifest retains the report hash from execution before this approval update.
 
 Warm-up: 25 target rows. MAPE is a percentage computed from original MW truths.
 
