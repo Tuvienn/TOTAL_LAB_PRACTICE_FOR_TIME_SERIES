@@ -1,0 +1,13 @@
+{
+  "run_id": "P8_error_interpretation_20261025_112108_e89bbd23",
+  "execution_identity": "e89bbd23",
+  "status": "COMPLETED",
+  "completed_tasks": [
+    "error_analysis",
+    "feature_importance",
+    "figures",
+    "official_promotion"
+  ],
+  "official_outputs_promoted": true,
+  "binary_model_persisted": false
+}

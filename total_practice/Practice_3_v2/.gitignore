@@ -8,5 +8,4 @@ __pycache__/
 .matplotlib/
 .matplotlib-cache/
 .ipython/
-runs/
 build/

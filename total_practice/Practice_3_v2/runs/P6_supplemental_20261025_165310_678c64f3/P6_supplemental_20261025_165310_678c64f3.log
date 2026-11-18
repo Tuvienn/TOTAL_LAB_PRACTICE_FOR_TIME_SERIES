@@ -1,0 +1,73 @@
+2026-10-25 16:53:10 | INFO | Phase 6 supplemental run initialized.
+2026-10-25 16:53:10 | INFO | Phase 6 supplemental execution started.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 1/5 started.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 1/5 completed: MAE=143.864505 RMSE=193.978276 time=0.030s.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 2/5 started.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 2/5 completed: MAE=138.914257 RMSE=187.214327 time=0.022s.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 3/5 started.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 3/5 completed: MAE=135.910556 RMSE=182.584401 time=0.024s.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 4/5 started.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 4/5 completed: MAE=135.673230 RMSE=192.259877 time=0.033s.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 5/5 started.
+2026-10-25 16:53:10 | INFO | Linear Regression fold 5/5 completed: MAE=129.445892 RMSE=174.442328 time=0.032s.
+2026-10-25 16:53:10 | INFO | Lag p=1 fold 1/5 started.
+2026-10-25 16:53:11 | INFO | Lag p=1 fold 1/5 completed: MAE=418.684755 RMSE=541.696451 time=1.160s.
+2026-10-25 16:53:11 | INFO | Lag p=1 fold 2/5 started.
+2026-10-25 16:53:12 | INFO | Lag p=1 fold 2/5 completed: MAE=421.364085 RMSE=540.082037 time=1.133s.
+2026-10-25 16:53:12 | INFO | Lag p=1 fold 3/5 started.
+2026-10-25 16:53:14 | INFO | Lag p=1 fold 3/5 completed: MAE=415.040360 RMSE=533.436866 time=1.139s.
+2026-10-25 16:53:14 | INFO | Lag p=1 fold 4/5 started.
+2026-10-25 16:53:15 | INFO | Lag p=1 fold 4/5 completed: MAE=420.738651 RMSE=540.525657 time=1.151s.
+2026-10-25 16:53:15 | INFO | Lag p=1 fold 5/5 started.
+2026-10-25 16:53:16 | INFO | Lag p=1 fold 5/5 completed: MAE=414.293545 RMSE=531.335158 time=1.171s.
+2026-10-25 16:53:16 | INFO | Lag p=6 fold 1/5 started.
+2026-10-25 16:53:17 | INFO | Lag p=6 fold 1/5 completed: MAE=186.587378 RMSE=259.557508 time=1.184s.
+2026-10-25 16:53:17 | INFO | Lag p=6 fold 2/5 started.
+2026-10-25 16:53:18 | INFO | Lag p=6 fold 2/5 completed: MAE=188.724554 RMSE=261.888763 time=1.213s.
+2026-10-25 16:53:18 | INFO | Lag p=6 fold 3/5 started.
+2026-10-25 16:53:19 | INFO | Lag p=6 fold 3/5 completed: MAE=175.851323 RMSE=245.682447 time=1.237s.
+2026-10-25 16:53:19 | INFO | Lag p=6 fold 4/5 started.
+2026-10-25 16:53:21 | INFO | Lag p=6 fold 4/5 completed: MAE=183.681278 RMSE=260.340167 time=1.242s.
+2026-10-25 16:53:21 | INFO | Lag p=6 fold 5/5 started.
+2026-10-25 16:53:22 | INFO | Lag p=6 fold 5/5 completed: MAE=172.555253 RMSE=238.443643 time=1.255s.
+2026-10-25 16:53:22 | INFO | Lag p=12 fold 1/5 started.
+2026-10-25 16:53:23 | INFO | Lag p=12 fold 1/5 completed: MAE=167.318209 RMSE=231.139951 time=1.274s.
+2026-10-25 16:53:23 | INFO | Lag p=12 fold 2/5 started.
+2026-10-25 16:53:25 | INFO | Lag p=12 fold 2/5 completed: MAE=174.650891 RMSE=242.465724 time=1.283s.
+2026-10-25 16:53:25 | INFO | Lag p=12 fold 3/5 started.
+2026-10-25 16:53:26 | INFO | Lag p=12 fold 3/5 completed: MAE=158.797185 RMSE=220.745481 time=1.301s.
+2026-10-25 16:53:26 | INFO | Lag p=12 fold 4/5 started.
+2026-10-25 16:53:27 | INFO | Lag p=12 fold 4/5 completed: MAE=167.194831 RMSE=236.713711 time=1.329s.
+2026-10-25 16:53:27 | INFO | Lag p=12 fold 5/5 started.
+2026-10-25 16:53:29 | INFO | Lag p=12 fold 5/5 completed: MAE=153.924332 RMSE=212.550550 time=1.373s.
+2026-10-25 16:53:29 | INFO | Lag p=24 fold 1/5 started.
+2026-10-25 16:53:30 | INFO | Lag p=24 fold 1/5 completed: MAE=138.440217 RMSE=187.738018 time=1.490s.
+2026-10-25 16:53:30 | INFO | Lag p=24 fold 2/5 started.
+2026-10-25 16:53:32 | INFO | Lag p=24 fold 2/5 completed: MAE=142.910831 RMSE=195.120144 time=1.607s.
+2026-10-25 16:53:32 | INFO | Lag p=24 fold 3/5 started.
+2026-10-25 16:53:33 | INFO | Lag p=24 fold 3/5 completed: MAE=129.981910 RMSE=175.149529 time=1.532s.
+2026-10-25 16:53:33 | INFO | Lag p=24 fold 4/5 started.
+2026-10-25 16:53:35 | INFO | Lag p=24 fold 4/5 completed: MAE=137.646159 RMSE=192.251042 time=1.602s.
+2026-10-25 16:53:35 | INFO | Lag p=24 fold 5/5 started.
+2026-10-25 16:53:36 | INFO | Lag p=24 fold 5/5 completed: MAE=129.552878 RMSE=175.077818 time=1.631s.
+2026-10-25 16:53:36 | INFO | Lag p=48 fold 1/5 started.
+2026-10-25 16:53:38 | INFO | Lag p=48 fold 1/5 completed: MAE=136.523284 RMSE=181.842098 time=2.045s.
+2026-10-25 16:53:38 | INFO | Lag p=48 fold 2/5 started.
+2026-10-25 16:53:40 | INFO | Lag p=48 fold 2/5 completed: MAE=136.832968 RMSE=185.347099 time=1.982s.
+2026-10-25 16:53:40 | INFO | Lag p=48 fold 3/5 started.
+2026-10-25 16:53:43 | INFO | Lag p=48 fold 3/5 completed: MAE=127.994157 RMSE=168.263935 time=2.073s.
+2026-10-25 16:53:43 | INFO | Lag p=48 fold 4/5 started.
+2026-10-25 16:53:45 | INFO | Lag p=48 fold 4/5 completed: MAE=134.679778 RMSE=184.997905 time=2.152s.
+2026-10-25 16:53:45 | INFO | Lag p=48 fold 5/5 started.
+2026-10-25 16:53:47 | INFO | Lag p=48 fold 5/5 completed: MAE=124.752467 RMSE=165.005953 time=2.195s.
+2026-10-25 16:53:47 | INFO | Lag p=168 fold 1/5 started.
+2026-10-25 16:53:51 | INFO | Lag p=168 fold 1/5 completed: MAE=139.069939 RMSE=183.953564 time=4.513s.
+2026-10-25 16:53:51 | INFO | Lag p=168 fold 2/5 started.
+2026-10-25 16:53:56 | INFO | Lag p=168 fold 2/5 completed: MAE=141.666093 RMSE=188.363162 time=4.667s.
+2026-10-25 16:53:56 | INFO | Lag p=168 fold 3/5 started.
+2026-10-25 16:54:01 | INFO | Lag p=168 fold 3/5 completed: MAE=132.931563 RMSE=176.751165 time=4.836s.
+2026-10-25 16:54:01 | INFO | Lag p=168 fold 4/5 started.
+2026-10-25 16:54:06 | INFO | Lag p=168 fold 4/5 completed: MAE=136.873615 RMSE=185.858048 time=5.142s.
+2026-10-25 16:54:06 | INFO | Lag p=168 fold 5/5 started.
+2026-10-25 16:54:11 | INFO | Lag p=168 fold 5/5 completed: MAE=127.560165 RMSE=167.262521 time=5.239s.
+2026-10-25 16:54:12 | INFO | Phase 6 supplemental execution completed.
