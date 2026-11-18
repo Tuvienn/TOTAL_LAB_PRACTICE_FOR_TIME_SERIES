@@ -7,7 +7,7 @@ Model: SARIMA(0,2,1)(0,1,1,12)
 Dep. Variable:                              value   No. Observations:                  163
 Model:             SARIMAX(1, 2, 1)x(0, 1, 1, 12)   Log Likelihood                -126.649
 Date:                            Wed, 18 Nov 2026   AIC                            261.298
-Time:                                    03:58:21   BIC                            272.919
+Time:                                    23:13:48   BIC                            272.919
 Sample:                                07-01-1991   HQIC                           266.020
                                      - 01-01-2005                                         
 Covariance Type:                              opg                                         
