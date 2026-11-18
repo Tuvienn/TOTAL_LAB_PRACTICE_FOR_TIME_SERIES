@@ -192,14 +192,23 @@ def predecessor_predictions(expected):
     return result
 
 
-def run(run_id, config_path):
+def run(run_id, config_path, replay=False):
+    import re
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
+        raise ValueError("Invalid run ID")
+    if replay and (ROOT / "runs" / run_id).exists():
+        raise FileExistsError("Replay output collision")
     config_path = Path(config_path).resolve()
-    if run_id != RUN_ID or config_path != ROOT / "runs" / run_id / "config.json":
+    if not replay and (run_id != RUN_ID or config_path != ROOT / "runs" / run_id / "config.json"):
         raise ValueError("Unexpected G02 run or config path")
     config = json.loads(config_path.read_bytes())
     verify(config, config_path)
     if config["feature_order"] != FEATURE_ORDER or config["shuffle"] is not False:
         raise ValueError("Feature order or shuffle mismatch")
+    run_dir = ROOT / "runs" / run_id
+    if replay:
+        run_dir.mkdir(exist_ok=False)
+        (run_dir / "config.json").write_bytes(config_path.read_bytes())
     tf, keras = runtime(config)
     scaler = json.loads((ROOT / SCALER).read_bytes())
     if [f"{name}_scaled" for name in scaler["feature_order"]] != FEATURE_ORDER:
@@ -222,9 +231,9 @@ def run(run_id, config_path):
         for row in rows if row["split"] == "validation"
     ], columns=KEYS)
     comparisons = predecessor_predictions(expected)
-    artifacts = config_path.parent / "artifacts"
-    report = ROOT / "docs/results/lstm_findings.md"
-    log = ROOT / "docs/logs" / f"G02_{run_id}.md"
+    artifacts = run_dir / "artifacts"
+    report = artifacts / "lstm_findings.md" if replay else ROOT / "docs/results/lstm_findings.md"
+    log = artifacts / "execution.md" if replay else ROOT / "docs/logs" / f"G02_{run_id}.md"
     if report.exists() or log.exists():
         raise FileExistsError("G02 report/log collision")
     artifacts.mkdir()
@@ -285,7 +294,7 @@ def run(run_id, config_path):
         "counts": counts, "versions": config["versions"], "reload_max_abs_mw": parity,
         "outputs": [{"path": p.relative_to(ROOT).as_posix(), "sha256": sha(p)} for p in paths],
     }
-    save_json(config_path.parent / "manifest.json", manifest)
+    save_json(run_dir / "manifest.json", manifest)
     print(json.dumps({"selected": trial_id, "checkpoint_sha256": metadata["checkpoint_sha256"],
                       "reload_max_abs_mw": parity}, indent=2), flush=True)
 
@@ -458,8 +467,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--config", required=True)
+    parser.add_argument("--replay", action="store_true")
     args = parser.parse_args()
-    run(args.run_id, args.config)
+    run(args.run_id, args.config, args.replay)
 
 
 if __name__ == "__main__":

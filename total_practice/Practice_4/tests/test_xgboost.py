@@ -41,3 +41,35 @@ def test_iteration_metadata_and_reload():
     assert meta["feature_order"] == ["lag00_load"]
     assert meta["scaler_sha256"] == "scaler"
     assert meta["tree_count"] == best + 1
+
+
+def test_train_monitoring_preserves_validation_early_stopping():
+    rng = np.random.default_rng(42)
+    x = rng.normal(size=(128, 5))
+    y = 3 * x[:, 0] + x[:, 1] + rng.normal(size=128)
+    train_x, valid_x = x[:96], x[96:]
+    train_y, valid_y = y[:96], y[96:]
+    params = dict(n_estimators=100, max_depth=3, learning_rate=0.1,
+                  early_stopping_rounds=8, random_state=42, n_jobs=1,
+                  eval_metric="rmse")
+    validation_only = xgb.XGBRegressor(**params)
+    both = xgb.XGBRegressor(**params)
+    validation_only.fit(train_x, train_y, eval_set=[(valid_x, valid_y)], verbose=False)
+    both.fit(train_x, train_y, eval_set=[(train_x, train_y), (valid_x, valid_y)], verbose=False)
+    assert validation_only.best_iteration == both.best_iteration
+    np.testing.assert_array_equal(validation_only.predict(valid_x), both.predict(valid_x))
+    np.testing.assert_array_equal(validation_only.evals_result()["validation_0"]["rmse"],
+                                  both.evals_result()["validation_1"]["rmse"])
+
+def test_replay_rejects_collision_before_reading_config():
+    import pytest
+    from practice_4.models.xgboost_model import run
+    with pytest.raises(FileExistsError):
+        run("20261118_system312_g01_01", "missing.json", replay=True)
+
+
+def test_replay_rejects_wrong_locked_config():
+    import pytest
+    from practice_4.models.xgboost_model import ROOT, run
+    with pytest.raises(ValueError, match="config mismatch"):
+        run("p85_invalid_config_xgb", ROOT / "runs/20261118_system312_f02_02/config.json", replay=True)

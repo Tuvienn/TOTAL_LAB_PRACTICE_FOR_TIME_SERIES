@@ -141,3 +141,13 @@ def test_metadata_and_weight_reload(config, backend):
             file.unlink()
         directory.rmdir()
 
+
+def test_replay_rejects_collision_before_reading_config():
+    with pytest.raises(FileExistsError):
+        lstm.run("20261118_system312_g02_01", "missing.json", replay=True)
+
+
+def test_replay_rejects_wrong_locked_config():
+    with pytest.raises(ValueError, match="config SHA256 mismatch"):
+        lstm.run("p85_invalid_config_lstm",
+                 lstm.ROOT / "runs/20261118_system312_f02_02/config.json", replay=True)

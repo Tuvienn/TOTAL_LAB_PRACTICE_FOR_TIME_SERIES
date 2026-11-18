@@ -52,10 +52,12 @@ def validate_stability(coefficients):
     return eigenvalues
 
 
-def run(run_id, config_path, baseline_run_id):
+def run(run_id, config_path, baseline_run_id, replay=False):
     import re
     if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
         raise ValueError("Invalid run ID")
+    if replay and (ROOT / "runs" / run_id).exists():
+        raise FileExistsError("Replay output collision")
     if platform.python_version_tuple()[:2] != ("3", "12") or statsmodels.__version__ != "0.14.6" or int(pd.__version__.split(".")[0]) >= 3:
         raise ValueError("Environment mismatch")
     config_path = Path(config_path)
@@ -76,8 +78,8 @@ def run(run_id, config_path, baseline_run_id):
     if sha(DIAGNOSTICS) != "d54b19f6aea2bc842207b7780cb4084a070eff5ba4f799730386b623f46228e7":
         raise ValueError("Stationarity diagnostics mismatch")
     run_dir = ROOT / "runs" / run_id
-    report = ROOT / "docs/results/var_results.md"
-    log = ROOT / "docs/logs" / f"F02_{run_id}.md"
+    report = run_dir / "artifacts/var_results.md" if replay else ROOT / "docs/results/var_results.md"
+    log = run_dir / "artifacts/execution.md" if replay else ROOT / "docs/logs" / f"F02_{run_id}.md"
     if run_dir.exists() or report.exists() or log.exists():
         raise FileExistsError("F02 output collision")
     with np.load(ROOT / INPUTS, allow_pickle=False) as data:
@@ -167,8 +169,9 @@ def main():
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--config", required=True)
     parser.add_argument("--baseline-run-id", required=True)
+    parser.add_argument("--replay", action="store_true")
     args = parser.parse_args()
-    run(args.run_id, args.config, args.baseline_run_id)
+    run(args.run_id, args.config, args.baseline_run_id, args.replay)
 
 
 if __name__ == "__main__":

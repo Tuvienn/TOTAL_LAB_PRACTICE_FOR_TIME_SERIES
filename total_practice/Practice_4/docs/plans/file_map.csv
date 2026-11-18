@@ -187,3 +187,5 @@
 "F186","outputs/figures/actual_vs_predicted.png","FILE","PLANNED","H02","diagnostic evidence","UTC comparison on common eligible targets","docs/phase_details/phase_09.md","H02/I01","Pending Human approval"
 "F187","outputs/figures/residual_distributions.png","FILE","PLANNED","H02","diagnostic evidence","Common-sample residual distributions in MW","docs/phase_details/phase_09.md","H02/I01","Pending Human approval"
 "F188","outputs/figures/grouped_error_profiles.png","FILE","PLANNED","H02","diagnostic evidence","Madrid calendar and fixed train-defined error groups","docs/phase_details/phase_09.md","H02/I01","Pending Human approval"
+"F189","docs/phase_details/phase_08_5.md","FILE","EXISTING","P85","phase design","Authorized scientific replay plan","docs/phase_details/phase_06.md;docs/phase_details/phase_07.md;docs/phase_details/phase_08.md","Human review","Replays completed; PENDING HUMAN REVIEW"
+"F190","docs/logs/training_evidence/<batch_id>/","FAMILY","EXISTING","P85","training evidence","Separate model logs and evidence index","docs/phase_details/phase_08_5.md","Human review","Seven logs and parity index complete; PENDING HUMAN REVIEW"

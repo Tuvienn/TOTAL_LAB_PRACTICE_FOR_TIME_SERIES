@@ -44,3 +44,8 @@ def test_target_hour_changes_cannot_change_forecast():
     changed = forecasts(levels[:24][None], levels[:24].reshape(1, 96), 20, 2)
     for name in baseline:
         np.testing.assert_array_equal(baseline[name], changed[name])
+
+def test_replay_rejects_existing_run():
+    from practice_4.models.baselines import run
+    with pytest.raises(FileExistsError):
+        run("20261118_system312_f01_01", replay=True)

@@ -118,9 +118,11 @@ def align(root, target_rows, truths):
     return eligible, counts
 
 
-def run(run_id):
+def run(run_id, replay=False):
     if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
         raise ValueError("Invalid run ID")
+    if replay and (ROOT / "runs" / run_id).exists():
+        raise FileExistsError("Replay output collision")
     if platform.python_version_tuple()[:2] != ("3", "12"):
         raise ValueError("Python 3.12 required")
     approval = (ROOT / "docs/phase_details/phase_06.md").read_text(encoding="utf-8")
@@ -128,8 +130,8 @@ def run(run_id):
         raise ValueError("F01 approval missing")
     before = verify_lineage(ROOT)
     run_dir = ROOT / "runs" / run_id
-    report = ROOT / "docs/results/baseline_results.md"
-    log = ROOT / "docs/logs" / f"F01_{run_id}.md"
+    report = run_dir / "artifacts/baseline_results.md" if replay else ROOT / "docs/results/baseline_results.md"
+    log = run_dir / "artifacts/execution.md" if replay else ROOT / "docs/logs" / f"F01_{run_id}.md"
     if run_dir.exists() or report.exists() or log.exists():
         raise FileExistsError("Run or output already exists")
     scaler = json.loads((ROOT / SCALER).read_text(encoding="utf-8"))
@@ -141,7 +143,7 @@ def run(run_id):
         rows, counts = align(ROOT, targets, truths)
     if not np.isfinite(truths).all() or any(not np.isfinite(v).all() for v in predicted.values()):
         raise ValueError("Nonfinite truth or prediction")
-    configs = model_configs(before[SCALER], sha(Path(__file__)))
+    configs = json.loads((ROOT / "runs/20261118_system312_f01_01/config.json").read_bytes()) if replay else model_configs(before[SCALER], sha(Path(__file__)))
     hashes = {name: hashlib.sha256(canonical(config)).hexdigest() for name, config in configs.items()}
     metrics = {}
     for name, values in predicted.items():
@@ -190,8 +192,9 @@ def run(run_id):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-id", required=True)
+    parser.add_argument("--replay", action="store_true")
     args = parser.parse_args()
-    run(args.run_id)
+    run(args.run_id, args.replay)
 
 
 if __name__ == "__main__":

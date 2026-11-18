@@ -48,9 +48,14 @@ def verify(config):
         raise ValueError("Version mismatch")
 
 
-def run(run_id, config_path):
+def run(run_id, config_path, replay=False):
+    import re
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
+        raise ValueError("Invalid run ID")
+    if replay and (ROOT / "runs" / run_id).exists():
+        raise FileExistsError("Replay output collision")
     config_path = Path(config_path).resolve()
-    if run_id != RUN_ID or sha(config_path) != CONFIG_HASH:
+    if (not replay and run_id != RUN_ID) or sha(config_path) != CONFIG_HASH:
         raise ValueError("Run ID or config mismatch")
     config = json.loads(config_path.read_text(encoding="utf-8"))
     verify(config)
@@ -73,7 +78,11 @@ def run(run_id, config_path):
     valid = ~train
     if (int(train.sum()), int(valid.sum())) != (24435, 5257):
         raise ValueError("Eligibility mismatch")
-    artifacts = ROOT / "runs" / run_id / "artifacts"
+    run_dir = ROOT / "runs" / run_id
+    if replay:
+        run_dir.mkdir(exist_ok=False)
+        (run_dir / "config.json").write_bytes(config_path.read_bytes())
+    artifacts = run_dir / "artifacts"
     artifacts.mkdir(exist_ok=False)
     trials = []
     models = {}
@@ -86,7 +95,14 @@ def run(run_id, config_path):
                 started = time.monotonic()
                 with warnings.catch_warnings(record=True) as caught:
                     warnings.simplefilter("always")
-                    model.fit(selected[train], truth[train], eval_set=[(selected[valid], truth[valid])], verbose=False)
+                    evaluations = [(selected[train], truth[train]), (selected[valid], truth[valid])] if replay else [(selected[valid], truth[valid])]
+                    model.fit(selected[train], truth[train], eval_set=evaluations, verbose=replay)
+                if replay:
+                    history = model.evals_result()
+                    with (artifacts / f"{trial_id}_rounds.csv").open("x", encoding="utf-8", newline="") as stream:
+                        writer = csv.writer(stream, lineterminator="\n")
+                        writer.writerow(["round", "train_rmse", "validation_rmse"])
+                        writer.writerows((i + 1, a, b) for i, (a, b) in enumerate(zip(history["validation_0"]["rmse"], history["validation_1"]["rmse"], strict=True)))
                 best = int(model.best_iteration)
                 if best < 0 or best >= estimators:
                     raise ValueError("Invalid early stopping state")
@@ -144,8 +160,8 @@ def run(run_id, config_path):
     verify(config)
     if sha(config_path) != CONFIG_HASH:
         raise ValueError("Config changed")
-    report = ROOT / "docs/results/xgboost_findings.md"
-    log = ROOT / "docs/logs" / f"G01_{run_id}.md"
+    report = artifacts / "xgboost_findings.md" if replay else ROOT / "docs/results/xgboost_findings.md"
+    log = artifacts / "execution.md" if replay else ROOT / "docs/logs" / f"G01_{run_id}.md"
     if report.exists() or log.exists():
         raise FileExistsError("Report collision")
     lines = [f"# G01 XGBoost findings\n\nRun `{run_id}`. **PENDING HUMAN REVIEW**.\n", "## Trials\n", "| Subset | Trial | Trees | MAE MW | RMSE MW | MAPE % |", "|---|---|---:|---:|---:|---:|"]
@@ -171,8 +187,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--config", required=True)
+    parser.add_argument("--replay", action="store_true")
     args = parser.parse_args()
-    run(args.run_id, args.config)
+    run(args.run_id, args.config, args.replay)
 
 
 if __name__ == "__main__":

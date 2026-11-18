@@ -1,0 +1,208 @@
+Replay: 20261118_system312_p85_f02_01
+Accepted F02_01 ADF/KPSS diagnostics, copied, not recomputed:
+{
+  "load": {
+    "adf_stat": -16.264599393564765,
+    "adf_p": 3.5376486004892143e-29,
+    "adf_lags": 24,
+    "adf_nobs": 9246,
+    "adf_critical": {
+      "1%": -3.431057453646652,
+      "5%": -2.8618526496210386,
+      "10%": -2.5669364183221988
+    },
+    "adf_icbest": -8787.810913283494,
+    "kpss_stat": 0.330654450591906,
+    "kpss_p": 0.1,
+    "kpss_lags": 24,
+    "kpss_critical": {
+      "10%": 0.347,
+      "5%": 0.463,
+      "2.5%": 0.574,
+      "1%": 0.739
+    },
+    "warnings": [
+      "The test statistic is outside of the range of p-values available in the\nlook-up table. The actual p-value is greater than the p-value returned.\n"
+    ],
+    "decision": "d=0"
+  },
+  "temperature": {
+    "adf_stat": -3.0186686036812107,
+    "adf_p": 0.03318738644556592,
+    "adf_lags": 24,
+    "adf_nobs": 9246,
+    "adf_critical": {
+      "1%": -3.431057453646652,
+      "5%": -2.8618526496210386,
+      "10%": -2.5669364183221988
+    },
+    "adf_icbest": -22990.20429761585,
+    "kpss_stat": 23.534859611538412,
+    "kpss_p": 0.01,
+    "kpss_lags": 24,
+    "kpss_critical": {
+      "10%": 0.347,
+      "5%": 0.463,
+      "2.5%": 0.574,
+      "1%": 0.739
+    },
+    "warnings": [
+      "The test statistic is outside of the range of p-values available in the\nlook-up table. The actual p-value is smaller than the p-value returned.\n"
+    ],
+    "decision": "unresolved"
+  },
+  "humidity": {
+    "adf_stat": -4.242871587950168,
+    "adf_p": 0.0005570423092485917,
+    "adf_lags": 24,
+    "adf_nobs": 9246,
+    "adf_critical": {
+      "1%": -3.431057453646652,
+      "5%": -2.8618526496210386,
+      "10%": -2.5669364183221988
+    },
+    "adf_icbest": -1476.0928636349886,
+    "kpss_stat": 20.604151976162818,
+    "kpss_p": 0.01,
+    "kpss_lags": 24,
+    "kpss_critical": {
+      "10%": 0.347,
+      "5%": 0.463,
+      "2.5%": 0.574,
+      "1%": 0.739
+    },
+    "warnings": [
+      "The test statistic is outside of the range of p-values available in the\nlook-up table. The actual p-value is smaller than the p-value returned.\n"
+    ],
+    "decision": "unresolved"
+  },
+  "wind_speed": {
+    "adf_stat": -7.8864018117241645,
+    "adf_p": 4.557444755770706e-12,
+    "adf_lags": 24,
+    "adf_nobs": 9246,
+    "adf_critical": {
+      "1%": -3.431057453646652,
+      "5%": -2.8618526496210386,
+      "10%": -2.5669364183221988
+    },
+    "adf_icbest": 12859.439587377616,
+    "kpss_stat": 1.0904483689974422,
+    "kpss_p": 0.01,
+    "kpss_lags": 24,
+    "kpss_critical": {
+      "10%": 0.347,
+      "5%": 0.463,
+      "2.5%": 0.574,
+      "1%": 0.739
+    },
+    "warnings": [
+      "The test statistic is outside of the range of p-values available in the\nlook-up table. The actual p-value is smaller than the p-value returned.\n"
+    ],
+    "decision": "unresolved"
+  }
+}
+Recomputed 24 lag candidates:
+p,bic,status,response_start,response_end
+1,-10.94712173072225,completed,25,9270
+2,-12.525018415459378,completed,25,9270
+3,-12.632259533729984,completed,25,9270
+4,-12.714881816823162,completed,25,9270
+5,-12.776616352805062,completed,25,9270
+6,-12.808518188906492,completed,25,9270
+7,-12.85871936941517,completed,25,9270
+8,-12.87684713086759,completed,25,9270
+9,-12.893154323299223,completed,25,9270
+10,-12.980843289684795,completed,25,9270
+11,-13.014873545217313,completed,25,9270
+12,-13.089096199131072,completed,25,9270
+13,-13.212480199021416,completed,25,9270
+14,-13.22203437555849,completed,25,9270
+15,-13.23381369181189,completed,25,9270
+16,-13.301394657113356,completed,25,9270
+17,-13.302432172378325,completed,25,9270
+18,-13.304701129339474,completed,25,9270
+19,-13.334821795891573,completed,25,9270
+20,-13.357568597415245,completed,25,9270
+21,-13.380499971486985,completed,25,9270
+22,-13.387800221200871,completed,25,9270
+23,-13.380725356293066,completed,25,9270
+24,-13.458498791827054,completed,25,9270
+
+Companion eigenvalue moduli: [0.9754284701212498, 0.9754284701212498, 0.9641794983721955, 0.9641794983721955, 0.9364831307836682, 0.9364831307836682, 0.9948752146023512, 0.9948752146023512, 0.956304374381796, 0.956304374381796, 0.9228726338022416, 0.9228726338022416, 0.8922442656258363, 0.8922442656258363, 0.8757155582518719, 0.8757155582518719, 0.9441876867739766, 0.9441876867739766, 0.8746229801557361, 0.8746229801557361, 0.8968545606791308, 0.8968545606791308, 0.924126224385943, 0.924126224385943, 0.9010503772213424, 0.9010503772213424, 0.8949877348837523, 0.8949877348837523, 0.9982765350391976, 0.9982765350391976, 0.8683504555263646, 0.8683504555263646, 0.9442316425939005, 0.9442316425939005, 0.9648411763386583, 0.9648411763386583, 0.945440449023056, 0.945440449023056, 0.9426420168688214, 0.9426420168688214, 0.9367804003085016, 0.9367804003085016, 0.9476376223350178, 0.9476376223350178, 0.9309081277578988, 0.9309081277578988, 0.9385838259823, 0.9385838259823, 0.9499546481303853, 0.9499546481303853, 0.9421690872357392, 0.9421690872357392, 0.9575030502309368, 0.9575030502309368, 0.859768512505462, 0.859768512505462, 0.8822065832556091, 0.8822065832556091, 0.8707801274231717, 0.8707801274231717, 0.9491275608489821, 0.9491275608489821, 0.8621505158370393, 0.8621505158370393, 0.8350368650848511, 0.8350368650848511, 0.8252705664066228, 0.8252705664066228, 0.9281560148540762, 0.9281560148540762, 0.8782813793168861, 0.8782813793168861, 0.8590120044529884, 0.8590120044529884, 0.7831981799257554, 0.7831981799257554, 0.9991374249333004, 0.9687951891656525, 0.9850982887571419, 0.9877406229379593, 0.8827819915537896, 0.8827819915537896, 0.8699033763991161, 0.8699033763991161, 0.7819037923233825, 0.7819037923233825, 0.8575477522791325, 0.8575477522791325, 0.8069668388639123, 0.8069668388639123, 0.7785314643379851, 0.7785314643379851, 0.8587259477077978, 0.8105728097544348, 0.45724990929087767, 0.17031277525449334]
+Recomputed report, stability, Portmanteau and metrics:
+# F02 VAR Results
+
+Run `20261118_system312_p85_f02_01` - **PENDING HUMAN REVIEW**.
+
+## Stationarity
+
+| Variable | ADF statistic | ADF p | KPSS statistic | KPSS p | d |
+|---|---:|---:|---:|---:|---:|
+| load | -16.2646 | 3.53765e-29 | 0.330654 | 0.1 | 0 |
+| temperature | -3.01867 | 0.0331874 | 23.5349 | 0.01 | 0 |
+| humidity | -4.24287 | 0.000557042 | 20.6042 | 0.01 | 0 |
+| wind_speed | -7.8864 | 4.55744e-12 | 1.09045 | 0.01 | 0 |
+
+KPSS p-values at 0.01 or 0.1 are table bounds. Human selected d=0 using ADF and identified annual weather seasonal drift as a possible explanation of KPSS rejection. These diagnostics alone do not establish the cause. The 9,271-hour block excludes 15,241 earlier observed hours and may not represent earlier regimes.
+
+## Lag selection
+
+| p | BIC |
+|---:|---:|
+| 1 | -10.94712173 |
+| 2 | -12.52501842 |
+| 3 | -12.63225953 |
+| 4 | -12.71488182 |
+| 5 | -12.77661635 |
+| 6 | -12.80851819 |
+| 7 | -12.85871937 |
+| 8 | -12.87684713 |
+| 9 | -12.89315432 |
+| 10 | -12.98084329 |
+| 11 | -13.01487355 |
+| 12 | -13.08909620 |
+| 13 | -13.21248020 |
+| 14 | -13.22203438 |
+| 15 | -13.23381369 |
+| 16 | -13.30139466 |
+| 17 | -13.30243217 |
+| 18 | -13.30470113 |
+| 19 | -13.33482180 |
+| 20 | -13.35756860 |
+| 21 | -13.38049997 |
+| 22 | -13.38780022 |
+| 23 | -13.38072536 |
+| 24 | -13.45849879 |
+
+Selected VAR(24), complexity 398, model SHA256 `e4997a2afbd37a1f8ec1f8c7d8da0df21878b8ffc04f161f198152e7e26d84da`. Maximum companion eigenvalue modulus 0.9991374249.
+Adjusted Portmanteau lag 48 statistic 4297.18, df 384, p-value 0, reject at 5% True.
+
+## Validation metrics
+
+| Model | MAE MW | RMSE MW | MAPE % |
+|---|---:|---:|---:|
+| persistence | 1115.634012 | 1507.303309 | 3.911556 |
+| seasonal24 | 2429.289138 | 3507.532671 | 8.433175 |
+| VAR | 514.619863 | 799.962062 | 1.816565 |
+
+All models use 5,257 eligible validation targets. Two missing truths and zero invalid contexts are excluded. Fixed train scaler and coefficients are used throughout.
+
+Console output:
+{
+  "p": 24,
+  "model_sha256": "e4997a2afbd37a1f8ec1f8c7d8da0df21878b8ffc04f161f198152e7e26d84da",
+  "metrics": {
+    "mae_mw": 514.6198631680792,
+    "rmse_mw": 799.9620622637289,
+    "mape_percent": 1.8165647946845882,
+    "mape_null_reason": null,
+    "n_considered": 5259,
+    "n_scored": 5257,
+    "n_zero_excluded": 0,
+    "n_missing_excluded": 2,
+    "n_input_excluded": 0
+  },
+  "max_eigenvalue_modulus": 0.9991374249333004,
+  "whiteness_p": 0.0
+}

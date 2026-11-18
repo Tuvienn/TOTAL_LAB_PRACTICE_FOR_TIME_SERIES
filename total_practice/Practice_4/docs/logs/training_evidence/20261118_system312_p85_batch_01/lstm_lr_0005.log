@@ -1,0 +1,167 @@
+Replay: 20261118_system312_p85_g02_01
+Trial: {
+  "learning_rate": "0.0005",
+  "trial_id": "lstm_lr_0005",
+  "model": "LSTM",
+  "complexity": "30113",
+  "status": "completed",
+  "best_epoch": "50",
+  "stopping_epoch": "50",
+  "epochs_after_best": "0",
+  "elapsed_seconds": "223.07450100000096",
+  "restored_train_mse": "0.012484489486938309",
+  "restored_val_mse": "0.013958810227309163",
+  "warnings": "",
+  "mae_mw": "341.066003000317",
+  "rmse_mw": "535.9761016195885",
+  "mape_percent": "1.193152308480062",
+  "mape_null_reason": "",
+  "n_considered": "5259",
+  "n_scored": "5257",
+  "n_zero_excluded": "0",
+  "n_missing_excluded": "2",
+  "n_input_excluded": "0"
+}
+Epoch console output:
+
+Epoch 1/50
+2026-11-18 11:11:55.599301: E tensorflow/core/framework/node_def_util.cc:680] NodeDef mentions attribute 
+use_unbounded_threadpool which is not in the op definition: Op<name=MapDataset; signature=input_dataset:variant, 
+other_arguments: -> handle:variant; attr=f:func; attr=Targuments:list(type),min=0; attr=output_types:list(type),min=1; 
+attr=output_shapes:list(shape),min=1; attr=use_inter_op_parallelism:bool,default=true; 
+attr=preserve_cardinality:bool,default=false; attr=force_synchronous:bool,default=false; 
+attr=metadata:string,default=""> This may be expected if your graph generating binary is newer  than this binary. 
+Unknown attributes will be ignored. NodeDef: {{node ParallelMapDatasetV2/_15}}
+2026-11-18 11:12:00.958044: E tensorflow/core/framework/node_def_util.cc:680] NodeDef mentions attribute 
+use_unbounded_threadpool which is not in the op definition: Op<name=MapDataset; signature=input_dataset:variant, 
+other_arguments: -> handle:variant; attr=f:func; attr=Targuments:list(type),min=0; attr=output_types:list(type),min=1; 
+attr=output_shapes:list(shape),min=1; attr=use_inter_op_parallelism:bool,default=true; 
+attr=preserve_cardinality:bool,default=false; attr=force_synchronous:bool,default=false; 
+attr=metadata:string,default=""> This may be expected if your graph generating binary is newer  than this binary. 
+Unknown attributes will be ignored. NodeDef: {{node ParallelMapDatasetV2/_15}}
+382/382 - 6s - 15ms/step - loss: 0.4076 - val_loss: 0.2111
+Epoch 2/50
+382/382 - 4s - 11ms/step - loss: 0.1144 - val_loss: 0.1053
+Epoch 3/50
+382/382 - 4s - 11ms/step - loss: 0.0720 - val_loss: 0.0788
+Epoch 4/50
+382/382 - 4s - 11ms/step - loss: 0.0529 - val_loss: 0.0621
+Epoch 5/50
+382/382 - 4s - 11ms/step - loss: 0.0413 - val_loss: 0.0503
+Epoch 6/50
+382/382 - 4s - 12ms/step - loss: 0.0330 - val_loss: 0.0380
+Epoch 7/50
+382/382 - 4s - 11ms/step - loss: 0.0263 - val_loss: 0.0281
+Epoch 8/50
+382/382 - 4s - 11ms/step - loss: 0.0224 - val_loss: 0.0242
+Epoch 9/50
+382/382 - 4s - 12ms/step - loss: 0.0205 - val_loss: 0.0225
+Epoch 10/50
+382/382 - 4s - 11ms/step - loss: 0.0194 - val_loss: 0.0216
+Epoch 11/50
+382/382 - 5s - 12ms/step - loss: 0.0187 - val_loss: 0.0210
+Epoch 12/50
+382/382 - 5s - 13ms/step - loss: 0.0183 - val_loss: 0.0207
+Epoch 13/50
+382/382 - 5s - 12ms/step - loss: 0.0180 - val_loss: 0.0203
+Epoch 14/50
+382/382 - 5s - 12ms/step - loss: 0.0176 - val_loss: 0.0201
+Epoch 15/50
+382/382 - 5s - 12ms/step - loss: 0.0173 - val_loss: 0.0198
+Epoch 16/50
+382/382 - 5s - 12ms/step - loss: 0.0170 - val_loss: 0.0195
+Epoch 17/50
+382/382 - 4s - 11ms/step - loss: 0.0167 - val_loss: 0.0193
+Epoch 18/50
+382/382 - 4s - 11ms/step - loss: 0.0164 - val_loss: 0.0191
+Epoch 19/50
+382/382 - 4s - 12ms/step - loss: 0.0162 - val_loss: 0.0189
+Epoch 20/50
+382/382 - 4s - 11ms/step - loss: 0.0159 - val_loss: 0.0187
+Epoch 21/50
+382/382 - 4s - 11ms/step - loss: 0.0157 - val_loss: 0.0185
+Epoch 22/50
+382/382 - 5s - 12ms/step - loss: 0.0154 - val_loss: 0.0183
+Epoch 23/50
+382/382 - 4s - 12ms/step - loss: 0.0152 - val_loss: 0.0180
+Epoch 24/50
+382/382 - 4s - 11ms/step - loss: 0.0150 - val_loss: 0.0178
+Epoch 25/50
+382/382 - 4s - 12ms/step - loss: 0.0148 - val_loss: 0.0175
+Epoch 26/50
+382/382 - 5s - 12ms/step - loss: 0.0145 - val_loss: 0.0172
+Epoch 27/50
+382/382 - 5s - 13ms/step - loss: 0.0143 - val_loss: 0.0169
+Epoch 28/50
+382/382 - 4s - 11ms/step - loss: 0.0141 - val_loss: 0.0167
+Epoch 29/50
+382/382 - 5s - 12ms/step - loss: 0.0139 - val_loss: 0.0164
+Epoch 30/50
+382/382 - 5s - 12ms/step - loss: 0.0137 - val_loss: 0.0162
+Epoch 31/50
+382/382 - 5s - 12ms/step - loss: 0.0135 - val_loss: 0.0160
+Epoch 32/50
+382/382 - 5s - 12ms/step - loss: 0.0133 - val_loss: 0.0158
+Epoch 33/50
+382/382 - 4s - 11ms/step - loss: 0.0131 - val_loss: 0.0156
+Epoch 34/50
+382/382 - 4s - 11ms/step - loss: 0.0129 - val_loss: 0.0154
+Epoch 35/50
+382/382 - 4s - 11ms/step - loss: 0.0127 - val_loss: 0.0153
+Epoch 36/50
+382/382 - 4s - 11ms/step - loss: 0.0126 - val_loss: 0.0151
+Epoch 37/50
+382/382 - 4s - 11ms/step - loss: 0.0124 - val_loss: 0.0150
+Epoch 38/50
+382/382 - 4s - 11ms/step - loss: 0.0122 - val_loss: 0.0148
+Epoch 39/50
+382/382 - 4s - 12ms/step - loss: 0.0120 - val_loss: 0.0147
+Epoch 40/50
+382/382 - 4s - 12ms/step - loss: 0.0119 - val_loss: 0.0146
+Epoch 41/50
+382/382 - 4s - 11ms/step - loss: 0.0117 - val_loss: 0.0145
+Epoch 42/50
+382/382 - 4s - 11ms/step - loss: 0.0116 - val_loss: 0.0144
+Epoch 43/50
+382/382 - 4s - 11ms/step - loss: 0.0115 - val_loss: 0.0143
+Epoch 44/50
+382/382 - 4s - 12ms/step - loss: 0.0113 - val_loss: 0.0143
+Epoch 45/50
+382/382 - 4s - 11ms/step - loss: 0.0112 - val_loss: 0.0142
+Epoch 46/50
+382/382 - 5s - 12ms/step - loss: 0.0111 - val_loss: 0.0142
+Epoch 47/50
+382/382 - 4s - 11ms/step - loss: 0.0109 - val_loss: 0.0141
+Epoch 48/50
+382/382 - 4s - 12ms/step - loss: 0.0108 - val_loss: 0.0141
+Epoch 49/50
+382/382 - 4s - 11ms/step - loss: 0.0107 - val_loss: 0.0140
+Epoch 50/50
+382/382 - 4s - 11ms/step - loss: 0.0106 - val_loss: 0.0140
+D:\Documents\Coding\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\total_practice\Practice_4\src\practice_4\models\lstm_model.py:32
+3: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. 
+This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  earlier = times.get_indexer(times - pd.Timedelta(hours=lag))
+D:\Documents\Coding\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\total_practice\Practice_4\src\practice_4\models\lstm_model.py:32
+3: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. 
+This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  earlier = times.get_indexer(times - pd.Timedelta(hours=lag))
+D:\Documents\Coding\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\total_practice\Practice_4\src\practice_4\models\lstm_model.py:32
+3: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. 
+This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  earlier = times.get_indexer(times - pd.Timedelta(hours=lag))
+D:\Documents\Coding\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\total_practice\Practice_4\src\practice_4\models\lstm_model.py:32
+3: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. 
+This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  earlier = times.get_indexer(times - pd.Timedelta(hours=lag))
+D:\Documents\Coding\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\total_practice\Practice_4\src\practice_4\models\lstm_model.py:32
+3: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. 
+This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  earlier = times.get_indexer(times - pd.Timedelta(hours=lag))
+{
+  "selected": "lstm_lr_001",
+  "checkpoint_sha256": "512715c5249f35bcfe46d1ecdbfc4413dbb1d3f263fe73f41dc9845fe5a69a1c",
+  "reload_max_abs_mw": 0.0
+}
+
+Selected checkpoint reload verification: 0.0 MW (selected trial only)

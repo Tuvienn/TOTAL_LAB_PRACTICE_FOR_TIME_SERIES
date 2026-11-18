@@ -1,0 +1,40 @@
+Model: persistence
+Replay: 20261118_system312_p85_f01_01
+Deterministic baseline; no fitted parameters
+Formula: load_input(t)
+Config: {
+  "complexity": 0,
+  "horizon_hours": 1,
+  "implementation_version": "1",
+  "lag_offset": 0,
+  "model": "persistence",
+  "protocol_version": "predict_score_reveal_v1",
+  "scaler_sha256": "ebfa412b7bce9ac077776b416df1083eaff32b08c48c28dc5d2e7e06b2757b11",
+  "schema_version": "1",
+  "source_sha256": "cf3a054cfd9aa40c5fa50f89f367d5343b5aede5b6bbc25b4d90ad633cec0700",
+  "trial_id": "persistence_01"
+}
+Metrics and counts: {
+  "train": {
+    "mae_mw": 1057.1444649068958,
+    "mape_null_reason": null,
+    "mape_percent": 3.7752618125948003,
+    "n_considered": 24519,
+    "n_input_excluded": 52,
+    "n_missing_excluded": 32,
+    "n_scored": 24435,
+    "n_zero_excluded": 0,
+    "rmse_mw": 1423.1758606962774
+  },
+  "validation": {
+    "mae_mw": 1115.6340117937987,
+    "mape_null_reason": null,
+    "mape_percent": 3.9115562103169084,
+    "n_considered": 5259,
+    "n_input_excluded": 0,
+    "n_missing_excluded": 2,
+    "n_scored": 5257,
+    "n_zero_excluded": 0,
+    "rmse_mw": 1507.303308634044
+  }
+}

@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Status: Human **APPROVED / COMPLETED** G02 run `20261118_system312_g02_01`, the LSTM model lock, the findings and [Phase 8](../phase_details/phase_08.md) on 2026-11-18 via Director review. Phase 9 specification drafting is **IN_PROGRESS** and the [draft](../phase_details/phase_09.md) is **PENDING HUMAN REVIEW**. H01 test opening and H02 execution remain gated.
+Status: Human **APPROVED / COMPLETED** G02 run `20261118_system312_g02_01`, the LSTM model lock, the findings and [Phase 8](../phase_details/phase_08.md) on 2026-11-18 via Director review. Phase 8.5 scientific replay is **PENDING HUMAN REVIEW**. Phase 9 specification drafting is awaiting review and the [draft](../phase_details/phase_09.md) is **PENDING HUMAN REVIEW**. H01 test opening and H02 execution remain gated.
 
 The system Python 3.12 probe raised `ModuleNotFoundError: No module named 'tensorflow'`; `pip show tensorflow keras` found neither package, while `pip check` reported no broken requirements. Installation requires separate Human approval. No G02 training code or configuration was written and no test records were accessed.
 
@@ -134,3 +134,9 @@ không suy diễn nguyên nhân. UCI không phải dataset chính đã chọn.
 - Weights SHA256 `512715c5249f35bcfe46d1ecdbfc4413dbb1d3f263fe73f41dc9845fe5a69a1c`. Architecture SHA256 `c858df9f6417ac508d9b4d2195ce0b29a539ab89d4bb5d10950ac12f6d7af807`. Manifest SHA256 `5baa3e252753d65edefe7e185e57a5e578cac6dea0f639643400ce096853bf47`.
 - 56 tests passed. A fresh process reloaded the checkpoint with 0 MW maximum absolute prediction difference across 5,257 rows. Independent checks recomputed the scores and exact UTC lag correlations. All 71 upstream SHA256 values matched. The last validation target row was 29,802. Raw and canonical CSVs were byte hashed only.
 - Human approved G02, the LSTM findings and lock, and Phase 8 completion on 2026-11-18 via Director review. The G02 manifest retains the findings hash from before this approval edit.
+
+## Phase 8.5 replay evidence for Human review
+
+- Four isolated replays completed. [Evidence index](../logs/training_evidence/20261118_system312_p85_batch_01/README.md) links seven model-specific logs and records metrics, commands, versions and digests.
+- All 26 snapshot hashes matched after replay. All comparisons used 5,257 matching validation keys and truths. Baseline, XGBoost and LSTM metrics matched; VAR differences were at most 1.26e-12 in the reported metrics. Selected XGBoost and LSTM hashes matched. The replay VAR serialized bytes differed with maximum coefficient difference 4.65e-15. Accepted model locks remain authoritative.
+- Targeted tests passed 27 cases after final changes, with eight Keras/NumPy deprecation warnings. Baseline and VAR elapsed times were not instrumented. XGBoost per-round logs were saved after each trial during this replay; streaming was enabled afterward.

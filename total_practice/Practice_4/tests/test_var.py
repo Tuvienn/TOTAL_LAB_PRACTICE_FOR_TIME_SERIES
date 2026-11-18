@@ -36,3 +36,9 @@ def test_model_roundtrip():
     with np.load(stream, allow_pickle=False) as artifact:
         expected = predict_levels(np.ones((1, 4)), coefficients, intercept)
         np.testing.assert_array_equal(predict_levels(np.ones((1, 4)), artifact["coefs"], artifact["intercept"]), expected)
+
+def test_replay_rejects_existing_run():
+    from practice_4.models.var_model import ROOT, run
+    with pytest.raises(FileExistsError):
+        run("20261118_system312_f02_02", ROOT / "runs/20261118_system312_f02_02/config.json",
+            "20261118_system312_f01_01", replay=True)
