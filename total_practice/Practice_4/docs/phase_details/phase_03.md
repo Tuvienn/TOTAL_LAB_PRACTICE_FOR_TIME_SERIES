@@ -1,8 +1,6 @@
 # Phase 3 — Training-only exploratory data analysis (D01)
 
-Trạng thái: **APPROVED — D01 IN_PROGRESS**, 2026-11-18. Human đã duyệt Phase 3
-specification và before-process plan; Human cho phép tiếp tục D01 qua Director
-review với raw wind 133 m/s train membership chưa xác minh.
+Status: **D01 APPROVED / PHASE 3 COMPLETED**, Human, 2026-11-18 via Director review.
 
 Nguồn: [roadmap Cụm D và mục 7](../plans/plan_overview.md),
 [file map](../plans/file_map.csv), [Phase 2](phase_02.md),
@@ -169,4 +167,4 @@ không chứng minh causality. Findings phải báo những giới hạn thực 
 - Phase 3 specification / before-process plan: **Human APPROVED 2026-11-18 via Director review**; D01 được phép thực thi.
 - Human resolution 2026-11-18 via Director review: tiếp tục D01, ghi raw 133 m/s
   train membership chưa xác minh; không truy cập held-out records để xác định.
-- D01 acceptance và D02 policy: **PENDING HUMAN REVIEW**; Phase 4 chưa được duyệt.
+- D01 run `20261118_system312_d01_01`, findings and Phase 3: **Human APPROVED / COMPLETED**, 2026-11-18 via Director review. Phase 4 specification and D02 execution require separate approval.

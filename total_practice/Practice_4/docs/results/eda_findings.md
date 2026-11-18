@@ -1,11 +1,11 @@
 # D01 — Training-only EDA findings
 
-**PENDING HUMAN REVIEW**, run `20261118_system312_d01_01`. Scope: 24,544
+**APPROVED / PHASE 3 COMPLETED** by Human on 2026-11-18 via Director review, run `20261118_system312_d01_01`. Scope: 24,544
 canonical train rows, UTC 2014-12-31 23:00 through 2017-10-19 14:00 inclusive.
 [Summary table](../../runs/20261118_system312_d01_01/summary.json),
 [config](../../runs/20261118_system312_d01_01/config.json) and
 [run manifest](../../runs/20261118_system312_d01_01/manifest.json) contain
-counts, UTC extrema, parameters and hashes. Figures below remain run-staged.
+counts, UTC extrema, parameters and hashes. Figures were promoted from the accepted run; the original run evidence remains unchanged.
 
 The raw city-level 133 m/s wind-speed extreme recorded in B01/B02 has **unverified
 train-split membership**. Human authorized proceeding without searching held-out
@@ -58,7 +58,9 @@ ACF uses FFT and PACF Yule–Walker modified (`ywm`), lags 0–168; no confidenc
 intervals are plotted. This selected block can bias interpretation and neither
 plot alone establishes stationarity or a model order.
 
-## Proposed D02 policy — PENDING HUMAN REVIEW
+## D02 proposals and subsequent Human decision
+
+Human approved the max-gap, anomaly and VAR domain policy decisions on 2026-11-18 via Director review. The causal interpretation of multi-hour gaps requires resolution in the Phase 4 draft.
 
 - **Missing load:** propose causal last-observation carry-forward for at most one
   consecutive missing hour in working inputs only. Train contains 15 one-hour
@@ -78,3 +80,16 @@ plot alone establishes stationarity or a model order.
   change the fit population; report that limitation. If inadequate after model
   requirements are set, present alternative causal-fill or contiguous-block
   policies for separate approval instead of silently dropping interior gaps.
+
+## Promoted figure provenance
+
+Human authorized promotion on 2026-11-18. Source run: `20261118_system312_d01_01`; SHA256 is identical for the source and promoted bytes. Historical manifest hashes for this findings document and Phase 3 reflect their state at run time, before approval updates.
+
+| Promoted figure | SHA256 |
+|---|---|
+| [ missing_gaps.png ](../../outputs/figures/missing_gaps.png) | `c3fbb03a6c2404ad8fa7f78023671b654701fb197625a5efffe524a442f943e6` |
+| [ extremes.png ](../../outputs/figures/extremes.png) | `8cbf8c92a546884e07d883c678471e814f374f5eb386f57234456b7870471ded` |
+| [ load_utc.png ](../../outputs/figures/load_utc.png) | `856c58eaf431debf8d53c2c5bb9bb37a1fbd6af91c366473d0724c8843c2cafd` |
+| [ local_profiles.png ](../../outputs/figures/local_profiles.png) | `4400341b9d5862b58cc2abb57ec8f40ad3ef08e261caaeeddff1ce60caf2ac33` |
+| [ relationships.png ](../../outputs/figures/relationships.png) | `898327cbe3745e76b8210d9a7107e9a5606ce69539832058709c0baa84e3af21` |
+| [ acf_pacf.png ](../../outputs/figures/acf_pacf.png) | `c4253384ab367fac8e22318ce7f3ba296c4dc682abd09900a28eec88fbbbb4ef` |

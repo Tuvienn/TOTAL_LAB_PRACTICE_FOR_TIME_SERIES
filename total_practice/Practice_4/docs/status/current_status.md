@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Trạng thái dự án: `IN_PROGRESS` — Phase 3 specification APPROVED; Stage D01 `IN_PROGRESS`.
+Status: `IN_PROGRESS` ? Phase 3 / D01 COMPLETED; Phase 4 specification drafting IN_PROGRESS; D02 execution pending approval.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -51,9 +51,7 @@ Trạng thái dự án: `IN_PROGRESS` — Phase 3 specification APPROVED; Stage 
   Evidence B01/B02 xác nhận một raw 133 m/s record nhưng không ghi timestamp;
   Human cho phép tiếp tục ngày 2026-11-18 qua Director review; train membership
   của raw record được ghi là chưa xác minh, không mở held-out rows để tìm.
-- D01 run `20261118_system312_d01_01` đã tạo train-only findings và staged figures;
-  D01 acceptance và D02 policy proposals **PENDING HUMAN REVIEW**. Raw 133 m/s
-  train membership chưa xác minh; không promote figures.
+- D01 run `20261118_system312_d01_01`, findings and Phase 3: Human APPROVED / COMPLETED on 2026-11-18 via Director review. Six figures were promoted with hashes in findings. Raw 133 m/s train membership remains unverified.
 
 ## Chưa thực hiện
 
@@ -62,9 +60,7 @@ Trạng thái dự án: `IN_PROGRESS` — Phase 3 specification APPROVED; Stage 
 - Human xác nhận source, version 1, CC0, units và time semantics; Kaggle page/API
   chưa được xác minh độc lập trong môi trường này. Archive hash chưa có.
 - Data contract Phase 1 và Phase 2 specification đã được Human chấp nhận.
-- D01 acceptance và D02 policy còn PENDING HUMAN REVIEW.
-- Chưa khóa missing-value treatment hoặc scaling; walk-forward protocol đã duyệt,
-  nhưng D02 context policy và model-specific budgets vẫn chờ approval riêng.
+- Human approved the D02 policy decisions; Phase 4 specification and before-process plan await approval. No D02 scaler fit or execution has occurred.
 - Editable install vào system Python 3.12 đã chạy; không tạo virtualenv hoặc
   kiểm clean-environment reproduction. B01 đã được Human chấp nhận.
 - Đã có B01/B02 pipeline và tests; notebook template có 12 Markdown cells, chưa
