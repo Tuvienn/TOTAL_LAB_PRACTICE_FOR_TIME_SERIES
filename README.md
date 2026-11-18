@@ -322,28 +322,6 @@ Mỗi bài thực hành ưu tiên các nguyên tắc sau:
 
 ---
 
-# 📌 Trạng thái hiện tại
-
-<table>
-  <tr>
-    <th align="left">Practice</th>
-    <th align="left">Trạng thái</th>
-    <th align="left">Nội dung chính</th>
-  </tr>
-  <tr>
-    <td>Practice 2</td>
-    <td>🟡 Documentation prepared</td>
-    <td>ADF, ARIMA/SARIMA và đánh giá forecast</td>
-  </tr>
-  <tr>
-    <td>Practice 3+</td>
-    <td>⚪ Chưa bắt đầu</td>
-    <td>Sẽ bổ sung theo lộ trình học</td>
-  </tr>
-</table>
-
----
-
 # ✅ Kết quả mong đợi
 
 Sau khi hoàn thành các Practice trong repository này, mục tiêu là có thể:
