@@ -1,10 +1,7 @@
 # Phase 2 — Temporal Split và Evaluation Contract
 
-Trạng thái: **DRAFT — PENDING HUMAN REVIEW / APPROVAL**, 2026-11-18. Human đã
-duyệt B02 run `20261118_system312_b02_01`, canonical dataset, data contract và
-đóng Phase 1; tin nhắn `Close Phase 1 (Gate B02) & Draft Phase 2 Specification`
-trong cuộc hội thoại hiện tại chỉ cho phép soạn specification này. Không tự
-coi các protocol bên dưới là đã được duyệt hoặc đã thực thi.
+Trạng thái: **APPROVED / COMPLETED**, 2026-11-18. Human duyệt C02, evaluation
+contract và đóng Phase 2 qua Director review.
 
 Nguồn: [Phase 1 approval](phase_01.md), [data contract](../results/data_contract.md),
 [roadmap mục 3–4](../plans/plan_overview.md), [file map](../plans/file_map.csv),
@@ -133,8 +130,8 @@ test để đổi configuration. Ties, model budget và trial-count definition c
 
 ## 4. Evaluation artifact schema v1 — RV2 proposal
 
-Schema này được đề xuất để **C02 trình Human khóa**, không đánh dấu RV2 completed
-ở thời điểm soạn. H01 mới được tạo artifacts thật. UTC timestamps có offset `Z`
+Schema này đã được Human duyệt tại gate C02; RV2 đóng ngày 2026-11-18.
+H01 mới được tạo artifacts thật. UTC timestamps có offset `Z`
 hoặc `+00:00`; numeric metrics/predictions phải finite, units MW. Schema validators
 phải reject unknown schema versions, missing required fields và duplicate keys.
 
@@ -237,5 +234,7 @@ Baseline-first, raw truth immutability và model-lock/test gate tiếp tục áp
 
 - Phase 1 / B02 acceptance: **Human APPROVED 2026-11-18**, tin nhắn `Close Phase 1
   (Gate B02) & Draft Phase 2 Specification` trong cuộc hội thoại hiện tại.
-- Phase 2 specification / before-process plan: **PENDING HUMAN APPROVAL**.
-- C01 acceptance, C02 contract approval và Phase 2 acceptance: **chưa thực hiện**.
+- Phase 2 specification / before-process plan: **Human APPROVED 2026-11-18 via Director review**, chỉ C01.
+- C01 run `20261118_system312_c01_01` và split manifest: **Human APPROVED 2026-11-18 via Director review**; C01 COMPLETED.
+- C02 run `20261118_system312_c02_01`, evaluation contract và Phase 2:
+  **Human APPROVED / COMPLETED 2026-11-18 via Director review**; RV2 đóng.

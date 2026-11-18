@@ -22,5 +22,18 @@
       "datasets/raw/energy_dataset.csv": "14cd13e020d87af0ab49db8e0f1e4d308320ec5b8d2dec23bab4d27c75c7733a",
       "datasets/raw/weather_features.csv": "3566c3c21179d4fc6691eec6d37a6cfe8fe6a4d9e097f95e4fda4a29dc683b18"
     }
+  },
+  "c01": {
+    "predecessor_run": "20261118_system312_b02_01",
+    "predecessor_manifest_sha256": "3917d57633a5bef6a7f0f714b0ba799b0cde934b4f7d21a5af29a5b99526d414",
+    "approval_reference": "Human: Phase 2 specification and before-process plan APPROVED 2026-11-18 via Director review; C01 only",
+    "b02_acceptance": "Human: Close Phase 1 (Gate B02) & Draft Phase 2 Specification, 2026-11-18",
+    "schema_version": "1"
+  },
+  "c02": {
+    "predecessor_run": "20261118_system312_c01_01",
+    "predecessor_manifest_sha256": "cfab391bc73976bb1dab945382e78822afa85a7988ef773581b4636967e2db91",
+    "approval_reference": "Human: C01 run and split APPROVED 2026-11-18 via Director review; C02 authorized",
+    "schema_version": "1"
   }
 }

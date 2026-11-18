@@ -17,7 +17,7 @@ from practice_4.data.ingestion import sha256_file, summarize
 
 HASH = {"type": "string", "pattern": "^[a-f0-9]{64}$"}
 FILE = {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": HASH}, "additionalProperties": False}
-MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
+MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02", "C01", "C02"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
 
 
 def validate_manifest(manifest: dict) -> None:
@@ -243,17 +243,149 @@ def run_b02(root: Path, config_path: Path, run_id: str) -> None:
         write_json(run_dir / "manifest.json", manifest)
 
 
+def bootstrap_c01(root: Path, config: dict) -> list[dict]:
+    policy = config.get("c01", {})
+    if policy.get("schema_version") != "1" or policy.get("predecessor_run") != "20261118_system312_b02_01" or not policy.get("approval_reference") or not policy.get("b02_acceptance"):
+        raise ValueError("C01 approval and B02 acceptance required")
+    phase = (root / "docs/phase_details/phase_02.md").read_text(encoding="utf-8")
+    if "Human APPROVED 2026-11-18 via Director review" not in phase or "Human APPROVED 2026-11-18" not in phase:
+        raise ValueError("Approval record missing")
+    predecessor_path = root / "runs/20261118_system312_b02_01/manifest.json"
+    if sha256_file(predecessor_path) != policy.get("predecessor_manifest_sha256"):
+        raise ValueError("B02 manifest hash mismatch")
+    predecessor = json.loads(predecessor_path.read_text(encoding="utf-8"))
+    validate_manifest(predecessor)
+    if predecessor["stage_id"] != "B02" or predecessor["status"] != "completed" or predecessor["run_id"] != policy["predecessor_run"]:
+        raise ValueError("Invalid B02 predecessor")
+    names = {"datasets/raw/energy_dataset.csv", "datasets/raw/weather_features.csv", "datasets/processed/canonical_hourly.csv"}
+    entries = [x for x in predecessor["inputs"] + predecessor["outputs"] if x["path"] in names]
+    if len(entries) != 3 or {x["path"] for x in entries} != names:
+        raise ValueError("Missing B02 data hashes")
+    for item in entries:
+        if sha256_file(root / item["path"]) != item["sha256"]:
+            raise ValueError(f"B02 data hash mismatch: {item['path']}")
+    return [{"path": predecessor_path.relative_to(root).as_posix(), "sha256": policy["predecessor_manifest_sha256"]}, {"path": "docs/phase_details/phase_02.md", "sha256": sha256_file(root / "docs/phase_details/phase_02.md")}, *entries]
+
+
+def run_c01(root: Path, config_path: Path, run_id: str) -> None:
+    import pandas as pd
+    from practice_4.data.splitting import partition, split_hash
+
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
+        raise ValueError("Invalid run ID")
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    inputs = bootstrap_c01(root, config)
+    run_dir = root / "runs" / run_id
+    run_dir.mkdir(parents=True, exist_ok=False)
+    env = {"python": platform.python_version(), "platform": platform.platform(), "packages": {name: metadata.version(name) for name in ["pandas", "numpy", "pytest", "setuptools", "wheel", "jsonschema"]}}
+    manifest = {"schema_version": "1", "run_id": run_id, "stage_id": "C01", "status": "running", "started_at_utc": now(), "finished_at_utc": None, "approval_refs": {"phase_2": config["c01"]["approval_reference"], "b02": config["c01"]["b02_acceptance"]}, "inputs": inputs, "config_sha256": sha256_file(config_path), "environment": env, "outputs": [], "checks": [], "limitations": ["C01 acceptance and C02 contract approval pending Human review.", "No windows, model inputs, or target-value analysis performed."]}
+    (run_dir / "config.json").write_bytes(config_path.read_bytes())
+    write_json(run_dir / "environment.json", env)
+    try:
+        output = root / "datasets/processed/split_manifest.json"
+        log = root / "docs/logs" / f"C01_{run_id}.md"
+        if output.exists() or log.exists():
+            raise FileExistsError("C01 output exists; refusing to overwrite")
+        canonical = next(x for x in inputs if x["path"] == "datasets/processed/canonical_hourly.csv")
+        timestamps = pd.read_csv(root / canonical["path"], usecols=["timestamp_utc"])["timestamp_utc"]
+        result = partition(timestamps, canonical["path"], canonical["sha256"])
+        expected = [(24544, "2014-12-31T23:00:00+00:00", "2017-10-19T14:00:00+00:00"), (5259, "2017-10-19T15:00:00+00:00", "2018-05-26T17:00:00+00:00"), (5261, "2018-05-26T18:00:00+00:00", "2018-12-31T22:00:00+00:00")]
+        actual = [(x["row_count"], x["start_utc"], x["end_utc"]) for x in result["splits"].values()]
+        if result["total_rows"] != 35064 or actual != expected or split_hash(result) != result["split_sha256"]:
+            raise ValueError("Split mismatch")
+        bootstrap_c01(root, config)
+        write_json(output, result)
+        log.write_text(f"# C01 ? {run_id}\n\nStatus: PENDING HUMAN REVIEW. Command: `python -m practice_4.pipeline --stage C01 --config config/practice_4.json --run-id {run_id}`.\n\nB02 acceptance and data hashes verified before and after timestamp-only partition. Counts and boundaries match Phase 2 plan. Split semantic hash: `{result['split_sha256']}`. No windows or target-value inspection. See run manifest for inputs, outputs, environment and approval references.\n", encoding="utf-8")
+        paths = [output, log, run_dir / "config.json", run_dir / "environment.json"]
+        manifest["outputs"] = [{"path": p.relative_to(root).as_posix(), "sha256": sha256_file(p)} for p in paths]
+        manifest["checks"] = [{"name": "approval_and_data_hashes", "status": "pass", "evidence": "B02 manifest and raw/canonical hashes verified before and after partition"}, {"name": "timeline_and_split", "status": "pass", "evidence": "Sorted unique contiguous UTC hourly timeline and approved counts/boundaries verified"}, {"name": "split_self_hash", "status": "pass", "evidence": result["split_sha256"]}]
+        manifest["status"] = "completed"
+    except Exception as exc:
+        manifest["status"] = "failed"
+        manifest["limitations"].append(f"{type(exc).__name__}: {exc}")
+        raise
+    finally:
+        manifest["finished_at_utc"] = now()
+        validate_manifest(manifest)
+        write_json(run_dir / "manifest.json", manifest)
+
+
+def bootstrap_c02(root: Path, config: dict) -> list[dict]:
+    from practice_4.data.splitting import split_hash
+
+    policy = config.get("c02", {})
+    if policy.get("schema_version") != "1" or policy.get("predecessor_run") != "20261118_system312_c01_01" or not policy.get("approval_reference"):
+        raise ValueError("C01 approval required")
+    phase_path = root / "docs/phase_details/phase_02.md"
+    if "C01 run `20261118_system312_c01_01`" not in phase_path.read_text(encoding="utf-8") or "Human APPROVED 2026-11-18 via Director review" not in phase_path.read_text(encoding="utf-8"):
+        raise ValueError("C01 acceptance missing")
+    previous_path = root / "runs/20261118_system312_c01_01/manifest.json"
+    if sha256_file(previous_path) != policy.get("predecessor_manifest_sha256"):
+        raise ValueError("C01 manifest hash mismatch")
+    previous = json.loads(previous_path.read_text(encoding="utf-8"))
+    validate_manifest(previous)
+    if previous["run_id"] != policy["predecessor_run"] or previous["stage_id"] != "C01" or previous["status"] != "completed":
+        raise ValueError("Invalid C01 predecessor")
+    names = {"datasets/raw/energy_dataset.csv", "datasets/raw/weather_features.csv", "datasets/processed/canonical_hourly.csv", "datasets/processed/split_manifest.json"}
+    entries = [item for item in previous["inputs"] + previous["outputs"] if item["path"] in names]
+    if len(entries) != 4 or {x["path"] for x in entries} != names:
+        raise ValueError("C01 data lineage missing")
+    for item in entries:
+        if sha256_file(root / item["path"]) != item["sha256"]:
+            raise ValueError(f"C01 data hash mismatch: {item['path']}")
+    split = json.loads((root / "datasets/processed/split_manifest.json").read_text(encoding="utf-8"))
+    if split.get("schema_version") != "1" or split_hash(split) != split.get("split_sha256") or split.get("canonical_sha256") != next(x["sha256"] for x in entries if x["path"] == "datasets/processed/canonical_hourly.csv"):
+        raise ValueError("Split semantic hash mismatch")
+    return [{"path": previous_path.relative_to(root).as_posix(), "sha256": sha256_file(previous_path)}, {"path": phase_path.relative_to(root).as_posix(), "sha256": sha256_file(phase_path)}, *entries]
+
+
+def run_c02(root: Path, config_path: Path, run_id: str) -> None:
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
+        raise ValueError("Invalid run ID")
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    inputs = bootstrap_c02(root, config)
+    run_dir = root / "runs" / run_id
+    run_dir.mkdir(parents=True, exist_ok=False)
+    env = {"python": platform.python_version(), "platform": platform.platform(), "packages": {name: metadata.version(name) for name in ["pandas", "numpy", "pytest", "setuptools", "wheel", "jsonschema"]}}
+    manifest = {"schema_version": "1", "run_id": run_id, "stage_id": "C02", "status": "running", "started_at_utc": now(), "finished_at_utc": None, "approval_refs": {"c01": config["c02"]["approval_reference"]}, "inputs": inputs, "config_sha256": sha256_file(config_path), "environment": env, "outputs": [], "checks": [], "limitations": ["C02 contract and Phase 2 acceptance pending Human review.", "C02 uses synthetic fixtures only; no real test origins or model fitting.", "D02 context eligibility policy and model-specific trial budgets remain pending."]}
+    (run_dir / "config.json").write_bytes(config_path.read_bytes())
+    write_json(run_dir / "environment.json", env)
+    try:
+        contract = root / "docs/results/evaluation_contract.md"
+        log = root / "docs/logs" / f"C02_{run_id}.md"
+        if not contract.exists() or log.exists():
+            raise ValueError("Contract missing or log already exists")
+        bootstrap_c02(root, config)
+        log.write_text(f"# C02 - {run_id}\n\nStatus: PENDING HUMAN REVIEW. Command: `py -3.12 -m practice_4.pipeline --stage C02 --config config/practice_4.json --run-id {run_id}`.\n\nC01 approval, predecessor manifest, split byte and semantic hashes, and raw/canonical hashes verified before and after C02. Contract is pending Human review. No real test origins, tensors, predictions, EDA, or model fitting.\n", encoding="utf-8")
+        paths = [contract, log, run_dir / "config.json", run_dir / "environment.json"]
+        manifest["outputs"] = [{"path": p.relative_to(root).as_posix(), "sha256": sha256_file(p)} for p in paths]
+        manifest["checks"] = [{"name": "c01_acceptance_and_hashes", "status": "pass", "evidence": "C01 manifest, split semantic and file hashes and raw/canonical hashes verified before and after"}]
+        manifest["status"] = "completed"
+    except Exception as exc:
+        manifest["status"] = "failed"
+        manifest["limitations"].append(f"{type(exc).__name__}: {exc}")
+        raise
+    finally:
+        manifest["finished_at_utc"] = now()
+        validate_manifest(manifest)
+        write_json(run_dir / "manifest.json", manifest)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--stage", required=True, choices=["B01", "B02"])
+    parser.add_argument("--stage", required=True, choices=["B01", "B02", "C01", "C02"])
     parser.add_argument("--config", required=True)
     parser.add_argument("--run-id", required=True)
     args = parser.parse_args()
     root = Path.cwd()
     if args.stage == "B01":
         run(root, root / args.config, args.run_id)
-    else:
+    elif args.stage == "B02":
         run_b02(root, root / args.config, args.run_id)
+    elif args.stage == "C01":
+        run_c01(root, root / args.config, args.run_id)
+    else:
+        run_c02(root, root / args.config, args.run_id)
 
 
 if __name__ == "__main__":

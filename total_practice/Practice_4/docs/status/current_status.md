@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Trạng thái dự án: `IN_PROGRESS` — Phase 1 đã đóng; đang soạn Phase 2 specification.
+Trạng thái dự án: `IN_PROGRESS` — Phase 2 APPROVED / COMPLETED; Phase 3 specification drafting `IN_PROGRESS`.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -33,10 +33,18 @@ Trạng thái dự án: `IN_PROGRESS` — Phase 1 đã đóng; đang soạn Phas
   2026-11-18 theo yêu cầu `Close Gate B01 & Execute Stage B02`.
 - Human duyệt B02 run `20261118_system312_b02_01`, canonical dataset, data
   contract và đóng Phase 1 ngày 2026-11-18 theo yêu cầu `Close Phase 1 (Gate B02)
-  & Draft Phase 2 Specification`. Phase 2 specification đang soạn, chưa duyệt.
+  & Draft Phase 2 Specification`. Phase 2 specification và before-process plan được
+  Human APPROVED ngày 2026-11-18 qua Director review; chỉ C01 được phép thực thi.
 - Approval record và contract header được cập nhật sau B02 run: hash hiện tại
   của hai tài liệu khác hash tại thời điểm run trong B02 manifest; manifest được
   giữ nguyên như evidence lịch sử. Raw và canonical data không đổi bởi việc này.
+- C01 run `20261118_system312_c01_01` và split manifest được Human APPROVED
+  2026-11-18 qua Director review; C02 được phép thực thi.
+- C02 run `20261118_system312_c02_01`, evaluation contract và Phase 2 được
+  Human APPROVED / COMPLETED ngày 2026-11-18 qua Director review; RV2 đóng.
+  Phase 3 specification đang soạn, D01 chưa được phép thực thi.
+- Header Phase 2 và evaluation contract cập nhật sau C02 approval; hash hiện tại
+  khác C02 run manifest lịch sử, manifest được giữ nguyên để bảo toàn provenance.
 
 ## Chưa thực hiện
 
@@ -44,9 +52,10 @@ Trạng thái dự án: `IN_PROGRESS` — Phase 1 đã đóng; đang soạn Phas
   counts cùng limitations trong `docs/results/data_audit.md`.
 - Human xác nhận source, version 1, CC0, units và time semantics; Kaggle page/API
   chưa được xác minh độc lập trong môi trường này. Archive hash chưa có.
-- Data contract Phase 1 đã được Human chấp nhận; chưa duyệt Phase 2 specification.
-- Chưa khóa split boundaries và validation protocol thuộc Phase 2.
-- Chưa khóa missing-value treatment, scaling hoặc walk-forward protocol.
+- Data contract Phase 1 và Phase 2 specification đã được Human chấp nhận.
+- Phase 3 specification và before-process plan còn PENDING HUMAN REVIEW.
+- Chưa khóa missing-value treatment hoặc scaling; walk-forward protocol đã duyệt,
+  nhưng D02 context policy và model-specific budgets vẫn chờ approval riêng.
 - Editable install vào system Python 3.12 đã chạy; không tạo virtualenv hoặc
   kiểm clean-environment reproduction. B01 đã được Human chấp nhận.
 - Đã có B01/B02 pipeline và tests; notebook template có 12 Markdown cells, chưa
