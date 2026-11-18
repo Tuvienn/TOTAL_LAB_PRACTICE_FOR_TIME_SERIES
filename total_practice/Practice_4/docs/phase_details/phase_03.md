@@ -1,9 +1,8 @@
 # Phase 3 — Training-only exploratory data analysis (D01)
 
-Trạng thái: **DRAFT — PENDING HUMAN REVIEW / APPROVAL**, 2026-11-18. Human đã
-duyệt C02 run `20261118_system312_c02_01`, evaluation contract và đóng Phase 2;
-yêu cầu `Close Phase 2 (Gate C02) & Draft Phase 3 Specification` chỉ cho phép
-soạn tài liệu này. D01 chưa được duyệt hoặc thực thi.
+Trạng thái: **APPROVED — D01 IN_PROGRESS**, 2026-11-18. Human đã duyệt Phase 3
+specification và before-process plan; Human cho phép tiếp tục D01 qua Director
+review với raw wind 133 m/s train membership chưa xác minh.
 
 Nguồn: [roadmap Cụm D và mục 7](../plans/plan_overview.md),
 [file map](../plans/file_map.csv), [Phase 2](phase_02.md),
@@ -66,8 +65,8 @@ và Phase 4 specification/before-process plan được duyệt riêng.
    records; nếu có timestamp train đã xác minh, chỉ inspect raw record thuộc train
    và phân biệt raw city value với canonical proxy cùng giờ. Nếu không xác định
    được train membership mà không parse held-out records, không mở raw rows để
-   tìm: ghi limitation, dừng phần truy vết này và trình Human hướng xử lý trước
-   khi tuyên bố hoàn tất yêu cầu đó. Không xóa, clip hay sửa giá trị.
+   tìm. Human cho phép tiếp tục ngày 2026-11-18 với membership chưa xác minh;
+   ghi limitation trong findings, manifest và log. Không xóa, clip hay sửa giá trị.
 3. **Time series/profiles:** đồ thị load theo UTC và mean/median profile theo
    hour-of-day và weekday `Europe/Madrid`; show số observed/missing và coverage.
    Báo DST và partial-period limitations, không đưa missing thành zero.
@@ -153,7 +152,7 @@ git diff --check
 
 Dừng khi thiếu approval/dependency/tzdata, predecessor hay hash drift, split
 schema/boundary/timeline mismatch, bất kỳ held-out record được parse, train-only
-test thất bại, raw 133 m/s không thể xác minh train membership trong boundary,
+test thất bại,
 missing/invalid values cần policy chưa duyệt, ACF/PACF thiếu contiguous domain,
 figure không thể inspect, hoặc scope/semantics cần mở rộng. Giữ failed-run evidence
 và báo Human; không tự đổi split, threshold, lag, policy hay dependency.
@@ -167,5 +166,7 @@ không chứng minh causality. Findings phải báo những giới hạn thực 
 
 - C01, C02, evaluation contract và Phase 2: **Human APPROVED / COMPLETED
   2026-11-18 via Director review**, theo yêu cầu hiện tại.
-- Phase 3 specification / before-process plan: **PENDING HUMAN REVIEW / APPROVAL**.
-- D01 execution và acceptance, D02 policy và Phase 4: **chưa được duyệt**.
+- Phase 3 specification / before-process plan: **Human APPROVED 2026-11-18 via Director review**; D01 được phép thực thi.
+- Human resolution 2026-11-18 via Director review: tiếp tục D01, ghi raw 133 m/s
+  train membership chưa xác minh; không truy cập held-out records để xác định.
+- D01 acceptance và D02 policy: **PENDING HUMAN REVIEW**; Phase 4 chưa được duyệt.

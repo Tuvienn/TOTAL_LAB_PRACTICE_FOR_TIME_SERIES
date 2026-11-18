@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "practice-4"
 version = "0.1.0"
 requires-python = ">=3.12,<3.13"
-dependencies = ["pandas>=2.2,<3", "numpy", "jsonschema"]
+dependencies = ["pandas>=2.2,<3", "numpy", "jsonschema", "matplotlib==3.11.2", "statsmodels==0.14.6", "tzdata==2026.5"]
 
 [project.optional-dependencies]
 test = ["pytest"]

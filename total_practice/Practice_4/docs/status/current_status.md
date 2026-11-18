@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Trạng thái dự án: `IN_PROGRESS` — Phase 2 APPROVED / COMPLETED; Phase 3 specification drafting `IN_PROGRESS`.
+Trạng thái dự án: `IN_PROGRESS` — Phase 3 specification APPROVED; Stage D01 `IN_PROGRESS`.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -42,9 +42,18 @@ Trạng thái dự án: `IN_PROGRESS` — Phase 2 APPROVED / COMPLETED; Phase 3 
   2026-11-18 qua Director review; C02 được phép thực thi.
 - C02 run `20261118_system312_c02_01`, evaluation contract và Phase 2 được
   Human APPROVED / COMPLETED ngày 2026-11-18 qua Director review; RV2 đóng.
-  Phase 3 specification đang soạn, D01 chưa được phép thực thi.
+  Phase 3 specification và before-process plan được Human APPROVED ngày
+  2026-11-18 qua Director review; D01 được phép thực thi.
 - Header Phase 2 và evaluation contract cập nhật sau C02 approval; hash hiện tại
   khác C02 run manifest lịch sử, manifest được giữ nguyên để bảo toàn provenance.
+- D01: Python 3.12 import được matplotlib 3.11.2 với Agg, statsmodels 0.14.6,
+  tzdata 2026.5 và pandas 2.3.3; đã ghi versions và khóa config trước EDA.
+  Evidence B01/B02 xác nhận một raw 133 m/s record nhưng không ghi timestamp;
+  Human cho phép tiếp tục ngày 2026-11-18 qua Director review; train membership
+  của raw record được ghi là chưa xác minh, không mở held-out rows để tìm.
+- D01 run `20261118_system312_d01_01` đã tạo train-only findings và staged figures;
+  D01 acceptance và D02 policy proposals **PENDING HUMAN REVIEW**. Raw 133 m/s
+  train membership chưa xác minh; không promote figures.
 
 ## Chưa thực hiện
 
@@ -53,7 +62,7 @@ Trạng thái dự án: `IN_PROGRESS` — Phase 2 APPROVED / COMPLETED; Phase 3 
 - Human xác nhận source, version 1, CC0, units và time semantics; Kaggle page/API
   chưa được xác minh độc lập trong môi trường này. Archive hash chưa có.
 - Data contract Phase 1 và Phase 2 specification đã được Human chấp nhận.
-- Phase 3 specification và before-process plan còn PENDING HUMAN REVIEW.
+- D01 acceptance và D02 policy còn PENDING HUMAN REVIEW.
 - Chưa khóa missing-value treatment hoặc scaling; walk-forward protocol đã duyệt,
   nhưng D02 context policy và model-specific budgets vẫn chờ approval riêng.
 - Editable install vào system Python 3.12 đã chạy; không tạo virtualenv hoặc

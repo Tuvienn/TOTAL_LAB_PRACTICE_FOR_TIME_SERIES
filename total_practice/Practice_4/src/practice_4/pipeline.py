@@ -17,7 +17,7 @@ from practice_4.data.ingestion import sha256_file, summarize
 
 HASH = {"type": "string", "pattern": "^[a-f0-9]{64}$"}
 FILE = {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": HASH}, "additionalProperties": False}
-MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02", "C01", "C02"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
+MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02", "C01", "C02", "D01"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
 
 
 def validate_manifest(manifest: dict) -> None:
@@ -371,9 +371,82 @@ def run_c02(root: Path, config_path: Path, run_id: str) -> None:
         write_json(run_dir / "manifest.json", manifest)
 
 
+def bootstrap_d01(root: Path, config: dict) -> list[dict]:
+    from practice_4.data.splitting import split_hash
+
+    policy = config["d01"]
+    if policy.get("predecessor_run") != "20261118_system312_c02_01" or not policy.get("approval_reference"):
+        raise ValueError("D01 approval missing")
+    phase = (root / "docs/phase_details/phase_03.md").read_text(encoding="utf-8")
+    if "Human APPROVED 2026-11-18 via Director review" not in phase or "Human resolution 2026-11-18" not in phase:
+        raise ValueError("Phase 3 approval or resolution missing")
+    predecessor = root / "runs/20261118_system312_c02_01/manifest.json"
+    if sha256_file(predecessor) != policy["predecessor_manifest_sha256"]:
+        raise ValueError("C02 manifest hash drift")
+    old = json.loads(predecessor.read_text(encoding="utf-8"))
+    validate_manifest(old)
+    if old["run_id"] != policy["predecessor_run"] or old["stage_id"] != "C02" or old["status"] != "completed":
+        raise ValueError("C02 predecessor invalid")
+    if "APPROVED / COMPLETED" not in (root / "docs/results/evaluation_contract.md").read_text(encoding="utf-8"):
+        raise ValueError("C02 acceptance missing")
+    names = {"datasets/raw/energy_dataset.csv", "datasets/raw/weather_features.csv", "datasets/processed/canonical_hourly.csv", "datasets/processed/split_manifest.json"}
+    entries = [item for item in old["inputs"] if item["path"] in names]
+    if len(entries) != 4 or {item["path"] for item in entries} != names:
+        raise ValueError("C02 data lineage missing")
+    for item in entries:
+        if sha256_file(root / item["path"]) != item["sha256"]:
+            raise ValueError(f"Input drift: {item['path']}")
+    split = json.loads((root / "datasets/processed/split_manifest.json").read_text(encoding="utf-8"))
+    if split_hash(split) != split["split_sha256"] or split["canonical_sha256"] != next(x["sha256"] for x in entries if x["path"].endswith("canonical_hourly.csv")):
+        raise ValueError("Split semantic hash drift")
+    expected = {"row_count":24544,"start_row":0,"end_row":24543,"start_utc":"2014-12-31T23:00:00+00:00","end_utc":"2017-10-19T14:00:00+00:00"}
+    if split["splits"]["train"] != expected:
+        raise ValueError("Train boundary drift")
+    if policy["max_acf_lag"] != 168 or policy["pacf_method"] != "ywm" or policy["acf_contiguous_block_rule"] != "longest_observed_train_block" or policy["block_tie_break"] != "earliest_timestamp" or policy["figure_dpi"] != 120:
+        raise ValueError("D01 config drift")
+    return [{"path": predecessor.relative_to(root).as_posix(), "sha256": sha256_file(predecessor)}, {"path": "docs/phase_details/phase_03.md", "sha256": sha256_file(root / "docs/phase_details/phase_03.md")}, *entries]
+
+
+def run_d01(root: Path, config_path: Path, run_id: str) -> None:
+    from practice_4.analysis.eda import load_train, summarize
+    from practice_4.visualization.plots import render
+    import matplotlib
+
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
+        raise ValueError("Invalid run ID")
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    inputs = bootstrap_d01(root, config)
+    run_dir = root / "runs" / run_id
+    run_dir.mkdir(parents=True, exist_ok=False)
+    env = {"python": platform.python_version(), "platform": platform.platform(), "packages": {name: metadata.version(name) for name in ["pandas", "numpy", "pytest", "jsonschema", "matplotlib", "statsmodels", "tzdata"]}, "matplotlib_backend": matplotlib.get_backend(), "font": "DejaVu Sans"}
+    manifest = {"schema_version":"1","run_id":run_id,"stage_id":"D01","status":"running","started_at_utc":now(),"finished_at_utc":None,"approval_refs":{"phase_3":config["d01"]["approval_reference"]},"inputs":inputs,"config_sha256":sha256_file(config_path),"environment":env,"outputs":[],"checks":[],"limitations":["Raw city-level 133 m/s train membership unverified to preserve strict train-only isolation; Human approved proceeding.","D01 and D02 proposals pending Human review; figures staged, not promoted."]}
+    (run_dir / "config.json").write_bytes(config_path.read_bytes())
+    write_json(run_dir / "environment.json", env)
+    try:
+        split = json.loads((root / "datasets/processed/split_manifest.json").read_text(encoding="utf-8"))
+        frame = load_train(root / "datasets/processed/canonical_hourly.csv", split["splits"]["train"])
+        result = summarize(frame, split["splits"]["train"], 168, "ywm")
+        summary = run_dir / "summary.json"
+        write_json(summary, result)
+        figures = render(frame, result, run_dir / "figures", 120)
+        bootstrap_d01(root, config)
+        paths = [summary, *figures, run_dir / "config.json", run_dir / "environment.json"]
+        manifest["outputs"] = [{"path":p.relative_to(root).as_posix(),"sha256":sha256_file(p)} for p in paths]
+        manifest["checks"] = [{"name":"lineage_and_unchanged_hashes","status":"pass","evidence":"C02 manifest and raw/canonical/split bytes verified before and after"},{"name":"train_only","status":"pass","evidence":"24544 records parsed; UTC timeline and train boundaries validated"}]
+        manifest["status"] = "completed"
+    except Exception as exc:
+        manifest["status"] = "failed"
+        manifest["limitations"].append(f"{type(exc).__name__}: {exc}")
+        raise
+    finally:
+        manifest["finished_at_utc"] = now()
+        validate_manifest(manifest)
+        write_json(run_dir / "manifest.json", manifest)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--stage", required=True, choices=["B01", "B02", "C01", "C02"])
+    parser.add_argument("--stage", required=True, choices=["B01", "B02", "C01", "C02", "D01"])
     parser.add_argument("--config", required=True)
     parser.add_argument("--run-id", required=True)
     args = parser.parse_args()
@@ -384,8 +457,10 @@ def main() -> None:
         run_b02(root, root / args.config, args.run_id)
     elif args.stage == "C01":
         run_c01(root, root / args.config, args.run_id)
-    else:
+    elif args.stage == "C02":
         run_c02(root, root / args.config, args.run_id)
+    else:
+        run_d01(root, root / args.config, args.run_id)
 
 
 if __name__ == "__main__":

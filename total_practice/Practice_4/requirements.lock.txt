@@ -3,6 +3,8 @@ numpy==2.5.5
 python-dateutil==3.0.0
 pytz==2026.5
 tzdata==2026.5
+matplotlib==3.11.2
+statsmodels==0.14.6
 six==1.17.0
 pytest==9.2.0
 setuptools==84.2.1

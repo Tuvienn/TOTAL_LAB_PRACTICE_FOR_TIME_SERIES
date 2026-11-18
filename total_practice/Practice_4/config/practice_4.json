@@ -35,5 +35,21 @@
     "predecessor_manifest_sha256": "cfab391bc73976bb1dab945382e78822afa85a7988ef773581b4636967e2db91",
     "approval_reference": "Human: C01 run and split APPROVED 2026-11-18 via Director review; C02 authorized",
     "schema_version": "1"
+  },
+  "d01": {
+    "max_acf_lag": 168,
+    "pacf_method": "ywm",
+    "acf_contiguous_block_rule": "longest_observed_train_block",
+    "block_tie_break": "earliest_timestamp",
+    "figure_dpi": 120,
+    "figure_style": {
+      "backend": "Agg",
+      "font_family": "DejaVu Sans",
+      "style": "default"
+    },
+    "timezone": "Europe/Madrid",
+    "predecessor_run": "20261118_system312_c02_01",
+    "predecessor_manifest_sha256": "6bedf3bb565ba51c6695cb30177845d6f1a35969e1c10120ea9114817064c730",
+    "approval_reference": "Human: Phase 3 approved and raw 133 m/s limitation accepted, 2026-11-18 via Director review"
   }
 }
