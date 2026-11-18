@@ -69,5 +69,10 @@
       "rows": 9271,
       "earlier_observed_excluded": 15241
     }
+  },
+  "e01": {
+    "approval_reference": "Human: Phase 5 specification and before-process plan APPROVED 2026-11-18 via Director review; E01 only",
+    "predecessor_run": "20261118_system312_d02_01",
+    "predecessor_manifest_sha256": "50527847fbbda7dc510806301cf95a368de6f39716577d2ca7813d7bd4c3e3ff"
   }
 }

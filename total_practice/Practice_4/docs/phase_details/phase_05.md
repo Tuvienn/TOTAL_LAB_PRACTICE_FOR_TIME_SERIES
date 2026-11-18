@@ -1,6 +1,6 @@
 # Phase 5 — Feature engineering and aligned model inputs (E01–E02)
 
-Status: **SPECIFICATION DRAFT — PENDING HUMAN REVIEW**. Phase 5 drafting is **IN_PROGRESS**. Human authorized documentation only on 2026-11-18 via Director review.
+Status: **SPECIFICATION APPROVED** by Human on 2026-11-18 via Director review. Execution authorization covers **Stage E01 only**. See [current status](../status/current_status.md) for run progress.
 
 Sources: [roadmap, Cụm E and §4.1](../plans/plan_overview.md), [file map](../plans/file_map.csv), [C02 evaluation contract](../results/evaluation_contract.md), [split manifest](../../datasets/processed/split_manifest.json), [Phase 4 approval](phase_04.md), [D02 audit](../results/preprocessing_audit.md), and [accepted D02 run manifest](../../runs/20261118_system312_d02_01/manifest.json).
 
@@ -84,7 +84,7 @@ Reject object arrays, extra or duplicate keys, dtype/shape mismatches, nonfinite
 2. After Human accepts E01 and authorizes E02, implement alignment and serialization. Verify synthetic fixtures for row-25 warm-up, cross-split carry, target-missing precedence, older context NaNs, wrong timestamp/schema rejection, and VAR block limits.
 3. Run E02 with a fresh ID. Reload staged outputs, compare every eligible index, target, lag view and raw label against the permitted source, verify counts and hashes, and only then promote. Present the audit and artifact hashes for Human acceptance before downstream modeling.
 
-Planned commands from the Practice 4 root after the respective gates. The E01/E02 dispatchers and feature tests are future deliverables.
+Planned commands from the Practice 4 root after the respective gates. E02 execution requires its own Human authorization.
 
 ```powershell
 py -3.12 -m pytest tests/test_features.py
@@ -102,5 +102,6 @@ Stop for missing stage approval, inaccessible or changed input lineage, unexpect
 ## 7. Approval record
 
 - D02 run `20261118_system312_d02_01`, prepared data, preprocessing audit and Phase 4 completion: **Human APPROVED / COMPLETED, 2026-11-18 via Director review**.
-- Phase 5 specification and before-process plan: **PENDING HUMAN APPROVAL**.
-- E01 implementation, E02 implementation and Phase 5 RV2 schema acceptance await explicit Human authorization. H01 test opening remains a separate gate.
+- Phase 5 specification and before-process plan: **Human APPROVED 2026-11-18 via Director review**.
+- Stage E01 only: **Human authorized execution 2026-11-18 via Director review**.
+- E01 gate acceptance and E02 execution approval: **PENDING HUMAN REVIEW**. Phase 5 RV2 schema acceptance and H01 test opening retain separate gates.

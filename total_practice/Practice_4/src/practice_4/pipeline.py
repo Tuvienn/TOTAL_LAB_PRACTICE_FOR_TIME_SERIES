@@ -17,7 +17,7 @@ from practice_4.data.ingestion import sha256_file, summarize
 
 HASH = {"type": "string", "pattern": "^[a-f0-9]{64}$"}
 FILE = {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": HASH}, "additionalProperties": False}
-MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02", "C01", "C02", "D01", "D02"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
+MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02", "C01", "C02", "D01", "D02", "E01"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
 
 
 def validate_manifest(manifest: dict) -> None:
@@ -561,9 +561,241 @@ def run_d02(root: Path, config_path: Path, run_id: str) -> None:
         write_json(run_dir / "manifest.json", manifest)
 
 
+def _e01_inputs(root: Path, policy: dict) -> tuple[list[dict], dict, dict]:
+    from practice_4.data.features import PREFIX_ROWS, TRAIN_ROWS
+    from practice_4.data.preprocessing import FEATURES
+    from practice_4.data.splitting import split_hash
+
+    phase_4 = "docs/phase_details/phase_04.md"
+    phase_5 = "docs/phase_details/phase_05.md"
+    run_id = "20261118_system312_d02_01"
+    acceptance = (
+        f"D02 run `{run_id}`, prepared data, preprocessing audit and Phase 4 completion: "
+        "**Human APPROVED / COMPLETED, 2026-11-18 via Director review**."
+    )
+    approval = "Human: Phase 5 specification and before-process plan APPROVED 2026-11-18 via Director review; E01 only"
+    phase_5_record = (root / phase_5).read_text(encoding="utf-8")
+    if (
+        policy["approval_reference"] != approval
+        or policy["predecessor_run"] != run_id
+        or acceptance not in (root / phase_4).read_text(encoding="utf-8")
+        or "Phase 5 specification and before-process plan: **Human APPROVED 2026-11-18 via Director review**." not in phase_5_record
+        or "Stage E01 only: **Human authorized execution 2026-11-18 via Director review**." not in phase_5_record
+    ):
+        raise ValueError("Phase 5/E01 approval or D02 acceptance missing")
+
+    previous_path = f"runs/{run_id}/manifest.json"
+    predecessor_hash = sha256_file(root / previous_path)
+    if predecessor_hash != policy["predecessor_manifest_sha256"]:
+        raise ValueError("D02 manifest hash drift")
+    previous = json.loads((root / previous_path).read_text(encoding="utf-8"))
+    validate_manifest(previous)
+    if (previous["stage_id"], previous["run_id"], previous["status"]) != ("D02", run_id, "completed"):
+        raise ValueError("Invalid D02 predecessor")
+
+    split_path = "datasets/processed/split_manifest.json"
+    canonical_path = "datasets/processed/canonical_hourly.csv"
+    prepared_path = "datasets/processed/prepared_hourly.csv"
+    scaler_path = f"runs/{run_id}/artifacts/scaler.json"
+    summary_path = f"runs/{run_id}/artifacts/summary.json"
+    immutable_inputs = (
+        "datasets/raw/energy_dataset.csv", "datasets/raw/weather_features.csv", canonical_path, split_path,
+    )
+    data_entries = []
+    for records, paths in (
+        (previous["inputs"], immutable_inputs),
+        (previous["outputs"], (prepared_path, scaler_path, summary_path)),
+    ):
+        for path in paths:
+            matches = [entry for entry in records if entry["path"] == path]
+            if len(matches) != 1 or sha256_file(root / path) != matches[0]["sha256"]:
+                raise ValueError(f"Missing or changed D02 lineage: {path}")
+            data_entries.append(matches[0])
+
+    hashes = {entry["path"]: entry["sha256"] for entry in data_entries}
+    split = json.loads((root / split_path).read_text(encoding="utf-8"))
+    scaler = json.loads((root / scaler_path).read_text(encoding="utf-8"))
+    summary = json.loads((root / summary_path).read_text(encoding="utf-8"))
+    semantic_hash = split_hash(split)
+    provenance = {path: hashes[path] for path in immutable_inputs}
+    provenance["split_semantic_sha256"] = semantic_hash
+    if (
+        split["split_sha256"] != semantic_hash
+        or split["canonical_path"] != canonical_path
+        or split["canonical_sha256"] != hashes[canonical_path]
+        or scaler["provenance"] != provenance
+        or scaler["feature_order"] != FEATURES
+        or (scaler["fit_start_row"], scaler["fit_end_row"]) != (0, TRAIN_ROWS - 1)
+        or summary["input_hashes"] != provenance
+        or summary["scaler_sha256"] != hashes[scaler_path]
+        or summary["prepared_sha256"] != hashes[prepared_path]
+    ):
+        raise ValueError("D02 split or scaler provenance mismatch")
+    for name, start, stop in (("train", 0, TRAIN_ROWS), ("validation", TRAIN_ROWS, PREFIX_ROWS)):
+        part = split["splits"][name]
+        if (part["start_row"], part["end_row"], part["row_count"]) != (start, stop - 1, stop - start):
+            raise ValueError(f"E01 split boundary mismatch: {name}")
+
+    inputs = [
+        {"path": previous_path, "sha256": predecessor_hash},
+        *({"path": path, "sha256": sha256_file(root / path)} for path in (phase_4, phase_5)),
+        *data_entries,
+    ]
+    return inputs, split["splits"], summary["counts"]
+
+
+def _feature_dictionary(run_id: str, var_shape: tuple[int, int]) -> str:
+    import numpy as np
+    from practice_4.data.features import (
+        FLAT_FEATURE_NAMES, SCALED_COLUMNS, SEQUENCE_HOURS, VAR_EARLIER_OBSERVED,
+        VAR_END_ROW, VAR_END_UTC, VAR_START_ROW, VAR_START_UTC, XGB_FEATURE_NAMES,
+        classify_origin, feature_views,
+    )
+
+    ramp = np.arange(26, dtype=np.float64)[:, None] + np.array([0, 100, 200, 300])
+    raw_load = ramp[:, 0].copy()
+    raw_load[25] = 12345.0
+    origin = classify_origin(ramp, 25, raw_load[25], True)
+    sequence, flat, xgb = feature_views(ramp, [origin.target_row])
+    expected_sequence = np.arange(1, 25)[:, None] + np.array([0, 100, 200, 300])
+    if not origin.eligible or origin.y_true_mw != 12345.0:
+        raise ValueError("E01 ramp label mismatch")
+    np.testing.assert_array_equal(sequence[0], expected_sequence)
+    np.testing.assert_array_equal(flat[0], expected_sequence.ravel())
+    np.testing.assert_array_equal(xgb[0, :96], flat[0])
+    np.testing.assert_allclose(xgb[0, 96:], [21.5, np.sqrt(575 / 12), 24], rtol=1e-14, atol=0)
+
+    lines = [
+        "# E01 Feature Dictionary", "",
+        f"Run `{run_id}` · **PENDING HUMAN REVIEW**", "",
+        "For target row `k`, origin `t` is row `k-1`. The common context is rows `k-25..k-1` inclusive.",
+        "Each input is available at the end of its source hour. Target-hour weather and later observations are outside the context.",
+        "The fixed D02 working features and their statistics are dimensionless. The label is the observed raw `load` at `t+1` in MW.", "",
+        "LSTM uses a float64 array of shape `(N, 24, 4)`. Its time axis runs oldest to newest from `t-23` through `t`.",
+        f"Its variable axis is {', '.join(f'`{name}`' for name in SCALED_COLUMNS)}.",
+        "The flat view reshapes these axes in time-major order to `(N, 96)`. XGBoost appends three derived columns for `(N, 99)`.", "",
+        "| 0-based column | Exact name | D02 source | Origin-relative hours | Target-relative hours | Definition |",
+        "|---:|---|---|---|---|---|",
+    ]
+    for column, feature in enumerate(FLAT_FEATURE_NAMES):
+        hour, variable = divmod(column, len(SCALED_COLUMNS))
+        offset = hour - (SEQUENCE_HOURS - 1)
+        source = SCALED_COLUMNS[variable]
+        lines.append(f"| {column} | `{feature}` | `{source}` | {offset} | {offset - 1} | Scaled level |")
+    derived = (
+        ("-5..0", "-6..-1", "Arithmetic mean of six hourly levels"),
+        ("-23..0", "-24..-1", "Population standard deviation of 24 hourly levels, `ddof=0`"),
+        ("-24, 0", "-25, -1", "Level at `t` minus level at `t-24`"),
+    )
+    for column, (feature, definition) in enumerate(zip(XGB_FEATURE_NAMES[96:], derived), start=96):
+        offset, target_offset, formula = definition
+        lines.append(f"| {column} | `{feature}` | `{SCALED_COLUMNS[0]}` | {offset} | {target_offset} | {formula} |")
+    lines.extend([
+        "", "## Ramp hand check", "",
+        "Synthetic row `i` contains `[i, 100+i, 200+i, 300+i]`. Origin 24 uses context 0–24 and target 25.",
+        f"- Sequence and flat lag blocks start at `{sequence[0, 0].astype(int).tolist()}` and end at `{sequence[0, -1].astype(int).tolist()}`.",
+        "- `mean6h = (19 + 20 + 21 + 22 + 23 + 24) / 6 = 21.5`.",
+        f"- `std24h = sqrt(575/12) = {xgb[0, 97]:.15g}` from the population variance of integers 1–24.",
+        "- `trend24h = 24 - 0 = 24`.",
+        f"- The label is row 25's synthetic raw value, `{origin.y_true_mw:g} MW`.",
+        "", "## Candidate eligibility", "",
+        "Rows 0–24 are warm-up. Candidate split follows the target timestamp. The first validation target uses the last training hour as its origin.",
+        "A missing raw label takes precedence as `missing_truth`. An observed target with a nonfinite value anywhere in its 25 × 4 scaled context is `invalid_context`.",
+        "A finite observed truth and finite context are eligible. A raw truth and mask mismatch raises a contract error. Physical and statistical flags leave eligibility unchanged.",
+        "", "## VAR training block", "",
+        f"E01 verified a contiguous float64 matrix of shape `{var_shape}`, using the same four scaled columns.",
+        f"Prepared rows {VAR_START_ROW:,}–{VAR_END_ROW:,} span `{VAR_START_UTC}` through `{VAR_END_UTC}`, inclusive.",
+        "All block hours are observed, have equal raw and working load, and have finite scaled levels.",
+        f"The fixed block excludes {VAR_EARLIER_OBSERVED:,} earlier observed train hours and may underrepresent earlier regimes.",
+        "The block has its own row axis. F02 owns VAR fitting and adequacy checks.",
+        "",
+    ])
+    return "\n".join(lines)
+
+
+def run_e01(root: Path, config_path: Path, run_id: str) -> None:
+    from practice_4.data.features import extract_var_train_levels, load_prepared_prefix
+
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
+        raise ValueError("Invalid run ID")
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    policy = config["e01"]
+    inputs, splits, counts = _e01_inputs(root, policy)
+    dictionary = root / "docs/results/feature_dictionary.md"
+    log = root / "docs/logs" / f"E01_{run_id}.md"
+    if dictionary.exists() or log.exists():
+        raise FileExistsError("E01 output collision")
+    run_dir = root / "runs" / run_id
+    run_dir.mkdir(parents=True, exist_ok=False)
+
+    packages = ("pandas", "numpy", "scikit-learn", "pytest", "jsonschema")
+    env = {
+        "python": platform.python_version(), "platform": platform.platform(),
+        "packages": {name: metadata.version(name) for name in packages},
+    }
+    manifest = {
+        "schema_version": "1", "run_id": run_id, "stage_id": "E01", "status": "running",
+        "started_at_utc": now(), "finished_at_utc": None,
+        "approval_refs": {"phase_5": policy["approval_reference"], "d02": policy["predecessor_run"]},
+        "inputs": inputs, "config_sha256": sha256_file(config_path), "environment": env,
+        "outputs": [], "checks": [],
+        "limitations": [
+            "E01 gate acceptance and E02 execution approval remain pending Human review.",
+            "Raw and canonical CSVs were hashed as opaque bytes. Data parsing was restricted to D02 train and validation.",
+            "The fixed VAR block omits earlier observed train hours and may underrepresent earlier regimes.",
+        ],
+    }
+    try:
+        prepared = load_prepared_prefix(root / "datasets/processed/prepared_hourly.csv", splits, counts)
+        var = extract_var_train_levels(prepared)
+        report = _feature_dictionary(run_id, var.shape)
+        after, _, _ = _e01_inputs(root, policy)
+        if inputs != after:
+            raise ValueError("Input drift during E01")
+
+        snapshot = run_dir / "config.json"
+        environment = run_dir / "environment.json"
+        snapshot.write_bytes(config_path.read_bytes())
+        write_json(environment, env)
+        if sha256_file(snapshot) != manifest["config_sha256"]:
+            raise ValueError("Config drift during E01")
+        manifest["checks"] = [
+            {"name": "lineage_and_hashes", "status": "pass", "evidence": "D02 acceptance, manifest SHA256 and split file/semantic lineage verified. Raw, canonical, split, prepared and scaler digests match D02 before and after feature checks."},
+            {"name": "prepared_prefix", "status": "pass", "evidence": f"{len(prepared)} UTC hours with the accepted D02 schema, split endpoints, masks and counts."},
+            {"name": "ramp", "status": "pass", "evidence": "Synthetic sequence and flat view matched the hand calculation, including all three derived features and row 25 raw truth."},
+            {"name": "var", "status": "pass", "evidence": f"{var.shape} finite scaled levels, exact UTC hourly endpoints, observed raw load and working/raw equality."},
+        ]
+        log_text = "\n".join([
+            f"# E01 {run_id}", "",
+            "Status **PENDING HUMAN REVIEW**.", "",
+            f"Command `py -3.12 -m practice_4.pipeline --stage E01 --config {config_path.relative_to(root).as_posix()} --run-id {run_id}` completed successfully.", "",
+            *(f"- {check['evidence']}" for check in manifest["checks"]),
+            "", "The [current status](../status/current_status.md) records the separate pytest commands and outcomes.",
+            f"See the [run manifest](../../runs/{run_id}/manifest.json) for input and output hashes.",
+            "The run publishes the feature dictionary and run evidence. E02 artifacts remain gated.", "",
+        ])
+        with dictionary.open("x", encoding="utf-8") as stream:
+            stream.write(report)
+        with log.open("x", encoding="utf-8") as stream:
+            stream.write(log_text)
+        manifest["outputs"] = [
+            {"path": path.relative_to(root).as_posix(), "sha256": sha256_file(path)}
+            for path in (dictionary, log, snapshot, environment)
+        ]
+        manifest["status"] = "completed"
+    except Exception as exc:
+        manifest["status"] = "failed"
+        manifest["limitations"].append(f"{type(exc).__name__}: {exc}")
+        raise
+    finally:
+        manifest["finished_at_utc"] = now()
+        validate_manifest(manifest)
+        write_json(run_dir / "manifest.json", manifest)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--stage", required=True, choices=["B01", "B02", "C01", "C02", "D01", "D02"])
+    parser.add_argument("--stage", required=True, choices=["B01", "B02", "C01", "C02", "D01", "D02", "E01"])
     parser.add_argument("--config", required=True)
     parser.add_argument("--run-id", required=True)
     args = parser.parse_args()
@@ -578,8 +810,10 @@ def main() -> None:
         run_c02(root, root / args.config, args.run_id)
     elif args.stage == "D01":
         run_d01(root, root / args.config, args.run_id)
-    else:
+    elif args.stage == "D02":
         run_d02(root, root / args.config, args.run_id)
+    else:
+        run_e01(root, root / args.config, args.run_id)
 
 
 if __name__ == "__main__":

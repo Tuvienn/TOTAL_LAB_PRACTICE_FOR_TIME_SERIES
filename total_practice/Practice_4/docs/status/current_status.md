@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Status: D02 / Phase 4 **APPROVED / COMPLETED** (Human, 2026-11-18 via Director review). Phase 5 specification drafting **IN_PROGRESS**. E01/E02 implementation awaits Human approval.
+Status: D02 / Phase 4 **APPROVED / COMPLETED** (Human, 2026-11-18 via Director review). Phase 5 specification and before-process plan **APPROVED** (Human, 2026-11-18 via Director review). Stage E01 execution **COMPLETED**. E01 gate acceptance and E02 execution approval are **PENDING HUMAN REVIEW**.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -60,7 +60,7 @@ Status: D02 / Phase 4 **APPROVED / COMPLETED** (Human, 2026-11-18 via Director r
 - Human xác nhận source, version 1, CC0, units và time semantics; Kaggle page/API
   chưa được xác minh độc lập trong môi trường này. Archive hash chưa có.
 - Data contract Phase 1 và Phase 2 specification đã được Human chấp nhận.
-- [Phase 5 specification and before-process plan](../phase_details/phase_05.md) are drafted for Human review. E01/E02 code and model input artifacts remain pending.
+- [Phase 5 specification and before-process plan](../phase_details/phase_05.md) were approved on 2026-11-18 via Director review for E01 execution only.
 - Editable install vào system Python 3.12 đã chạy; không tạo virtualenv hoặc
   kiểm clean-environment reproduction. B01 đã được Human chấp nhận.
 - Đã có B01/B02 pipeline và tests; notebook template có 12 Markdown cells, chưa
@@ -75,3 +75,11 @@ không suy diễn nguyên nhân. UCI không phải dataset chính đã chọn.
 - Preprocessing tests: 9 passed; splitting/walk-forward/metrics regression: 17 passed. Deprecation warnings are recorded in the D02 log.
 - Raw, canonical and split hashes matched D01 lineage before and after processing; persisted data and manifest hashes were independently verified. See `docs/results/preprocessing_audit.md` and run manifest.
 - Human accepted the D02 run, prepared CSV, preprocessing audit and Phase 4 completion on 2026-11-18 via Director review. The Phase 4 approval record and audit header were updated after the run. The D02 manifest and staged audit retain their run-time hashes and wording.
+
+## E01 evidence for Human gate review
+
+- Run `20261118_system312_e01_01` completed with exit code 0 on system Python 3.12.10. The [feature dictionary](../results/feature_dictionary.md), [run manifest](../../runs/20261118_system312_e01_01/manifest.json) and [execution log](../logs/E01_20261118_system312_e01_01.md) are ready for review.
+- `py -3.12 -m pytest tests/test_features.py` passed 23 tests. `py -3.12 -m pytest tests/test_preprocessing.py tests/test_splitting.py tests/test_walk_forward.py tests/test_metrics.py` passed 26 tests with 21 existing NumPy timedelta deprecation warnings. `py -3.12 -m pytest tests/test_pipeline.py` passed 2 tests. Pytest plugin autoload and cache were disabled for these commands.
+- The ramp verified the 24 x 4 sequence, 96 flat lags, three appended XGBoost statistics and the distinct raw target. Synthetic tests covered target-hour weather invariance, split carry and exclusion precedence. E01 validated all 29,803 prepared UTC rows and extracted the exact 9,271 x 4 VAR train block in memory. Its exclusion of 15,241 earlier observed hours limits representativeness.
+- Independent before/after SHA256 checks matched for both raw CSVs, the canonical CSV, split manifest, prepared CSV and D02 scaler. Raw and canonical CSV access was byte hashing only. Parsed records were restricted to the prepared prefix ending at row 29,802.
+- E01 acceptance and E02 execution approval are **PENDING HUMAN REVIEW**. E02 origin, model input and alignment audit paths are absent.
