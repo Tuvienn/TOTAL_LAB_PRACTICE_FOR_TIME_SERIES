@@ -153,7 +153,7 @@ phần Advanced SARIMA Extension.
   </tr>
   <tr>
     <td>Khoảng thời gian</td>
-    <td>Dataset 1: theo file; Dataset 2: 1949–1960</td>
+    <td>Dataset 1: 1991-2008; Dataset 2: 1949–1960</td>
   </tr>
 </table>
 
