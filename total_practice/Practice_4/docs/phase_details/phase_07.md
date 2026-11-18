@@ -1,8 +1,8 @@
 # Phase 7 - XGBoost and weather ablation (G01)
 
-Status **DRAFT - PENDING HUMAN REVIEW**. Human approved F02, the VAR(24) lock and Phase 6 completion on 2026-11-18 via Director review, and authorized preparation of this specification and before-process plan.
+Status **APPROVED / COMPLETED**. Human approved F02, the VAR(24) lock and Phase 6 completion on 2026-11-18 via Director review, and authorized preparation of this specification and before-process plan.
 
-The objective is one-step observed load prediction in MW and a validation comparison of load-only inputs with load plus weather. This draft proposes the execution protocol for Human review.
+The objective is one-step observed load prediction in MW and a validation comparison of load-only inputs with load plus weather. This document records the approved execution protocol.
 
 Sources are the [roadmap, cluster G and sections 4.3 and 7](../plans/plan_overview.md), [evaluation contract](../results/evaluation_contract.md), [feature dictionary](../results/feature_dictionary.md), [file map](../plans/file_map.csv), [Phase 6 approval](phase_06.md) and [F02 report](../results/var_results.md).
 
@@ -90,5 +90,6 @@ Stop for missing Human approval, unapproved or unavailable dependency, version i
 ## 7. Approval record
 
 - F02 run `20261118_system312_f02_02`, its report and VAR(24) model lock SHA256 `0b3820731f3369f57699adaa64a7b1f4a5cbbf659c48331fc5721335572d3e26`, and Phase 6 completion were **Human APPROVED / COMPLETED** on 2026-11-18 via Director review.
-- Phase 7 specification and before-process plan **PENDING HUMAN APPROVAL**. Status **PENDING HUMAN REVIEW**.
-- G01 execution, G01 model lock, Phase 7 completion, G02 execution and H01 test opening retain their own approval gates.
+- Human **APPROVED** the Phase 7 specification and before-process plan on 2026-11-18 via Director review and authorized G01 execution. G01 was blocked at the dependency check. Human approved `xgboost==3.4.1` on 2026-11-18 via Director review and authorized resumption. The installed version, core versions, pip check and API smoke test passed. G01 execution completed 18 trials.
+- Human **APPROVED / COMPLETED** G01 run 20261118_system312_g01_01, the [G01 findings](../results/xgboost_findings.md), the XGB_full model lock with SHA256 e7386e8cfc38d51d6abc51abad383fb2c9d6360c9c955c6fe3ddb33883aec8ae and complexity 931, and Phase 7 on 2026-11-18 via Director review. Human authorized [Phase 8 specification drafting](phase_08.md). G02 execution and H01 test opening retain separate approval gates.
+- The [G01 run manifest](../../runs/20261118_system312_g01_01/manifest.json) records the findings hash at run time (41adadcbe022a40fac841a8e173314d0c4f5cb4a3678e412fc40f7f475bfecf7). The approved findings header changed the document SHA256 to aa2c8e7787c9e76a419ded671c90a20a3c139bb34cd0206d4049419df376ccbf.

@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Status: F02, the VAR(24) model lock and Phase 6 **APPROVED / COMPLETED** by Human on 2026-11-18 via Director review. Phase 7 Specification Drafting is **IN_PROGRESS** and the [draft](../phase_details/phase_07.md) is **PENDING HUMAN REVIEW**.
+Status: Human **APPROVED / COMPLETED** G01 run 20261118_system312_g01_01, its findings, the XGB_full model lock and [Phase 7](../phase_details/phase_07.md) on 2026-11-18 via Director review. Phase 8 Specification Drafting is **IN_PROGRESS** and the [draft](../phase_details/phase_08.md) is **PENDING HUMAN REVIEW**.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -112,6 +112,10 @@ không suy diễn nguyên nhân. UCI không phải dataset chính đã chọn.
 - Run 20261118_system312_f02_02 completed with VAR(24). [Results](../results/var_results.md), [log](../logs/F02_20261118_system312_f02_02.md), and [manifest](../../runs/20261118_system312_f02_02/manifest.json) record results and hashes. Model SHA256 0b3820731f3369f57699adaa64a7b1f4a5cbbf659c48331fc5721335572d3e26.
 - Targeted tests passed 14 cases. Forecast keys and truths match F01. Residual whiteness was rejected at 5%. Human approved F02, the VAR(24) model lock and Phase 6 completion on 2026-11-18 via Director review.
 
-## Phase 7 specification drafting
+## Phase 7 approval and G01 execution
 
-- Human authorized G01 specification and before-process planning. [Phase 7](../phase_details/phase_07.md) is pending Human review. F02 model artifact was accepted as-is, with feature-order and scaler-hash direct embedding recorded as a limitation. The F02 manifest and run-time report hash remain historical evidence.
+- The 2026-11-18 Director review authorized G01 execution. The required `py -3.12` import probe raised `ModuleNotFoundError: No module named 'xgboost'` under system Python 3.12.10 (Windows x64). Human approved `xgboost==3.4.1` on 2026-11-18 via Director review. The existing installation, core package versions, pip check and early-stopping and model save/load smoke test passed. The stop occurred before configuration lock, implementation, training, or any dataset access. F02 model artifact was accepted as-is, with feature-order and scaler-hash direct embedding recorded as a limitation. The F02 manifest and run-time report hash remain historical evidence.
+
+## G01 acceptance and Phase 7 closure
+
+- Run 20261118_system312_g01_01 completed 18 trials. [Findings](../results/xgboost_findings.md), [manifest](../../runs/20261118_system312_g01_01/manifest.json), and [log](../logs/G01_20261118_system312_g01_01.md) record the results and recovery of manifest creation. Targeted tests passed 14 cases. Human accepted G01, the findings, the XGB_full lock (SHA256 e7386e8cfc38d51d6abc51abad383fb2c9d6360c9c955c6fe3ddb33883aec8ae, complexity 931) and Phase 7 completion on 2026-11-18 via Director review. The run manifest retains the findings hash from before the approval header edit.
