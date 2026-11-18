@@ -1,6 +1,14 @@
 # Current Status — Practice 4
 
-Status: Human **APPROVED / COMPLETED** G01 run 20261118_system312_g01_01, its findings, the XGB_full model lock and [Phase 7](../phase_details/phase_07.md) on 2026-11-18 via Director review. Phase 8 Specification Drafting is **IN_PROGRESS** and the [draft](../phase_details/phase_08.md) is **PENDING HUMAN REVIEW**.
+Status: Human **APPROVED / COMPLETED** G02 run `20261118_system312_g02_01`, the LSTM model lock, the findings and [Phase 8](../phase_details/phase_08.md) on 2026-11-18 via Director review. Phase 9 specification drafting is **IN_PROGRESS** and the [draft](../phase_details/phase_09.md) is **PENDING HUMAN REVIEW**. H01 test opening and H02 execution remain gated.
+
+The system Python 3.12 probe raised `ModuleNotFoundError: No module named 'tensorflow'`; `pip show tensorflow keras` found neither package, while `pip check` reported no broken requirements. Installation requires separate Human approval. No G02 training code or configuration was written and no test records were accessed.
+
+Human approved `tensorflow==2.20.0` and `keras==3.11.3` on 2026-11-18 via Director review and manually installed them. The follow-up probe confirmed those versions, TensorFlow backend, CPU visibility and a clean `pip check`. Existing lock versions matched and the initial dependency block was resolved.
+
+The synthetic EarlyStopping and `.keras` save/load smoke did not complete after more than one minute and was interrupted. A partial checkpoint appeared, but save/load parity was not established. The script and partial file remain under `runs/g02_smoke_20261118/` for inspection. No pre-fit configuration or G02 trial was created.
+
+The [2026-11-18 serialization diagnostic](../phase_details/phase_08.md#4-dependencies-and-artifacts) reproduced the ZIP stall under both CPU thread and oneDNN configurations with `HDF5_USE_FILE_LOCKING=FALSE`. Both subprocesses timed out at 15 seconds inside Python temporary file creation for the Keras asset store. Direct `.weights.h5` save/load passed in 0.031979 seconds with exact synthetic prediction parity. Human approved the weights plus architecture JSON amendment on 2026-11-18 and authorized G02 continuation.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -119,3 +127,10 @@ không suy diễn nguyên nhân. UCI không phải dataset chính đã chọn.
 ## G01 acceptance and Phase 7 closure
 
 - Run 20261118_system312_g01_01 completed 18 trials. [Findings](../results/xgboost_findings.md), [manifest](../../runs/20261118_system312_g01_01/manifest.json), and [log](../logs/G01_20261118_system312_g01_01.md) record the results and recovery of manifest creation. Targeted tests passed 14 cases. Human accepted G01, the findings, the XGB_full lock (SHA256 e7386e8cfc38d51d6abc51abad383fb2c9d6360c9c955c6fe3ddb33883aec8ae, complexity 931) and Phase 7 completion on 2026-11-18 via Director review. The run manifest retains the findings hash from before the approval header edit.
+
+## Accepted G02 evidence
+
+- Run `20261118_system312_g02_01` completed the two approved CPU trials. C02 selected `lstm_lr_001` (best epoch 47, 30,113 trainable parameters) with validation MAE 320.692 MW, RMSE 504.751 MW and MAPE 1.1309%. See the [findings](../results/lstm_findings.md), [manifest](../../runs/20261118_system312_g02_01/manifest.json) and [execution log](../logs/G02_20261118_system312_g02_01.md).
+- Weights SHA256 `512715c5249f35bcfe46d1ecdbfc4413dbb1d3f263fe73f41dc9845fe5a69a1c`. Architecture SHA256 `c858df9f6417ac508d9b4d2195ce0b29a539ab89d4bb5d10950ac12f6d7af807`. Manifest SHA256 `5baa3e252753d65edefe7e185e57a5e578cac6dea0f639643400ce096853bf47`.
+- 56 tests passed. A fresh process reloaded the checkpoint with 0 MW maximum absolute prediction difference across 5,257 rows. Independent checks recomputed the scores and exact UTC lag correlations. All 71 upstream SHA256 values matched. The last validation target row was 29,802. Raw and canonical CSVs were byte hashed only.
+- Human approved G02, the LSTM findings and lock, and Phase 8 completion on 2026-11-18 via Director review. The G02 manifest retains the findings hash from before this approval edit.
