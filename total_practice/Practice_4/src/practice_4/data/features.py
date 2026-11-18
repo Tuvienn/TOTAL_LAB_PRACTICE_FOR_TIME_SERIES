@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import csv
 from dataclasses import dataclass
-from itertools import islice
+from itertools import islice, zip_longest
 from pathlib import Path
+from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
@@ -172,3 +173,146 @@ def extract_var_train_levels(frame: pd.DataFrame) -> np.ndarray:
     ):
         raise ValueError("D02 VAR observed block, levels or exclusion count mismatch")
     return levels
+
+
+RV2_VERSION = 1
+ORIGIN_COLUMNS = (
+    "schema_version", "origin_row", "target_row", "context_start_row",
+    "origin_timestamp_utc", "target_timestamp_utc", "split", "load_observed",
+    "context_finite", "eligible", "exclusion_reason", "y_true_mw", "sample_index",
+)
+ARRAY_KEYS = (
+    "schema_version", "target_row", "x_lstm", "x_flat", "x_xgb", "y_true_mw",
+    "var_row", "var_train_levels",
+)
+
+
+def align_origins(frame: pd.DataFrame) -> tuple[list[Origin], dict[str, dict[str, int]]]:
+    if len(frame) != PREFIX_ROWS:
+        raise ValueError("E02 requires the exact prepared train and validation prefix")
+    levels = frame.loc[:, list(SCALED_COLUMNS)].to_numpy(dtype=np.float64)
+    raw = frame.load.to_numpy(dtype=np.float64)
+    observed = frame.load_observed.to_numpy(dtype=bool)
+    origins = [
+        classify_origin(levels, row, raw[row], observed[row])
+        for row in range(CONTEXT_HOURS, PREFIX_ROWS)
+    ]
+    counts = {}
+    for name, expected in (("train", TRAIN_ROWS - CONTEXT_HOURS), ("validation", PREFIX_ROWS - TRAIN_ROWS)):
+        part = [origin for origin in origins if origin.split == name]
+        missing = sum(origin.exclusion_reason == "missing_truth" for origin in part)
+        invalid = sum(origin.exclusion_reason == "invalid_context" for origin in part)
+        eligible = sum(origin.eligible for origin in part)
+        if not eligible or len(part) != expected or missing + invalid + eligible != expected:
+            raise ValueError(f"Empty eligible split or candidate count mismatch: {name}")
+        counts[name] = {
+            "n_considered": expected, "n_missing_excluded": missing,
+            "n_input_excluded": invalid, "n_eligible": eligible,
+        }
+    return origins, counts
+
+
+def _origin_rows(frame: pd.DataFrame, origins: list[Origin]):
+    timestamps = [timestamp.isoformat(timespec="seconds") for timestamp in frame.timestamp_utc]
+    sample_index = 0
+    for origin in origins:
+        yield (
+            str(RV2_VERSION), str(origin.origin_row), str(origin.target_row), str(origin.context_start_row),
+            timestamps[origin.origin_row], timestamps[origin.target_row], origin.split,
+            str(origin.y_true_mw is not None), str(origin.context_finite), str(origin.eligible),
+            origin.exclusion_reason or "",
+            "" if origin.y_true_mw is None else repr(origin.y_true_mw),
+            str(sample_index) if origin.eligible else "",
+        )
+        sample_index += origin.eligible
+
+
+def stage_aligned_inputs(
+    frame: pd.DataFrame, origins: list[Origin], csv_path: Path, npz_path: Path
+) -> None:
+    target_rows = np.array([origin.target_row for origin in origins if origin.eligible], dtype=np.int64)
+    levels = frame.loc[:, list(SCALED_COLUMNS)].to_numpy(dtype=np.float64)
+    sequences, flat, xgb = feature_views(levels, target_rows)
+    var_levels = extract_var_train_levels(frame)
+
+    with csv_path.open("x", encoding="utf-8", newline="") as stream:
+        writer = csv.writer(stream, lineterminator="\n")
+        writer.writerow(ORIGIN_COLUMNS)
+        writer.writerows(_origin_rows(frame, origins))
+    with npz_path.open("xb") as stream:
+        np.savez_compressed(
+            stream,
+            schema_version=np.asarray(RV2_VERSION, dtype=np.uint8),
+            target_row=target_rows,
+            x_lstm=sequences,
+            x_flat=flat,
+            x_xgb=xgb,
+            y_true_mw=frame.load.to_numpy(dtype=np.float64)[target_rows],
+            var_row=np.arange(VAR_START_ROW, VAR_END_ROW + 1, dtype=np.int64),
+            var_train_levels=var_levels,
+        )
+
+
+def validate_aligned_inputs(
+    frame: pd.DataFrame, csv_path: Path, npz_path: Path
+) -> dict[str, tuple[tuple[int, ...], str]]:
+    candidates = np.arange(CONTEXT_HOURS, PREFIX_ROWS, dtype=np.int64)
+    levels = frame.loc[:, list(SCALED_COLUMNS)].to_numpy(dtype=np.float64)
+    context = levels[candidates[:, None] - np.arange(CONTEXT_HOURS, 0, -1)]
+    context_finite = np.isfinite(context).all(axis=(1, 2))
+    observed = frame.load_observed.to_numpy(dtype=bool)[candidates]
+    raw = frame.load.to_numpy(dtype=np.float64)[candidates]
+    eligible = observed & context_finite
+    reasons = np.where(~observed, "missing_truth", np.where(~context_finite, "invalid_context", None))
+    expected_origins = [
+        Origin(row, row - 1, row - CONTEXT_HOURS, split, bool(finite), reason, float(truth) if mask else None)
+        for row, split, finite, reason, truth, mask in zip(
+            candidates, np.where(candidates < TRAIN_ROWS, "train", "validation"),
+            context_finite, reasons, raw, observed,
+        )
+    ]
+    with csv_path.open(encoding="utf-8", newline="") as stream:
+        reader = csv.reader(stream, strict=True)
+        if tuple(next(reader, ())) != ORIGIN_COLUMNS:
+            raise ValueError("RV2 origin CSV schema mismatch")
+        for actual, expected in zip_longest(reader, _origin_rows(frame, expected_origins)):
+            if actual is None or expected is None or tuple(actual) != expected:
+                raise ValueError("RV2 origin CSV candidate or sample alignment mismatch")
+
+    targets = candidates[eligible]
+    context = context[eligible]
+    sequences = context[:, 1:, :]
+    flat = sequences.reshape(len(targets), len(FLAT_FEATURE_NAMES))
+    load = context[:, :, 0]
+    xgb_stats = (
+        load[:, -6:].mean(axis=1),
+        load[:, -24:].std(axis=1, ddof=0),
+        load[:, -1] - load[:, 0],
+    )
+    expected_arrays = {
+        "schema_version": np.asarray(RV2_VERSION, dtype=np.uint8),
+        "target_row": targets,
+        "x_lstm": sequences,
+        "x_flat": flat,
+        "x_xgb": np.column_stack((flat, *xgb_stats)),
+        "y_true_mw": frame.load.to_numpy(dtype=np.float64)[targets],
+        "var_row": np.arange(VAR_START_ROW, VAR_END_ROW + 1, dtype=np.int64),
+        "var_train_levels": extract_var_train_levels(frame),
+    }
+    shapes = {}
+    with npz_path.open("rb") as stream:
+        with ZipFile(stream) as archive:
+            if sorted(archive.namelist()) != sorted(f"{key}.npy" for key in ARRAY_KEYS):
+                raise ValueError("RV2 NPZ keys are missing, extra or duplicated")
+        stream.seek(0)
+        with np.load(stream, allow_pickle=False) as archive:
+            for key, expected in expected_arrays.items():
+                actual = archive[key]
+                if actual.dtype != expected.dtype or actual.shape != expected.shape:
+                    raise ValueError(f"RV2 NPZ dtype or shape mismatch: {key}")
+                if actual.dtype.kind == "f" and not np.isfinite(actual).all():
+                    raise ValueError(f"RV2 NPZ nonfinite values: {key}")
+                if not np.array_equal(actual, expected):
+                    raise ValueError(f"RV2 NPZ source or sample alignment mismatch: {key}")
+                shapes[key] = (actual.shape, str(actual.dtype))
+    return shapes

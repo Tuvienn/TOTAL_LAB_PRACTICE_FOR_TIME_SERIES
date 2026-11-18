@@ -1,6 +1,6 @@
 # E01 Feature Dictionary
 
-Run `20261118_system312_e01_01` · **PENDING HUMAN REVIEW**
+Run `20261118_system312_e01_01` · **Human APPROVED / COMPLETED, 2026-11-18 via Director review**
 
 For target row `k`, origin `t` is row `k-1`. The common context is rows `k-25..k-1` inclusive.
 Each input is available at the end of its source hour. Target-hour weather and later observations are outside the context.

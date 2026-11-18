@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import platform
@@ -17,7 +18,7 @@ from practice_4.data.ingestion import sha256_file, summarize
 
 HASH = {"type": "string", "pattern": "^[a-f0-9]{64}$"}
 FILE = {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": HASH}, "additionalProperties": False}
-MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02", "C01", "C02", "D01", "D02", "E01"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
+MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02", "C01", "C02", "D01", "D02", "E01", "E02"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
 
 
 def validate_manifest(manifest: dict) -> None:
@@ -793,9 +794,225 @@ def run_e01(root: Path, config_path: Path, run_id: str) -> None:
         write_json(run_dir / "manifest.json", manifest)
 
 
+def _e02_inputs(root: Path, config: dict) -> tuple[list[dict], dict, dict]:
+    policy = config["e02"]
+    acceptance = "Human APPROVED / COMPLETED, 2026-11-18 via Director review"
+    run_id = "20261118_system312_e01_01"
+    phase_record = (root / "docs/phase_details/phase_05.md").read_text(encoding="utf-8")
+    dictionary = "docs/results/feature_dictionary.md"
+    if (
+        policy["predecessor_run"] != run_id
+        or policy["approval_reference"]
+        != "Human: E01 run and feature dictionary APPROVED 2026-11-18 via Director review. E02 authorized."
+        or f"E01 run `{run_id}` and the feature dictionary: **{acceptance}**. Stage E02 execution authorized."
+        not in phase_record
+        or f"Run `{run_id}` · **{acceptance}**" not in (root / dictionary).read_text(encoding="utf-8")
+    ):
+        raise ValueError("E01 acceptance or E02 authorization missing")
+
+    previous_path = f"runs/{run_id}/manifest.json"
+    previous_hash = sha256_file(root / previous_path)
+    dictionary_hash = sha256_file(root / dictionary)
+    if previous_hash != policy["predecessor_manifest_sha256"] or dictionary_hash != policy["accepted_dictionary_sha256"]:
+        raise ValueError("E01 manifest or accepted dictionary hash drift")
+    previous = json.loads((root / previous_path).read_text(encoding="utf-8"))
+    validate_manifest(previous)
+    if (previous["stage_id"], previous["run_id"], previous["status"]) != ("E01", run_id, "completed"):
+        raise ValueError("Invalid E01 predecessor")
+
+    inputs, splits, counts = _e01_inputs(root, config["e01"])
+    phase_path = "docs/phase_details/phase_05.md"
+    historical = {entry["path"]: entry["sha256"] for entry in previous["inputs"]}
+    if any(entry["sha256"] != historical.get(entry["path"]) for entry in inputs if entry["path"] != phase_path):
+        raise ValueError("D02 input lineage differs from the accepted E01 run")
+    return [
+        {"path": previous_path, "sha256": previous_hash},
+        {"path": dictionary, "sha256": dictionary_hash},
+        *inputs,
+    ], splits, counts
+
+
+def _e02_audit(
+    run_id: str, command: str, counts: dict, shapes: dict, split: dict,
+    inputs: list[dict], outputs: list[dict],
+) -> str:
+    from practice_4.data.features import (
+        CONTEXT_HOURS, ORIGIN_COLUMNS, SCALED_COLUMNS, VAR_EARLIER_OBSERVED, VAR_END_ROW,
+        VAR_END_UTC, VAR_START_ROW, VAR_START_UTC, XGB_FEATURE_NAMES,
+    )
+
+    total_rows = split["total_rows"]
+    splits = split["splits"]
+    candidate_count = sum(values["n_considered"] for values in counts.values())
+    n = sum(values["n_eligible"] for values in counts.values())
+    train, validation = splits["train"], splits["validation"]
+    lines = [
+        "# E02 Alignment Audit", "",
+        f"Run `{run_id}` · **PENDING HUMAN REVIEW**", "",
+        f"`{command}` completed successfully. The [execution log](../logs/E02_{run_id}.md) links the separate pytest evidence.", "",
+        "## Scope and conservation", "",
+        f"The validated D02 train/validation prefix contains {train['row_count'] + validation['row_count']:,} UTC rows.",
+        f"Warm-up excludes target rows 0–{CONTEXT_HOURS - 1} ({CONTEXT_HOURS} rows). The candidate manifest contains {candidate_count:,} rows and the supervised arrays contain {n:,} eligible samples.",
+        "Raw share below uses the full canonical row count from split metadata as the denominator. Dataset records were parsed only from the prepared prefix.",
+        "", "| Target split | Raw rows | Raw share | Start UTC | End UTC | Candidates | Missing truth | Invalid context | Eligible |",
+        "|---|---:|---:|---|---|---:|---:|---:|---:|",
+    ]
+    for name, values in counts.items():
+        part = splits[name]
+        raw_rows = part["row_count"]
+        lines.append(
+            f"| {name} | {raw_rows:,} | {raw_rows / total_rows:.4%} | {part['start_utc']} | {part['end_utc']} | "
+            f"{values['n_considered']:,} | {values['n_missing_excluded']:,} | {values['n_input_excluded']:,} | {values['n_eligible']:,} |"
+        )
+    lines.extend([
+        "", "Each split passed candidate = missing truth + invalid context + eligible.",
+        f"The first validation target is row {validation['start_row']:,} at `{validation['start_utc']}`. Its origin is the last train row {train['end_row']:,} at `{train['end_utc']}`.",
+        "Every target uses exactly the previous 25 hours for eligibility. Each lag and statistic ends at or before the origin. Missing truth takes precedence over nonfinite context.",
+        "", "## RV2 schema v1 round-trip checks", "",
+        "UTF-8 origin CSV used the exact ordered header below. The reload checked all candidate IDs, timestamps, splits, mask and context flags, exclusion reasons, raw values and consecutive eligible sample indices against the prepared source.", "",
+        "```text", ",".join(ORIGIN_COLUMNS), "```", "",
+        "The NPZ ZIP member list, keys, dtypes and shapes passed validation with `allow_pickle=False`. Each eligible sample matched the source by target row, including raw MW truth, 24-hour sequence, time-major flat view and all three XGBoost statistics. Floating-point arrays were finite.",
+        "", "| NPZ key | dtype | Shape |", "|---|---|---|",
+    ])
+    for key, (shape, dtype) in shapes.items():
+        lines.append(f"| `{key}` | `{dtype}` | `{shape}` |")
+    lines.extend([
+        "", f"The LSTM and VAR variable axes use {', '.join(f'`{name}`' for name in SCALED_COLUMNS)} in that order.",
+        f"The XGBoost order runs from `{XGB_FEATURE_NAMES[0]}` through `{XGB_FEATURE_NAMES[95]}`, followed by `mean6h`, `std24h` and `trend24h`. See the [feature dictionary](feature_dictionary.md) for each column.",
+        "", "## VAR block", "",
+        f"Rows {VAR_START_ROW:,}–{VAR_END_ROW:,}, from `{VAR_START_UTC}` through `{VAR_END_UTC}` inclusive, were checked for hourly continuity, observed raw load, working/raw equality and finite scaled levels.",
+        f"The separate VAR axis excludes {VAR_EARLIER_OBSERVED:,} earlier observed hours. The retained block may underrepresent earlier training regimes. Model fitting has its own gate.",
+        "", "## SHA256 provenance", "",
+        f"Split semantic SHA256 `{split['split_sha256']}` matched D02 scaler lineage. Protected inputs matched D02 before and after staging.",
+        "Raw and canonical files were hashed as opaque bytes. The E01 manifest preserves the original Phase 5 and dictionary digests from before the approval edits.",
+        "", "| Role | Path | SHA256 |", "|---|---|---|",
+    ])
+    for role, entries in (("Input", inputs), ("Output", outputs)):
+        for entry in entries:
+            lines.append(f"| {role} | `{entry['path']}` | `{entry['sha256']}` |")
+    lines.extend([
+        "", f"The [run manifest](../../runs/{run_id}/manifest.json) records the SHA256 of this audit and its staged copy. The final manifest digest is recorded in [current status](../status/current_status.md).",
+        "", "E02 gate acceptance, Phase 5 RV2 schema acceptance and Phase 5 completion sign-off are **PENDING HUMAN REVIEW**.", "",
+    ])
+    return "\n".join(lines)
+
+
+def run_e02(root: Path, config_path: Path, run_id: str) -> None:
+    from shutil import copyfileobj
+
+    from practice_4.data.features import align_origins, load_prepared_prefix, stage_aligned_inputs, validate_aligned_inputs
+
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
+        raise ValueError("Invalid run ID")
+    config_bytes = config_path.read_bytes()
+    config = json.loads(config_bytes)
+    policy = config["e02"]
+    inputs, splits, counts = _e02_inputs(root, config)
+    split_path = root / "datasets/processed/split_manifest.json"
+    split = json.loads(split_path.read_text(encoding="utf-8"))
+    run_dir = root / "runs" / run_id
+    artifacts = run_dir / "artifacts"
+    targets = [
+        root / "datasets/processed/origin_manifest.csv",
+        root / "datasets/processed/model_inputs.npz",
+        root / "docs/results/alignment_audit.md",
+    ]
+    log = root / "docs/logs" / f"E02_{run_id}.md"
+    if any(path.exists() for path in (*targets, log)):
+        raise FileExistsError("E02 output collision")
+    run_dir.mkdir(parents=True, exist_ok=False)
+    artifacts.mkdir()
+
+    packages = ("pandas", "numpy", "scikit-learn", "pytest", "jsonschema")
+    env = {
+        "python": platform.python_version(), "platform": platform.platform(),
+        "packages": {name: metadata.version(name) for name in packages},
+    }
+    manifest = {
+        "schema_version": "1", "run_id": run_id, "stage_id": "E02", "status": "running",
+        "started_at_utc": now(), "finished_at_utc": None,
+        "approval_refs": {"e02": policy["approval_reference"], "e01": policy["predecessor_run"]},
+        "inputs": inputs, "config_sha256": sha256_file(config_path), "environment": env,
+        "outputs": [], "checks": [],
+        "limitations": [
+            "E02 gate acceptance, Phase 5 RV2 schema acceptance and Phase 5 sign-off are pending Human review.",
+            "Raw and canonical CSVs were hashed as opaque bytes. Parsed records were restricted to the D02 train/validation prefix.",
+            "The fixed VAR block omits earlier observed hours and may underrepresent earlier regimes.",
+        ],
+    }
+
+    def entry(path: Path, digest: str | None = None) -> dict:
+        return {"path": path.relative_to(root).as_posix(), "sha256": digest or sha256_file(path)}
+
+    staged_csv, staged_npz, staged_audit = (artifacts / path.name for path in targets)
+    snapshot, environment = run_dir / "config.json", run_dir / "environment.json"
+    command = f"py -3.12 -m practice_4.pipeline --stage E02 --config {config_path.relative_to(root).as_posix()} --run-id {run_id}"
+    published = []
+    try:
+        prepared = load_prepared_prefix(root / "datasets/processed/prepared_hourly.csv", splits, counts)
+        origins, alignment_counts = align_origins(prepared)
+        stage_aligned_inputs(prepared, origins, staged_csv, staged_npz)
+        shapes = validate_aligned_inputs(prepared, staged_csv, staged_npz)
+        if _e02_inputs(root, config)[0] != inputs or config_path.read_bytes() != config_bytes:
+            raise ValueError("Input or config drift during E02")
+
+        manifest["checks"] = [
+            {"name": "lineage", "status": "pass", "evidence": "Accepted E01 manifest and dictionary verified. D02 raw, canonical, split, prepared and scaler hashes match before and after staging."},
+            {"name": "candidate_conservation", "status": "pass", "evidence": alignment_counts},
+            {"name": "roundtrip", "status": "pass", "evidence": f"All {len(origins)} CSV candidates and all eight NPZ arrays reloaded and matched the prepared D02 source. VAR continuity and working/raw equality verified."},
+        ]
+        snapshot.write_bytes(config_bytes)
+        write_json(environment, env)
+        if sha256_file(snapshot) != manifest["config_sha256"]:
+            raise ValueError("E02 config snapshot hash mismatch")
+        log_text = "\n".join([
+            f"# E02 {run_id}", "", "Status **PENDING HUMAN REVIEW**.", "",
+            f"`{command}` completed successfully.", "",
+            f"Verified {len(origins):,} origin records and {shapes['target_row'][0][0]:,} eligible samples. The validated CSV, NPZ and audit were staged before publication.",
+            "", f"See the [alignment audit](../results/alignment_audit.md) and [manifest](../../runs/{run_id}/manifest.json). The [current status](../status/current_status.md) records the separate pytest results.", "",
+        ])
+        log_bytes = log_text.encode("utf-8")
+        log_entry = entry(log, hashlib.sha256(log_bytes).hexdigest())
+        data_entries = [entry(staged_csv), entry(staged_npz)]
+        output_records = [
+            *data_entries,
+            *(entry(target, source["sha256"]) for target, source in zip(targets[:2], data_entries)),
+            entry(snapshot), entry(environment), log_entry,
+        ]
+        staged_audit.write_text(
+            _e02_audit(run_id, command, alignment_counts, shapes, split, inputs, output_records),
+            encoding="utf-8",
+        )
+
+        for staged, target in zip((staged_csv, staged_npz, staged_audit), targets):
+            with staged.open("rb") as source, target.open("xb") as destination:
+                published.append(target)
+                copyfileobj(source, destination)
+            if sha256_file(staged) != sha256_file(target):
+                raise ValueError(f"E02 promotion hash mismatch: {target.name}")
+        with log.open("xb") as stream:
+            published.append(log)
+            stream.write(log_bytes)
+
+        if entry(log) != log_entry:
+            raise ValueError("E02 log hash mismatch")
+        manifest["outputs"] = [*output_records, entry(staged_audit), entry(targets[2])]
+        manifest["status"] = "completed"
+    except Exception as exc:
+        for path in reversed(published):
+            path.unlink()
+        manifest["status"] = "failed"
+        manifest["limitations"].append(f"{type(exc).__name__}: {exc}")
+        raise
+    finally:
+        manifest["finished_at_utc"] = now()
+        validate_manifest(manifest)
+        write_json(run_dir / "manifest.json", manifest)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--stage", required=True, choices=["B01", "B02", "C01", "C02", "D01", "D02", "E01"])
+    parser.add_argument("--stage", required=True, choices=["B01", "B02", "C01", "C02", "D01", "D02", "E01", "E02"])
     parser.add_argument("--config", required=True)
     parser.add_argument("--run-id", required=True)
     args = parser.parse_args()
@@ -812,8 +1029,10 @@ def main() -> None:
         run_d01(root, root / args.config, args.run_id)
     elif args.stage == "D02":
         run_d02(root, root / args.config, args.run_id)
-    else:
+    elif args.stage == "E01":
         run_e01(root, root / args.config, args.run_id)
+    else:
+        run_e02(root, root / args.config, args.run_id)
 
 
 if __name__ == "__main__":

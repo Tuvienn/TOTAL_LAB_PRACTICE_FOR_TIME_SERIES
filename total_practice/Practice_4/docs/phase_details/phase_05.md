@@ -1,6 +1,6 @@
 # Phase 5 — Feature engineering and aligned model inputs (E01–E02)
 
-Status: **SPECIFICATION APPROVED** by Human on 2026-11-18 via Director review. Execution authorization covers **Stage E01 only**. See [current status](../status/current_status.md) for run progress.
+Status: **SPECIFICATION APPROVED** by Human on 2026-11-18 via Director review. Stage E01 is **APPROVED / COMPLETED**. Stage E02, Phase 5 RV2 schema v1 and Phase 5 are **APPROVED / COMPLETED**. See [current status](../status/current_status.md) for the accepted run.
 
 Sources: [roadmap, Cụm E and §4.1](../plans/plan_overview.md), [file map](../plans/file_map.csv), [C02 evaluation contract](../results/evaluation_contract.md), [split manifest](../../datasets/processed/split_manifest.json), [Phase 4 approval](phase_04.md), [D02 audit](../results/preprocessing_audit.md), and [accepted D02 run manifest](../../runs/20261118_system312_d02_01/manifest.json).
 
@@ -104,4 +104,7 @@ Stop for missing stage approval, inaccessible or changed input lineage, unexpect
 - D02 run `20261118_system312_d02_01`, prepared data, preprocessing audit and Phase 4 completion: **Human APPROVED / COMPLETED, 2026-11-18 via Director review**.
 - Phase 5 specification and before-process plan: **Human APPROVED 2026-11-18 via Director review**.
 - Stage E01 only: **Human authorized execution 2026-11-18 via Director review**.
-- E01 gate acceptance and E02 execution approval: **PENDING HUMAN REVIEW**. Phase 5 RV2 schema acceptance and H01 test opening retain separate gates.
+- E01 run `20261118_system312_e01_01` and the feature dictionary: **Human APPROVED / COMPLETED, 2026-11-18 via Director review**. Stage E02 execution authorized.
+- E02 run `20261118_system312_e02_01`, the promoted `origin_manifest.csv` and `model_inputs.npz`, and the [alignment audit](../results/alignment_audit.md) were **Human APPROVED / COMPLETED** on 2026-11-18 via Director review.
+- Phase 5 RV2 schema v1 and Phase 5 completion were **Human APPROVED / COMPLETED** on 2026-11-18 via Director review.
+- Human authorized preparation of the [Phase 6 specification and before-process plan](phase_06.md). F01 and F02 execution and H01 test opening retain separate approval gates.

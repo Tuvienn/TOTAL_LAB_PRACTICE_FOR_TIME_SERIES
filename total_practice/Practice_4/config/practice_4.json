@@ -74,5 +74,11 @@
     "approval_reference": "Human: Phase 5 specification and before-process plan APPROVED 2026-11-18 via Director review; E01 only",
     "predecessor_run": "20261118_system312_d02_01",
     "predecessor_manifest_sha256": "50527847fbbda7dc510806301cf95a368de6f39716577d2ca7813d7bd4c3e3ff"
+  },
+  "e02": {
+    "approval_reference": "Human: E01 run and feature dictionary APPROVED 2026-11-18 via Director review. E02 authorized.",
+    "predecessor_run": "20261118_system312_e01_01",
+    "predecessor_manifest_sha256": "fbac230318eca7df9b821dfba31a501b449fd1db80ef3aa07c059adac6d6eac9",
+    "accepted_dictionary_sha256": "f6b91409f4d9d4194f3bf6539ffca3e4e9a24419cbeba75575dcdf6074851284"
   }
 }
