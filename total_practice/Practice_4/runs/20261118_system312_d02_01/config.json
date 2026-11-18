@@ -1,0 +1,73 @@
+{
+  "stage": "B01",
+  "approval_references": {
+    "phase_0": "Human: Close Phase 0 (Gate A02) & Draft Phase 1 Specification, 2026-11-17",
+    "phase_1": "Human: APPROVED, 2026-11-17",
+    "b01": "Human: Unblock & Complete Stage B01 (Provenance, Pipeline, Tests & Audit), 2026-11-18"
+  },
+  "inputs": {
+    "docs/phase_details/phase_00.md": "b6e8ca72f9617a19ab08e17b991d1a8d9c282d085a38892eecf710f977052463",
+    "docs/phase_details/phase_01.md": "9187dfe940b143a954b79d7ed23d333555cf5afb9d00afcb8787af94e1dc79a1",
+    "docs/results/problem_definition.md": "9319c1abf6ff849da0eb441f2b0b24197b6eee297f4816c9def67923dc8a16f7",
+    "datasets/raw/energy_dataset.csv": "14cd13e020d87af0ab49db8e0f1e4d308320ec5b8d2dec23bab4d27c75c7733a",
+    "datasets/raw/weather_features.csv": "3566c3c21179d4fc6691eec6d37a6cfe8fe6a4d9e097f95e4fda4a29dc683b18"
+  },
+  "b02": {
+    "predecessor_run": "20261118_system312_01",
+    "approval_reference": "Human: Close Gate B01 & Execute Stage B02 (Canonical Dataset & Data Contract), 2026-11-18",
+    "inputs": {
+      "docs/phase_details/phase_01.md": "4811cc797932697107d79d39b22a82022f19e01966fe131cfff0b77020bbebe2",
+      "runs/20261118_system312_01/manifest.json": "dc4f265e729719d072b9f86eebce342cf9bfba6f7eb6d3dc45a07b2f13086c43",
+      "datasets/raw/source_manifest.json": "7f57efd9ab746fb8abeb74a4225236488700c25675417905a3528339fbb04e51",
+      "datasets/raw/energy_dataset.csv": "14cd13e020d87af0ab49db8e0f1e4d308320ec5b8d2dec23bab4d27c75c7733a",
+      "datasets/raw/weather_features.csv": "3566c3c21179d4fc6691eec6d37a6cfe8fe6a4d9e097f95e4fda4a29dc683b18"
+    }
+  },
+  "c01": {
+    "predecessor_run": "20261118_system312_b02_01",
+    "predecessor_manifest_sha256": "3917d57633a5bef6a7f0f714b0ba799b0cde934b4f7d21a5af29a5b99526d414",
+    "approval_reference": "Human: Phase 2 specification and before-process plan APPROVED 2026-11-18 via Director review; C01 only",
+    "b02_acceptance": "Human: Close Phase 1 (Gate B02) & Draft Phase 2 Specification, 2026-11-18",
+    "schema_version": "1"
+  },
+  "c02": {
+    "predecessor_run": "20261118_system312_c01_01",
+    "predecessor_manifest_sha256": "cfab391bc73976bb1dab945382e78822afa85a7988ef773581b4636967e2db91",
+    "approval_reference": "Human: C01 run and split APPROVED 2026-11-18 via Director review; C02 authorized",
+    "schema_version": "1"
+  },
+  "d01": {
+    "max_acf_lag": 168,
+    "pacf_method": "ywm",
+    "acf_contiguous_block_rule": "longest_observed_train_block",
+    "block_tie_break": "earliest_timestamp",
+    "figure_dpi": 120,
+    "figure_style": {
+      "backend": "Agg",
+      "font_family": "DejaVu Sans",
+      "style": "default"
+    },
+    "timezone": "Europe/Madrid",
+    "predecessor_run": "20261118_system312_c02_01",
+    "predecessor_manifest_sha256": "6bedf3bb565ba51c6695cb30177845d6f1a35969e1c10120ea9114817064c730",
+    "approval_reference": "Human: Phase 3 approved and raw 133 m/s limitation accepted, 2026-11-18 via Director review"
+  },
+  "d02": {
+    "approval_reference": "Human: Phase 4 approved and Streaming LOCF-1 selected, 2026-11-18 via Director review",
+    "predecessor_run": "20261118_system312_d01_01",
+    "locf_max_gap": 1,
+    "percentiles": [
+      0.5,
+      99.5
+    ],
+    "percentile_method": "linear",
+    "csv_na_rep": "",
+    "csv_float_format": "%.17g",
+    "var_block": {
+      "start_utc": "2016-09-28T08:00:00+00:00",
+      "end_utc": "2017-10-19T14:00:00+00:00",
+      "rows": 9271,
+      "earlier_observed_excluded": 15241
+    }
+  }
+}

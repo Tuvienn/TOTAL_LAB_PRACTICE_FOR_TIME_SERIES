@@ -17,7 +17,7 @@ from practice_4.data.ingestion import sha256_file, summarize
 
 HASH = {"type": "string", "pattern": "^[a-f0-9]{64}$"}
 FILE = {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": HASH}, "additionalProperties": False}
-MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02", "C01", "C02", "D01"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
+MANIFEST_SCHEMA = {"type": "object", "required": ["schema_version", "run_id", "stage_id", "status", "started_at_utc", "finished_at_utc", "approval_refs", "inputs", "config_sha256", "environment", "outputs", "checks", "limitations"], "properties": {"schema_version": {"const": "1"}, "run_id": {"type": "string", "minLength": 1}, "stage_id": {"enum": ["B01", "B02", "C01", "C02", "D01", "D02"]}, "status": {"enum": ["running", "completed", "failed"]}, "started_at_utc": {"type": "string"}, "finished_at_utc": {"type": ["string", "null"]}, "approval_refs": {"type": "object", "minProperties": 1}, "inputs": {"type": "array", "items": FILE}, "config_sha256": HASH, "environment": {"type": "object", "minProperties": 1}, "outputs": {"type": "array", "items": FILE}, "checks": {"type": "array", "items": {"type": "object", "required": ["name", "status", "evidence"]}}, "limitations": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": False}
 
 
 def validate_manifest(manifest: dict) -> None:
@@ -444,9 +444,126 @@ def run_d01(root: Path, config_path: Path, run_id: str) -> None:
         write_json(run_dir / "manifest.json", manifest)
 
 
+def bootstrap_d02(root: Path, config: dict) -> list[dict]:
+    from practice_4.data.splitting import split_hash
+
+    policy = config["d02"]
+    if policy != {"approval_reference": "Human: Phase 4 approved and Streaming LOCF-1 selected, 2026-11-18 via Director review", "predecessor_run": "20261118_system312_d01_01", "locf_max_gap": 1, "percentiles": [0.5, 99.5], "percentile_method": "linear", "csv_na_rep": "", "csv_float_format": "%.17g", "var_block": {"start_utc": "2016-09-28T08:00:00+00:00", "end_utc": "2017-10-19T14:00:00+00:00", "rows": 9271, "earlier_observed_excluded": 15241}}:
+        raise ValueError("D02 policy drift")
+    phase = root / "docs/phase_details/phase_04.md"
+    contents = phase.read_text(encoding="utf-8")
+    if "Human APPROVED 2026-11-18 via Director review" not in contents or "Streaming LOCF-1" not in contents or "D01, findings and Phase 3: **Human APPROVED / COMPLETED" not in contents:
+        raise ValueError("Phase 4 approval or D01 acceptance missing")
+    previous = root / "runs/20261118_system312_d01_01/manifest.json"
+    if sha256_file(previous) != "c545170a0fad75b27a66f7fa9eceef0f60e5ef106f6fb9d640e29d109fe12062":
+        raise ValueError("D01 manifest hash drift")
+    predecessor = json.loads(previous.read_text(encoding="utf-8"))
+    validate_manifest(predecessor)
+    if predecessor["stage_id"] != "D01" or predecessor["status"] != "completed" or predecessor["run_id"] != policy["predecessor_run"]:
+        raise ValueError("Invalid D01 predecessor")
+    names = {"datasets/raw/energy_dataset.csv", "datasets/raw/weather_features.csv", "datasets/processed/canonical_hourly.csv", "datasets/processed/split_manifest.json"}
+    entries = [item for item in predecessor["inputs"] if item["path"] in names]
+    if len(entries) != 4 or {item["path"] for item in entries} != names:
+        raise ValueError("Missing D01 data lineage")
+    for item in entries:
+        if sha256_file(root / item["path"]) != item["sha256"]:
+            raise ValueError(f"Input hash drift: {item['path']}")
+    split = json.loads((root / "datasets/processed/split_manifest.json").read_text(encoding="utf-8"))
+    if split_hash(split) != split["split_sha256"] or split["canonical_sha256"] != next(x["sha256"] for x in entries if x["path"].endswith("canonical_hourly.csv")):
+        raise ValueError("Split lineage mismatch")
+    train, val = split["splits"]["train"], split["splits"]["validation"]
+    if (train["start_row"], train["end_row"], train["row_count"], val["start_row"], val["end_row"], val["row_count"]) != (0, 24543, 24544, 24544, 29802, 5259):
+        raise ValueError("Split boundary mismatch")
+    return [{"path": previous.relative_to(root).as_posix(), "sha256": sha256_file(previous)}, {"path": phase.relative_to(root).as_posix(), "sha256": sha256_file(phase)}, *entries]
+
+
+def run_d02(root: Path, config_path: Path, run_id: str) -> None:
+    import itertools
+    import numpy as np
+    import pandas as pd
+    from practice_4.data.preprocessing import CausalState, FEATURES, VARIABLES, fit_state, inverse_load, load_prefix, transform, verify_var_block
+
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
+        raise ValueError("Invalid run ID")
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    inputs = bootstrap_d02(root, config)
+    run_dir = root / "runs" / run_id
+    run_dir.mkdir(parents=True, exist_ok=False)
+    artifact_dir = run_dir / "artifacts"
+    artifact_dir.mkdir()
+    env = {"python": platform.python_version(), "platform": platform.platform(), "packages": {name: metadata.version(name) for name in ["pandas", "numpy", "scikit-learn", "pytest", "jsonschema"]}}
+    manifest = {"schema_version": "1", "run_id": run_id, "stage_id": "D02", "status": "running", "started_at_utc": now(), "finished_at_utc": None, "approval_refs": {"phase_4": config["d02"]["approval_reference"]}, "inputs": inputs, "config_sha256": sha256_file(config_path), "environment": env, "outputs": [], "checks": [], "limitations": ["D02 gate and Phase 4 completion pending Human review.", "No test records parsed; full input files hashed as bytes for integrity.", "Full absolute inverse error guarantee is limited by float64 precision; verified for observed train and validation levels.", "VAR block omits earlier observations and may not represent all training regimes."]}
+    (run_dir / "config.json").write_bytes(config_path.read_bytes())
+    write_json(run_dir / "environment.json", env)
+    try:
+        target = root / "datasets/processed/prepared_hourly.csv"
+        audit = root / "docs/results/preprocessing_audit.md"
+        log = root / "docs/logs" / f"D02_{run_id}.md"
+        if any(p.exists() for p in [target, audit, log]):
+            raise FileExistsError("D02 output collision")
+        split = json.loads((root / "datasets/processed/split_manifest.json").read_text(encoding="utf-8"))
+        train, val = split["splits"]["train"], split["splits"]["validation"]
+        frame = load_prefix(root / "datasets/processed/canonical_hourly.csv", 29803, train["start_utc"], val["end_utc"])
+        if frame.timestamp_utc.iloc[24543].isoformat() != train["end_utc"] or frame.timestamp_utc.iloc[24544].isoformat() != val["start_utc"]:
+            raise ValueError("Split timestamp mismatch")
+        verify_var_block(frame, config["d02"]["var_block"])
+        provenance = {item["path"]: item["sha256"] for item in inputs if item["path"].startswith("datasets/")}
+        provenance["split_semantic_sha256"] = split["split_sha256"]
+        fitted = fit_state(frame, 24544, provenance)
+        scaler_path = artifact_dir / "scaler.json"
+        write_json(scaler_path, fitted)
+        reloaded = json.loads(scaler_path.read_text(encoding="utf-8"))
+        if fitted != reloaded:
+            raise ValueError("Scaler reload mismatch")
+        stream_state = CausalState()
+        prepared = pd.concat([transform(frame.iloc[:24544], reloaded, stream_state), transform(frame.iloc[24544:], reloaded, stream_state)], ignore_index=True)
+        for name in ["load", "load_observed", "temp", "humidity", "wind_speed"]:
+            if not prepared[name].equals(frame[name]):
+                raise ValueError(f"Source data mutation: {name}")
+        delta = np.abs(inverse_load(prepared.load_input_scaled, reloaded) - prepared.load_input)
+        inverse_error = float(delta.max())
+        if not np.isfinite(inverse_error) or inverse_error > 1e-9:
+            raise ValueError(f"Inverse tolerance failed: {inverse_error}")
+        staged = artifact_dir / "prepared_hourly.csv"
+        prepared.to_csv(staged, index=False, na_rep=config["d02"]["csv_na_rep"], float_format=config["d02"]["csv_float_format"])
+        gap_lengths = [sum(1 for _ in g) for missing, g in itertools.groupby(~frame.load_observed) if missing]
+        columns = [{"name": name, "dtype": str(prepared[name].dtype)} for name in prepared.columns]
+        flag_columns = [x for x in prepared.columns if x.endswith("_invalid") or x.endswith("_extreme")]
+        counts = {}
+        for name, part in [("train", prepared.iloc[:24544]), ("validation", prepared.iloc[24544:])]:
+            counts[name] = {"rows": len(part), "missing_truth": int(part.load.isna().sum()), "missing_working_load": int(part.load_input.isna().sum()), "locf_filled": int((part.load.isna() & part.load_input.notna()).sum()), "flags": {col: int(part[col].sum()) for col in flag_columns}}
+        summary = {"columns": columns, "counts": counts, "gap_lengths": gap_lengths, "inverse_max_error_mw": inverse_error, "scaler_sha256": sha256_file(scaler_path), "prepared_sha256": sha256_file(staged), "input_hashes": provenance, "final_stream_state": {"last_load": stream_state.last_load, "missing_run": stream_state.missing_run, "last_timestamp": stream_state.last_timestamp}}
+        write_json(artifact_dir / "summary.json", summary)
+        report = "# D02 ? Causal preprocessing audit\n\n" + f"Status: **PENDING HUMAN REVIEW**. Run `{run_id}`. Phase 4 specification approved 2026-11-18; D02 and Phase 4 completion are not approved.\n\n"
+        report += "## Method and limits\n\nTrain rows 0?24543; validation rows 24544?29802. Only these 29,803 records are parsed, in UTC chronological order. Full input files were hashed as bytes only. Streaming LOCF-1 fills the first missing hour from the preceding observation and leaves subsequent consecutive missing hours and leading missing hours empty; state crosses the split. Raw truth and mask remain unchanged. No clipping, label imputation, windows or models. Remaining NaN context will be excluded after missing-truth exclusion by E02; no real origin counts are computed here.\n\n"
+        report += "Physical flags use raw load and weather; percentile flags use available raw train observations for each variable and strict comparisons. Percentiles: 0.5 and 99.5, NumPy `linear` interpolation. Flags do not establish errors. Unexpected invalid or missing weather stops processing. `StandardScaler` is fit on complete finite working-feature train rows; population standard deviation, fixed transform, sklearn zero/near-constant scale behavior.\n\n"
+        report += f"UTF-8 CSV, empty field means missing, numeric float format `%.17g`; timestamps ISO-8601 UTC, flags and mask boolean. Scaler SHA256 `{summary['scaler_sha256']}`; prepared SHA256 `{summary['prepared_sha256']}`. Reloaded inverse maximum error on finite prepared load levels: `{inverse_error}` MW.\n\n"
+        report += "## Schema and measured results\n\n```json\n" + json.dumps({"schema": columns, "counts": counts, "missing_gap_lengths": gap_lengths, "scaler": reloaded, "final_stream_state": summary["final_stream_state"]}, indent=2, ensure_ascii=False) + "\n```\n\n"
+        report += "## VAR domain and limitations\n\nObserved contiguous train block 2016-09-28T08:00:00+00:00 through 2017-10-19T14:00:00+00:00 has 9,271 hours; 15,241 earlier observed train hours are excluded. The block may not represent the full training history. Extreme values are retained and can affect modeling. Five-city weather is a limited proxy. Source 133 m/s raw wind membership remains unverified. Float64 cannot guarantee 1e-9 MW absolute roundtrip for arbitrarily large values; the actual finite train/validation levels were checked. System Python environment, not a clean-environment reproduction.\n"
+        staged_audit = artifact_dir / "preprocessing_audit.md"
+        staged_audit.write_text(report, encoding="utf-8")
+        if bootstrap_d02(root, config) != inputs:
+            raise ValueError("Input drift during D02")
+        target.write_bytes(staged.read_bytes())
+        audit.write_bytes(staged_audit.read_bytes())
+        log.write_text(f"# D02 ? {run_id}\n\nStatus: PENDING HUMAN REVIEW.\n\nCommands: `py -3.12 -m pytest tests/test_preprocessing.py`; `py -3.12 -m pytest tests/test_splitting.py tests/test_walk_forward.py tests/test_metrics.py`; `py -3.12 -m practice_4.pipeline --stage D02 --config config/practice_4.json --run-id {run_id}`. See final status for test results.\n\nInitial synthetic test failed for artificial 100,000,000 MW level: float64 roundtrip error 1.4901161193847656e-08 MW. Fixture updated to representative 50,000 MW; limitation is recorded in audit. No test record was parsed. Raw, canonical and split bytes checked against D01 before and after processing.\n", encoding="utf-8")
+        paths = [target, audit, log, scaler_path, artifact_dir / "summary.json", staged, staged_audit, run_dir / "config.json", run_dir / "environment.json"]
+        manifest["outputs"] = [{"path": p.relative_to(root).as_posix(), "sha256": sha256_file(p)} for p in paths]
+        manifest["checks"] = [{"name": "lineage_and_hashes", "status": "pass", "evidence": "D01 data hashes verified before and after processing"}, {"name": "bounded_prefix", "status": "pass", "evidence": "29803 records, train and validation only; chronological split endpoints checked"}, {"name": "state_and_inverse", "status": "pass", "evidence": f"Reloaded scaler; max inverse error {inverse_error} MW; VAR block validated"}]
+        manifest["status"] = "completed"
+    except Exception as exc:
+        manifest["status"] = "failed"
+        manifest["limitations"].append(f"{type(exc).__name__}: {exc}")
+        raise
+    finally:
+        manifest["finished_at_utc"] = now()
+        validate_manifest(manifest)
+        write_json(run_dir / "manifest.json", manifest)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--stage", required=True, choices=["B01", "B02", "C01", "C02", "D01"])
+    parser.add_argument("--stage", required=True, choices=["B01", "B02", "C01", "C02", "D01", "D02"])
     parser.add_argument("--config", required=True)
     parser.add_argument("--run-id", required=True)
     args = parser.parse_args()
@@ -459,8 +576,10 @@ def main() -> None:
         run_c01(root, root / args.config, args.run_id)
     elif args.stage == "C02":
         run_c02(root, root / args.config, args.run_id)
-    else:
+    elif args.stage == "D01":
         run_d01(root, root / args.config, args.run_id)
+    else:
+        run_d02(root, root / args.config, args.run_id)
 
 
 if __name__ == "__main__":

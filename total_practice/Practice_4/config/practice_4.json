@@ -51,5 +51,23 @@
     "predecessor_run": "20261118_system312_c02_01",
     "predecessor_manifest_sha256": "6bedf3bb565ba51c6695cb30177845d6f1a35969e1c10120ea9114817064c730",
     "approval_reference": "Human: Phase 3 approved and raw 133 m/s limitation accepted, 2026-11-18 via Director review"
+  },
+  "d02": {
+    "approval_reference": "Human: Phase 4 approved and Streaming LOCF-1 selected, 2026-11-18 via Director review",
+    "predecessor_run": "20261118_system312_d01_01",
+    "locf_max_gap": 1,
+    "percentiles": [
+      0.5,
+      99.5
+    ],
+    "percentile_method": "linear",
+    "csv_na_rep": "",
+    "csv_float_format": "%.17g",
+    "var_block": {
+      "start_utc": "2016-09-28T08:00:00+00:00",
+      "end_utc": "2017-10-19T14:00:00+00:00",
+      "rows": 9271,
+      "earlier_observed_excluded": 15241
+    }
   }
 }

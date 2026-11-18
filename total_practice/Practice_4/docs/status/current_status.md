@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Status: `IN_PROGRESS` ? Phase 3 / D01 COMPLETED; Phase 4 specification drafting IN_PROGRESS; D02 execution pending approval.
+Status: D02 / Phase 4 **APPROVED / COMPLETED** (Human, 2026-11-18 via Director review). Phase 5 specification drafting **IN_PROGRESS**. E01/E02 implementation awaits Human approval.
 
 ## Đã hoàn thành ở mức lập kế hoạch
 
@@ -60,7 +60,7 @@ Status: `IN_PROGRESS` ? Phase 3 / D01 COMPLETED; Phase 4 specification drafting 
 - Human xác nhận source, version 1, CC0, units và time semantics; Kaggle page/API
   chưa được xác minh độc lập trong môi trường này. Archive hash chưa có.
 - Data contract Phase 1 và Phase 2 specification đã được Human chấp nhận.
-- Human approved the D02 policy decisions; Phase 4 specification and before-process plan await approval. No D02 scaler fit or execution has occurred.
+- [Phase 5 specification and before-process plan](../phase_details/phase_05.md) are drafted for Human review. E01/E02 code and model input artifacts remain pending.
 - Editable install vào system Python 3.12 đã chạy; không tạo virtualenv hoặc
   kiểm clean-environment reproduction. B01 đã được Human chấp nhận.
 - Đã có B01/B02 pipeline và tests; notebook template có 12 Markdown cells, chưa
@@ -68,3 +68,10 @@ Status: `IN_PROGRESS` ? Phase 3 / D01 COMPLETED; Phase 4 specification drafting 
 
 Kiểm tra ngày 2026-11-17 không thấy `LD2011_2014.txt` trong `datasets/raw/`;
 không suy diễn nguyên nhân. UCI không phải dataset chính đã chọn.
+
+## Accepted D02 evidence
+
+- Run `20261118_system312_d02_01` processed 24,544 train and 5,259 validation hours; scaler fit count 24,530. Test records were not parsed.
+- Preprocessing tests: 9 passed; splitting/walk-forward/metrics regression: 17 passed. Deprecation warnings are recorded in the D02 log.
+- Raw, canonical and split hashes matched D01 lineage before and after processing; persisted data and manifest hashes were independently verified. See `docs/results/preprocessing_audit.md` and run manifest.
+- Human accepted the D02 run, prepared CSV, preprocessing audit and Phase 4 completion on 2026-11-18 via Director review. The Phase 4 approval record and audit header were updated after the run. The D02 manifest and staged audit retain their run-time hashes and wording.
