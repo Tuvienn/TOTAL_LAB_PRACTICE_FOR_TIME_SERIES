@@ -1,0 +1,12 @@
+{
+  "python": "3.12.10",
+  "platform": "Windows-11-10.0.26100-SP0",
+  "packages": {
+    "pandas": "2.3.3",
+    "numpy": "2.5.5",
+    "pytest": "9.2.0",
+    "setuptools": "84.2.1",
+    "wheel": "0.48.0",
+    "jsonschema": "4.26.0"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "1",
+  "status": "human_confirmed_pending_review",
+  "source": {
+    "url": "https://www.kaggle.com/datasets/nicholasjhana/energy-consumption-generation-prices-and-weather",
+    "version": "1",
+    "retrieval_date": "2026-11-17",
+    "license": "CC0: Public Domain",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "provenance": "Kaggle dataset nicholasjhana/energy-consumption-generation-prices-and-weather (downloaded 2026-11-17 by Human); Kaggle page/API metadata unreachable from offline/headless environment, upstream sources ENTSO-E Transparency Platform & OpenWeatherMap",
+    "archive_sha256": null,
+    "retrieval_time_utc": null,
+    "metadata_basis": "Human confirmation 2026-11-18; not independently verified"
+  },
+  "files": [
+    {
+      "path": "datasets/raw/energy_dataset.csv",
+      "bytes": 6273009,
+      "sha256": "14cd13e020d87af0ab49db8e0f1e4d308320ec5b8d2dec23bab4d27c75c7733a",
+      "rows": 35064,
+      "columns": 29,
+      "timestamp_column": "time",
+      "target_column": "total load actual"
+    },
+    {
+      "path": "datasets/raw/weather_features.csv",
+      "bytes": 19918887,
+      "sha256": "3566c3c21179d4fc6691eec6d37a6cfe8fe6a4d9e097f95e4fda4a29dc683b18",
+      "rows": 178396,
+      "columns": 17,
+      "timestamp_column": "dt_iso",
+      "weather_columns": [
+        "temp",
+        "humidity",
+        "wind_speed"
+      ]
+    }
+  ],
+  "unresolved": [
+    "Independent archive checksum, source metadata verification and exact retrieval time",
+    "B02 dedup, proxy, timezone policy and contract await Human approval"
+  ],
+  "units": {
+    "total load actual": "MW",
+    "temp": "K",
+    "humidity": "%",
+    "wind_speed": "m/s"
+  },
+  "time_semantics": {
+    "basis": "Human confirmation",
+    "raw": "ISO-8601 offsets +01:00 and +02:00, CET/CEST",
+    "audit_index": "UTC",
+    "start": "2014-12-31 23:00:00+00:00",
+    "end": "2018-12-31 22:00:00+00:00"
+  }
+}

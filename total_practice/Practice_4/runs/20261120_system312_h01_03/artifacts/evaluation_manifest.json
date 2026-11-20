@@ -1,0 +1,79 @@
+{
+  "schema_version": "1",
+  "run_id": "20261120_system312_h01_03",
+  "stage_id": "H01",
+  "prediction_file": {
+    "path": "outputs/predictions/test_predictions.csv",
+    "sha256": "4cb840e287aa7987d78c34c838d57857c76c0a500f39e2bd8644b3aa36cff1f5"
+  },
+  "input_hashes": {
+    "canonical_sha256": "7122e873708d3297e38316a5d29a08236c516fcdf20327e7724edc1d31a83045",
+    "split_sha256": "d21e718e1b3661186df9f0848e7bd341b5760a6d29fdd3f48dc51102cd0f307d",
+    "config_sha256": "866aa8fb59048789010f09c4355ea7a484c7a5e51d06c655e156575a3d0a87fc",
+    "preprocessor_sha256": "ebfa412b7bce9ac077776b416df1083eaff32b08c48c28dc5d2e7e06b2757b11",
+    "eligibility_sha256": "b7ffdd30d28a1a4f76bca96e8cccf1bd5e68434f9b741f6fbc02ca7bec5804b7",
+    "source_manifest_sha256": "8436e43aca3ef672acff5077a3ba60253966f716f3f215346df03070f4085694"
+  },
+  "model_hashes": {
+    "persistence": "f0bce270c71b033af288c8f2b43ab05a66730d98aaa00ba0694c70fd24925d63",
+    "seasonal24": "2c8b93b4f663e69f6ef62229ab8c3df79d4f3959a5cb803ec9521682aac7dce3",
+    "VAR": "0b3820731f3369f57699adaa64a7b1f4a5cbbf659c48331fc5721335572d3e26",
+    "XGB": "e7386e8cfc38d51d6abc51abad383fb2c9d6360c9c955c6fe3ddb33883aec8ae",
+    "LSTM": "512715c5249f35bcfe46d1ecdbfc4413dbb1d3f263fe73f41dc9845fe5a69a1c"
+  },
+  "approval_refs": {
+    "evaluation_contract": "Human-approved C02/RV2 v1",
+    "model_locks": "Accepted F01/F02/G01/G02 locks in Practice 4 manifests",
+    "test_opening": "Human instruction: do what is needed to complete Practice 4"
+  },
+  "counts": {
+    "n_considered": 5261,
+    "n_scored": 5259,
+    "n_zero_excluded": 0,
+    "n_missing_excluded": 2,
+    "n_input_excluded": 0
+  },
+  "metrics": {
+    "persistence": {
+      "mae_mw": 1045.9594980034226,
+      "rmse_mw": 1383.8618637420993,
+      "mape_percent": 3.6881650240943893,
+      "mape_null_reason": null
+    },
+    "seasonal24": {
+      "mae_mw": 2531.0165430690245,
+      "rmse_mw": 3618.5775579471656,
+      "mape_percent": 8.758403402598043,
+      "mape_null_reason": null
+    },
+    "VAR": {
+      "mae_mw": 477.26028924445336,
+      "rmse_mw": 681.5317146256151,
+      "mape_percent": 1.6856921289965474,
+      "mape_null_reason": null
+    },
+    "XGB": {
+      "mae_mw": 283.673614206004,
+      "rmse_mw": 445.9482657517603,
+      "mape_percent": 0.988848203179056,
+      "mape_null_reason": null
+    },
+    "LSTM": {
+      "mae_mw": 301.80463295759165,
+      "rmse_mw": 458.5074603204119,
+      "mape_percent": 1.0550734312184897,
+      "mape_null_reason": null
+    }
+  },
+  "protocol": {
+    "forecast_horizon_hours": 1,
+    "weights": "fixed",
+    "transformations": "train_fitted_fixed",
+    "update_order": "predict_score_reveal"
+  },
+  "created_at_utc": "2026-11-20T08:11:12.983367+00:00",
+  "limitations": [
+    "One-step walk-forward with observed truth revealed after each target; reflects the approved availability assumption.",
+    "Test rankings are descriptive and do not change validation-selected model locks."
+  ]
+}

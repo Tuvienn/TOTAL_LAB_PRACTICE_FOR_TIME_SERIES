@@ -78,7 +78,15 @@ TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/
 │   │   ├── config/
 │   │   ├── pyproject.toml
 │   │   └── README.md
-│   └── Practice_2/
+│   └── Practice_4/
+│       ├── datasets/
+│       ├── notebooks/
+│       ├── src/
+│       ├── tests/
+│       ├── outputs/
+│       ├── docs/
+│       ├── runs/
+│       └── README.md
 ├── references/
 ├── .agents/
 ├── AGENTS.md
@@ -166,6 +174,14 @@ Practice 1 sử dụng dataset **AirPassengers**.
 - Decomposition.
 - Phân tích trend, seasonality và residual/noise.
 - Chuẩn bị nền tảng cho feature engineering và forecasting.
+
+---
+
+## Practice 4 — Multivariate Time Series Forecasting
+
+Practice 4 xây dựng và so sánh baseline, VAR, XGBoost và LSTM cho dự báo phụ tải điện theo giờ, sử dụng các metric MAE, RMSE và MAPE. Báo cáo trình bày đầy đủ nằm trong [notebook end-to-end](total_practice/Practice_4/notebooks/practice_4_end_to_end.ipynb); kết quả và giới hạn được ghi trong [README của Practice 4](total_practice/Practice_4/README.md).
+
+**Lưu ý về dataset:** PDF bài tập nêu Electricity Load Diagrams Dataset (UCI), còn project hiện dùng dataset phụ tải và thời tiết của Tây Ban Nha. Báo cáo Practice 4 ghi rõ sự khác biệt này; cần xác nhận với giảng viên nếu dataset UCI là bắt buộc.
 
 ---
 
@@ -333,6 +349,11 @@ Mỗi bài thực hành ưu tiên các nguyên tắc sau:
     <td>Practice 1</td>
     <td>🟡 Đang phát triển</td>
     <td>Khám phá đặc tính dữ liệu chuỗi thời gian</td>
+  </tr>
+  <tr>
+    <td>Practice 4</td>
+    <td>✅ Hoàn tất triển khai</td>
+    <td>Dự báo phụ tải điện với VAR, XGBoost và LSTM</td>
   </tr>
   <tr>
     <td>Practice 2+</td>

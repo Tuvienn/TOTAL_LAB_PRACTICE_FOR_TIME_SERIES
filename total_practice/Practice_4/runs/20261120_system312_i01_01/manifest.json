@@ -1,0 +1,28 @@
+{
+  "schema_version": "1",
+  "run_id": "20261120_system312_i01_01",
+  "stage_id": "I01-I02",
+  "status": "completed",
+  "runtime": {
+    "python": "3.12.10",
+    "kernel": "practice4-system31210",
+    "ipykernel": "6.30.1"
+  },
+  "inputs": {
+    "notebook_sha256": "3bd33243457dcf079f63bc51d84d88c7194df6a3f36e80332bb0f3866d65c77d",
+    "h01_manifest_sha256": "64e549a1e56ff708d2bc4f90279b82f5cab25e090f2ea3eec9f64b5481ebe482",
+    "h02_manifest_sha256": "2c9cabd6889fccc0ce9e315e970904a2a89444484972c5f0a34bd9e0cede4224",
+    "final_report_sha256": "9ff95e6c83a7d5e3f35313114674843b07f938ae01801f9f7729fd90a9e219ad"
+  },
+  "outputs": {
+    "executed_notebook_sha256": "08cd4bec062288fa514d3de014990b5604fe16b24754fd32ecbf0602492da8cd"
+  },
+  "verification": {
+    "cells": 30,
+    "code_cells": 7,
+    "execution": "all cells completed without notebook errors",
+    "raw_or_canonical_data_loaded": false,
+    "models_fit": false,
+    "presentation_outputs_embedded": true
+  }
+}

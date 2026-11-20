@@ -1,0 +1,33 @@
+{
+  "schema_version": "1",
+  "run_id": "20261120_system312_h01_03",
+  "stage_id": "H01",
+  "status": "completed",
+  "environment": {
+    "python": "3.12.10"
+  },
+  "counts": {
+    "n_considered": 5261,
+    "n_scored": 5259,
+    "n_zero_excluded": 0,
+    "n_missing_excluded": 2,
+    "n_input_excluded": 0
+  },
+  "outputs": {
+    "diagnostic_context.csv": "48793f0f6b5abd6b14eb9262f538dec836d7125e2213e9d88c5d4df7a0c4f520",
+    "evaluation_manifest.json": "1c701150740099671a326af384c9d5d35e2eac9e6d278e432a5cbf46f111e053",
+    "test_eligibility.csv": "b7ffdd30d28a1a4f76bca96e8cccf1bd5e68434f9b741f6fbc02ca7bec5804b7",
+    "test_metrics.csv": "376725c82ea43254624f1296ab30d8e829b6b19d38fe86c1b54e35151b772abd",
+    "test_predictions.csv": "4cb840e287aa7987d78c34c838d57857c76c0a500f39e2bd8644b3aa36cff1f5"
+  },
+  "input_hashes": {
+    "canonical": "7122e873708d3297e38316a5d29a08236c516fcdf20327e7724edc1d31a83045",
+    "split": "d21e718e1b3661186df9f0848e7bd341b5760a6d29fdd3f48dc51102cd0f307d",
+    "prepared": "fbe9ff6f95757caf53482cb522c4e06007840fc7775a145530b89fbb789a415c",
+    "scaler": "ebfa412b7bce9ac077776b416df1083eaff32b08c48c28dc5d2e7e06b2757b11",
+    "var": "0b3820731f3369f57699adaa64a7b1f4a5cbbf659c48331fc5721335572d3e26",
+    "xgb": "e7386e8cfc38d51d6abc51abad383fb2c9d6360c9c955c6fe3ddb33883aec8ae",
+    "lstm_weights": "512715c5249f35bcfe46d1ecdbfc4413dbb1d3f263fe73f41dc9845fe5a69a1c",
+    "lstm_architecture": "c858df9f6417ac508d9b4d2195ce0b29a539ab89d4bb5d10950ac12f6d7af807"
+  }
+}

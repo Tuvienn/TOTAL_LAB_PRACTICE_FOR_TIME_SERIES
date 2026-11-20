@@ -1,0 +1,40 @@
+{
+  "packages": {
+    "keras": "3.11.3",
+    "numpy": "2.5.5",
+    "pandas": "2.3.3",
+    "statsmodels": "0.14.6",
+    "tensorflow": "2.20.0",
+    "xgboost": "3.4.1"
+  },
+  "python": "3.12.10",
+  "scope": "opaque byte hashing, no test record parsing",
+  "sha256": {
+    "datasets/processed/canonical_hourly.csv": "7122e873708d3297e38316a5d29a08236c516fcdf20327e7724edc1d31a83045",
+    "datasets/processed/model_inputs.npz": "d6f7d245b188ac34df414d92bac6fc9cd881b36357c7bde5e0e3bc1e19e83814",
+    "datasets/processed/origin_manifest.csv": "2c171663ef57bb883b9f345119ff7751bea182160f7391055d2e99408d47e8f6",
+    "datasets/processed/prepared_hourly.csv": "fbe9ff6f95757caf53482cb522c4e06007840fc7775a145530b89fbb789a415c",
+    "datasets/processed/split_manifest.json": "d21e718e1b3661186df9f0848e7bd341b5760a6d29fdd3f48dc51102cd0f307d",
+    "datasets/raw/energy_dataset.csv": "14cd13e020d87af0ab49db8e0f1e4d308320ec5b8d2dec23bab4d27c75c7733a",
+    "datasets/raw/weather_features.csv": "3566c3c21179d4fc6691eec6d37a6cfe8fe6a4d9e097f95e4fda4a29dc683b18",
+    "docs/results/README.md": "9eba2f488bcdd01b8d3088aa8c2d1b66fa80382864e8c5631866289599f7b190",
+    "docs/results/alignment_audit.md": "97b5dfb1a29cd1b28c8c86ee41bc4c7995b254cdeb695e1d18374aca305c365b",
+    "docs/results/baseline_results.md": "c7e18bcda279f92b7454b3fddb5140e9a03ccb434b61e146eb6b5c71cfe90afb",
+    "docs/results/data_audit.md": "e1decd7470d5e866e7de79510a21f41e596490f56c55b31edea6eef82a9246dd",
+    "docs/results/data_contract.md": "c81897ba30b6336100c284f436c8afc46608b61eacfd719994bb42838da9f573",
+    "docs/results/eda_findings.md": "8701adbc95ccdcf81fd4b89140fde27ed7621c606cc94b7a98f209c35d14ff05",
+    "docs/results/evaluation_contract.md": "ed284a06bae3ee2f59f065bbd0a1d3a347fa3991c811ec79e17446b33fdd9150",
+    "docs/results/feature_dictionary.md": "f6b91409f4d9d4194f3bf6539ffca3e4e9a24419cbeba75575dcdf6074851284",
+    "docs/results/lstm_findings.md": "db047412ada943e343bd89d7029998ddb5d1c072d99f17de345e4cf1f28addc3",
+    "docs/results/preprocessing_audit.md": "986ef4ca8585e6c481baf6da27f5d7074515a09e3bbd1f56c712f49fa1bcdd10",
+    "docs/results/problem_definition.md": "9319c1abf6ff849da0eb441f2b0b24197b6eee297f4816c9def67923dc8a16f7",
+    "docs/results/var_results.md": "0eee6cfdbc8cc32e355bddf6350c7299bac0e8649290d341bd8c0e533ddebd30",
+    "docs/results/xgboost_findings.md": "aa2c8e7787c9e76a419ded671c90a20a3c139bb34cd0206d4049419df376ccbf",
+    "runs/20261118_system312_d02_01/artifacts/scaler.json": "ebfa412b7bce9ac077776b416df1083eaff32b08c48c28dc5d2e7e06b2757b11",
+    "runs/20261118_system312_f01_01/manifest.json": "dba8592daaa6971357fe40d1426df31382e189882efc48201ad785e2e520eca1",
+    "runs/20261118_system312_f02_01/manifest.json": "51b561117de455ba5ab76c36ee9ae8bf79a8ff3757d31c4dcb9cb9970fda3651",
+    "runs/20261118_system312_f02_02/manifest.json": "3e03c81ec4063a3f57c5efa1d227de69e159b09dfedb3a1a1cf42770010ea4c0",
+    "runs/20261118_system312_g01_01/manifest.json": "5e261804aa5e885e77f3eda620258aeef15556a8fde8198ddfef1d2fb638df11",
+    "runs/20261118_system312_g02_01/manifest.json": "5baa3e252753d65edefe7e185e57a5e578cac6dea0f639643400ce096853bf47"
+  }
+}

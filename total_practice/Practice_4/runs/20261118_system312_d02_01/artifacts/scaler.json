@@ -1,0 +1,74 @@
+{
+  "schema_version": "1",
+  "feature_order": [
+    "load_input",
+    "temp",
+    "humidity",
+    "wind_speed"
+  ],
+  "mean": [
+    28552.109702405218,
+    290.26302578806514,
+    67.47501834488384,
+    2.4490827558091985
+  ],
+  "std": [
+    4536.503215172632,
+    7.204975167486003,
+    14.843465870743465,
+    1.3747929371868104
+  ],
+  "scale": [
+    4536.503215172632,
+    7.204975167486003,
+    14.843465870743465,
+    1.3747929371868104
+  ],
+  "variance": [
+    20579861.421271626,
+    51.911667164089955,
+    220.32847905592604,
+    1.8900556201387373
+  ],
+  "fit_count": 24530,
+  "fit_start_row": 0,
+  "fit_end_row": 24543,
+  "percentiles": [
+    0.5,
+    99.5
+  ],
+  "percentile_method": "linear",
+  "bounds": {
+    "load": {
+      "lower": 19605.11,
+      "upper": 38758.0,
+      "count": 24512
+    },
+    "temp": {
+      "lower": 274.89040300000005,
+      "upper": 306.28171000000003,
+      "count": 24544
+    },
+    "humidity": {
+      "lower": 33.4,
+      "upper": 95.6,
+      "count": 24544
+    },
+    "wind_speed": {
+      "lower": 0.4,
+      "upper": 7.4,
+      "count": 24544
+    }
+  },
+  "locf_max_gap": 1,
+  "scikit_learn_version": "1.9.1",
+  "numpy_version": "2.5.5",
+  "pandas_version": "2.3.3",
+  "provenance": {
+    "datasets/raw/energy_dataset.csv": "14cd13e020d87af0ab49db8e0f1e4d308320ec5b8d2dec23bab4d27c75c7733a",
+    "datasets/raw/weather_features.csv": "3566c3c21179d4fc6691eec6d37a6cfe8fe6a4d9e097f95e4fda4a29dc683b18",
+    "datasets/processed/canonical_hourly.csv": "7122e873708d3297e38316a5d29a08236c516fcdf20327e7724edc1d31a83045",
+    "datasets/processed/split_manifest.json": "d21e718e1b3661186df9f0848e7bd341b5760a6d29fdd3f48dc51102cd0f307d",
+    "split_semantic_sha256": "37a84f769f4f8e2a8180641c4ef68bb5309c88d02eb73c932d93d84c20f898b5"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": "1",
+  "run_id": "20261118_system312_e01_01",
+  "stage_id": "E01",
+  "status": "completed",
+  "started_at_utc": "2026-11-18T01:31:50.591410+00:00",
+  "finished_at_utc": "2026-11-18T01:31:58.129021+00:00",
+  "approval_refs": {
+    "phase_5": "Human: Phase 5 specification and before-process plan APPROVED 2026-11-18 via Director review; E01 only",
+    "d02": "20261118_system312_d02_01"
+  },
+  "inputs": [
+    {
+      "path": "runs/20261118_system312_d02_01/manifest.json",
+      "sha256": "50527847fbbda7dc510806301cf95a368de6f39716577d2ca7813d7bd4c3e3ff"
+    },
+    {
+      "path": "docs/phase_details/phase_04.md",
+      "sha256": "1d0118fced94a5239f478afd556c546a8305cc9bc91e874958b6dfbf972736be"
+    },
+    {
+      "path": "docs/phase_details/phase_05.md",
+      "sha256": "c891deaefc41b177e4c554950899067e72b3be347b17f2bcd05df5cdfc560159"
+    },
+    {
+      "path": "datasets/raw/energy_dataset.csv",
+      "sha256": "14cd13e020d87af0ab49db8e0f1e4d308320ec5b8d2dec23bab4d27c75c7733a"
+    },
+    {
+      "path": "datasets/raw/weather_features.csv",
+      "sha256": "3566c3c21179d4fc6691eec6d37a6cfe8fe6a4d9e097f95e4fda4a29dc683b18"
+    },
+    {
+      "path": "datasets/processed/canonical_hourly.csv",
+      "sha256": "7122e873708d3297e38316a5d29a08236c516fcdf20327e7724edc1d31a83045"
+    },
+    {
+      "path": "datasets/processed/split_manifest.json",
+      "sha256": "d21e718e1b3661186df9f0848e7bd341b5760a6d29fdd3f48dc51102cd0f307d"
+    },
+    {
+      "path": "datasets/processed/prepared_hourly.csv",
+      "sha256": "fbe9ff6f95757caf53482cb522c4e06007840fc7775a145530b89fbb789a415c"
+    },
+    {
+      "path": "runs/20261118_system312_d02_01/artifacts/scaler.json",
+      "sha256": "ebfa412b7bce9ac077776b416df1083eaff32b08c48c28dc5d2e7e06b2757b11"
+    },
+    {
+      "path": "runs/20261118_system312_d02_01/artifacts/summary.json",
+      "sha256": "8e4a4e3d1cb5f7240bbf876e006aebc63408630ae04e9e37bb41db4a809b0903"
+    }
+  ],
+  "config_sha256": "f4ddd8ef848448ef531af7ef7e1febe767e88ae894ed2dde69ffdcef58888b4c",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "packages": {
+      "pandas": "2.3.3",
+      "numpy": "2.5.5",
+      "scikit-learn": "1.9.1",
+      "pytest": "9.2.0",
+      "jsonschema": "4.26.0"
+    }
+  },
+  "outputs": [
+    {
+      "path": "docs/results/feature_dictionary.md",
+      "sha256": "1d2dc9119d3f65c59f42509ca58d999b4b848030e1dde569f6707a07bf12ed38"
+    },
+    {
+      "path": "docs/logs/E01_20261118_system312_e01_01.md",
+      "sha256": "ef582f30b2b92d722d005f6e3b0e93cf29111bdb676720ef7cfd07db16f91bde"
+    },
+    {
+      "path": "runs/20261118_system312_e01_01/config.json",
+      "sha256": "f4ddd8ef848448ef531af7ef7e1febe767e88ae894ed2dde69ffdcef58888b4c"
+    },
+    {
+      "path": "runs/20261118_system312_e01_01/environment.json",
+      "sha256": "d8d3dc210a8181e95c794d8d58de4ade37dec0c6daeef44b67b7717f5a816492"
+    }
+  ],
+  "checks": [
+    {
+      "name": "lineage_and_hashes",
+      "status": "pass",
+      "evidence": "D02 acceptance, manifest SHA256 and split file/semantic lineage verified. Raw, canonical, split, prepared and scaler digests match D02 before and after feature checks."
+    },
+    {
+      "name": "prepared_prefix",
+      "status": "pass",
+      "evidence": "29803 UTC hours with the accepted D02 schema, split endpoints, masks and counts."
+    },
+    {
+      "name": "ramp",
+      "status": "pass",
+      "evidence": "Synthetic sequence and flat view matched the hand calculation, including all three derived features and row 25 raw truth."
+    },
+    {
+      "name": "var",
+      "status": "pass",
+      "evidence": "(9271, 4) finite scaled levels, exact UTC hourly endpoints, observed raw load and working/raw equality."
+    }
+  ],
+  "limitations": [
+    "E01 gate acceptance and E02 execution approval remain pending Human review.",
+    "Raw and canonical CSVs were hashed as opaque bytes. Data parsing was restricted to D02 train and validation.",
+    "The fixed VAR block omits earlier observed train hours and may underrepresent earlier regimes."
+  ]
+}
