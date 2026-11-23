@@ -1,3 +1,0 @@
-learning_rate,trial_id,model,complexity,status,best_epoch,stopping_epoch,epochs_after_best,elapsed_seconds,restored_train_mse,restored_val_mse,warnings,mae_mw,rmse_mw,mape_percent,mape_null_reason,n_considered,n_scored,n_zero_excluded,n_missing_excluded,n_input_excluded
-0.001,lstm_lr_001,LSTM,30113,completed,47,50,3,212.73533380000117,0.010731721304254793,0.01237973169083592,,320.6916861291538,504.7505973997725,1.1309291647735424,,5259,5257,0,2,0
-0.0005,lstm_lr_0005,LSTM,30113,completed,50,50,0,212.3275010999987,0.012484489486938309,0.013958810227309163,,341.066003000317,535.9761016195885,1.193152308480062,,5259,5257,0,2,0

@@ -1,196 +1,339 @@
 from __future__ import annotations
 
-import argparse
-import csv
-import json
-import platform
+import itertools
 import time
-import warnings
 from pathlib import Path
+from typing import Any
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import shap
 import xgboost as xgb
 
-from practice_4.analysis.metrics import calculate_metrics, select_validation
-from practice_4.data.features import XGB_FEATURE_NAMES
-from practice_4.models.baselines import ROOT, INPUTS, SCALER, align, canonical, sha, verify_lineage
-
-CONFIG_HASH = "16d91759d81efb3af5394b7dace9cecafd915badee0e489b27043b9aaa9ee6fd"
-RUN_ID = "20261118_system312_g01_01"
-
-
-def feature_indices(names, selected):
-    if len(names) != len(set(names)) or len(selected) != len(set(selected)):
-        raise ValueError("Duplicate feature names")
-    return [names.index(name) for name in selected]
-
-
-def prediction(model, features, best_iteration):
-    if best_iteration < 0:
-        raise ValueError("Invalid best iteration")
-    return model.predict(features, iteration_range=(0, best_iteration + 1))
+from practice_4.analysis.metrics import calculate_metrics
+from practice_4.data.features import (
+    EXTENDED_LOAD_LAGS,
+    INTERACTION_FEATURES,
+    LAG24_FEATURE_NAMES,
+    ROLLING_LOAD_FEATURES,
+    TARGET_CALENDAR_FEATURES,
+    XGB_FULL_FEATURES,
+    feature_subset_indices,
+    xgb_ablation_subsets,
+)
 
 
-def metadata(subset, names, scaler_hash, booster_hash, config_hash, best_iteration, versions, lineage):
-    return {"model": subset, "feature_order": names, "scaler_sha256": scaler_hash,
-            "booster_sha256": booster_hash, "config_sha256": config_hash,
-            "best_iteration": best_iteration, "tree_count": best_iteration + 1,
-            "library_versions": versions, "input_lineage": lineage, "model_version": "1"}
+def _feature_group(name: str) -> str:
+    if name in TARGET_CALENDAR_FEATURES:
+        return "calendar_dst_holiday"
+    if name in INTERACTION_FEATURES:
+        return "cross_interactions"
+    if name in ROLLING_LOAD_FEATURES or name in EXTENDED_LOAD_LAGS:
+        return "load_rolling_weekly"
+    if name.endswith("_load"):
+        return "load_lags_24h"
+    if name.endswith("_temperature"):
+        return "temperature_lags"
+    if name.endswith("_humidity"):
+        return "humidity_lags"
+    if name.endswith("_wind_speed"):
+        return "wind_speed_lags"
+    return "other"
 
 
-def verify(config):
-    for name, expected in config["upstream_sha256"].items():
-        if sha(ROOT / name) != expected:
-            raise ValueError(f"Upstream hash mismatch: {name}")
-    verify_lineage(ROOT)
-    if (xgb.__version__, np.__version__, pd.__version__) != ("3.4.1", "2.5.5", "2.3.3"):
-        raise ValueError("Version mismatch")
+def _predict_booster(model: xgb.XGBRegressor, x_data: np.ndarray, best_iteration: int) -> np.ndarray:
+    booster = model.get_booster()
+    dmat = xgb.DMatrix(x_data, feature_names=booster.feature_names)
+    return booster.predict(dmat, iteration_range=(0, best_iteration + 1)).astype(np.float64)
 
 
-def run(run_id, config_path, replay=False):
-    import re
-    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
-        raise ValueError("Invalid run ID")
-    if replay and (ROOT / "runs" / run_id).exists():
-        raise FileExistsError("Replay output collision")
-    config_path = Path(config_path).resolve()
-    if (not replay and run_id != RUN_ID) or sha(config_path) != CONFIG_HASH:
-        raise ValueError("Run ID or config mismatch")
-    config = json.loads(config_path.read_text(encoding="utf-8"))
-    verify(config)
-    names = list(XGB_FEATURE_NAMES)
-    if config["feature_order"]["XGB_full"] != names:
-        raise ValueError("Feature order mismatch")
-    for subset, features in config["feature_order"].items():
-        if feature_indices(names, features) != config["feature_indices"][subset]:
-            raise ValueError("Feature indices mismatch")
-    with np.load(ROOT / INPUTS, allow_pickle=False) as data:
-        targets = data["target_row"]
-        truth = data["y_true_mw"]
-        features = data["x_xgb"]
-    if len(targets) != 29692 or features.shape != (29692, 99) or np.any(targets >= 29803):
-        raise ValueError("Invalid feature domain")
-    rows, counts = align(ROOT, targets, truth)
-    if not np.isfinite(features).all() or not np.isfinite(truth).all():
-        raise ValueError("Nonfinite input")
-    train = np.array([row["split"] == "train" for row in rows])
-    valid = ~train
-    if (int(train.sum()), int(valid.sum())) != (24435, 5257):
-        raise ValueError("Eligibility mismatch")
-    run_dir = ROOT / "runs" / run_id
-    if replay:
-        run_dir.mkdir(exist_ok=False)
-        (run_dir / "config.json").write_bytes(config_path.read_bytes())
-    artifacts = run_dir / "artifacts"
-    artifacts.mkdir(exist_ok=False)
-    trials = []
-    models = {}
-    for subset in ("XGB_full", "XGB_load_only"):
-        selected = features[:, config["feature_indices"][subset]]
-        for depth in config["grid"]["max_depth"]:
-            for estimators in config["grid"]["n_estimators"]:
-                trial_id = f"{subset}_d{depth}_n{estimators:04d}"
-                model = xgb.XGBRegressor(max_depth=depth, n_estimators=estimators, **config["parameters"])
-                started = time.monotonic()
-                with warnings.catch_warnings(record=True) as caught:
-                    warnings.simplefilter("always")
-                    evaluations = [(selected[train], truth[train]), (selected[valid], truth[valid])] if replay else [(selected[valid], truth[valid])]
-                    model.fit(selected[train], truth[train], eval_set=evaluations, verbose=replay)
-                if replay:
-                    history = model.evals_result()
-                    with (artifacts / f"{trial_id}_rounds.csv").open("x", encoding="utf-8", newline="") as stream:
-                        writer = csv.writer(stream, lineterminator="\n")
-                        writer.writerow(["round", "train_rmse", "validation_rmse"])
-                        writer.writerows((i + 1, a, b) for i, (a, b) in enumerate(zip(history["validation_0"]["rmse"], history["validation_1"]["rmse"], strict=True)))
-                best = int(model.best_iteration)
-                if best < 0 or best >= estimators:
-                    raise ValueError("Invalid early stopping state")
-                values = prediction(model, selected[valid], best)
-                scores = calculate_metrics(truth[valid], values, 2, 0)
-                record = {"model": "XGB", "subset": subset, "trial_id": trial_id, "max_depth": depth,
-                          "n_estimators": estimators, "status": "completed", "elapsed_seconds": time.monotonic()-started,
-                          "best_iteration": best, "complexity": best+1, "warnings": " | ".join(str(w.message) for w in caught), **scores}
-                trials.append(record)
-                models[trial_id] = model
-                print(trial_id, scores["rmse_mw"], flush=True)
-    with (artifacts / "trials.csv").open("x", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(trials[0]))
-        writer.writeheader()
-        writer.writerows(trials)
-    selected_records = {}
-    predictions = {}
-    model_hashes = {}
-    for subset in ("XGB_full", "XGB_load_only"):
-        chosen = select_validation([trial for trial in trials if trial["subset"] == subset])
-        selected_records[subset] = chosen
-        model = models[chosen["trial_id"]]
-        selected = features[valid][:, config["feature_indices"][subset]]
-        reference = prediction(model, selected, chosen["best_iteration"])
-        booster = model.get_booster()[:chosen["complexity"]]
-        booster.feature_names = config["feature_order"][subset]
-        model_path = artifacts / f"{subset}.json"
+def run_xgboost_stage(
+    x_xgb: np.ndarray,
+    y_true: np.ndarray,
+    target_rows: np.ndarray,
+    origin_df: pd.DataFrame,
+    split_manifest: dict[str, Any],
+    config: dict[str, Any],
+    artifacts_dir: Path,
+    figures_dir: Path,
+) -> dict[str, Any]:
+    artifacts_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir.mkdir(parents=True, exist_ok=True)
+    xgb_cfg = config["xgboost"]
+    seed = int(config["seed"])
+
+    eligible = origin_df[origin_df["eligible"]].reset_index(drop=True)
+    train_mask = (eligible["split"] == "train").to_numpy()
+    val_mask = (eligible["split"] == "validation").to_numpy()
+    val_all = origin_df[origin_df["split"] == "validation"]
+    n_missing = int((val_all["exclusion_reason"] == "missing_truth").sum())
+    n_invalid = int((val_all["exclusion_reason"] == "invalid_context").sum())
+
+    cv_folds = split_manifest.get("train_expanding_cv_folds", [])
+    subsets = xgb_ablation_subsets()
+    full_indices = feature_subset_indices(subsets["XGB_full"])
+
+    grid = xgb_cfg["grid"]
+    combos = list(
+        itertools.product(
+            grid["max_depth"],
+            grid["learning_rate"],
+            grid["min_child_weight"],
+            grid["colsample_bytree"],
+            grid["reg_lambda"],
+        )
+    )
+
+    cv_cache_path = artifacts_dir / "cv_trials.csv"
+    if cv_cache_path.exists():
+        cached_df = pd.read_csv(cv_cache_path)
+        if len(cached_df) == len(combos):
+            cv_df = cached_df.sort_values("cv_mean_rmse").reset_index(drop=True)
+            combos = []
+
+    cv_trials = []
+    for idx, (depth, lr, mcw, colsub, reg_lam) in enumerate(combos, start=1):
+        started = time.perf_counter()
+        fold_rmses = []
+        fold_iters = []
+        for fold in cv_folds:
+            f_tr = (target_rows >= fold["train_start_row"]) & (target_rows <= fold["train_end_row"])
+            f_va = (target_rows >= fold["val_start_row"]) & (target_rows <= fold["val_end_row"])
+            model = xgb.XGBRegressor(
+                n_estimators=xgb_cfg["n_estimators"],
+                max_depth=int(depth),
+                learning_rate=float(lr),
+                min_child_weight=float(mcw),
+                subsample=float(xgb_cfg["subsample"]),
+                colsample_bytree=float(colsub),
+                reg_lambda=float(reg_lam),
+                tree_method=xgb_cfg["tree_method"],
+                device=xgb_cfg["device"],
+                objective=xgb_cfg["objective"],
+                eval_metric=xgb_cfg["eval_metric"],
+                early_stopping_rounds=int(xgb_cfg["early_stopping_rounds"]),
+                random_state=seed,
+                verbosity=0,
+            )
+            model.fit(
+                x_xgb[f_tr][:, full_indices],
+                y_true[f_tr],
+                eval_set=[(x_xgb[f_va][:, full_indices], y_true[f_va])],
+                verbose=False,
+            )
+            best_it = int(model.best_iteration)
+            preds = _predict_booster(model, x_xgb[f_va][:, full_indices], best_it)
+            rmse = float(np.sqrt(np.mean((y_true[f_va] - preds) ** 2)))
+            fold_rmses.append(rmse)
+            fold_iters.append(best_it + 1)
+
+        cv_trials.append(
+            {
+                "trial_id": f"cv_{idx:02d}_d{depth}_lr{lr}_mcw{mcw}_cs{colsub}_l{reg_lam}",
+                "max_depth": int(depth),
+                "learning_rate": float(lr),
+                "min_child_weight": float(mcw),
+                "colsample_bytree": float(colsub),
+                "reg_lambda": float(reg_lam),
+                "cv_mean_rmse": float(np.mean(fold_rmses)),
+                "cv_std_rmse": float(np.std(fold_rmses)),
+                "cv_median_trees": int(np.median(fold_iters)),
+                "elapsed_seconds": float(time.perf_counter() - started),
+            }
+        )
+
+    if cv_trials:
+        cv_df = pd.DataFrame(cv_trials).sort_values("cv_mean_rmse").reset_index(drop=True)
+        cv_df.to_csv(cv_cache_path, index=False)
+    best_hp = cv_df.iloc[0].to_dict()
+
+    ablation_records = []
+    val_preds_map: dict[str, np.ndarray] = {}
+    saved_models: dict[str, Path] = {}
+    full_model_obj: xgb.XGBRegressor | None = None
+    full_best_iter = 0
+
+    for subset_name, feat_names in subsets.items():
+        cols = feature_subset_indices(feat_names)
+        started = time.perf_counter()
+        model = xgb.XGBRegressor(
+            n_estimators=xgb_cfg["n_estimators"],
+            max_depth=int(best_hp["max_depth"]),
+            learning_rate=float(best_hp["learning_rate"]),
+            min_child_weight=float(best_hp["min_child_weight"]),
+            subsample=float(xgb_cfg["subsample"]),
+            colsample_bytree=float(best_hp["colsample_bytree"]),
+            reg_lambda=float(best_hp["reg_lambda"]),
+            tree_method=xgb_cfg["tree_method"],
+            device=xgb_cfg["device"],
+            objective=xgb_cfg["objective"],
+            eval_metric=xgb_cfg["eval_metric"],
+            early_stopping_rounds=int(xgb_cfg["early_stopping_rounds"]),
+            random_state=seed,
+            verbosity=0,
+        )
+        x_tr = x_xgb[train_mask][:, cols]
+        x_va = x_xgb[val_mask][:, cols]
+        model.fit(x_tr, y_true[train_mask], eval_set=[(x_va, y_true[val_mask])], verbose=False)
+        best_it = int(model.best_iteration)
+        booster = model.get_booster()[: best_it + 1]
+        booster.feature_names = feat_names
+        model_path = artifacts_dir / f"{subset_name}.json"
         booster.save_model(model_path)
-        model_hashes[subset] = sha(model_path)
-        loaded = xgb.Booster()
-        loaded.load_model(model_path)
-        actual = loaded.predict(xgb.DMatrix(selected, feature_names=config["feature_order"][subset]), iteration_range=(0, chosen["complexity"]))
-        if np.max(np.abs(reference.astype(float) - actual.astype(float))) > 1e-9:
-            raise ValueError("Reload parity failure")
-        predictions[subset] = actual
-        meta = metadata(subset, config["feature_order"][subset], config["scaler_sha256"], model_hashes[subset], CONFIG_HASH, chosen["best_iteration"], config["versions"], config["upstream_sha256"])
-        (artifacts / f"{subset}_metadata.json").write_bytes(canonical(meta) + b"\n")
-        if subset == "XGB_full":
-            gains = loaded.get_score(importance_type="gain")
-    with (artifacts / "validation_predictions.csv").open("x", encoding="utf-8", newline="") as stream:
-        writer = csv.writer(stream)
-        writer.writerow(["target_row", "origin", "target_timestamp", "y_true_mw", "XGB_full", "XGB_load_only"])
-        for i, row in enumerate([r for r in rows if r["split"] == "validation"]):
-            writer.writerow([row["target_row"], row["origin_timestamp_utc"], row["target_timestamp_utc"], row["y_true_mw"], predictions["XGB_full"][i], predictions["XGB_load_only"][i]])
-    group = lambda name: "derived_load" if name in ("mean6h", "std24h", "trend24h") else name.split("_", 1)[1]
-    with (artifacts / "gain.csv").open("x", encoding="utf-8", newline="") as stream:
-        writer = csv.writer(stream)
-        writer.writerow(["feature", "group", "mean_split_gain"])
-        writer.writerows((name, group(name), gains.get(name, 0.0)) for name in names)
-    aggregates = {g: sum(gains.get(n, 0.0) for n in names if group(n) == g) for g in ("load", "temperature", "humidity", "wind_speed", "derived_load")}
-    baseline = json.loads((ROOT / "runs/20261118_system312_f01_01/artifacts/metrics.json").read_text())
-    var = json.loads((ROOT / "runs/20261118_system312_f02_02/artifacts/metrics.json").read_text())
-    results = {"selected": selected_records, "gain_group_sums": aggregates, "baseline": baseline, "VAR": var, "counts": counts, "hashes": model_hashes}
-    (artifacts / "metrics.json").write_bytes(canonical(results) + b"\n")
-    verify(config)
-    if sha(config_path) != CONFIG_HASH:
-        raise ValueError("Config changed")
-    report = artifacts / "xgboost_findings.md" if replay else ROOT / "docs/results/xgboost_findings.md"
-    log = artifacts / "execution.md" if replay else ROOT / "docs/logs" / f"G01_{run_id}.md"
-    if report.exists() or log.exists():
-        raise FileExistsError("Report collision")
-    lines = [f"# G01 XGBoost findings\n\nRun `{run_id}`. **PENDING HUMAN REVIEW**.\n", "## Trials\n", "| Subset | Trial | Trees | MAE MW | RMSE MW | MAPE % |", "|---|---|---:|---:|---:|---:|"]
-    for t in trials:
-        lines.append(f"| {t['subset']} | {t['trial_id']} | {t['complexity']} | {t['mae_mw']:.6f} | {t['rmse_mw']:.6f} | {t['mape_percent']:.6f} |")
-    lines += ["\n## Validation comparison\n", "| Model | MAE MW | RMSE MW | MAPE % |", "|---|---:|---:|---:|"]
-    for name, m in [("persistence", baseline["persistence"]["validation"]), ("seasonal24", baseline["seasonal24"]["validation"]), ("VAR(24)", var), *selected_records.items()]:
-        lines.append(f"| {name} | {m['mae_mw']:.6f} | {m['rmse_mw']:.6f} | {m['mape_percent']:.6f} |")
-    full, load = selected_records["XGB_full"], selected_records["XGB_load_only"]
-    lines.append(f"\nFull minus load-only: MAE {full['mae_mw']-load['mae_mw']:.6f} MW, RMSE {full['rmse_mw']-load['rmse_mw']:.6f} MW, MAPE {full['mape_percent']-load['mape_percent']:.6f} percentage points.")
-    lines += ["\nValidation has 5259 candidates, 2 missing truths, 0 invalid contexts, and 5257 scored. Train has 24519 candidates, 32 missing truths, 52 invalid contexts, and 24435 scored. Initial warm-up contains 25 target rows. MAPE excludes zero truths.", "\n## Gain importance\n", "Group totals sum each feature's mean split gain. These values describe predictive association and are affected by correlated inputs and weather proxies. The validation set supports early stopping and selection, introducing optimism. Neither gain nor ablation establishes causality."]
-    lines += [f"- {name}: {value:.6f}" for name, value in aggregates.items()]
-    lines += [f"\n- {name}: `{value}`" for name, value in model_hashes.items()]
-    report.write_text("\n".join(lines)+"\n", encoding="utf-8")
-    log.write_text(f"# G01 {run_id}\n\nStatus **PENDING HUMAN REVIEW**. Config SHA256 `{CONFIG_HASH}`. Upstream hashes checked before and after fitting. Both selected boosters reloaded with prediction parity <= 1e-9 MW.\n", encoding="utf-8")
-    paths = list(artifacts.iterdir()) + [config_path, report, log]
-    manifest = {"stage_id":"G01", "run_id":run_id, "status":"pending_human_review", "config_sha256":CONFIG_HASH, "upstream_sha256":config["upstream_sha256"], "model_hashes":model_hashes, "environment":{"python":platform.python_version(), **config["versions"]}, "outputs":[{"path":p.relative_to(ROOT).as_posix(), "sha256":sha(p)} for p in paths]}
-    (ROOT / "runs" / run_id / "manifest.json").write_bytes(canonical(manifest)+b"\n")
-    print(json.dumps(results, indent=2))
+        saved_models[subset_name] = model_path
+
+        reloaded = xgb.Booster()
+        reloaded.load_model(model_path)
+        reloaded.set_param({"device": xgb_cfg["device"]})
+        preds_orig = _predict_booster(model, x_va, best_it)
+        preds_reloaded = reloaded.predict(
+            xgb.DMatrix(x_va, feature_names=feat_names), iteration_range=(0, best_it + 1)
+        ).astype(np.float64)
+        reload_diff = float(np.max(np.abs(preds_orig - preds_reloaded)))
+        if reload_diff > 1e-2:
+            raise ValueError(f"XGBoost reload parity mismatch for {subset_name}: {reload_diff}")
+
+        scores = calculate_metrics(y_true[val_mask], preds_reloaded, n_missing, n_invalid)
+        val_preds_map[subset_name] = preds_reloaded
+        ablation_records.append(
+            {
+                "subset": subset_name,
+                "n_features": len(feat_names),
+                "trees": best_it + 1,
+                "elapsed_seconds": float(time.perf_counter() - started),
+                "reload_max_diff": reload_diff,
+                **scores,
+            }
+        )
+        if subset_name == "XGB_full":
+            full_model_obj = model
+            full_best_iter = best_it
+
+    ablation_df = pd.DataFrame(ablation_records).sort_values("rmse_mw").reset_index(drop=True)
+    ablation_df.to_csv(artifacts_dir / "ablation_summary.csv", index=False)
+    best_subset = str(ablation_df.iloc[0]["subset"])
+
+    val_table = eligible.loc[
+        val_mask, ["target_row", "origin_timestamp_utc", "target_timestamp_utc", "y_true"]
+    ].copy()
+    for name, arr in val_preds_map.items():
+        val_table[name] = arr
+    val_table.to_csv(artifacts_dir / "validation_predictions.csv", index=False)
+
+    assert full_model_obj is not None
+    x_va_full = x_xgb[val_mask][:, full_indices]
+    sample_n = min(int(xgb_cfg["shap_sample_size"]), len(x_va_full))
+    rng = np.random.default_rng(seed)
+    sample_idx = np.sort(rng.choice(len(x_va_full), size=sample_n, replace=False))
+    x_shap = x_va_full[sample_idx]
+
+    full_booster = xgb.Booster()
+    full_booster.load_model(saved_models["XGB_full"])
+    explainer = shap.TreeExplainer(full_booster)
+    shap_vals = np.asarray(explainer.shap_values(x_shap), dtype=np.float64)
+    base_val = float(np.asarray(explainer.expected_value).reshape(-1)[0])
+    shap_preds = full_booster.predict(
+        xgb.DMatrix(x_shap, feature_names=list(XGB_FULL_FEATURES)),
+        iteration_range=(0, full_best_iter + 1),
+    ).astype(np.float64)
+    shap_additivity_err = float(np.max(np.abs((base_val + shap_vals.sum(axis=1)) - shap_preds)))
+
+    mean_abs_shap = np.abs(shap_vals).mean(axis=0)
+    shap_feat_df = pd.DataFrame(
+        {
+            "feature": list(XGB_FULL_FEATURES),
+            "group": [_feature_group(f) for f in XGB_FULL_FEATURES],
+            "mean_abs_shap": mean_abs_shap,
+        }
+    ).sort_values("mean_abs_shap", ascending=False)
+    shap_feat_df.to_csv(artifacts_dir / "shap_importance.csv", index=False)
+    group_shap = shap_feat_df.groupby("group")["mean_abs_shap"].sum().sort_values(ascending=False).to_dict()
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+    top20 = shap_feat_df.head(20).iloc[::-1]
+    axes[0].barh(top20["feature"], top20["mean_abs_shap"], color="#1f77b4")
+    axes[0].set_title("Top 20 Features by Mean |SHAP| (XGB_full)")
+    axes[0].set_xlabel("Mean |SHAP value| (kW)")
+
+    g_names = list(group_shap.keys())[::-1]
+    g_vals = [group_shap[k] for k in g_names]
+    axes[1].barh(g_names, g_vals, color="#ff7f0e")
+    axes[1].set_title("Aggregated Mean |SHAP| by Feature Group")
+    axes[1].set_xlabel("Sum of Mean |SHAP value| (kW)")
+    fig.tight_layout()
+    fig.savefig(figures_dir / "xgb_shap_summary.png", dpi=130)
+    plt.close(fig)
+
+    temp_idx = list(XGB_FULL_FEATURES).index("lag00_temperature")
+    hdd_idx = list(XGB_FULL_FEATURES).index("hdd_proxy")
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+    axes[0].scatter(x_shap[:, temp_idx], shap_vals[:, temp_idx], s=10, alpha=0.5, color="#2ca02c")
+    axes[0].axhline(0, color="black", lw=0.7)
+    axes[0].set_title("SHAP Dependence: lag00_temperature (scaled)")
+    axes[0].set_xlabel("lag00_temperature (standardized)")
+    axes[0].set_ylabel("SHAP value (kW)")
+
+    axes[1].scatter(x_shap[:, hdd_idx], shap_vals[:, hdd_idx], s=10, alpha=0.5, color="#d62728")
+    axes[1].axhline(0, color="black", lw=0.7)
+    axes[1].set_title("SHAP Dependence: hdd_proxy (Heating Degree °C)")
+    axes[1].set_xlabel("hdd_proxy = max(0, 18 - temp_c)")
+    axes[1].set_ylabel("SHAP value (kW)")
+    fig.tight_layout()
+    fig.savefig(figures_dir / "xgb_shap_dependence_temp.png", dpi=130)
+    plt.close(fig)
+
+    return {
+        "device": xgb_cfg["device"],
+        "best_cv_hyperparams": best_hp,
+        "best_subset": best_subset,
+        "ablation": ablation_df.to_dict(orient="records"),
+        "shap_additivity_max_err": shap_additivity_err,
+        "shap_group_totals": {k: float(v) for k, v in group_shap.items()},
+        "top10_shap_features": shap_feat_df.head(10).to_dict(orient="records"),
+        "saved_models": {k: str(v) for k, v in saved_models.items()},
+    }
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--run-id", required=True)
-    parser.add_argument("--config", required=True)
-    parser.add_argument("--replay", action="store_true")
-    args = parser.parse_args()
-    run(args.run_id, args.config, args.replay)
-
-
-if __name__ == "__main__":
-    main()
+def format_xgboost_markdown(res: dict[str, Any], unit: str = "kW") -> str:
+    hp = res["best_cv_hyperparams"]
+    lines = [
+        "# Stage S6 — GPU-Accelerated XGBoost, Ablation & SHAP Findings (v2)",
+        "",
+        f"- **Device:** NVIDIA RTX 5050 (`device={res['device']}`, `tree_method=hist`)",
+        f"- **CV-Selected Hyperparameters (3-fold Expanding CV on Train):** `max_depth={int(hp['max_depth'])}`, `learning_rate={hp['learning_rate']}`, `min_child_weight={hp['min_child_weight']}`, `colsample_bytree={hp['colsample_bytree']}`, `reg_lambda={hp['reg_lambda']}` (CV RMSE `{hp['cv_mean_rmse']:,.2f} ± {hp['cv_std_rmse']:,.2f} {unit}`)",
+        f"- **Selected Winning Subset on Validation:** **`{res['best_subset']}`**",
+        f"- **SHAP Additivity Max Error:** `{res['shap_additivity_max_err']:.6f} {unit}`",
+        "",
+        "## 1. Validation Ablation Study",
+        "",
+        f"| Subset | Features | Trees | Fit (s) | MAE ({unit}) | RMSE ({unit}) | MAPE (%) |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+    ]
+    for r in res["ablation"]:
+        lines.append(
+            f"| `{r['subset']}` | {r['n_features']} | {r['trees']} | {r['elapsed_seconds']:.2f} | "
+            f"{r['mae_mw']:,.2f} | {r['rmse_mw']:,.2f} | {r['mape_percent']:.4f} |"
+        )
+    lines += [
+        "",
+        "## 2. SHAP Group Attribution (`XGB_full`)",
+        "",
+        f"| Feature Group | Sum of Mean |SHAP| ({unit}) |",
+        "|---|---:|",
+    ]
+    for grp, val in res["shap_group_totals"].items():
+        lines.append(f"| `{grp}` | {val:,.2f} |")
+    lines += [
+        "",
+        "## 3. Top 10 Individual Features by Mean |SHAP|",
+        "",
+        f"| Feature | Group | Mean |SHAP| ({unit}) |",
+        "|---|---|---:|",
+    ]
+    for item in res["top10_shap_features"]:
+        lines.append(f"| `{item['feature']}` | `{item['group']}` | {item['mean_abs_shap']:,.2f} |")
+    lines.append("")
+    return "\n".join(lines)

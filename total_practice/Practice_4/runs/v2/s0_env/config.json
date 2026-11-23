@@ -1,0 +1,159 @@
+{
+  "schema_version": "2",
+  "project": "Practice_4_v2_Multivariate_Time_Series",
+  "seed": 42,
+  "device": "cuda",
+  "dataset": {
+    "name": "UCI ElectricityLoadDiagrams20112014 + Open-Meteo ERA5 Portugal",
+    "timezone_local": "Europe/Lisbon",
+    "country_holiday_code": "PT",
+    "uci_url": "https://archive.ics.uci.edu/static/public/321/electricityloaddiagrams20112014.zip",
+    "uci_archive_name": "electricityloaddiagrams20112014.zip",
+    "uci_member_name": "LD2011_2014.txt",
+    "uci_license": "CC BY 4.0",
+    "uci_license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "open_meteo_url": "https://archive-api.open-meteo.com/v1/archive",
+    "open_meteo_license": "CC BY 4.0 (ECMWF ERA5 via Open-Meteo)",
+    "open_meteo_variables": [
+      "temperature_2m",
+      "relative_humidity_2m",
+      "wind_speed_10m"
+    ],
+    "start_date": "2011-01-01",
+    "end_date": "2015-01-01",
+    "cities": [
+      {
+        "name": "Lisbon",
+        "latitude": 38.7223,
+        "longitude": -9.1393,
+        "weight": 0.5
+      },
+      {
+        "name": "Porto",
+        "latitude": 41.1579,
+        "longitude": -8.6291,
+        "weight": 0.35
+      },
+      {
+        "name": "Coimbra",
+        "latitude": 40.2033,
+        "longitude": -8.4103,
+        "weight": 0.15
+      }
+    ],
+    "load_unit": "kW",
+    "temp_unit": "C",
+    "humidity_unit": "%",
+    "wind_speed_unit": "m/s",
+    "min_active_clients_date": "2012-01-01T00:00:00+00:00"
+  },
+  "anomaly_bounds": {
+    "load_min": 0.0,
+    "temp_min_c": -30.0,
+    "temp_max_c": 55.0,
+    "humidity_min": 0.0,
+    "humidity_max": 100.0,
+    "wind_speed_min": 0.0,
+    "wind_speed_max": 40.0,
+    "percentiles": [
+      0.5,
+      99.5
+    ]
+  },
+  "split": {
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "test_ratio": 0.15,
+    "cv_folds": 3
+  },
+  "preprocessing": {
+    "locf_max_gap_load": 1,
+    "locf_max_gap_weather": 3
+  },
+  "features": {
+    "window_hours": 24,
+    "context_hours": 168,
+    "hdd_base_c": 18.0,
+    "cdd_base_c": 22.0
+  },
+  "var": {
+    "max_lag": 24,
+    "diagnostic_lags": [
+      24,
+      48
+    ],
+    "adf_alpha": 0.05,
+    "kpss_alpha": 0.05,
+    "whiteness_lags": 48
+  },
+  "xgboost": {
+    "device": "cuda",
+    "tree_method": "hist",
+    "objective": "reg:squarederror",
+    "eval_metric": "rmse",
+    "n_estimators": 2500,
+    "early_stopping_rounds": 50,
+    "grid": {
+      "max_depth": [
+        4,
+        6,
+        8
+      ],
+      "learning_rate": [
+        0.02,
+        0.05
+      ],
+      "min_child_weight": [
+        1,
+        5
+      ],
+      "colsample_bytree": [
+        0.7,
+        0.9
+      ],
+      "reg_lambda": [
+        1.0,
+        5.0
+      ]
+    },
+    "subsample": 0.8,
+    "shap_sample_size": 1000
+  },
+  "lstm": {
+    "device": "cuda",
+    "epochs": 60,
+    "patience": 10,
+    "batch_size": 128,
+    "seeds_stability": [
+      42,
+      123,
+      2026
+    ],
+    "grid": [
+      {
+        "trial_id": "lr1e3_d00",
+        "lr": 0.001,
+        "dropout": 0.0,
+        "weight_decay": 0.0
+      },
+      {
+        "trial_id": "lr1e3_d10",
+        "lr": 0.001,
+        "dropout": 0.1,
+        "weight_decay": 0.0001
+      },
+      {
+        "trial_id": "lr5e4_d10",
+        "lr": 0.0005,
+        "dropout": 0.1,
+        "weight_decay": 0.0001
+      },
+      {
+        "trial_id": "lr3e4_d20",
+        "lr": 0.0003,
+        "dropout": 0.2,
+        "weight_decay": 0.0001
+      }
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": "2",
+  "feature_order": [
+    "load_input",
+    "temp_input",
+    "humidity_input",
+    "wind_speed_input"
+  ],
+  "mean": [
+    204690.8683784929,
+    15.33280659352594,
+    75.93066478383696,
+    3.9444369976102385
+  ],
+  "std": [
+    80135.97095277147,
+    5.619530632766637,
+    15.429367787597563,
+    1.7271110851935316
+  ],
+  "scale": [
+    80135.97095277147,
+    5.619530632766637,
+    15.429367787597563,
+    1.7271110851935316
+  ],
+  "variance": [
+    6421773840.543432,
+    31.5791245326026,
+    238.0653903249533,
+    2.9829127005983787
+  ],
+  "fit_count": 18412,
+  "train_rows": 18412,
+  "percentile_bounds": {
+    "load": {
+      "lower": 91471.48482764918,
+      "upper": 403430.91571398854,
+      "count": 18412
+    },
+    "temp": {
+      "lower": 4.185275,
+      "upper": 31.49307499999999,
+      "count": 18412
+    },
+    "humidity": {
+      "lower": 32.7055,
+      "upper": 98.35,
+      "count": 18412
+    },
+    "wind_speed": {
+      "lower": 0.9135274999999999,
+      "upper": 9.445697499999998,
+      "count": 18412
+    }
+  },
+  "anomaly_bounds": {
+    "load_min": 0.0,
+    "temp_min_c": -30.0,
+    "temp_max_c": 55.0,
+    "humidity_min": 0.0,
+    "humidity_max": 100.0,
+    "wind_speed_min": 0.0,
+    "wind_speed_max": 40.0,
+    "percentiles": [
+      0.5,
+      99.5
+    ]
+  },
+  "locf_max_gap_load": 1,
+  "locf_max_gap_weather": 3,
+  "provenance": {
+    "canonical_sha256": "85c575e07cc1e7be7d913e882122360ba0f536c531227c0e9087a26ff1311542",
+    "split_sha256": "2d72ea7dd1ac8fd7931bba68c7f9dff9df2a5018dabdd40d5b22f3a497ccd519"
+  }
+}

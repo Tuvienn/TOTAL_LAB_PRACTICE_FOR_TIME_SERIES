@@ -1,477 +1,454 @@
 from __future__ import annotations
 
-import argparse
-import importlib.metadata
-import json
-import os
-import platform
+import copy
 import time
-import warnings
 from pathlib import Path
+from typing import Any
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import torch
+from torch import nn
+from torch.utils.data import DataLoader, Dataset
 
-from practice_4.analysis.metrics import calculate_metrics, select_validation
-from practice_4.models.baselines import INPUTS, ROOT, SCALER, align, canonical, sha, verify_lineage
-
-RUN_ID = "20261118_system312_g02_01"
-CONFIG_HASH = "866aa8fb59048789010f09c4355ea7a484c7a5e51d06c655e156575a3d0a87fc"
-FEATURE_ORDER = ["load_input_scaled", "temp_scaled", "humidity_scaled", "wind_speed_scaled"]
-COMPLEXITY = 30113
-KEYS = ["target_row", "origin", "target_timestamp", "y_true_mw"]
-PREDECESSORS = {
-    "persistence": ("f01_01", "predictions.csv", "y_pred_mw"),
-    "seasonal24": ("f01_01", "predictions.csv", "y_pred_mw"),
-    "VAR(24)": ("f02_02", "validation_predictions.csv", "y_pred_mw"),
-    "XGB_full": ("g01_01", "validation_predictions.csv", "XGB_full"),
-}
+from practice_4.analysis.metrics import calculate_metrics
+from practice_4.data.preprocessing import inverse_scale_load
+from practice_4.runtime import set_deterministic_seed, write_json
 
 
-def verify(config, config_path):
-    if sha(config_path) != CONFIG_HASH:
-        raise ValueError("Locked config SHA256 mismatch")
-    upstream = verify_lineage(ROOT)
-    if any(config["upstream_sha256"][key] != value for key, value in upstream.items()):
-        raise ValueError("E02 lineage mismatch")
-    for name, expected in config["upstream_sha256"].items():
-        if sha(ROOT / name) != expected:
-            raise ValueError(f"Upstream SHA256 mismatch: {name}")
+class SequenceWindowDataset(Dataset):
+    def __init__(
+        self,
+        full_seq: np.ndarray,
+        target_rows: np.ndarray,
+        y_scaled: np.ndarray,
+        window_len: int,
+        col_indices: list[int],
+    ):
+        self.full_seq = full_seq[:, col_indices].astype(np.float32, copy=False)
+        self.target_rows = target_rows.astype(np.int64, copy=False)
+        self.y_scaled = y_scaled.astype(np.float32, copy=False)
+        self.window_len = int(window_len)
+
+    def __len__(self) -> int:
+        return len(self.target_rows)
+
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
+        trow = int(self.target_rows[idx])
+        window = self.full_seq[trow - self.window_len : trow]
+        return torch.from_numpy(window.copy()), torch.tensor(self.y_scaled[idx], dtype=torch.float32)
 
 
-def runtime(config):
-    os.environ.update(config["environment"])
-    import tensorflow as tf
-    import keras
+class MultivariateLSTM(nn.Module):
+    def __init__(
+        self,
+        input_size: int,
+        hidden1: int = 64,
+        hidden2: int = 32,
+        dropout: float = 0.0,
+    ):
+        super().__init__()
+        self.input_size = int(input_size)
+        self.hidden1 = int(hidden1)
+        self.hidden2 = int(hidden2)
+        self.dropout_rate = float(dropout)
+        self.lstm1 = nn.LSTM(input_size, hidden1, batch_first=True)
+        self.drop1 = nn.Dropout(dropout) if dropout > 0.0 else nn.Identity()
+        self.lstm2 = nn.LSTM(hidden1, hidden2, batch_first=True)
+        self.drop2 = nn.Dropout(dropout) if dropout > 0.0 else nn.Identity()
+        self.head = nn.Linear(hidden2, 1)
 
-    for name, expected in config["versions"].items():
-        actual = platform.python_version() if name == "python" else importlib.metadata.version(name)
-        if actual != expected:
-            raise ValueError(f"Unexpected version for {name}: {actual}")
-    if keras.backend.backend() != "tensorflow" or tf.config.list_physical_devices("GPU"):
-        raise ValueError("CPU TensorFlow backend required")
-    if not tf.config.list_physical_devices("CPU"):
-        raise ValueError("No CPU device")
-    tf.config.threading.set_inter_op_parallelism_threads(config["threads"]["inter"])
-    tf.config.threading.set_intra_op_parallelism_threads(config["threads"]["intra"])
-    tf.config.experimental.enable_op_determinism()
-    keras.mixed_precision.set_global_policy(config["dtype"])
-    return tf, keras
-
-
-def align_sequences(x, targets, truth):
-    if np.any(targets >= 29803):
-        raise ValueError("Forbidden target row")
-    if x.shape != (len(targets), 24, 4) or truth.shape != targets.shape:
-        raise ValueError("Unexpected sequence or target shape")
-    if not np.isfinite(x).all() or not np.isfinite(truth).all():
-        raise ValueError("Nonfinite sequence or truth")
-    return align(ROOT, targets, truth)
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        out, _ = self.lstm1(x)
+        out = self.drop1(out)
+        out, _ = self.lstm2(out)
+        out = self.drop2(out[:, -1, :])
+        return self.head(out).squeeze(-1)
 
 
-def scale_truth(truth, mean, scale):
-    if not np.isfinite([mean, scale]).all() or scale <= 0:
-        raise ValueError("Invalid D02 load scaler")
-    result = ((truth.astype(np.float64) - mean) / scale).astype(np.float32)
-    if not np.isfinite(result).all():
-        raise ValueError("Nonfinite scaled target")
-    return result
+def count_trainable_parameters(model: nn.Module) -> int:
+    return int(sum(p.numel() for p in model.parameters() if p.requires_grad))
 
 
-def to_mw(values, mean, scale):
-    return np.asarray(values, dtype=np.float64) * scale + mean
+@torch.no_grad()
+def predict_dataset(model: nn.Module, loader: DataLoader, device: torch.device) -> np.ndarray:
+    model.eval()
+    chunks = []
+    for xb, _ in loader:
+        xb = xb.to(device, non_blocking=True)
+        chunks.append(model(xb).detach().cpu().numpy().astype(np.float64))
+    return np.concatenate(chunks, axis=0)
 
 
-def build_model(keras, config, lr):
-    model = keras.Sequential([
-        keras.Input(shape=(24, 4), dtype="float32"),
-        keras.layers.LSTM(64, return_sequences=True),
-        keras.layers.LSTM(32),
-        keras.layers.Dense(1),
-    ], name="lstm_r07")
-    model.compile(
-        optimizer=keras.optimizers.Adam(learning_rate=lr, **config["optimizer"]),
-        loss=config["loss"], jit_compile=config["jit_compile"],
+@torch.no_grad()
+def predict_single_window(model: nn.Module, window: np.ndarray, device: torch.device) -> float:
+    model.eval()
+    tensor = torch.from_numpy(np.asarray(window, dtype=np.float32)[None, ...]).to(device)
+    return float(model(tensor).detach().cpu().item())
+
+
+def train_single_lstm(
+    train_ds: Dataset,
+    val_ds: Dataset,
+    input_size: int,
+    lr: float,
+    dropout: float,
+    weight_decay: float,
+    epochs: int,
+    patience: int,
+    batch_size: int,
+    seed: int,
+    device: torch.device,
+) -> dict[str, Any]:
+    set_deterministic_seed(seed)
+    gen = torch.Generator()
+    gen.manual_seed(seed)
+
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, generator=gen)
+    train_eval_loader = DataLoader(train_ds, batch_size=batch_size * 2, shuffle=False)
+    val_loader = DataLoader(val_ds, batch_size=batch_size * 2, shuffle=False)
+
+    model = MultivariateLSTM(input_size=input_size, hidden1=64, hidden2=32, dropout=dropout).to(device)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode="min", factor=0.5, patience=max(3, patience // 3), min_lr=1e-5
     )
-    if sum(np.prod(v.shape) for v in model.trainable_weights) != COMPLEXITY:
-        raise ValueError("R07 complexity mismatch")
-    return model
+    criterion = nn.MSELoss()
 
+    best_val_loss = float("inf")
+    best_epoch = 1
+    best_state = copy.deepcopy(model.state_dict())
+    no_improve = 0
+    history = []
+    started = time.perf_counter()
 
-def fit(model, callback, config, train_x, train_y, valid_x, valid_y):
-    kwargs = dict(validation_data=(valid_x, valid_y), epochs=config["epochs"],
-                  batch_size=config["batch_size"], shuffle=config["shuffle"],
-                  callbacks=[callback], verbose=2)
-    return model.fit(train_x, train_y, **kwargs).history
+    for epoch in range(1, epochs + 1):
+        model.train()
+        tr_loss_sum = 0.0
+        tr_count = 0
+        for xb, yb in train_loader:
+            xb = xb.to(device, non_blocking=True)
+            yb = yb.to(device, non_blocking=True)
+            optimizer.zero_grad(set_to_none=True)
+            pred = model(xb)
+            loss = criterion(pred, yb)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=5.0)
+            optimizer.step()
+            bs = len(yb)
+            tr_loss_sum += float(loss.item()) * bs
+            tr_count += bs
 
+        model.eval()
+        va_loss_sum = 0.0
+        va_count = 0
+        with torch.no_grad():
+            for xb, yb in val_loader:
+                xb = xb.to(device, non_blocking=True)
+                yb = yb.to(device, non_blocking=True)
+                pred = model(xb)
+                loss = criterion(pred, yb)
+                bs = len(yb)
+                va_loss_sum += float(loss.item()) * bs
+                va_count += bs
 
-def restored_epoch(model, callback, history):
-    validation = np.asarray(history["val_loss"])
-    if not np.isfinite([validation, history["loss"]]).all():
-        raise ValueError("Nonfinite learning curve")
-    first = int(np.argmin(validation))
-    if callback.best_epoch != first or callback.best_weights is None:
-        raise ValueError("EarlyStopping did not select the earliest minimum")
-    for restored, saved in zip(model.get_weights(), callback.best_weights, strict=True):
-        np.testing.assert_array_equal(restored, saved)
-    return first + 1
+        tr_mse = tr_loss_sum / tr_count
+        va_mse = va_loss_sum / va_count
+        scheduler.step(va_mse)
+        history.append({"epoch": epoch, "train_loss": tr_mse, "val_loss": va_mse, "lr": optimizer.param_groups[0]["lr"]})
 
+        if va_mse < best_val_loss - 1e-9:
+            best_val_loss = va_mse
+            best_epoch = epoch
+            best_state = copy.deepcopy(model.state_dict())
+            no_improve = 0
+        else:
+            no_improve += 1
+            if no_improve >= patience:
+                break
 
-def predict(tf, model, x, batch_size):
-    before = [v.numpy() for v in model.variables]
-
-    @tf.function(input_signature=[tf.TensorSpec((None, 24, 4), tf.float32)], jit_compile=False)
-    def infer(inputs):
-        return model(inputs, training=False)
-
-    values = np.concatenate([
-        infer(x[start:start + batch_size]).numpy().reshape(-1)
-        for start in range(0, len(x), batch_size)
-    ])
-    for variable, old in zip(model.variables, before, strict=True):
-        np.testing.assert_array_equal(variable.numpy(), old)
-    if not np.isfinite(values).all():
-        raise ValueError("Nonfinite model output")
-    return values
-
-
-def save_json(path, value):
-    with path.open("xb") as stream:
-        stream.write(canonical(value) + b"\n")
-
-
-def write_checkpoint(keras, model, artifacts, config, chosen):
-    weights = artifacts / "lstm.weights.h5"
-    architecture = artifacts / "lstm_architecture.json"
-    metadata_path = artifacts / "lstm_metadata.json"
-    with architecture.open("x", encoding="utf-8") as stream:
-        stream.write(model.to_json())
-    model.save_weights(weights)
-    metadata = {
-        "model": "LSTM", "model_version": "1", "config_sha256": CONFIG_HASH,
-        "checkpoint_sha256": sha(weights), "architecture_sha256": sha(architecture),
-        "best_epoch": chosen["best_epoch"], "trial_id": chosen["trial_id"],
-        "library_versions": config["versions"], "input_lineage": config["upstream_sha256"],
-        **{name: config[name] for name in ("feature_order", "scaler_sha256", "architecture",
-           "input_shape", "seed", "complexity", "device", "dtype", "batch_size", "checkpoint_format")},
+    elapsed = time.perf_counter() - started
+    model.load_state_dict(best_state)
+    val_preds_scaled = predict_dataset(model, val_loader, device)
+    tr_preds_scaled = predict_dataset(model, train_eval_loader, device)
+    return {
+        "model": model,
+        "state_dict": best_state,
+        "best_epoch": int(best_epoch),
+        "stop_epoch": int(len(history)),
+        "best_val_mse_scaled": float(best_val_loss),
+        "restored_train_mse_scaled": float(np.mean((tr_preds_scaled - train_ds.y_scaled) ** 2)),
+        "restored_val_mse_scaled": float(np.mean((val_preds_scaled - val_ds.y_scaled) ** 2)),
+        "val_preds_scaled": val_preds_scaled,
+        "history": history,
+        "elapsed_seconds": float(elapsed),
+        "param_count": count_trainable_parameters(model),
     }
-    save_json(metadata_path, metadata)
-    saved = json.loads(metadata_path.read_bytes())
-    if saved != metadata or sha(weights) != saved["checkpoint_sha256"] or sha(architecture) != saved["architecture_sha256"]:
-        raise ValueError("Checkpoint and metadata hash mismatch")
-    loaded = keras.models.model_from_json(architecture.read_text(encoding="utf-8"))
-    loaded.optimizer.build(loaded.trainable_variables)
-    loaded.load_weights(weights)
-    return loaded, metadata
 
 
-def scores(truth, values, missing=0, invalid=0):
-    result = calculate_metrics(truth, values, missing, invalid)
-    absolute = np.abs(truth - values)
-    nonzero = truth != 0
-    independent = [absolute.mean(), np.sqrt(np.mean(absolute ** 2))]
-    expected = [result["mae_mw"], result["rmse_mw"]]
-    if np.any(nonzero):
-        independent.append(100 * np.mean(absolute[nonzero] / np.abs(truth[nonzero])))
-        expected.append(result["mape_percent"])
-    np.testing.assert_allclose(expected, independent, rtol=1e-12, atol=0)
-    return result
+def run_lstm_stage(
+    full_scaled_seq: np.ndarray,
+    target_rows: np.ndarray,
+    y_true: np.ndarray,
+    origin_df: pd.DataFrame,
+    scaler_state: dict[str, Any],
+    config: dict[str, Any],
+    artifacts_dir: Path,
+    figures_dir: Path,
+) -> dict[str, Any]:
+    artifacts_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir.mkdir(parents=True, exist_ok=True)
+    lstm_cfg = config["lstm"]
+    device = torch.device(lstm_cfg["device"] if torch.cuda.is_available() else "cpu")
+    if device.type != "cuda":
+        raise RuntimeError("CUDA GPU required for Stage S7 LSTM training")
 
+    seed = int(config["seed"])
+    mean_load = float(scaler_state["mean"][0])
+    scale_load = float(scaler_state["scale"][0])
+    y_scaled = ((y_true - mean_load) / scale_load).astype(np.float32)
 
-def predecessor_predictions(expected):
-    result = {}
-    for name, (run, filename, column) in PREDECESSORS.items():
-        path = ROOT / f"runs/20261118_system312_{run}/artifacts/{filename}"
-        table = pd.read_csv(path, float_precision="round_trip")
-        if (table.target_row >= 29803).any():
-            raise ValueError(f"Forbidden predecessor row for {name}")
-        if run == "f01_01":
-            table = table.loc[(table.model == name) & (table.split == "validation")]
-        pd.testing.assert_frame_equal(table[KEYS].reset_index(drop=True), expected[KEYS])
-        result[name] = table[column].to_numpy(dtype=np.float64)
-    return result
+    eligible = origin_df[origin_df["eligible"]].reset_index(drop=True)
+    train_mask = (eligible["split"] == "train").to_numpy()
+    val_mask = (eligible["split"] == "validation").to_numpy()
+    val_all = origin_df[origin_df["split"] == "validation"]
+    n_missing = int((val_all["exclusion_reason"] == "missing_truth").sum())
+    n_invalid = int((val_all["exclusion_reason"] == "invalid_context").sum())
 
+    tr_targets, va_targets = target_rows[train_mask], target_rows[val_mask]
+    tr_y_s, va_y_s = y_scaled[train_mask], y_scaled[val_mask]
+    va_y_orig = y_true[val_mask]
 
-def run(run_id, config_path, replay=False):
-    import re
-    if not re.fullmatch(r"[A-Za-z0-9_-]+", run_id):
-        raise ValueError("Invalid run ID")
-    if replay and (ROOT / "runs" / run_id).exists():
-        raise FileExistsError("Replay output collision")
-    config_path = Path(config_path).resolve()
-    if not replay and (run_id != RUN_ID or config_path != ROOT / "runs" / run_id / "config.json"):
-        raise ValueError("Unexpected G02 run or config path")
-    config = json.loads(config_path.read_bytes())
-    verify(config, config_path)
-    if config["feature_order"] != FEATURE_ORDER or config["shuffle"] is not False:
-        raise ValueError("Feature order or shuffle mismatch")
-    run_dir = ROOT / "runs" / run_id
-    if replay:
-        run_dir.mkdir(exist_ok=False)
-        (run_dir / "config.json").write_bytes(config_path.read_bytes())
-    tf, keras = runtime(config)
-    scaler = json.loads((ROOT / SCALER).read_bytes())
-    if [f"{name}_scaled" for name in scaler["feature_order"]] != FEATURE_ORDER:
-        raise ValueError("D02 scaler feature order mismatch")
-    if sha(ROOT / SCALER) != config["scaler_sha256"]:
-        raise ValueError("D02 scaler hash mismatch")
-    mean, scale = scaler["mean"][0], scaler["scale"][0]
-    with np.load(ROOT / INPUTS, allow_pickle=False) as arrays:
-        if int(arrays["schema_version"]) != 1:
-            raise ValueError("E02 schema mismatch")
-        targets, truth, x = arrays["target_row"], arrays["y_true_mw"], arrays["x_lstm"]
-    rows, counts = align_sequences(x, targets, truth)
-    if counts != config["eligibility"]:
-        raise ValueError("Eligibility gate mismatch")
-    train = targets < 24544
-    train_x, valid_x = x[train].astype(np.float32), x[~train].astype(np.float32)
-    train_y, valid_y = [scale_truth(y, mean, scale) for y in (truth[train], truth[~train])]
-    expected = pd.DataFrame([
-        (int(row["target_row"]), row["origin_timestamp_utc"], row["target_timestamp_utc"], float(row["y_true_mw"]))
-        for row in rows if row["split"] == "validation"
-    ], columns=KEYS)
-    comparisons = predecessor_predictions(expected)
-    artifacts = run_dir / "artifacts"
-    report = artifacts / "lstm_findings.md" if replay else ROOT / "docs/results/lstm_findings.md"
-    log = artifacts / "execution.md" if replay else ROOT / "docs/logs" / f"G02_{run_id}.md"
-    if report.exists() or log.exists():
-        raise FileExistsError("G02 report/log collision")
-    artifacts.mkdir()
-    trials, curves, models, predictions = [], [], {}, {}
-    for trial in config["trial_budget"]:
-        trial_id = trial["trial_id"]
-        print(f"Starting {trial_id}", flush=True)
-        keras.utils.set_random_seed(config["seed"])
-        model = build_model(keras, config, trial["learning_rate"])
-        callback = keras.callbacks.EarlyStopping(**config["early_stopping"])
-        started = time.perf_counter()
-        with warnings.catch_warnings(record=True) as caught:
-            warnings.simplefilter("always")
-            history = fit(model, callback, config, train_x, train_y, valid_x, valid_y)
-        elapsed = time.perf_counter() - started
-        best, stop = restored_epoch(model, callback, history), len(history["loss"])
-        train_scaled = predict(tf, model, train_x, config["batch_size"])
-        val_scaled = predict(tf, model, valid_x, config["batch_size"])
-        values = to_mw(val_scaled, mean, scale)
-        train_mse = float(np.mean((train_scaled.astype(np.float64) - train_y) ** 2))
-        val_mse = float(np.mean((val_scaled.astype(np.float64) - valid_y) ** 2))
-        trials.append({
-            **trial, "model": "LSTM", "complexity": COMPLEXITY, "status": "completed",
-            "best_epoch": best, "stopping_epoch": stop, "epochs_after_best": stop - best,
-            "elapsed_seconds": elapsed, "restored_train_mse": train_mse, "restored_val_mse": val_mse,
-            "warnings": " | ".join(str(w.message) for w in caught),
-            **scores(truth[~train], values, 2),
-        })
-        models[trial_id], predictions[trial_id] = model, values
-        table = pd.DataFrame({"trial_id": trial_id, "epoch": range(1, stop + 1),
-                              "train_loss": history["loss"], "val_loss": history["val_loss"]})
-        table["validation_minus_train"] = table.val_loss - table.train_loss
-        curves.append(table)
-        pd.DataFrame(trials).to_csv(artifacts / "trials.csv", index=False)
-        pd.concat(curves, ignore_index=True).to_csv(artifacts / "training_history.csv", index=False)
-    chosen = select_validation(trials)
-    trial_id = chosen["trial_id"]
-    loaded, metadata = write_checkpoint(keras, models[trial_id], artifacts, config, chosen)
-    values = to_mw(predict(tf, loaded, valid_x, config["batch_size"]), mean, scale)
-    np.testing.assert_allclose(values, predictions[trial_id], rtol=0, atol=1e-6)
-    parity = float(np.max(np.abs(values - predictions[trial_id])))
-    comparisons["LSTM"] = values
-    results = finish_diagnostics(expected, comparisons, curves, artifacts, trials, chosen, metadata, parity)
-    verify(config, config_path)
-    write_report(report, results, trials, metadata, run_id)
-    with log.open("x", encoding="utf-8") as stream:
-        stream.write(
-            f"# G02 {run_id}\n\n**PENDING HUMAN REVIEW**\n\n"
-            f"Config SHA256 `{CONFIG_HASH}`. Verified all upstream hashes before and after fitting. "
-            f"Reloaded architecture and weights across 5,257 validation samples, max difference {parity:.9g} MW. "
-            "Trial times and Python warnings are in trials.csv.\n"
+    n_total_cols = full_scaled_seq.shape[1]
+    variant_specs = {
+        "LSTM_24h_load_only": {"window_len": 24, "cols": [0]},
+        "LSTM_24h_core": {"window_len": 24, "cols": [0, 1, 2, 3]},
+        "LSTM_24h_cal": {"window_len": 24, "cols": list(range(n_total_cols))},
+        "LSTM_168h_diag": {"window_len": 168, "cols": list(range(n_total_cols))},
+    }
+
+    trial_records = []
+    histories = []
+    best_per_variant: dict[str, dict[str, Any]] = {}
+
+    for variant_name, spec in variant_specs.items():
+        tr_ds = SequenceWindowDataset(full_scaled_seq, tr_targets, tr_y_s, spec["window_len"], spec["cols"])
+        va_ds = SequenceWindowDataset(full_scaled_seq, va_targets, va_y_s, spec["window_len"], spec["cols"])
+        grid_to_run = lstm_cfg["grid"] if variant_name in ("LSTM_24h_core", "LSTM_24h_cal") else [lstm_cfg["grid"][1]]
+        best_run = None
+
+        for hp in grid_to_run:
+            out = train_single_lstm(
+                tr_ds,
+                va_ds,
+                input_size=len(spec["cols"]),
+                lr=float(hp["lr"]),
+                dropout=float(hp["dropout"]),
+                weight_decay=float(hp["weight_decay"]),
+                epochs=int(lstm_cfg["epochs"]),
+                patience=int(lstm_cfg["patience"]),
+                batch_size=int(lstm_cfg["batch_size"]),
+                seed=seed,
+                device=device,
+            )
+            preds_orig = inverse_scale_load(out["val_preds_scaled"], scaler_state)
+            scores = calculate_metrics(va_y_orig, preds_orig, n_missing, n_invalid)
+            rec = {
+                "variant": variant_name,
+                "trial_id": f"{variant_name}_{hp['trial_id']}",
+                "window_len": spec["window_len"],
+                "input_size": len(spec["cols"]),
+                "lr": float(hp["lr"]),
+                "dropout": float(hp["dropout"]),
+                "weight_decay": float(hp["weight_decay"]),
+                "param_count": out["param_count"],
+                "best_epoch": out["best_epoch"],
+                "stop_epoch": out["stop_epoch"],
+                "elapsed_seconds": out["elapsed_seconds"],
+                "restored_train_mse_scaled": out["restored_train_mse_scaled"],
+                "restored_val_mse_scaled": out["restored_val_mse_scaled"],
+                **scores,
+            }
+            trial_records.append(rec)
+            for row in out["history"]:
+                histories.append({"variant": variant_name, "trial_id": rec["trial_id"], **row})
+
+            if best_run is None or scores["rmse_mw"] < best_run["record"]["rmse_mw"]:
+                best_run = {"record": rec, "out": out, "preds_orig": preds_orig, "spec": spec, "hp": hp}
+
+        assert best_run is not None
+        best_per_variant[variant_name] = best_run
+
+    trials_df = pd.DataFrame(trial_records).sort_values("rmse_mw").reset_index(drop=True)
+    trials_df.to_csv(artifacts_dir / "trials.csv", index=False)
+    pd.DataFrame(histories).to_csv(artifacts_dir / "training_history.csv", index=False)
+
+    winner_name = min(best_per_variant, key=lambda k: best_per_variant[k]["record"]["rmse_mw"])
+    winner = best_per_variant[winner_name]
+
+    saved_checkpoints = {}
+    for save_key, vname in (("lstm_best", winner_name), ("lstm_core", "LSTM_24h_core")):
+        entry = best_per_variant[vname]
+        ckpt_path = artifacts_dir / f"{save_key}.pt"
+        torch.save(entry["out"]["state_dict"], ckpt_path)
+        meta = {
+            "variant": vname,
+            "window_len": entry["spec"]["window_len"],
+            "col_indices": entry["spec"]["cols"],
+            "input_size": len(entry["spec"]["cols"]),
+            "hidden1": 64,
+            "hidden2": 32,
+            "dropout": float(entry["hp"]["dropout"]),
+            "param_count": entry["out"]["param_count"],
+            "best_epoch": entry["out"]["best_epoch"],
+            "lr": float(entry["hp"]["lr"]),
+            "weight_decay": float(entry["hp"]["weight_decay"]),
+        }
+        write_json(artifacts_dir / f"{save_key}_arch.json", meta)
+
+        reloaded = MultivariateLSTM(
+            input_size=meta["input_size"],
+            hidden1=meta["hidden1"],
+            hidden2=meta["hidden2"],
+            dropout=meta["dropout"],
+        ).to(device)
+        reloaded.load_state_dict(torch.load(ckpt_path, map_location=device, weights_only=True))
+        va_ds = SequenceWindowDataset(
+            full_scaled_seq, va_targets, va_y_s, meta["window_len"], meta["col_indices"]
         )
-    paths = sorted(artifacts.iterdir()) + [config_path, report, log, Path(__file__).resolve()]
-    manifest = {
-        "stage_id": "G02", "run_id": run_id, "status": "pending_human_review",
-        "config_sha256": CONFIG_HASH, "checkpoint_sha256": metadata["checkpoint_sha256"],
-        "architecture_sha256": metadata["architecture_sha256"], "upstream_sha256": config["upstream_sha256"],
-        "counts": counts, "versions": config["versions"], "reload_max_abs_mw": parity,
-        "outputs": [{"path": p.relative_to(ROOT).as_posix(), "sha256": sha(p)} for p in paths],
+        reloaded_batch = inverse_scale_load(
+            predict_dataset(reloaded, DataLoader(va_ds, batch_size=256, shuffle=False), device),
+            scaler_state,
+        )
+        batch_diff = float(np.max(np.abs(reloaded_batch - entry["preds_orig"])))
+        w0 = full_scaled_seq[int(va_targets[0]) - meta["window_len"] : int(va_targets[0]), meta["col_indices"]]
+        single_pred = float(inverse_scale_load(np.array([predict_single_window(reloaded, w0, device)]), scaler_state)[0])
+        single_diff = abs(single_pred - float(reloaded_batch[0]))
+        if batch_diff > 1e-2 or single_diff > 1e-2:
+            raise ValueError(f"LSTM reload parity failure ({save_key}): batch={batch_diff}, single={single_diff}")
+        saved_checkpoints[save_key] = {
+            "variant": vname,
+            "ckpt_path": str(ckpt_path),
+            "arch_path": str(artifacts_dir / f"{save_key}_arch.json"),
+            "reload_batch_max_diff": batch_diff,
+            "reload_single_diff": single_diff,
+        }
+
+    seed_rows = []
+    win_spec = winner["spec"]
+    win_hp = winner["hp"]
+    tr_win = SequenceWindowDataset(full_scaled_seq, tr_targets, tr_y_s, win_spec["window_len"], win_spec["cols"])
+    va_win = SequenceWindowDataset(full_scaled_seq, va_targets, va_y_s, win_spec["window_len"], win_spec["cols"])
+    for s in lstm_cfg["seeds_stability"]:
+        if int(s) == seed:
+            seed_rows.append(
+                {
+                    "seed": int(s),
+                    "best_epoch": winner["record"]["best_epoch"],
+                    "mae_mw": winner["record"]["mae_mw"],
+                    "rmse_mw": winner["record"]["rmse_mw"],
+                    "mape_percent": winner["record"]["mape_percent"],
+                }
+            )
+            continue
+        out_s = train_single_lstm(
+            tr_win,
+            va_win,
+            input_size=len(win_spec["cols"]),
+            lr=float(win_hp["lr"]),
+            dropout=float(win_hp["dropout"]),
+            weight_decay=float(win_hp["weight_decay"]),
+            epochs=int(lstm_cfg["epochs"]),
+            patience=int(lstm_cfg["patience"]),
+            batch_size=int(lstm_cfg["batch_size"]),
+            seed=int(s),
+            device=device,
+        )
+        preds_s = inverse_scale_load(out_s["val_preds_scaled"], scaler_state)
+        sc = calculate_metrics(va_y_orig, preds_s, n_missing, n_invalid)
+        seed_rows.append(
+            {
+                "seed": int(s),
+                "best_epoch": out_s["best_epoch"],
+                "mae_mw": sc["mae_mw"],
+                "rmse_mw": sc["rmse_mw"],
+                "mape_percent": sc["mape_percent"],
+            }
+        )
+    seed_df = pd.DataFrame(seed_rows)
+    seed_df.to_csv(artifacts_dir / "seed_stability.csv", index=False)
+
+    val_table = eligible.loc[
+        val_mask, ["target_row", "origin_timestamp_utc", "target_timestamp_utc", "y_true"]
+    ].copy()
+    for vname, entry in best_per_variant.items():
+        val_table[vname] = entry["preds_orig"]
+    val_table.to_csv(artifacts_dir / "validation_predictions.csv", index=False)
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+    hist_df = pd.DataFrame(histories)
+    for ax, vname in zip(axes.ravel(), variant_specs.keys()):
+        best_tid = best_per_variant[vname]["record"]["trial_id"]
+        sub = hist_df[hist_df["trial_id"] == best_tid]
+        ax.plot(sub["epoch"], sub["train_loss"], label="Train MSE (scaled)")
+        ax.plot(sub["epoch"], sub["val_loss"], label="Val MSE (scaled)")
+        ax.axvline(best_per_variant[vname]["record"]["best_epoch"], color="gray", ls="--", label="Best epoch")
+        ax.set_title(f"{vname} ({best_tid})")
+        ax.set_xlabel("Epoch")
+        ax.set_ylabel("Scaled MSE")
+        ax.set_yscale("log")
+        ax.legend(fontsize=8)
+    fig.tight_layout()
+    fig.savefig(figures_dir / "lstm_learning_curves.png", dpi=130)
+    plt.close(fig)
+
+    return {
+        "device": f"{device} ({torch.cuda.get_device_name(0)})",
+        "winner_variant": winner_name,
+        "variants_summary": [best_per_variant[k]["record"] for k in variant_specs.keys()],
+        "seed_stability": seed_rows,
+        "checkpoints": saved_checkpoints,
     }
-    save_json(run_dir / "manifest.json", manifest)
-    print(json.dumps({"selected": trial_id, "checkpoint_sha256": metadata["checkpoint_sha256"],
-                      "reload_max_abs_mw": parity}, indent=2), flush=True)
 
 
-def finish_diagnostics(expected, comparisons, curves, artifacts, trials, chosen, metadata, parity):
-    import matplotlib
-
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-
-    times = pd.DatetimeIndex(pd.to_datetime(expected.target_timestamp, utc=True))
-    if times.has_duplicates or not times.is_monotonic_increasing:
-        raise ValueError("Validation UTC keys are not unique and increasing")
-    local = times.tz_convert("Europe/Madrid")
-    truth = expected.y_true_mw.to_numpy()
-    d01 = json.loads((ROOT / "runs/20261118_system312_d01_01/summary.json").read_bytes())
-    profiles = {axis: {row["group"]: row for row in d01["profiles"][axis]} for axis in ("hour", "weekday")}
-    temporal, acf, metrics = [], [], {}
-    output = expected.copy()
-    output["target_local"] = [stamp.isoformat() for stamp in local]
-    for name, estimates in comparisons.items():
-        residual = truth - estimates
-        output[name] = estimates
-        metrics[name] = scores(truth, estimates, 2)
-        for lag in (24, 168):
-            earlier = times.get_indexer(times - pd.Timedelta(hours=lag))
-            exists = earlier >= 0
-            corr = float(np.corrcoef(residual[exists], residual[earlier[exists]])[0, 1])
-            acf.append({"model": name, "lag_hours_utc": lag, "pairs": int(exists.sum()), "correlation": corr})
-        for axis, groups in (("hour", local.hour), ("weekday", local.dayofweek)):
-            for label in sorted(set(groups)):
-                ix = groups == label
-                group_score = scores(truth[ix], estimates[ix])
-                train_profile = profiles[axis][label]
-                temporal.append({
-                    "model": name, "grouping": axis, "group": int(label), "n": int(ix.sum()),
-                    "mae_mw": group_score["mae_mw"], "rmse_mw": group_score["rmse_mw"],
-                    "mean_residual_mw": float(residual[ix].mean()), "validation_mean_load_mw": float(truth[ix].mean()),
-                    "d01_train_mean_load_mw": train_profile["mean"], "d01_train_count": train_profile["count"],
-                })
-    for key in ("mae_mw", "rmse_mw", "mape_percent"):
-        np.testing.assert_allclose(metrics["LSTM"][key], chosen[key], rtol=1e-12, atol=1e-6)
-    output["residual_mw"] = truth - comparisons["LSTM"]
-    output.to_csv(artifacts / "validation_predictions.csv", index=False)
-    pd.DataFrame(temporal).to_csv(artifacts / "temporal_errors.csv", index=False)
-    pd.DataFrame(acf).to_csv(artifacts / "residual_autocorrelation.csv", index=False)
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4), layout="constrained")
-    for ax, curve, trial in zip(axes, curves, trials, strict=True):
-        ax.plot(curve.epoch, curve.train_loss, label="Train")
-        ax.plot(curve.epoch, curve.val_loss, label="Validation")
-        ax.axvline(trial["best_epoch"], color="gray", ls="--", label="Best epoch")
-        ax.set(title=trial["trial_id"], xlabel="Epoch", ylabel="Scaled MSE", yscale="log")
-        ax.legend()
-    fig.savefig(artifacts / "learning_curves.png", dpi=130)
-    plt.close(fig)
-    fig, axes = plt.subplots(2, 1, figsize=(11, 6), layout="constrained")
-    axes[0].plot(times, truth, label="Observed", lw=0.6)
-    axes[0].plot(times, comparisons["LSTM"], label="LSTM", lw=0.6, alpha=0.8)
-    axes[0].legend()
-    axes[0].set(ylabel="Load (MW)")
-    axes[1].plot(times, output.residual_mw, lw=0.6, color="tab:orange")
-    axes[1].set(xlabel="Target hour (UTC)", ylabel="Observed - forecast (MW)")
-    fig.savefig(artifacts / "validation_trace.png", dpi=130)
-    plt.close(fig)
-    temporal_frame = pd.DataFrame(temporal)
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4), layout="constrained")
-    for ax, axis in zip(axes, ("hour", "weekday"), strict=True):
-        for name in metrics:
-            group = temporal_frame.loc[(temporal_frame.model == name) & (temporal_frame.grouping == axis)]
-            ax.plot(group.group, group.mae_mw, marker=".", label=name)
-        ax.set(xlabel=f"Europe/Madrid {axis}" + (" (0 = Monday)" if axis == "weekday" else ""), ylabel="MAE (MW)")
-        ax.legend()
-    fig.savefig(artifacts / "temporal_errors.png", dpi=130)
-    plt.close(fig)
-    var_manifest = json.loads((ROOT / "runs/20261118_system312_f02_02/manifest.json").read_bytes())
-    xgb_metrics = json.loads((ROOT / "runs/20261118_system312_g01_01/artifacts/metrics.json").read_bytes())
-    complexities = {"VAR(24)": var_manifest["complexity"],
-                    "XGB_full": xgb_metrics["selected"]["XGB_full"]["complexity"],
-                    "LSTM": COMPLEXITY}
-    validation_candidates = [
-        {"model": {"VAR(24)": "VAR", "XGB_full": "XGB"}.get(name, name),
-         "trial_id": chosen["trial_id"] if name == "LSTM" else name,
-         "complexity": complexities.get(name, 0), **value}
-        for name, value in metrics.items()
-    ]
-    xgb_trials = pd.read_csv(ROOT / "runs/20261118_system312_g01_01/artifacts/trials.csv")
-    var_trials = pd.read_csv(ROOT / "runs/20261118_system312_f02_02/artifacts/trials.csv")
-    result = {
-        "selected_trial": chosen["trial_id"], "metrics": metrics,
-        "cross_model_selection": select_validation(validation_candidates),
-        "reload_max_abs_mw": parity, "n_reload_checked": len(output),
-        "residual_autocorrelation": acf, "temporal_errors": temporal,
-        "checkpoint_sha256": metadata["checkpoint_sha256"], "architecture_sha256": metadata["architecture_sha256"],
-        "xgb_trials": len(xgb_trials), "xgb_fit_seconds": float(xgb_trials.elapsed_seconds.sum()),
-        "var_trials": len(var_trials),
-    }
-    save_json(artifacts / "metrics.json", result)
-    return result
-
-
-def write_report(path, result, trials, metadata, run_id):
-    chosen = next(t for t in trials if t["trial_id"] == result["selected_trial"])
-    groups = pd.DataFrame(result["temporal_errors"])
-    lstm_groups = groups.loc[groups.model == "LSTM"]
-    days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+def format_lstm_markdown(res: dict[str, Any], unit: str = "kW") -> str:
     lines = [
-        "# G02 LSTM findings", "", f"Run `{run_id}`. **PENDING HUMAN REVIEW**.", "",
-        "## Trials", "", "| Trial | Best epoch | Stop epoch | CPU fit seconds | MAE MW | RMSE MW | MAPE % |",
-        "|---|---:|---:|---:|---:|---:|---:|",
+        "# Stage S7 — PyTorch CUDA LSTM Findings & Ablation (v2)",
+        "",
+        f"- **Device:** `{res['device']}` (zero `np.repeat(64)` workaround; native `batch=1` & batched inference verified)",
+        f"- **Selected Winning LSTM Variant:** **`{res['winner_variant']}`**",
+        "",
+        "## 1. Variant & Ablation Comparison (Validation)",
+        "",
+        f"| Variant | Window | Input Dim | Params | Best/Stop Epoch | Fit (s) | Train MSE (scaled) | Val MSE (scaled) | MAE ({unit}) | RMSE ({unit}) | MAPE (%) |",
+        "|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|",
     ]
-    for t in trials:
-        lines.append(f"| {t['trial_id']} | {t['best_epoch']} | {t['stopping_epoch']} | {t['elapsed_seconds']:.2f} | "
-                     f"{t['mae_mw']:.3f} | {t['rmse_mw']:.3f} | {t['mape_percent']:.4f} |")
-    lines += ["", f"C02 selected **{chosen['trial_id']}**. Both trials used seed 42, chronological batches of 64 and validation-only early stopping.",
-              "", "## Q4. Daily and weekly patterns", "",
-              f"[Validation trace](../../runs/{run_id}/artifacts/validation_trace.png) and "
-              f"[Madrid group errors](../../runs/{run_id}/artifacts/temporal_errors.png) retain UTC alignment. "
-              "Repeated local DST hours contribute as separate observations. Residuals are observed minus forecast.", "",
-              "| UTC lag (hours) | Available pairs | LSTM | Persistence | Seasonal24 |",
-              "|---:|---:|---:|---:|---:|"]
-    for lag in (24, 168):
-        at_lag = {v["model"]: v for v in result["residual_autocorrelation"] if v["lag_hours_utc"] == lag}
-        lines.append(f"| {lag} | {at_lag['LSTM']['pairs']} | {at_lag['LSTM']['correlation']:.4f} | "
-                     f"{at_lag['persistence']['correlation']:.4f} | {at_lag['seasonal24']['correlation']:.4f} |")
-    lines.append("")
-    for axis in ("hour", "weekday"):
-        group = lstm_groups.loc[lstm_groups.grouping == axis]
-        low, high = group.loc[group.mae_mw.idxmin()], group.loc[group.mae_mw.idxmax()]
-        training_low = group.loc[group.d01_train_mean_load_mw.idxmin()]
-        training_high = group.loc[group.d01_train_mean_load_mw.idxmax()]
-        def label(entry):
-            return f"{int(entry.group):02d}:00" if axis == "hour" else days[int(entry.group)]
+    for r in res["variants_summary"]:
         lines.append(
-            f"By {axis}, D01 training means range from {training_low.d01_train_mean_load_mw:,.0f} MW ({label(training_low)}) "
-            f"to {training_high.d01_train_mean_load_mw:,.0f} MW ({label(training_high)}). "
-            f"LSTM validation MAE ranges from {low.mae_mw:.1f} MW ({label(low)}, n={low.n}) "
-            f"to {high.mae_mw:.1f} MW ({label(high)}, n={high.n})."
+            f"| `{r['variant']}` | {r['window_len']}h | {r['input_size']} | {r['param_count']:,} | "
+            f"{r['best_epoch']}/{r['stop_epoch']} | {r['elapsed_seconds']:.2f} | "
+            f"{r['restored_train_mse_scaled']:.6f} | {r['restored_val_mse_scaled']:.6f} | "
+            f"{r['mae_mw']:,.2f} | {r['rmse_mw']:,.2f} | {r['mape_percent']:.4f} |"
         )
-    lines += ["", "Daily error variation and the matched baselines describe how predictive accuracy changes across the day. "
-              "Weekly learning is inconclusive from group errors and residual correlations. The 24-hour input contains no direct lag-168 observation.",
-              "", "## Q5. Overfitting", "",
-              f"[Learning curves](../../runs/{run_id}/artifacts/learning_curves.png) show per-epoch train and validation scaled MSE. "
-              f"The selected trial ran {chosen['epochs_after_best']} epochs after its earliest best validation epoch. "
-              f"Inference MSE with restored weights is {chosen['restored_train_mse']:.6f} (train) and {chosen['restored_val_mse']:.6f} (validation), "
-              f"a gap of {chosen['restored_val_mse']-chosen['restored_train_mse']:+.6f}. "
-              "The gap reflects generalization across these chronological periods. Using the same validation set for stopping and trial selection can make reported performance optimistic.",
-              "", "## Q6. ML versus DL", "",
-              "| Model | MAE MW | RMSE MW | MAPE % |", "|---|---:|---:|---:|"]
-    for name, score in result["metrics"].items():
-        lines.append(f"| {name} | {score['mae_mw']:.3f} | {score['rmse_mw']:.3f} | {score['mape_percent']:.4f} |")
-    lines += ["", f"C02 cross-model selection on these five candidates gives **{result['cross_model_selection']['model']}**.",
-              f"LSTM uses 24 x 4 sequential inputs with {COMPLEXITY:,} trainable parameters. XGB_full uses flattened lags and derived load features "
-              f"including the 25-hour trend context. G01 ran {result['xgb_trials']} CPU trials in {result['xgb_fit_seconds']:.1f} s of fit time. "
-              f"G02 ran two CPU trials in {sum(t['elapsed_seconds'] for t in trials):.1f} s of fit time. "
-              f"F02 compared {result['var_trials']} lag candidates before its VAR(24) validation forecast. "
-              "The baselines have no fitted parameters. VAR coefficients are explicit, XGB gain is associative, and LSTM state is harder to interpret directly.",
-              "", "Validation scored 5,257 of 5,259 candidates with two missing truths and zero invalid contexts. "
-              "Train scored 24,435 of 24,519 candidates with 32 missing truths and 52 invalid contexts. MAPE excludes zero truths.",
-              "", "## Proposed model lock", "",
-              f"- Weights SHA256: `{metadata['checkpoint_sha256']}`",
-              f"- Architecture SHA256: `{metadata['architecture_sha256']}`",
-              f"- Config SHA256: `{CONFIG_HASH}`",
-              f"- Reload maximum absolute difference: {result['reload_max_abs_mw']:.9g} MW across {result['n_reload_checked']:,} validation rows.",
-              "", "G02 acceptance, LSTM model lock and Phase 8 sign-off are **PENDING HUMAN REVIEW**.", ""]
-    with path.open("x", encoding="utf-8") as stream:
-        stream.write("\n".join(lines))
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--run-id", required=True)
-    parser.add_argument("--config", required=True)
-    parser.add_argument("--replay", action="store_true")
-    args = parser.parse_args()
-    run(args.run_id, args.config, args.replay)
-
-
-if __name__ == "__main__":
-    main()
-
+    lines += [
+        "",
+        f"## 2. Multi-Seed Stability (`{res['winner_variant']}`)",
+        "",
+        f"| Seed | Best Epoch | MAE ({unit}) | RMSE ({unit}) | MAPE (%) |",
+        "|---:|---:|---:|---:|---:|",
+    ]
+    rmses = []
+    for row in res["seed_stability"]:
+        rmses.append(row["rmse_mw"])
+        lines.append(
+            f"| {row['seed']} | {row['best_epoch']} | {row['mae_mw']:,.2f} | {row['rmse_mw']:,.2f} | {row['mape_percent']:.4f} |"
+        )
+    lines += [
+        "",
+        f"- Seed RMSE Mean ± Std: **{np.mean(rmses):,.2f} ± {np.std(rmses):,.2f} {unit}**",
+        "",
+    ]
+    return "\n".join(lines)

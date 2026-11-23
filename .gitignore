@@ -12,3 +12,7 @@ __pycache__/
 .ipynb_checkpoints/
 .matplotlib/
 .ipython/
+
+# Practice 4 large raw UCI binaries (>100 MB; reproducible via S1 pipeline)
+total_practice/Practice_4/datasets/raw/LD2011_2014.txt
+total_practice/Practice_4/datasets/raw/electricityloaddiagrams20112014.zip

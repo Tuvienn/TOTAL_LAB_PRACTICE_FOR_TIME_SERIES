@@ -1,0 +1,87 @@
+{
+  "grouped_rows": 384,
+  "dm_tests": [
+    {
+      "model_a": "XGB_best",
+      "model_b": "LSTM_best",
+      "dm_stat": -6.378338197902264,
+      "p_value": 1.7901984222340025e-10,
+      "significant_5pct": true,
+      "better_model": "XGB_best"
+    },
+    {
+      "model_a": "XGB_best",
+      "model_b": "VAR",
+      "dm_stat": -6.374350742817811,
+      "p_value": 1.8373965700997679e-10,
+      "significant_5pct": true,
+      "better_model": "XGB_best"
+    },
+    {
+      "model_a": "LSTM_best",
+      "model_b": "VAR",
+      "dm_stat": 1.19298323657642,
+      "p_value": 0.23287593831820608,
+      "significant_5pct": false,
+      "better_model": "VAR"
+    },
+    {
+      "model_a": "XGB_best",
+      "model_b": "seasonal168",
+      "dm_stat": -22.76856440139495,
+      "p_value": 9.397383429264341e-115,
+      "significant_5pct": true,
+      "better_model": "XGB_best"
+    },
+    {
+      "model_a": "LSTM_best",
+      "model_b": "seasonal168",
+      "dm_stat": -21.292752165006718,
+      "p_value": 1.3251295239961234e-100,
+      "significant_5pct": true,
+      "better_model": "LSTM_best"
+    },
+    {
+      "model_a": "XGB_4var",
+      "model_b": "LSTM_core",
+      "dm_stat": 0.12748563726911744,
+      "p_value": 0.8985560402246654,
+      "significant_5pct": false,
+      "better_model": "LSTM_core"
+    }
+  ],
+  "residual_acf": {
+    "persistence": {
+      "lag24": 0.9651106845805385,
+      "lag168": 0.9507884294928197
+    },
+    "seasonal24": {
+      "lag24": -0.2340599943126148,
+      "lag168": 0.15755345738634557
+    },
+    "seasonal168": {
+      "lag24": 0.651516285339616,
+      "lag168": -0.267494018975834
+    },
+    "VAR": {
+      "lag24": -0.20754564380243937,
+      "lag168": 0.19170919509103726
+    },
+    "XGB_best": {
+      "lag24": -0.035657347810967015,
+      "lag168": 0.07076404051735605
+    },
+    "XGB_4var": {
+      "lag24": -0.14568908916329615,
+      "lag168": 0.1328917838446721
+    },
+    "LSTM_best": {
+      "lag24": 0.49646122865455994,
+      "lag168": 0.45054485413528755
+    },
+    "LSTM_core": {
+      "lag24": 0.3702543182688443,
+      "lag168": 0.37526897314062274
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "device": "cuda (NVIDIA GeForce RTX 5050)",
+  "winner_variant": "LSTM_24h_cal",
+  "variants_summary": [
+    {
+      "variant": "LSTM_24h_load_only",
+      "trial_id": "LSTM_24h_load_only_lr1e3_d10",
+      "window_len": 24,
+      "input_size": 1,
+      "lr": 0.001,
+      "dropout": 0.1,
+      "weight_decay": 0.0001,
+      "param_count": 29729,
+      "best_epoch": 39,
+      "stop_epoch": 49,
+      "elapsed_seconds": 29.91637659999833,
+      "restored_train_mse_scaled": 0.007155259950912675,
+      "restored_val_mse_scaled": 0.005580856569075741,
+      "mae_mw": 4418.332514682099,
+      "rmse_mw": 5986.568198162898,
+      "mape_percent": 2.422003062467008,
+      "mape_null_reason": null,
+      "n_considered": 3945,
+      "n_scored": 3945,
+      "n_zero_excluded": 0,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0
+    },
+    {
+      "variant": "LSTM_24h_core",
+      "trial_id": "LSTM_24h_core_lr1e3_d00",
+      "window_len": 24,
+      "input_size": 4,
+      "lr": 0.001,
+      "dropout": 0.0,
+      "weight_decay": 0.0,
+      "param_count": 30497,
+      "best_epoch": 37,
+      "stop_epoch": 47,
+      "elapsed_seconds": 26.93060470000637,
+      "restored_train_mse_scaled": 0.004497611844350257,
+      "restored_val_mse_scaled": 0.005473139167233162,
+      "mae_mw": 4115.95485247338,
+      "rmse_mw": 5928.5126229935295,
+      "mape_percent": 2.2191905384151593,
+      "mape_null_reason": null,
+      "n_considered": 3945,
+      "n_scored": 3945,
+      "n_zero_excluded": 0,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0
+    },
+    {
+      "variant": "LSTM_24h_cal",
+      "trial_id": "LSTM_24h_cal_lr1e3_d00",
+      "window_len": 24,
+      "input_size": 13,
+      "lr": 0.001,
+      "dropout": 0.0,
+      "weight_decay": 0.0,
+      "param_count": 32801,
+      "best_epoch": 19,
+      "stop_epoch": 29,
+      "elapsed_seconds": 18.294291100006376,
+      "restored_train_mse_scaled": 0.005131485208199455,
+      "restored_val_mse_scaled": 0.005426839647181772,
+      "mae_mw": 4096.36282169128,
+      "rmse_mw": 5903.383492337677,
+      "mape_percent": 2.1921191137117875,
+      "mape_null_reason": null,
+      "n_considered": 3945,
+      "n_scored": 3945,
+      "n_zero_excluded": 0,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0
+    },
+    {
+      "variant": "LSTM_168h_diag",
+      "trial_id": "LSTM_168h_diag_lr1e3_d10",
+      "window_len": 168,
+      "input_size": 13,
+      "lr": 0.001,
+      "dropout": 0.1,
+      "weight_decay": 0.0001,
+      "param_count": 32801,
+      "best_epoch": 19,
+      "stop_epoch": 29,
+      "elapsed_seconds": 19.90085170000384,
+      "restored_train_mse_scaled": 0.0072479194893227995,
+      "restored_val_mse_scaled": 0.00646745269863119,
+      "mae_mw": 4700.518444489838,
+      "rmse_mw": 6444.572781310517,
+      "mape_percent": 2.5217866443032118,
+      "mape_null_reason": null,
+      "n_considered": 3945,
+      "n_scored": 3945,
+      "n_zero_excluded": 0,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0
+    }
+  ],
+  "seed_stability": [
+    {
+      "seed": 42,
+      "best_epoch": 19,
+      "mae_mw": 4096.36282169128,
+      "rmse_mw": 5903.383492337677,
+      "mape_percent": 2.1921191137117875
+    },
+    {
+      "seed": 123,
+      "best_epoch": 31,
+      "mae_mw": 3935.223480249065,
+      "rmse_mw": 5901.185390331131,
+      "mape_percent": 2.1014919494344326
+    },
+    {
+      "seed": 2026,
+      "best_epoch": 14,
+      "mae_mw": 4516.904550664046,
+      "rmse_mw": 6273.029088247555,
+      "mape_percent": 2.4434451065099005
+    }
+  ],
+  "checkpoints": {
+    "lstm_best": {
+      "variant": "LSTM_24h_cal",
+      "ckpt_path": "D:\\Documents\\Coding\\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\\total_practice\\Practice_4\\runs\\v2\\s7_lstm\\artifacts\\lstm_best.pt",
+      "arch_path": "D:\\Documents\\Coding\\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\\total_practice\\Practice_4\\runs\\v2\\s7_lstm\\artifacts\\lstm_best_arch.json",
+      "reload_batch_max_diff": 0.0,
+      "reload_single_diff": 0.009552952164085582
+    },
+    "lstm_core": {
+      "variant": "LSTM_24h_core",
+      "ckpt_path": "D:\\Documents\\Coding\\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\\total_practice\\Practice_4\\runs\\v2\\s7_lstm\\artifacts\\lstm_core.pt",
+      "arch_path": "D:\\Documents\\Coding\\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\\total_practice\\Practice_4\\runs\\v2\\s7_lstm\\artifacts\\lstm_core_arch.json",
+      "reload_batch_max_diff": 0.0,
+      "reload_single_diff": 0.0
+    }
+  }
+}

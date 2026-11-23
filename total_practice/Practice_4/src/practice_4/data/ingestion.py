@@ -1,58 +1,182 @@
 from __future__ import annotations
 
-import hashlib
 from pathlib import Path
+from typing import Any
 
+import numpy as np
 import pandas as pd
 
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest()
+from practice_4.runtime import sha256_file
 
 
-def read_raw(path: Path, required: set[str], timestamp: str) -> tuple[pd.DataFrame, pd.Series]:
-    frame = pd.read_csv(path)
-    missing = required.difference(frame.columns)
-    if missing:
-        raise ValueError(f"Missing required columns: {sorted(missing)}")
-    times = pd.to_datetime(frame[timestamp], utc=True, errors="coerce", format="mixed")
-    if times.isna().any():
-        raise ValueError(f"Invalid or missing timestamp in {path.name}")
-    for column in required - {timestamp, "city_name"}:
-        parsed = pd.to_numeric(frame[column], errors="coerce")
-        if (parsed.isna() & frame[column].notna()).any():
-            raise ValueError(f"Non-numeric values in {column}")
-    return frame, times
+def audit_uci_raw(txt_path: Path) -> dict[str, Any]:
+    with txt_path.open("r", encoding="utf-8") as stream:
+        header = stream.readline().strip().split(";")
+    client_cols = [col.strip('"') for col in header[1:]]
+    frame = pd.read_csv(
+        txt_path,
+        sep=";",
+        decimal=",",
+        low_memory=False,
+    )
+    ts_col = frame.columns[0]
+    ts = pd.to_datetime(frame[ts_col], format="%Y-%m-%d %H:%M:%S", errors="coerce")
+    if ts.isna().any():
+        raise ValueError("Invalid timestamps in LD2011_2014.txt")
+
+    values = frame.iloc[:, 1:].to_numpy(dtype=np.float64)
+    total_kw = values.sum(axis=1)
+    active_clients = (values > 0).sum(axis=1)
+    years = ts.dt.year
+    yearly_active = {
+        int(y): {
+            "rows": int((years == y).sum()),
+            "min_active_clients": int(active_clients[years == y].min()),
+            "median_active_clients": float(np.median(active_clients[years == y])),
+            "max_active_clients": int(active_clients[years == y].max()),
+            "mean_total_kw": float(total_kw[years == y].mean()),
+            "zero_total_rows": int((total_kw[years == y] == 0).sum()),
+        }
+        for y in sorted(years.unique())
+    }
+
+    return {
+        "path": txt_path.name,
+        "sha256": sha256_file(txt_path),
+        "rows": int(len(frame)),
+        "client_count": int(len(client_cols)),
+        "start_local": str(ts.iloc[0]),
+        "end_local": str(ts.iloc[-1]),
+        "ordered": bool(ts.is_monotonic_increasing),
+        "duplicate_timestamps": int(ts.duplicated().sum()),
+        "missing_cells": int(np.isnan(values).sum()),
+        "negative_cells": int((values < 0).sum()),
+        "total_kw_min": float(np.nanmin(total_kw)),
+        "total_kw_max": float(np.nanmax(total_kw)),
+        "total_kw_mean": float(np.nanmean(total_kw)),
+        "yearly_active_summary": yearly_active,
+    }
 
 
-def summarize(energy_path: Path, weather_path: Path) -> dict:
-    energy, et = read_raw(energy_path, {"time", "total load actual"}, "time")
-    weather, wt = read_raw(weather_path, {"dt_iso", "city_name", "temp", "humidity", "wind_speed"}, "dt_iso")
-    groups = weather.assign(_utc=wt).groupby(["city_name", "_utc"], dropna=False)
-    sizes = groups.size()
-    duplicated = sizes[sizes > 1]
-    conflict = (groups[["temp", "humidity", "wind_speed"]].nunique(dropna=False) > 1).any(axis=1)
-    timeline = pd.DatetimeIndex(et.dropna().unique()).sort_values()
-    if len(timeline) == 0:
-        raise ValueError("Empty energy timeline")
-    expected = pd.date_range(timeline.min(), timeline.max(), freq="h")
-    ranges = {}
-    for name, series, unit in [("total load actual", energy["total load actual"], "MW"), ("temp", weather["temp"], "K"), ("humidity", weather["humidity"], "%"), ("wind_speed", weather["wind_speed"], "m/s")]:
-        values = pd.to_numeric(series, errors="raise")
-        if values.notna().sum() == 0:
-            raise ValueError(f"No observed values for {name}")
-        minimum, maximum = float(values.min()), float(values.max())
-        ranges[name] = {"min": minimum, "max": maximum, "unit": unit, "missing": int(values.isna().sum())}
-    ranges["total load actual"]["basic_range_pass"] = ranges["total load actual"]["min"] >= 0
-    ranges["temp"]["basic_range_pass"] = ranges["temp"]["min"] > 0
-    ranges["humidity"]["basic_range_pass"] = ranges["humidity"]["min"] >= 0 and ranges["humidity"]["max"] <= 100
-    ranges["wind_speed"]["basic_range_pass"] = ranges["wind_speed"]["min"] >= 0
-    city_coverage = {}
-    for city, group in weather.assign(_utc=wt).groupby("city_name", dropna=False):
-        unique = pd.DatetimeIndex(group["_utc"].unique())
-        city_coverage[str(city)] = {"rows": len(group), "unique_timestamps": len(unique), "missing_energy_timestamps": len(timeline.difference(unique)), "extra_timestamps": len(unique.difference(timeline))}
-    return {"energy": {"rows": len(energy), "columns": list(energy.columns), "missing": {k: int(v) for k, v in energy.isna().sum().items()}, "duplicate_rows": int(energy.duplicated().sum()), "duplicate_timestamps": int(et.duplicated().sum()), "ordered": bool(et.is_monotonic_increasing), "utc_min": str(et.min()), "utc_max": str(et.max()), "unique_timestamps": len(timeline), "missing_hours": len(expected.difference(timeline))}, "weather": {"rows": len(weather), "columns": list(weather.columns), "missing": {k: int(v) for k, v in weather.isna().sum().items()}, "duplicate_rows": int(weather.duplicated().sum()), "ordered": bool(wt.is_monotonic_increasing), "utc_min": str(wt.min()), "utc_max": str(wt.max()), "duplicate_city_hour_groups": len(duplicated), "extra_city_hour_rows": int((duplicated - 1).sum()), "conflicting_required_weather_groups": int(conflict.sum()), "city_coverage": city_coverage}, "ranges": ranges}
+def audit_weather_raw(weather_path: Path, bounds: dict[str, Any]) -> dict[str, Any]:
+    frame = pd.read_csv(weather_path)
+    required = {"timestamp_utc", "city_name", "weight", "temp_c", "humidity", "wind_speed"}
+    missing_cols = required.difference(frame.columns)
+    if missing_cols:
+        raise ValueError(f"Missing weather columns: {sorted(missing_cols)}")
+
+    ts = pd.to_datetime(frame["timestamp_utc"], utc=True, errors="raise")
+    cities = {}
+    for city, group in frame.groupby("city_name"):
+        city_ts = pd.to_datetime(group["timestamp_utc"], utc=True)
+        cities[str(city)] = {
+            "rows": int(len(group)),
+            "unique_timestamps": int(city_ts.nunique()),
+            "weight": float(group["weight"].iloc[0]),
+            "missing_temp": int(group["temp_c"].isna().sum()),
+            "missing_humidity": int(group["humidity"].isna().sum()),
+            "missing_wind": int(group["wind_speed"].isna().sum()),
+        }
+
+    ranges = {
+        "temp_c": {
+            "min": float(frame["temp_c"].min()),
+            "max": float(frame["temp_c"].max()),
+            "in_bounds": bool(
+                (frame["temp_c"] >= bounds["temp_min_c"]).all()
+                and (frame["temp_c"] <= bounds["temp_max_c"]).all()
+            ),
+        },
+        "humidity": {
+            "min": float(frame["humidity"].min()),
+            "max": float(frame["humidity"].max()),
+            "in_bounds": bool(
+                (frame["humidity"] >= bounds["humidity_min"]).all()
+                and (frame["humidity"] <= bounds["humidity_max"]).all()
+            ),
+        },
+        "wind_speed": {
+            "min": float(frame["wind_speed"].min()),
+            "max": float(frame["wind_speed"].max()),
+            "in_bounds": bool(
+                (frame["wind_speed"] >= bounds["wind_speed_min"]).all()
+                and (frame["wind_speed"] <= bounds["wind_speed_max"]).all()
+            ),
+        },
+    }
+
+    return {
+        "path": weather_path.name,
+        "sha256": sha256_file(weather_path),
+        "rows": int(len(frame)),
+        "utc_min": ts.min().isoformat(),
+        "utc_max": ts.max().isoformat(),
+        "duplicate_city_hour": int(frame.duplicated(subset=["city_name", "timestamp_utc"]).sum()),
+        "cities": cities,
+        "ranges": ranges,
+    }
+
+
+def summarize_raw(txt_path: Path, weather_path: Path, bounds: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "uci": audit_uci_raw(txt_path),
+        "weather": audit_weather_raw(weather_path, bounds),
+    }
+
+
+def format_audit_markdown(summary: dict[str, Any], manifest: dict[str, Any]) -> str:
+    uci = summary["uci"]
+    w = summary["weather"]
+    lines = [
+        "# Stage S1 — Raw Provenance & Data Quality Audit (v2)",
+        "",
+        f"- **Dataset:** {manifest['dataset_name']}",
+        f"- **UCI URL:** {manifest['uci_source']['url']} (`{manifest['uci_source']['license']}`)",
+        f"- **UCI Archive SHA256:** `{manifest['uci_source']['sha256']}`",
+        f"- **UCI `LD2011_2014.txt` SHA256:** `{uci['sha256']}`",
+        f"- **Weather Source:** Open-Meteo ERA5 Historical Archive (`{manifest['weather_source']['license']}`)",
+        f"- **Weather CSV SHA256:** `{w['sha256']}`",
+        "",
+        "## 1. UCI ElectricityLoadDiagrams20112014 Raw Quality",
+        "",
+        f"- Rows: **{uci['rows']:,}** (15-min intervals), Clients: **{uci['client_count']}**",
+        f"- Local span: `{uci['start_local']}` → `{uci['end_local']}`",
+        f"- Ordered: `{uci['ordered']}`, Duplicate timestamps: `{uci['duplicate_timestamps']}`",
+        f"- Missing cells: `{uci['missing_cells']}`, Negative cells: `{uci['negative_cells']}`",
+        f"- Total active power (kW): min `{uci['total_kw_min']:,.2f}`, mean `{uci['total_kw_mean']:,.2f}`, max `{uci['total_kw_max']:,.2f}`",
+        "",
+        "### Active Clients by Year (Onboarding Regime Check)",
+        "",
+        "| Year | 15-min Rows | Min Active | Median Active | Max Active | Mean Total kW | Zero-Total Rows |",
+        "|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    for year, info in uci["yearly_active_summary"].items():
+        lines.append(
+            f"| {year} | {info['rows']:,} | {info['min_active_clients']} | "
+            f"{info['median_active_clients']:.1f} | {info['max_active_clients']} | "
+            f"{info['mean_total_kw']:,.1f} | {info['zero_total_rows']} |"
+        )
+    lines += [
+        "",
+        "## 2. Open-Meteo ERA5 Portugal Weather Raw Quality",
+        "",
+        f"- Rows: **{w['rows']:,}** (`{w['utc_min']}` → `{w['utc_max']}`), Duplicate city-hour: `{w['duplicate_city_hour']}`",
+        "",
+        "| Variable | Min | Max | Unit | Physical Bounds Pass |",
+        "|---|---:|---:|---|---|",
+    ]
+    units = {"temp_c": "°C", "humidity": "%", "wind_speed": "m/s"}
+    for col, info in w["ranges"].items():
+        lines.append(f"| `{col}` | {info['min']:.3f} | {info['max']:.3f} | {units[col]} | `{info['in_bounds']}` |")
+    lines += [
+        "",
+        "| City | Weight | Rows | Unique Timestamps | Missing (T/H/W) |",
+        "|---|---:|---:|---:|---|",
+    ]
+    for city, info in w["cities"].items():
+        lines.append(
+            f"| {city} | {info['weight']:.2f} | {info['rows']:,} | {info['unique_timestamps']:,} | "
+            f"{info['missing_temp']}/{info['missing_humidity']}/{info['missing_wind']} |"
+        )
+    lines.append("")
+    return "\n".join(lines)

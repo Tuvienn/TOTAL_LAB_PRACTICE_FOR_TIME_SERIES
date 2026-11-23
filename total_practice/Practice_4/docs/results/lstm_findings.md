@@ -1,54 +1,23 @@
-# G02 LSTM findings
+# Stage S7 — PyTorch CUDA LSTM Findings & Ablation (v2)
 
-Run `20261118_system312_g02_01`. **APPROVED / COMPLETED**. Human approved G02, these findings, the LSTM lock with complexity 30,113, and Phase 8 completion on 2026-11-18 via Director review.
+- **Device:** `cuda (NVIDIA GeForce RTX 5050)` (zero `np.repeat(64)` workaround; native `batch=1` & batched inference verified)
+- **Selected Winning LSTM Variant:** **`LSTM_24h_cal`**
 
-## Trials
+## 1. Variant & Ablation Comparison (Validation)
 
-| Trial | Best epoch | Stop epoch | CPU fit seconds | MAE MW | RMSE MW | MAPE % |
-|---|---:|---:|---:|---:|---:|---:|
-| lstm_lr_001 | 47 | 50 | 212.74 | 320.692 | 504.751 | 1.1309 |
-| lstm_lr_0005 | 50 | 50 | 212.33 | 341.066 | 535.976 | 1.1932 |
+| Variant | Window | Input Dim | Params | Best/Stop Epoch | Fit (s) | Train MSE (scaled) | Val MSE (scaled) | MAE (kW) | RMSE (kW) | MAPE (%) |
+|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|
+| `LSTM_24h_load_only` | 24h | 1 | 29,729 | 39/49 | 29.92 | 0.007155 | 0.005581 | 4,418.33 | 5,986.57 | 2.4220 |
+| `LSTM_24h_core` | 24h | 4 | 30,497 | 37/47 | 26.93 | 0.004498 | 0.005473 | 4,115.95 | 5,928.51 | 2.2192 |
+| `LSTM_24h_cal` | 24h | 13 | 32,801 | 19/29 | 18.29 | 0.005131 | 0.005427 | 4,096.36 | 5,903.38 | 2.1921 |
+| `LSTM_168h_diag` | 168h | 13 | 32,801 | 19/29 | 19.90 | 0.007248 | 0.006467 | 4,700.52 | 6,444.57 | 2.5218 |
 
-C02 selected **lstm_lr_001**. Both trials used seed 42, chronological batches of 64 and validation-only early stopping.
+## 2. Multi-Seed Stability (`LSTM_24h_cal`)
 
-## Q4. Daily and weekly patterns
-
-[Validation trace](../../runs/20261118_system312_g02_01/artifacts/validation_trace.png) and [Madrid group errors](../../runs/20261118_system312_g02_01/artifacts/temporal_errors.png) retain UTC alignment. Repeated local DST hours contribute as separate observations. Residuals are observed minus forecast.
-
-| UTC lag (hours) | Available pairs | LSTM | Persistence | Seasonal24 |
+| Seed | Best Epoch | MAE (kW) | RMSE (kW) | MAPE (%) |
 |---:|---:|---:|---:|---:|
-| 24 | 5231 | 0.2416 | 0.8168 | -0.1848 |
-| 168 | 5087 | 0.0958 | 0.7579 | 0.1747 |
+| 42 | 19 | 4,096.36 | 5,903.38 | 2.1921 |
+| 123 | 31 | 3,935.22 | 5,901.19 | 2.1015 |
+| 2026 | 14 | 4,516.90 | 6,273.03 | 2.4434 |
 
-By hour, D01 training means range from 22,635 MW (04:00) to 32,007 MW (13:00). LSTM validation MAE ranges from 144.7 MW (03:00, n=219) to 924.5 MW (00:00, n=219).
-By weekday, D01 training means range from 26,307 MW (Sunday) to 29,506 MW (Wednesday). LSTM validation MAE ranges from 302.6 MW (Saturday, n=764) to 356.9 MW (Sunday, n=744).
-
-The largest LSTM residual was -12,698.2 MW at 2018-05-06 10:00 UTC (12:00 in Madrid), when all five forecasts exceeded observed load. This hour accounted for 12.0% of LSTM squared error and remained in every model score. The highest grouped LSTM MAE occurred at midnight in Madrid. Weekly learning is inconclusive from group errors and residual correlations. The 24-hour input contains no direct lag-168 observation.
-
-## Q5. Overfitting
-
-[Learning curves](../../runs/20261118_system312_g02_01/artifacts/learning_curves.png) show per-epoch train and validation scaled MSE. The selected trial ran 3 epochs after its earliest best validation epoch. Inference MSE with restored weights is 0.010732 (train) and 0.012380 (validation), a gap of +0.001648. From epoch 47 to 50, training loss stayed near 0.0091 while validation loss rose from 0.012380 to 0.013902. This late divergence supports restoring epoch 47. The lower learning rate reached its best validation loss at epoch 50. Using the same validation set for stopping and trial selection can make reported performance optimistic.
-
-## Q6. ML versus DL
-
-| Model | MAE MW | RMSE MW | MAPE % |
-|---|---:|---:|---:|
-| persistence | 1115.634 | 1507.303 | 3.9116 |
-| seasonal24 | 2429.289 | 3507.533 | 8.4332 |
-| VAR(24) | 514.620 | 799.962 | 1.8166 |
-| XGB_full | 300.186 | 508.939 | 1.0523 |
-| LSTM | 320.692 | 504.751 | 1.1309 |
-
-C02 cross-model selection on these five candidates gives **LSTM**. LSTM improved on XGB_full RMSE by 4.188 MW (0.82%). XGB_full had 20.505 MW lower MAE and 0.0787 percentage points lower MAPE.
-LSTM uses 24 x 4 sequential inputs with 30,113 trainable parameters. XGB_full uses flattened lags and derived load features including the 25-hour trend context. G01 ran 18 CPU trials in 46.5 s of fit time. G02 ran two CPU trials in 425.1 s of fit time. F02 compared 24 lag candidates before its VAR(24) validation forecast. The baselines have no fitted parameters. VAR coefficients are explicit, XGB gain is associative, and LSTM state is harder to interpret directly.
-
-Validation scored 5,257 of 5,259 candidates with two missing truths and zero invalid contexts. Train scored 24,435 of 24,519 candidates with 32 missing truths and 52 invalid contexts. MAPE excludes zero truths.
-
-## Approved model lock
-
-- Weights SHA256: `512715c5249f35bcfe46d1ecdbfc4413dbb1d3f263fe73f41dc9845fe5a69a1c`
-- Architecture SHA256: `c858df9f6417ac508d9b4d2195ce0b29a539ab89d4bb5d10950ac12f6d7af807`
-- Config SHA256: `866aa8fb59048789010f09c4355ea7a484c7a5e51d06c655e156575a3d0a87fc`
-- Reload maximum absolute difference: 0 MW across 5,257 validation rows.
-
-The G02 manifest retains the findings hash from before this approval edit. Human authorized Phase 9 drafting. H01 test opening requires separate authorization.
+- Seed RMSE Mean ± Std: **6,025.87 ± 174.77 kW**

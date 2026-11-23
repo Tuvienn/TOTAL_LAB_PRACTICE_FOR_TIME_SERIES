@@ -1,0 +1,102 @@
+{
+  "selected_tag": "VAR_diff1",
+  "selection_reason": "Selected VAR_diff1 per chapter4-5.pdf Slide 5 (KPSS rejects level stationarity; diff1 achieves both ADF & KPSS stationarity and stable eigenvalues).",
+  "stationarity": {
+    "load": {
+      "level_adf_stat": -3.2676205274253434,
+      "level_adf_p": 0.016389352199026635,
+      "level_kpss_stat": 2.2384350597281846,
+      "level_kpss_p": 0.01,
+      "level_stationary_both": false,
+      "diff1_adf_stat": -30.407971166607474,
+      "diff1_adf_p": 0.0,
+      "diff1_kpss_stat": 0.0007605413138238073,
+      "diff1_kpss_p": 0.1,
+      "diff1_stationary_both": true
+    },
+    "temperature": {
+      "level_adf_stat": -4.065280938278078,
+      "level_adf_p": 0.0011047284513507382,
+      "level_kpss_stat": 1.5016409649520495,
+      "level_kpss_p": 0.01,
+      "level_stationary_both": false,
+      "diff1_adf_stat": -24.955629045832584,
+      "diff1_adf_p": 0.0,
+      "diff1_kpss_stat": 0.003107904121375924,
+      "diff1_kpss_p": 0.1,
+      "diff1_stationary_both": true
+    },
+    "humidity": {
+      "level_adf_stat": -7.511729669939345,
+      "level_adf_p": 3.999082667037787e-11,
+      "level_kpss_stat": 0.7055805639080085,
+      "level_kpss_p": 0.013038130553817409,
+      "level_stationary_both": false,
+      "diff1_adf_stat": -28.84238891502528,
+      "diff1_adf_p": 0.0,
+      "diff1_kpss_stat": 0.002109810241725804,
+      "diff1_kpss_p": 0.1,
+      "diff1_stationary_both": true
+    },
+    "wind_speed": {
+      "level_adf_stat": -11.264351299554825,
+      "level_adf_p": 1.5931151866374703e-20,
+      "level_kpss_stat": 1.3693932900763244,
+      "level_kpss_p": 0.01,
+      "level_stationary_both": false,
+      "diff1_adf_stat": -28.181691513643088,
+      "diff1_adf_p": 0.0,
+      "diff1_kpss_stat": 0.004834671461644929,
+      "diff1_kpss_p": 0.1,
+      "diff1_stationary_both": true
+    }
+  },
+  "variants": {
+    "VAR_diff1": {
+      "variant": "VAR_diff1",
+      "diff_order": 1,
+      "p": 24,
+      "train_rows_used": 18411,
+      "complexity": 388,
+      "max_eigenvalue_modulus": 0.9998088003022647,
+      "stable": true,
+      "whiteness_stat": 4032.6267981510896,
+      "whiteness_df": 384,
+      "whiteness_p": 0.0,
+      "metrics": {
+        "mae_mw": 3317.1906679539593,
+        "rmse_mw": 4793.348415244037,
+        "mape_percent": 1.7830300672251596,
+        "mape_null_reason": null,
+        "n_considered": 3945,
+        "n_scored": 3945,
+        "n_zero_excluded": 0,
+        "n_missing_excluded": 0,
+        "n_input_excluded": 0
+      }
+    },
+    "VAR_level": {
+      "variant": "VAR_level",
+      "diff_order": 0,
+      "p": 24,
+      "train_rows_used": 18412,
+      "complexity": 388,
+      "max_eigenvalue_modulus": 0.9998279033386983,
+      "stable": true,
+      "whiteness_stat": 17857.240623190475,
+      "whiteness_df": 384,
+      "whiteness_p": 0.0,
+      "metrics": {
+        "mae_mw": 4935.826408339057,
+        "rmse_mw": 6992.346832642985,
+        "mape_percent": 2.6692630884617965,
+        "mape_null_reason": null,
+        "n_considered": 3945,
+        "n_scored": 3945,
+        "n_zero_excluded": 0,
+        "n_missing_excluded": 0,
+        "n_input_excluded": 0
+      }
+    }
+  }
+}

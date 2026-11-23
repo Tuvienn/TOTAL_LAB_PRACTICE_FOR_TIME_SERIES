@@ -1,0 +1,110 @@
+{
+  "uci": {
+    "path": "LD2011_2014.txt",
+    "sha256": "d51565f2cb5a6b768d06ba1bbd3c084c6e2f3aab07f00c6f2dcb80e90175124b",
+    "rows": 140256,
+    "client_count": 370,
+    "start_local": "2011-01-01 00:15:00",
+    "end_local": "2015-01-01 00:00:00",
+    "ordered": true,
+    "duplicate_timestamps": 0,
+    "missing_cells": 0,
+    "negative_cells": 0,
+    "total_kw_min": 342.5955085040956,
+    "total_kw_max": 452652.5955674096,
+    "total_kw_mean": 195556.9425263531,
+    "yearly_active_summary": {
+      "2011": {
+        "rows": 35039,
+        "min_active_clients": 155,
+        "median_active_clients": 158.0,
+        "max_active_clients": 160,
+        "mean_total_kw": 122716.73158821427,
+        "zero_total_rows": 0
+      },
+      "2012": {
+        "rows": 35136,
+        "min_active_clients": 119,
+        "median_active_clients": 323.0,
+        "max_active_clients": 332,
+        "mean_total_kw": 212317.43442272977,
+        "zero_total_rows": 0
+      },
+      "2013": {
+        "rows": 35040,
+        "min_active_clients": 128,
+        "median_active_clients": 336.0,
+        "max_active_clients": 349,
+        "mean_total_kw": 222736.76901749012,
+        "zero_total_rows": 0
+      },
+      "2014": {
+        "rows": 35040,
+        "min_active_clients": 117,
+        "median_active_clients": 364.0,
+        "max_active_clients": 369,
+        "mean_total_kw": 224410.87318514936,
+        "zero_total_rows": 0
+      },
+      "2015": {
+        "rows": 1,
+        "min_active_clients": 367,
+        "median_active_clients": 367.0,
+        "max_active_clients": 367,
+        "mean_total_kw": 124214.199215235,
+        "zero_total_rows": 0
+      }
+    }
+  },
+  "weather": {
+    "path": "portugal_weather_era5.csv",
+    "sha256": "ed0e577dff8e93ae0a0eac31bafa2a5fde91325cb9b499e2b7308262267df19b",
+    "rows": 105264,
+    "utc_min": "2011-01-01T00:00:00+00:00",
+    "utc_max": "2015-01-01T23:00:00+00:00",
+    "duplicate_city_hour": 0,
+    "cities": {
+      "Coimbra": {
+        "rows": 35088,
+        "unique_timestamps": 35088,
+        "weight": 0.15,
+        "missing_temp": 0,
+        "missing_humidity": 0,
+        "missing_wind": 0
+      },
+      "Lisbon": {
+        "rows": 35088,
+        "unique_timestamps": 35088,
+        "weight": 0.5,
+        "missing_temp": 0,
+        "missing_humidity": 0,
+        "missing_wind": 0
+      },
+      "Porto": {
+        "rows": 35088,
+        "unique_timestamps": 35088,
+        "weight": 0.35,
+        "missing_temp": 0,
+        "missing_humidity": 0,
+        "missing_wind": 0
+      }
+    },
+    "ranges": {
+      "temp_c": {
+        "min": -2.9,
+        "max": 39.3,
+        "in_bounds": true
+      },
+      "humidity": {
+        "min": 14.0,
+        "max": 100.0,
+        "in_bounds": true
+      },
+      "wind_speed": {
+        "min": 0.0,
+        "max": 16.02,
+        "in_bounds": true
+      }
+    }
+  }
+}

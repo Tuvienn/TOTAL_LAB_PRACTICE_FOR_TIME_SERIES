@@ -1,0 +1,18 @@
+{
+  "variant": "LSTM_24h_core",
+  "window_len": 24,
+  "col_indices": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "input_size": 4,
+  "hidden1": 64,
+  "hidden2": 32,
+  "dropout": 0.0,
+  "param_count": 30497,
+  "best_epoch": 37,
+  "lr": 0.001,
+  "weight_decay": 0.0
+}

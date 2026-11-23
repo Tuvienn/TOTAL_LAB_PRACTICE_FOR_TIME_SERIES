@@ -1,0 +1,150 @@
+{
+  "device": "cuda",
+  "best_cv_hyperparams": {
+    "trial_id": "cv_22_d6_lr0.02_mcw5_cs0.7_l5.0",
+    "max_depth": 6,
+    "learning_rate": 0.02,
+    "min_child_weight": 5.0,
+    "colsample_bytree": 0.7,
+    "reg_lambda": 5.0,
+    "cv_mean_rmse": 5252.608386575667,
+    "cv_std_rmse": 770.3995709207522,
+    "cv_median_trees": 984,
+    "elapsed_seconds": 11.01882000000478
+  },
+  "best_subset": "XGB_full",
+  "ablation": [
+    {
+      "subset": "XGB_full",
+      "n_features": 121,
+      "trees": 707,
+      "elapsed_seconds": 3.4130673999970895,
+      "reload_max_diff": 0.0,
+      "mae_mw": 2996.388245873951,
+      "rmse_mw": 4358.222901180128,
+      "mape_percent": 1.5563724884581622,
+      "mape_null_reason": null,
+      "n_considered": 3945,
+      "n_scored": 3945,
+      "n_zero_excluded": 0,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0
+    },
+    {
+      "subset": "XGB_load_calendar",
+      "n_features": 43,
+      "trees": 506,
+      "elapsed_seconds": 1.9225439000001643,
+      "reload_max_diff": 0.0,
+      "mae_mw": 3036.5459951925322,
+      "rmse_mw": 4463.6223223194165,
+      "mape_percent": 1.5774852632780196,
+      "mape_null_reason": null,
+      "n_considered": 3945,
+      "n_scored": 3945,
+      "n_zero_excluded": 0,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0
+    },
+    {
+      "subset": "XGB_load_weather",
+      "n_features": 104,
+      "trees": 528,
+      "elapsed_seconds": 2.5701215000008233,
+      "reload_max_diff": 0.0,
+      "mae_mw": 3134.903844745269,
+      "rmse_mw": 4514.443403649097,
+      "mape_percent": 1.6529100480474175,
+      "mape_null_reason": null,
+      "n_considered": 3945,
+      "n_scored": 3945,
+      "n_zero_excluded": 0,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0
+    },
+    {
+      "subset": "XGB_load_only",
+      "n_features": 34,
+      "trees": 623,
+      "elapsed_seconds": 2.4559563000002527,
+      "reload_max_diff": 0.0,
+      "mae_mw": 3106.2447513726725,
+      "rmse_mw": 4577.168712954051,
+      "mape_percent": 1.6185268130041208,
+      "mape_null_reason": null,
+      "n_considered": 3945,
+      "n_scored": 3945,
+      "n_zero_excluded": 0,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0
+    }
+  ],
+  "shap_additivity_max_err": 0.631270706653595,
+  "shap_group_totals": {
+    "load_lags_24h": 39096.840180731975,
+    "load_rolling_weekly": 28740.63970609224,
+    "cross_interactions": 2700.7318591342864,
+    "temperature_lags": 1702.6772828689031,
+    "calendar_dst_holiday": 1372.9629172298162,
+    "humidity_lags": 739.8855076548252,
+    "wind_speed_lags": 324.7057634341526
+  },
+  "top10_shap_features": [
+    {
+      "feature": "lag23_load",
+      "group": "load_lags_24h",
+      "mean_abs_shap": 31805.18384321976
+    },
+    {
+      "feature": "lag167_load",
+      "group": "load_rolling_weekly",
+      "mean_abs_shap": 18532.063192504884
+    },
+    {
+      "feature": "lag47_load",
+      "group": "load_rolling_weekly",
+      "mean_abs_shap": 6291.632937674999
+    },
+    {
+      "feature": "lag00_load",
+      "group": "load_lags_24h",
+      "mean_abs_shap": 4474.622458132267
+    },
+    {
+      "feature": "trend24h",
+      "group": "load_rolling_weekly",
+      "mean_abs_shap": 2101.389369583607
+    },
+    {
+      "feature": "load_per_temp_k",
+      "group": "cross_interactions",
+      "mean_abs_shap": 1449.3746041876077
+    },
+    {
+      "feature": "lag22_load",
+      "group": "load_lags_24h",
+      "mean_abs_shap": 1201.2275396754146
+    },
+    {
+      "feature": "lag00_temperature",
+      "group": "temperature_lags",
+      "mean_abs_shap": 1056.584473804772
+    },
+    {
+      "feature": "temp_diff_24h",
+      "group": "cross_interactions",
+      "mean_abs_shap": 451.0117983583212
+    },
+    {
+      "feature": "target_hour_cos",
+      "group": "calendar_dst_holiday",
+      "mean_abs_shap": 389.7214149458408
+    }
+  ],
+  "saved_models": {
+    "XGB_load_only": "D:\\Documents\\Coding\\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\\total_practice\\Practice_4\\runs\\v2\\s6_xgb\\artifacts\\XGB_load_only.json",
+    "XGB_load_weather": "D:\\Documents\\Coding\\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\\total_practice\\Practice_4\\runs\\v2\\s6_xgb\\artifacts\\XGB_load_weather.json",
+    "XGB_load_calendar": "D:\\Documents\\Coding\\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\\total_practice\\Practice_4\\runs\\v2\\s6_xgb\\artifacts\\XGB_load_calendar.json",
+    "XGB_full": "D:\\Documents\\Coding\\TOTAL_LAB_PRACTICE_FOR_TIME_SERIES\\total_practice\\Practice_4\\runs\\v2\\s6_xgb\\artifacts\\XGB_full.json"
+  }
+}

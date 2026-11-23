@@ -1,0 +1,28 @@
+{
+  "train_locf_filled": {
+    "load": 0,
+    "temp": 0,
+    "humidity": 0,
+    "wind_speed": 0
+  },
+  "val_locf_filled": {
+    "load": 0,
+    "temp": 0,
+    "humidity": 0,
+    "wind_speed": 0
+  },
+  "counts": {
+    "train": {
+      "n_considered": 18244,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0,
+      "n_eligible": 18244
+    },
+    "validation": {
+      "n_considered": 3945,
+      "n_missing_excluded": 0,
+      "n_input_excluded": 0,
+      "n_eligible": 3945
+    }
+  }
+}

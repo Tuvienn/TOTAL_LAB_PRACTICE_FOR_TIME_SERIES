@@ -1,0 +1,26 @@
+{
+  "load": {
+    "total_clients_raw": 370,
+    "selected_stable_clients": 321,
+    "start_utc": "2012-01-01T00:00:00+00:00",
+    "end_utc": "2014-12-31T23:00:00+00:00",
+    "hourly_rows": 26304,
+    "missing_load_hours": 0,
+    "dst_fallback_split_hours": 6,
+    "load_min": 75765.81756796128,
+    "load_max": 446935.4177076294,
+    "load_mean": 203577.33259964583
+  },
+  "weather": {
+    "cities_count": 3,
+    "raw_anomaly_rows": 0,
+    "canonical_anomaly_hours": 0,
+    "temp_min": 0.39499999999999996,
+    "temp_max": 35.99,
+    "humidity_min": 21.9,
+    "humidity_max": 100.0,
+    "wind_speed_min": 0.302,
+    "wind_speed_max": 14.017499999999998
+  },
+  "canonical_rows": 26304
+}

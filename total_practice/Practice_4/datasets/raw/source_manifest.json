@@ -1,56 +1,60 @@
 {
-  "schema_version": "1",
-  "status": "human_confirmed_pending_review",
-  "source": {
-    "url": "https://www.kaggle.com/datasets/nicholasjhana/energy-consumption-generation-prices-and-weather",
-    "version": "1",
-    "retrieval_date": "2026-11-17",
-    "license": "CC0: Public Domain",
-    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
-    "provenance": "Kaggle dataset nicholasjhana/energy-consumption-generation-prices-and-weather (downloaded 2026-11-17 by Human); Kaggle page/API metadata unreachable from offline/headless environment, upstream sources ENTSO-E Transparency Platform & OpenWeatherMap",
-    "archive_sha256": null,
-    "retrieval_time_utc": null,
-    "metadata_basis": "Human confirmation 2026-11-18; not independently verified"
-  },
-  "files": [
-    {
-      "path": "datasets/raw/energy_dataset.csv",
-      "bytes": 6273009,
-      "sha256": "14cd13e020d87af0ab49db8e0f1e4d308320ec5b8d2dec23bab4d27c75c7733a",
-      "rows": 35064,
-      "columns": 29,
-      "timestamp_column": "time",
-      "target_column": "total load actual"
+  "schema_version": "2",
+  "status": "verified_official_download",
+  "dataset_name": "UCI ElectricityLoadDiagrams20112014 + Open-Meteo ERA5 Portugal",
+  "uci_source": {
+    "url": "https://archive.ics.uci.edu/static/public/321/electricityloaddiagrams20112014.zip",
+    "final_url": "https://archive.ics.uci.edu/static/public/321/electricityloaddiagrams20112014.zip",
+    "status_code": 200,
+    "bytes": 261335609,
+    "sha256": "f6c4d0e0df12ecdb9ea008dd6eef3518adb52c559d04a9bac2e1b81dcfc8d4e1",
+    "retrieved_at_utc": "2026-11-23T16:04:37.896126+00:00",
+    "archive_path": "datasets/raw/electricityloaddiagrams20112014.zip",
+    "extracted_file": {
+      "path": "datasets/raw/LD2011_2014.txt",
+      "bytes": 710998915,
+      "sha256": "d51565f2cb5a6b768d06ba1bbd3c084c6e2f3aab07f00c6f2dcb80e90175124b"
     },
-    {
-      "path": "datasets/raw/weather_features.csv",
-      "bytes": 19918887,
-      "sha256": "3566c3c21179d4fc6691eec6d37a6cfe8fe6a4d9e097f95e4fda4a29dc683b18",
-      "rows": 178396,
-      "columns": 17,
-      "timestamp_column": "dt_iso",
-      "weather_columns": [
-        "temp",
-        "humidity",
-        "wind_speed"
-      ]
-    }
-  ],
-  "unresolved": [
-    "Independent archive checksum, source metadata verification and exact retrieval time",
-    "B02 dedup, proxy, timezone policy and contract await Human approval"
-  ],
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "weather_source": {
+    "path": "datasets/raw/portugal_weather_era5.csv",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "license": "CC BY 4.0 (ECMWF ERA5 via Open-Meteo)",
+    "bytes": 5301933,
+    "sha256": "ed0e577dff8e93ae0a0eac31bafa2a5fde91325cb9b499e2b7308262267df19b",
+    "cities": [
+      {
+        "name": "Lisbon",
+        "latitude": 38.7223,
+        "longitude": -9.1393,
+        "weight": 0.5
+      },
+      {
+        "name": "Porto",
+        "latitude": 41.1579,
+        "longitude": -8.6291,
+        "weight": 0.35
+      },
+      {
+        "name": "Coimbra",
+        "latitude": 40.2033,
+        "longitude": -8.4103,
+        "weight": 0.15
+      }
+    ],
+    "retrieved_at_utc": "2026-11-23T16:04:48.880761+00:00"
+  },
   "units": {
-    "total load actual": "MW",
-    "temp": "K",
+    "load": "kW",
+    "temp_c": "C",
     "humidity": "%",
     "wind_speed": "m/s"
   },
   "time_semantics": {
-    "basis": "Human confirmation",
-    "raw": "ISO-8601 offsets +01:00 and +02:00, CET/CEST",
-    "audit_index": "UTC",
-    "start": "2014-12-31 23:00:00+00:00",
-    "end": "2018-12-31 22:00:00+00:00"
+    "uci_raw": "15-minute intervals in Europe/Lisbon local wall time (March DST=0, Oct DST=combined)",
+    "weather_raw": "1-hour intervals in UTC (ERA5 reanalysis via Open-Meteo)",
+    "canonical_index": "UTC hourly"
   }
 }

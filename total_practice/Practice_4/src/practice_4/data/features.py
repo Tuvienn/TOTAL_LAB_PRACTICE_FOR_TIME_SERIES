@@ -1,318 +1,311 @@
 from __future__ import annotations
 
-import csv
 from dataclasses import dataclass
-from itertools import islice, zip_longest
-from pathlib import Path
-from zipfile import ZipFile
+from typing import Any
 
 import numpy as np
 import pandas as pd
 
-from practice_4.data.preprocessing import COLUMNS, FEATURES, VARIABLES
+from practice_4.data.preprocessing import CALENDAR_COLS, SCALED_VARS, WORK_VARS
 
-SEQUENCE_HOURS = 24
-CONTEXT_HOURS = SEQUENCE_HOURS + 1
-TRAIN_ROWS = 24_544
-PREFIX_ROWS = 29_803
-VARIABLE_NAMES = ("load", "temperature", "humidity", "wind_speed")
-SCALED_COLUMNS = tuple(f"{name}_scaled" for name in FEATURES)
-FLAT_FEATURE_NAMES = tuple(
+
+WINDOW_HOURS = 24
+CONTEXT_HOURS = 168
+BASE_NAMES = ("load", "temperature", "humidity", "wind_speed")
+
+LAG24_FEATURE_NAMES = tuple(
     f"lag{lag:02d}_{name}"
-    for lag in range(SEQUENCE_HOURS - 1, -1, -1)
-    for name in VARIABLE_NAMES
+    for lag in range(WINDOW_HOURS - 1, -1, -1)
+    for name in BASE_NAMES
 )
-XGB_FEATURE_NAMES = (*FLAT_FEATURE_NAMES, "mean6h", "std24h", "trend24h")
-FLAG_COLUMNS = tuple(
-    f"{variable}_{suffix}"
-    for suffix in ("physical_invalid", "statistical_extreme")
-    for variable in VARIABLES
+EXTENDED_LOAD_LAGS = ("lag47_load", "lag167_load")
+ROLLING_LOAD_FEATURES = (
+    "mean6h",
+    "mean24h",
+    "std24h",
+    "min24h",
+    "max24h",
+    "trend24h",
+    "diff1h",
+    "trend168h",
 )
-PREPARED_COLUMNS = (*COLUMNS, "load_input", *FLAG_COLUMNS, *SCALED_COLUMNS)
-VAR_START_ROW = 15_273
-VAR_END_ROW = TRAIN_ROWS - 1
-VAR_START_UTC = "2016-09-28T08:00:00+00:00"
-VAR_END_UTC = "2017-10-19T14:00:00+00:00"
-VAR_EARLIER_OBSERVED = 15_241
+TARGET_CALENDAR_FEATURES = tuple(f"target_{c}" for c in CALENDAR_COLS)
+INTERACTION_FEATURES = (
+    "load_per_temp_k",
+    "hdd_proxy",
+    "cdd_proxy",
+    "temp_x_humidity",
+    "temp_diff_1h",
+    "temp_diff_24h",
+)
+
+XGB_FULL_FEATURES = (
+    *LAG24_FEATURE_NAMES,
+    *EXTENDED_LOAD_LAGS,
+    *ROLLING_LOAD_FEATURES,
+    *TARGET_CALENDAR_FEATURES,
+    *INTERACTION_FEATURES,
+)
+
+
+def xgb_ablation_subsets() -> dict[str, list[str]]:
+    load_lags_24 = [name for name in LAG24_FEATURE_NAMES if name.endswith("_load")]
+    load_only = [*load_lags_24, *EXTENDED_LOAD_LAGS, *ROLLING_LOAD_FEATURES]
+    load_weather = [*LAG24_FEATURE_NAMES, *ROLLING_LOAD_FEATURES]
+    load_calendar = [*load_only, *TARGET_CALENDAR_FEATURES]
+    return {
+        "XGB_load_only": load_only,
+        "XGB_load_weather": load_weather,
+        "XGB_load_calendar": load_calendar,
+        "XGB_full": list(XGB_FULL_FEATURES),
+    }
+
+
+def feature_subset_indices(subset_names: list[str]) -> list[int]:
+    index_map = {name: i for i, name in enumerate(XGB_FULL_FEATURES)}
+    return [index_map[name] for name in subset_names]
 
 
 @dataclass(frozen=True)
-class Origin:
+class CandidateOrigin:
     target_row: int
     origin_row: int
     context_start_row: int
     split: str
+    load_observed: bool
     context_finite: bool
     exclusion_reason: str | None
-    y_true_mw: float | None
+    y_true: float | None
 
     @property
     def eligible(self) -> bool:
         return self.exclusion_reason is None
 
 
-def _causal_context(levels: np.ndarray, target_row: int) -> np.ndarray:
-    if levels.ndim != 2 or levels.shape[1] != len(SCALED_COLUMNS):
-        raise ValueError("Expected four scaled columns in D02 order")
-    if not CONTEXT_HOURS <= target_row < min(len(levels), PREFIX_ROWS):
-        raise ValueError("Target outside the train/validation candidate rows")
-    return levels[target_row - CONTEXT_HOURS:target_row]
-
-
-def classify_origin(
-    levels: np.ndarray, target_row: int, raw_load: float, observed: bool
-) -> Origin:
-    context = _causal_context(levels, target_row)
-    if (observed and not np.isfinite(raw_load)) or (not observed and not np.isnan(raw_load)):
-        raise ValueError("Raw target and observed mask disagree")
-    context_finite = bool(np.isfinite(context).all())
-    reason = None
-    if not observed:
-        reason = "missing_truth"
-    elif not context_finite:
-        reason = "invalid_context"
-    return Origin(
-        target_row, target_row - 1, target_row - CONTEXT_HOURS,
-        "train" if target_row < TRAIN_ROWS else "validation",
-        context_finite, reason, float(raw_load) if observed else None,
-    )
-
-
-def feature_views(
-    levels: np.ndarray, target_rows
+def build_feature_row_from_arrays(
+    scaled_levels: np.ndarray,
+    raw_work: np.ndarray,
+    cal_matrix: np.ndarray,
+    target_row: int,
+    hdd_base_c: float = 18.0,
+    cdd_base_c: float = 22.0,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    contexts = np.empty((len(target_rows), CONTEXT_HOURS, len(SCALED_COLUMNS)), dtype=np.float64)
-    for index, target_row in enumerate(target_rows):
-        contexts[index] = _causal_context(levels, target_row)
-    if not np.isfinite(contexts).all():
-        raise ValueError("Expected finite common context for feature construction")
+    if target_row < CONTEXT_HOURS:
+        raise ValueError(f"target_row {target_row} < CONTEXT_HOURS ({CONTEXT_HOURS})")
+    ctx_scaled = scaled_levels[target_row - CONTEXT_HOURS : target_row]
+    ctx_work = raw_work[target_row - CONTEXT_HOURS : target_row]
+    ctx_cal = cal_matrix[target_row - CONTEXT_HOURS : target_row]
+    target_cal = cal_matrix[target_row]
 
-    sequences = contexts[:, 1:, :].copy()
-    flat = sequences.reshape(len(contexts), len(FLAT_FEATURE_NAMES))
-    load = contexts[:, :, 0]
-    xgb = np.column_stack((
-        flat, load[:, -6:].mean(axis=1), load[:, 1:].std(axis=1, ddof=0),
-        load[:, -1] - load[:, 0],
-    ))
-    return sequences, flat, xgb
+    if not (np.isfinite(ctx_scaled).all() and np.isfinite(ctx_work).all() and np.isfinite(ctx_cal).all()):
+        raise ValueError("Non-finite value in causal context")
 
+    seq24_base = ctx_scaled[-WINDOW_HOURS:, :]
+    seq24_cal = np.concatenate([seq24_base, ctx_cal[-WINDOW_HOURS:, :]], axis=1).astype(np.float32)
+    flat96 = seq24_base.reshape(-1)
 
-def _hourly_index(values, start: str, end: str) -> pd.DatetimeIndex:
-    parsed = [pd.Timestamp(value) for value in values]
-    if not parsed or any(
-        pd.isna(value) or value.tzinfo is None or value.utcoffset().total_seconds() != 0
-        for value in parsed
-    ):
-        raise ValueError("Expected UTC timestamps")
-    index = pd.DatetimeIndex(parsed).tz_convert("UTC")
-    expected = pd.date_range(start, end, freq="h")
-    if not index.equals(expected):
-        raise ValueError("Invalid contiguous hourly timeline or endpoints")
-    return index
+    load_s = ctx_scaled[:, 0]
+    lag47_load = load_s[-48]
+    lag167_load = load_s[0]
 
+    mean6h = float(load_s[-6:].mean())
+    mean24h = float(load_s[-24:].mean())
+    std24h = float(load_s[-24:].std(ddof=0))
+    min24h = float(load_s[-24:].min())
+    max24h = float(load_s[-24:].max())
+    trend24h = float(load_s[-1] - load_s[-25])
+    diff1h = float(load_s[-1] - load_s[-2])
+    trend168h = float(load_s[-1] - load_s[0])
 
-def load_prepared_prefix(path: Path, splits: dict, expected_counts: dict) -> pd.DataFrame:
-    train, validation = splits["train"], splits["validation"]
-    with path.open("rb", buffering=0) as stream:
-        reader = csv.reader((line.decode("utf-8") for line in islice(stream, PREFIX_ROWS + 1)), strict=True)
-        if tuple(next(reader, ())) != PREPARED_COLUMNS:
-            raise ValueError("Unexpected D02 prepared schema")
-        rows = list(reader)
-        if len(rows) != PREFIX_ROWS or any(len(row) != len(PREPARED_COLUMNS) for row in rows):
-            raise ValueError("Invalid D02 prepared row count or width")
-        if stream.read(1):
-            raise ValueError("Unexpected bytes after the D02 prepared prefix")
+    load_t = float(ctx_work[-1, 0])
+    temp_t = float(ctx_work[-1, 1])
+    hum_t = float(ctx_work[-1, 2])
+    temp_t_m1 = float(ctx_work[-2, 1])
+    temp_t_m24 = float(ctx_work[-25, 1])
 
-    frame = pd.DataFrame(rows, columns=PREPARED_COLUMNS)
-    index = _hourly_index(frame.timestamp_utc, train["start_utc"], validation["end_utc"])
-    if index[TRAIN_ROWS - 1].isoformat() != train["end_utc"] or index[TRAIN_ROWS].isoformat() != validation["start_utc"]:
-        raise ValueError("D02 prepared split boundary mismatch")
-    frame["timestamp_utc"] = index
+    load_per_temp_k = load_t / (temp_t + 273.15)
+    hdd_proxy = max(0.0, hdd_base_c - temp_t)
+    cdd_proxy = max(0.0, temp_t - cdd_base_c)
+    temp_x_humidity = temp_t * hum_t
+    temp_diff_1h = temp_t - temp_t_m1
+    temp_diff_24h = temp_t - temp_t_m24
 
-    for name in ("load_observed", *FLAG_COLUMNS):
-        if not frame[name].isin(("True", "False")).all():
-            raise ValueError(f"Invalid D02 boolean column: {name}")
-        frame[name] = frame[name].eq("True")
-    nullable = ("load", "load_input", SCALED_COLUMNS[0])
-    for name in (*VARIABLES, "load_input", *SCALED_COLUMNS):
-        values = np.array([float(value) if value else np.nan for value in frame[name]])
-        allowed_missing = frame[name].eq("").to_numpy() if name in nullable else False
-        if not (np.isfinite(values) | allowed_missing).all():
-            raise ValueError(f"Invalid D02 numeric column: {name}")
-        frame[name] = values
-    if not frame.load_observed.equals(frame.load.notna()):
-        raise ValueError("D02 raw truth and mask disagree")
-    if not frame.load_input.isna().equals(frame[SCALED_COLUMNS[0]].isna()):
-        raise ValueError("D02 working load and scaled load missingness disagree")
-    if not frame.loc[frame.load_observed, "load"].equals(frame.loc[frame.load_observed, "load_input"]):
-        raise ValueError("D02 working load changed an observed value")
-
-    for name, part in (("train", frame.iloc[:TRAIN_ROWS]), ("validation", frame.iloc[TRAIN_ROWS:])):
-        counts = {
-            "rows": len(part),
-            "missing_truth": int(part.load.isna().sum()),
-            "missing_working_load": int(part.load_input.isna().sum()),
-            "locf_filled": int((part.load.isna() & part.load_input.notna()).sum()),
-            "flags": {column: int(part[column].sum()) for column in FLAG_COLUMNS},
-        }
-        if counts != expected_counts[name]:
-            raise ValueError(f"D02 prepared count mismatch: {name}")
-    return frame
-
-
-def extract_var_train_levels(frame: pd.DataFrame) -> np.ndarray:
-    block = frame.iloc[VAR_START_ROW:VAR_END_ROW + 1]
-    _hourly_index(block.timestamp_utc, VAR_START_UTC, VAR_END_UTC)
-    levels = block.loc[:, list(SCALED_COLUMNS)].to_numpy(dtype=np.float64)
-    if (
-        not block.load_observed.all()
-        or not np.isfinite(block.load).all()
-        or not block.load_input.eq(block.load).all()
-        or not np.isfinite(levels).all()
-        or int(frame.load_observed.iloc[:VAR_START_ROW].sum()) != VAR_EARLIER_OBSERVED
-    ):
-        raise ValueError("D02 VAR observed block, levels or exclusion count mismatch")
-    return levels
-
-
-RV2_VERSION = 1
-ORIGIN_COLUMNS = (
-    "schema_version", "origin_row", "target_row", "context_start_row",
-    "origin_timestamp_utc", "target_timestamp_utc", "split", "load_observed",
-    "context_finite", "eligible", "exclusion_reason", "y_true_mw", "sample_index",
-)
-ARRAY_KEYS = (
-    "schema_version", "target_row", "x_lstm", "x_flat", "x_xgb", "y_true_mw",
-    "var_row", "var_train_levels",
-)
-
-
-def align_origins(frame: pd.DataFrame) -> tuple[list[Origin], dict[str, dict[str, int]]]:
-    if len(frame) != PREFIX_ROWS:
-        raise ValueError("E02 requires the exact prepared train and validation prefix")
-    levels = frame.loc[:, list(SCALED_COLUMNS)].to_numpy(dtype=np.float64)
-    raw = frame.load.to_numpy(dtype=np.float64)
-    observed = frame.load_observed.to_numpy(dtype=bool)
-    origins = [
-        classify_origin(levels, row, raw[row], observed[row])
-        for row in range(CONTEXT_HOURS, PREFIX_ROWS)
-    ]
-    counts = {}
-    for name, expected in (("train", TRAIN_ROWS - CONTEXT_HOURS), ("validation", PREFIX_ROWS - TRAIN_ROWS)):
-        part = [origin for origin in origins if origin.split == name]
-        missing = sum(origin.exclusion_reason == "missing_truth" for origin in part)
-        invalid = sum(origin.exclusion_reason == "invalid_context" for origin in part)
-        eligible = sum(origin.eligible for origin in part)
-        if not eligible or len(part) != expected or missing + invalid + eligible != expected:
-            raise ValueError(f"Empty eligible split or candidate count mismatch: {name}")
-        counts[name] = {
-            "n_considered": expected, "n_missing_excluded": missing,
-            "n_input_excluded": invalid, "n_eligible": eligible,
-        }
-    return origins, counts
-
-
-def _origin_rows(frame: pd.DataFrame, origins: list[Origin]):
-    timestamps = [timestamp.isoformat(timespec="seconds") for timestamp in frame.timestamp_utc]
-    sample_index = 0
-    for origin in origins:
-        yield (
-            str(RV2_VERSION), str(origin.origin_row), str(origin.target_row), str(origin.context_start_row),
-            timestamps[origin.origin_row], timestamps[origin.target_row], origin.split,
-            str(origin.y_true_mw is not None), str(origin.context_finite), str(origin.eligible),
-            origin.exclusion_reason or "",
-            "" if origin.y_true_mw is None else repr(origin.y_true_mw),
-            str(sample_index) if origin.eligible else "",
-        )
-        sample_index += origin.eligible
-
-
-def stage_aligned_inputs(
-    frame: pd.DataFrame, origins: list[Origin], csv_path: Path, npz_path: Path
-) -> None:
-    target_rows = np.array([origin.target_row for origin in origins if origin.eligible], dtype=np.int64)
-    levels = frame.loc[:, list(SCALED_COLUMNS)].to_numpy(dtype=np.float64)
-    sequences, flat, xgb = feature_views(levels, target_rows)
-    var_levels = extract_var_train_levels(frame)
-
-    with csv_path.open("x", encoding="utf-8", newline="") as stream:
-        writer = csv.writer(stream, lineterminator="\n")
-        writer.writerow(ORIGIN_COLUMNS)
-        writer.writerows(_origin_rows(frame, origins))
-    with npz_path.open("xb") as stream:
-        np.savez_compressed(
-            stream,
-            schema_version=np.asarray(RV2_VERSION, dtype=np.uint8),
-            target_row=target_rows,
-            x_lstm=sequences,
-            x_flat=flat,
-            x_xgb=xgb,
-            y_true_mw=frame.load.to_numpy(dtype=np.float64)[target_rows],
-            var_row=np.arange(VAR_START_ROW, VAR_END_ROW + 1, dtype=np.int64),
-            var_train_levels=var_levels,
-        )
-
-
-def validate_aligned_inputs(
-    frame: pd.DataFrame, csv_path: Path, npz_path: Path
-) -> dict[str, tuple[tuple[int, ...], str]]:
-    candidates = np.arange(CONTEXT_HOURS, PREFIX_ROWS, dtype=np.int64)
-    levels = frame.loc[:, list(SCALED_COLUMNS)].to_numpy(dtype=np.float64)
-    context = levels[candidates[:, None] - np.arange(CONTEXT_HOURS, 0, -1)]
-    context_finite = np.isfinite(context).all(axis=(1, 2))
-    observed = frame.load_observed.to_numpy(dtype=bool)[candidates]
-    raw = frame.load.to_numpy(dtype=np.float64)[candidates]
-    eligible = observed & context_finite
-    reasons = np.where(~observed, "missing_truth", np.where(~context_finite, "invalid_context", None))
-    expected_origins = [
-        Origin(row, row - 1, row - CONTEXT_HOURS, split, bool(finite), reason, float(truth) if mask else None)
-        for row, split, finite, reason, truth, mask in zip(
-            candidates, np.where(candidates < TRAIN_ROWS, "train", "validation"),
-            context_finite, reasons, raw, observed,
-        )
-    ]
-    with csv_path.open(encoding="utf-8", newline="") as stream:
-        reader = csv.reader(stream, strict=True)
-        if tuple(next(reader, ())) != ORIGIN_COLUMNS:
-            raise ValueError("RV2 origin CSV schema mismatch")
-        for actual, expected in zip_longest(reader, _origin_rows(frame, expected_origins)):
-            if actual is None or expected is None or tuple(actual) != expected:
-                raise ValueError("RV2 origin CSV candidate or sample alignment mismatch")
-
-    targets = candidates[eligible]
-    context = context[eligible]
-    sequences = context[:, 1:, :]
-    flat = sequences.reshape(len(targets), len(FLAT_FEATURE_NAMES))
-    load = context[:, :, 0]
-    xgb_stats = (
-        load[:, -6:].mean(axis=1),
-        load[:, -24:].std(axis=1, ddof=0),
-        load[:, -1] - load[:, 0],
+    xgb_vec = np.concatenate(
+        [
+            flat96,
+            np.array(
+                [
+                    lag47_load,
+                    lag167_load,
+                    mean6h,
+                    mean24h,
+                    std24h,
+                    min24h,
+                    max24h,
+                    trend24h,
+                    diff1h,
+                    trend168h,
+                ],
+                dtype=np.float64,
+            ),
+            target_cal.astype(np.float64),
+            np.array(
+                [
+                    load_per_temp_k,
+                    hdd_proxy,
+                    cdd_proxy,
+                    temp_x_humidity,
+                    temp_diff_1h,
+                    temp_diff_24h,
+                ],
+                dtype=np.float64,
+            ),
+        ]
     )
-    expected_arrays = {
-        "schema_version": np.asarray(RV2_VERSION, dtype=np.uint8),
-        "target_row": targets,
-        "x_lstm": sequences,
-        "x_flat": flat,
-        "x_xgb": np.column_stack((flat, *xgb_stats)),
-        "y_true_mw": frame.load.to_numpy(dtype=np.float64)[targets],
-        "var_row": np.arange(VAR_START_ROW, VAR_END_ROW + 1, dtype=np.int64),
-        "var_train_levels": extract_var_train_levels(frame),
+    return seq24_base.astype(np.float32), seq24_cal, xgb_vec.astype(np.float32)
+
+
+def materialize_supervised_dataset(
+    prepared_df: pd.DataFrame,
+    train_end_row: int,
+    hdd_base_c: float = 18.0,
+    cdd_base_c: float = 22.0,
+) -> dict[str, Any]:
+    n = len(prepared_df)
+    scaled_levels = prepared_df[SCALED_VARS].to_numpy(dtype=np.float64)
+    raw_work = prepared_df[WORK_VARS].to_numpy(dtype=np.float64)
+    cal_matrix = prepared_df[CALENDAR_COLS].to_numpy(dtype=np.float64)
+    raw_load = prepared_df["load"].to_numpy(dtype=np.float64)
+    observed = prepared_df["load_observed"].to_numpy(dtype=bool)
+    timestamps = pd.DatetimeIndex(prepared_df["timestamp_utc"])
+
+    origins: list[CandidateOrigin] = []
+    eligible_targets: list[int] = []
+
+    for target_row in range(CONTEXT_HOURS, n):
+        split = "train" if target_row <= train_end_row else "validation"
+        obs = bool(observed[target_row])
+        ctx_ok = bool(
+            np.isfinite(scaled_levels[target_row - CONTEXT_HOURS : target_row]).all()
+            and np.isfinite(raw_work[target_row - CONTEXT_HOURS : target_row]).all()
+        )
+        if not obs:
+            reason = "missing_truth"
+        elif not ctx_ok:
+            reason = "invalid_context"
+        else:
+            reason = None
+            eligible_targets.append(target_row)
+
+        origins.append(
+            CandidateOrigin(
+                target_row=target_row,
+                origin_row=target_row - 1,
+                context_start_row=target_row - CONTEXT_HOURS,
+                split=split,
+                load_observed=obs,
+                context_finite=ctx_ok,
+                exclusion_reason=reason,
+                y_true=float(raw_load[target_row]) if obs else None,
+            )
+        )
+
+    m = len(eligible_targets)
+    x_lstm_core = np.empty((m, WINDOW_HOURS, 4), dtype=np.float32)
+    x_lstm_cal = np.empty((m, WINDOW_HOURS, 4 + len(CALENDAR_COLS)), dtype=np.float32)
+    x_xgb = np.empty((m, len(XGB_FULL_FEATURES)), dtype=np.float32)
+    y_true = np.empty(m, dtype=np.float64)
+    target_rows_arr = np.asarray(eligible_targets, dtype=np.int64)
+
+    for idx, trow in enumerate(eligible_targets):
+        seq_core, seq_cal, xgb_vec = build_feature_row_from_arrays(
+            scaled_levels, raw_work, cal_matrix, trow, hdd_base_c, cdd_base_c
+        )
+        x_lstm_core[idx] = seq_core
+        x_lstm_cal[idx] = seq_cal
+        x_xgb[idx] = xgb_vec
+        y_true[idx] = raw_load[trow]
+
+    origin_records = []
+    sample_idx = 0
+    for o in origins:
+        origin_records.append(
+            {
+                "origin_row": o.origin_row,
+                "target_row": o.target_row,
+                "context_start_row": o.context_start_row,
+                "origin_timestamp_utc": timestamps[o.origin_row].isoformat(),
+                "target_timestamp_utc": timestamps[o.target_row].isoformat(),
+                "split": o.split,
+                "load_observed": o.load_observed,
+                "context_finite": o.context_finite,
+                "eligible": o.eligible,
+                "exclusion_reason": o.exclusion_reason or "",
+                "y_true": o.y_true if o.y_true is not None else np.nan,
+                "sample_index": sample_idx if o.eligible else -1,
+            }
+        )
+        if o.eligible:
+            sample_idx += 1
+
+    counts = {}
+    for split_name in ("train", "validation"):
+        part = [o for o in origins if o.split == split_name]
+        counts[split_name] = {
+            "n_considered": len(part),
+            "n_missing_excluded": sum(o.exclusion_reason == "missing_truth" for o in part),
+            "n_input_excluded": sum(o.exclusion_reason == "invalid_context" for o in part),
+            "n_eligible": sum(o.eligible for o in part),
+        }
+
+    var_train_levels = scaled_levels[: train_end_row + 1].copy()
+    if not np.isfinite(var_train_levels).all():
+        var_df = pd.DataFrame(var_train_levels).ffill().bfill()
+        var_train_levels = var_df.to_numpy(dtype=np.float64)
+
+    return {
+        "origin_df": pd.DataFrame(origin_records),
+        "counts": counts,
+        "arrays": {
+            "schema_version": np.asarray(2, dtype=np.uint8),
+            "target_row": target_rows_arr,
+            "x_lstm_core": x_lstm_core,
+            "x_lstm_cal": x_lstm_cal,
+            "x_xgb": x_xgb,
+            "y_true": y_true,
+            "var_train_levels": var_train_levels,
+            "full_scaled_seq": np.concatenate([scaled_levels, cal_matrix], axis=1).astype(np.float32),
+        },
     }
-    shapes = {}
-    with npz_path.open("rb") as stream:
-        with ZipFile(stream) as archive:
-            if sorted(archive.namelist()) != sorted(f"{key}.npy" for key in ARRAY_KEYS):
-                raise ValueError("RV2 NPZ keys are missing, extra or duplicated")
-        stream.seek(0)
-        with np.load(stream, allow_pickle=False) as archive:
-            for key, expected in expected_arrays.items():
-                actual = archive[key]
-                if actual.dtype != expected.dtype or actual.shape != expected.shape:
-                    raise ValueError(f"RV2 NPZ dtype or shape mismatch: {key}")
-                if actual.dtype.kind == "f" and not np.isfinite(actual).all():
-                    raise ValueError(f"RV2 NPZ nonfinite values: {key}")
-                if not np.array_equal(actual, expected):
-                    raise ValueError(f"RV2 NPZ source or sample alignment mismatch: {key}")
-                shapes[key] = (actual.shape, str(actual.dtype))
-    return shapes
+
+
+def format_feature_dictionary_markdown(counts: dict[str, Any]) -> str:
+    subsets = xgb_ablation_subsets()
+    lines = [
+        "# Stage S4 — Causal Feature Dictionary (v2)",
+        "",
+        f"- **Common Causal Context:** `{CONTEXT_HOURS}` hours (`t-167 .. t`) to predict observed raw `load(t+1)`.",
+        f"- **Train Eligible:** `{counts['train']['n_eligible']:,}` / `{counts['train']['n_considered']:,}`",
+        f"- **Validation Eligible:** `{counts['validation']['n_eligible']:,}` / `{counts['validation']['n_considered']:,}`",
+        f"- **Total `XGB_full` Features:** `{len(XGB_FULL_FEATURES)}`",
+        f"- **LSTM Core Shape:** `(N, {WINDOW_HOURS}, 4)` | **LSTM Calendar Shape:** `(N, {WINDOW_HOURS}, {4 + len(CALENDAR_COLS)})`",
+        "",
+        "## Ablation Feature Subsets",
+        "",
+        "| Subset | Count | Description |",
+        "|---|---:|---|",
+        f"| `XGB_load_only` | {len(subsets['XGB_load_only'])} | 24h load lags + lag47/lag167 + 8 rolling load stats |",
+        f"| `XGB_load_weather` | {len(subsets['XGB_load_weather'])} | 96 base 24h multivariate lags + 8 rolling load stats |",
+        f"| `XGB_load_calendar` | {len(subsets['XGB_load_calendar'])} | `XGB_load_only` + 9 local calendar/DST/holiday target features |",
+        f"| `XGB_full` | {len(subsets['XGB_full'])} | All load, weather, calendar/DST/holiday, and 6 cross-variable interactions |",
+        "",
+        "## Cross-Variable Interaction Features (Slide 7, `chapter4-5.pdf`)",
+        "",
+        "- `load_per_temp_k`: `load_input(t) / (temp_input(t) + 273.15)`",
+        "- `hdd_proxy`: `max(0, 18.0 - temp_input(t))` (heating load nonlinearity)",
+        "- `cdd_proxy`: `max(0, temp_input(t) - 22.0)` (cooling load nonlinearity)",
+        "- `temp_x_humidity`: `temp_input(t) * humidity_input(t)`",
+        "- `temp_diff_1h`, `temp_diff_24h`: 1-hour and 24-hour temperature change at origin `t`",
+        "",
+    ]
+    return "\n".join(lines)
