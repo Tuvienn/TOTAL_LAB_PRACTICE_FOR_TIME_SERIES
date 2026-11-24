@@ -8,6 +8,7 @@
     3
   ],
   "input_size": 4,
+  "future_cal_dim": 0,
   "hidden1": 64,
   "hidden2": 32,
   "dropout": 0.0,

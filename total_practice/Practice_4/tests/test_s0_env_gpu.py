@@ -31,8 +31,14 @@ def test_s0_config_and_file_map_integrity():
     assert len(rows) > 0
     paths = [r["path"] for r in rows]
     assert len(paths) == len(set(paths)), "file_map.csv contains duplicate paths"
+    gitignored_raw = {
+        "datasets/raw/electricityloaddiagrams20112014.zip",
+        "datasets/raw/LD2011_2014.txt",
+    }
     for r in rows:
         if r["entry_kind"] == "FILE" and r["existence"] == "EXISTING":
+            if r["path"] in gitignored_raw and not (PRACTICE_ROOT / r["path"]).exists():
+                continue
             assert (PRACTICE_ROOT / r["path"]).exists(), f"Missing file registered as EXISTING: {r['path']}"
 
 
@@ -94,7 +100,7 @@ def test_s0_xgboost_cuda_and_shap_additivity():
         random_state=42,
     )
     model.fit(x, y)
-    preds = model.predict(x[:16])
+    preds = model.get_booster().predict(xgb.DMatrix(x[:16]))
     assert np.isfinite(preds).all()
 
     with tempfile.TemporaryDirectory() as tmp:

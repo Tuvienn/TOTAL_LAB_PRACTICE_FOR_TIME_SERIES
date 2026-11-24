@@ -4,8 +4,8 @@
     {
       "model_a": "XGB_best",
       "model_b": "LSTM_best",
-      "dm_stat": -6.378338197902264,
-      "p_value": 1.7901984222340025e-10,
+      "dm_stat": -4.961688878593586,
+      "p_value": 6.988286893244718e-07,
       "significant_5pct": true,
       "better_model": "XGB_best"
     },
@@ -20,10 +20,10 @@
     {
       "model_a": "LSTM_best",
       "model_b": "VAR",
-      "dm_stat": 1.19298323657642,
-      "p_value": 0.23287593831820608,
+      "dm_stat": -0.4669577630869621,
+      "p_value": 0.6405300970020831,
       "significant_5pct": false,
-      "better_model": "VAR"
+      "better_model": "LSTM_best"
     },
     {
       "model_a": "XGB_best",
@@ -36,17 +36,17 @@
     {
       "model_a": "LSTM_best",
       "model_b": "seasonal168",
-      "dm_stat": -21.292752165006718,
-      "p_value": 1.3251295239961234e-100,
+      "dm_stat": -21.529085285390128,
+      "p_value": 8.315870626683612e-103,
       "significant_5pct": true,
       "better_model": "LSTM_best"
     },
     {
       "model_a": "XGB_4var",
       "model_b": "LSTM_core",
-      "dm_stat": 0.12748563726911744,
-      "p_value": 0.8985560402246654,
-      "significant_5pct": false,
+      "dm_stat": 3.2467894077360393,
+      "p_value": 0.0011671471657543763,
+      "significant_5pct": true,
       "better_model": "LSTM_core"
     }
   ],
@@ -72,12 +72,12 @@
       "lag168": 0.07076404051735605
     },
     "XGB_4var": {
-      "lag24": -0.14568908916329615,
-      "lag168": 0.1328917838446721
+      "lag24": 0.026314380715175216,
+      "lag168": 0.2318164273669018
     },
     "LSTM_best": {
-      "lag24": 0.49646122865455994,
-      "lag168": 0.45054485413528755
+      "lag24": 0.4589368877295748,
+      "lag168": 0.3832398008705943
     },
     "LSTM_core": {
       "lag24": 0.3702543182688443,

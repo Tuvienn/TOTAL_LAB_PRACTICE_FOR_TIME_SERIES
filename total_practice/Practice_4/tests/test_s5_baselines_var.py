@@ -30,7 +30,7 @@ def test_s5_real_baselines_and_var_outputs():
     bm = json.loads(base_metrics_path.read_text(encoding="utf-8"))
     for name in ("persistence", "seasonal24", "seasonal168"):
         assert name in bm
-        assert bm[name]["validation"]["rmse_mw"] > 0
+        assert bm[name]["validation"]["rmse_kw"] > 0
 
     vm = json.loads(var_metrics_path.read_text(encoding="utf-8"))
     sel = vm["selected_tag"]
@@ -38,7 +38,7 @@ def test_s5_real_baselines_and_var_outputs():
     assert sel_info["stable"] is True
     assert sel_info["max_eigenvalue_modulus"] < 1.0
     assert sel_info["train_rows_used"] > 18000, "VAR must train on full train split, not 38% subset"
-    assert sel_info["metrics"]["rmse_mw"] < bm["persistence"]["validation"]["rmse_mw"]
+    assert sel_info["metrics"]["rmse_kw"] < bm["persistence"]["validation"]["rmse_kw"]
 
     with np.load(var_model_path, allow_pickle=False) as saved:
         assert int(saved["p"]) == sel_info["p"]

@@ -212,7 +212,7 @@ def run_xgboost_stage(
             full_model_obj = model
             full_best_iter = best_it
 
-    ablation_df = pd.DataFrame(ablation_records).sort_values("rmse_mw").reset_index(drop=True)
+    ablation_df = pd.DataFrame(ablation_records).sort_values("rmse_kw").reset_index(drop=True)
     ablation_df.to_csv(artifacts_dir / "ablation_summary.csv", index=False)
     best_subset = str(ablation_df.iloc[0]["subset"])
 
@@ -315,7 +315,7 @@ def format_xgboost_markdown(res: dict[str, Any], unit: str = "kW") -> str:
     for r in res["ablation"]:
         lines.append(
             f"| `{r['subset']}` | {r['n_features']} | {r['trees']} | {r['elapsed_seconds']:.2f} | "
-            f"{r['mae_mw']:,.2f} | {r['rmse_mw']:,.2f} | {r['mape_percent']:.4f} |"
+            f"{r['mae_kw']:,.2f} | {r['rmse_kw']:,.2f} | {r['mape_percent']:.4f} |"
         )
     lines += [
         "",

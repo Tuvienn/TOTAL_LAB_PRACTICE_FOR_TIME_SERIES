@@ -337,7 +337,7 @@ def run_s6(config: dict[str, Any]) -> dict[str, Any]:
         [
             ("src/practice_4/models/xgboost_model.py", "model", "RTX 5050 CUDA XGBoost + Expanding CV + Ablation + SHAP", "test_s6_xgboost_gpu.py"),
             ("runs/v2/s6_xgb/artifacts/xgb_metrics.json", "metric evidence", "XGBoost ablation & SHAP summary", "test_s6_xgboost_gpu.py"),
-            ("runs/v2/s6_xgb/artifacts/ablation_summary.csv", "experiment registry", "4-subset XGBoost ablation table", "test_s6_xgboost_gpu.py"),
+            ("runs/v2/s6_xgb/artifacts/ablation_summary.csv", "experiment registry", "5-subset strictly-nested XGBoost ablation table", "test_s6_xgboost_gpu.py"),
             ("runs/v2/s6_xgb/artifacts/shap_importance.csv", "explainability", "SHAP TreeExplainer feature attribution", "test_s6_xgboost_gpu.py"),
             ("outputs/figures/xgb_shap_summary.png", "official figure", "XGBoost SHAP summary plot", "test_s6_xgboost_gpu.py"),
             ("outputs/figures/xgb_shap_dependence_temp.png", "official figure", "XGBoost SHAP temperature dependence", "test_s6_xgboost_gpu.py"),
@@ -357,10 +357,11 @@ def run_s7(config: dict[str, Any]) -> dict[str, Any]:
     with np.load(PRACTICE_ROOT / "datasets/processed/model_inputs.npz", allow_pickle=False) as data:
         full_seq = data["full_scaled_seq"].copy()
         target_rows = data["target_row"].copy()
+        target_cal = data["target_cal"].copy()
         y_true = data["y_true"].copy()
 
     res = run_lstm_stage(
-        full_seq, target_rows, y_true, origin_df, scaler_state, config, art_dir, PRACTICE_ROOT / "outputs/figures"
+        full_seq, target_rows, target_cal, y_true, origin_df, scaler_state, config, art_dir, PRACTICE_ROOT / "outputs/figures"
     )
     write_json(art_dir / "lstm_metrics.json", res)
     (PRACTICE_ROOT / "docs/results/lstm_findings.md").write_text(
@@ -419,14 +420,18 @@ def _build_and_execute_notebook(root: Path) -> Path:
             "outputs": [],
             "source": [
                 "from pathlib import Path\n",
+                "import inspect\n",
                 "import json\n",
                 "import re\n",
+                "import sys\n",
                 "import pandas as pd\n",
                 "from IPython.display import display, Image, Markdown\n",
                 "\n",
                 "ROOT = Path.cwd()\n",
                 "if not (ROOT / 'outputs').exists() and (ROOT.parent / 'outputs').exists():\n",
                 "    ROOT = ROOT.parent\n",
+                "if str(ROOT / 'src') not in sys.path:\n",
+                "    sys.path.insert(0, str(ROOT / 'src'))\n",
                 "\n",
                 "def show_doc(rel_path: str) -> None:\n",
                 "    text = (ROOT / rel_path).read_text(encoding='utf-8')\n",
@@ -435,6 +440,10 @@ def _build_and_execute_notebook(root: Path) -> Path:
                 "        lines = lines[1:]\n",
                 "    cleaned = re.sub(r'^(#{1,4}) ', lambda m: '#' * min(len(m.group(1)) + 1, 5) + ' ', '\\n'.join(lines).strip(), flags=re.M)\n",
                 "    display(Markdown(cleaned))\n",
+                "\n",
+                "def show_code(obj, title: str) -> None:\n",
+                "    src = inspect.getsource(obj).rstrip()\n",
+                "    display(Markdown(f'### {title}\\n\\n```python\\n{src}\\n```'))\n",
                 "\n",
                 "env = json.loads((ROOT / 'runs/v2/s0_env/environment.json').read_text(encoding='utf-8'))\n",
                 "split = json.loads((ROOT / 'datasets/processed/split_manifest.json').read_text(encoding='utf-8'))\n",
@@ -527,6 +536,8 @@ def _build_and_execute_notebook(root: Path) -> Path:
                 "    'Train Std': scaler['std'],\n",
                 "})\n",
                 "display(scaler_df.style.format({'Train Mean': '{:,.4f}', 'Train Std': '{:,.4f}'}).hide(axis='index'))\n",
+                "from practice_4.data.features import xgb_ablation_subsets\n",
+                "show_code(xgb_ablation_subsets, 'Mã nguồn định nghĩa 5 tập con Ablation lồng nhau (`features.py`)')\n",
                 "show_doc('docs/results/feature_dictionary.md')\n",
             ],
         },
@@ -547,6 +558,8 @@ def _build_and_execute_notebook(root: Path) -> Path:
             "execution_count": None,
             "outputs": [],
             "source": [
+                "from practice_4.models.var_model import predict_var_one_step\n",
+                "show_code(predict_var_one_step, 'Mã nguồn dự báo 1 bước VAR sai phân bậc 1 (`var_model.py`)')\n",
                 "show_doc('docs/results/var_results.md')\n",
             ],
         },
@@ -557,7 +570,7 @@ def _build_and_execute_notebook(root: Path) -> Path:
             "source": [
                 "## 5. Mô hình Machine Learning: GPU XGBoost, Ablation & SHAP (S6)\n",
                 "\n",
-                "Huấn luyện trực tiếp trên **NVIDIA RTX 5050 (`device='cuda'`)** với 48 cấu hình Expanding-Window CV, tiếp theo là thí nghiệm Ablation 4 nhóm đặc trưng (`load_only` → `load_weather` → `load_calendar` → `full`) và phân tích đóng góp bằng **SHAP TreeExplainer**.\n",
+                "Huấn luyện trực tiếp trên **NVIDIA RTX 5050 (`device='cuda'`)** với 48 cấu hình Expanding-Window CV, tiếp theo là thí nghiệm Ablation **5 tập con lồng nhau chặt** (`XGB_24h_4var` thuần 24h, `XGB_load_only ⊂ XGB_load_weather ⊂ XGB_full`, `XGB_load_only ⊂ XGB_load_calendar ⊂ XGB_full`) và phân tích đóng góp bằng **SHAP TreeExplainer**.\n",
             ],
         },
         {
@@ -567,6 +580,8 @@ def _build_and_execute_notebook(root: Path) -> Path:
             "execution_count": None,
             "outputs": [],
             "source": [
+                "from practice_4.models.xgboost_model import _feature_group\n",
+                "show_code(_feature_group, 'Mã nguồn phân nhóm đặc trưng SHAP (`xgboost_model.py`)')\n",
                 "show_doc('docs/results/xgboost_findings.md')\n",
                 "for fn in ['xgb_shap_summary.png', 'xgb_shap_dependence_temp.png']:\n",
                 "    display(Image(filename=str(ROOT / 'outputs/figures' / fn)))\n",
@@ -579,7 +594,7 @@ def _build_and_execute_notebook(root: Path) -> Path:
             "source": [
                 "## 6. Mô hình Deep Learning: GPU PyTorch LSTM (S7)\n",
                 "\n",
-                "Xây dựng bằng PyTorch CUDA (`LSTM(64) → LSTM(32) → Linear(1)`) trên RTX 5050, loại bỏ hoàn toàn các workaround CPU chậm trước đây; thực nghiệm đối chứng trên 4 biến thể (`24h_load_only`, `24h_core`, `24h_cal`, `168h_diag`) và kiểm định độ ổn định qua 3 random seeds (`42, 123, 2026`).\n",
+                "Xây dựng bằng PyTorch CUDA (`LSTM(64) → LSTM(32) → concat(target_cal t+1) → Linear(1)`) trên RTX 5050; áp dụng **ngân sách tuning công bằng (4 cấu hình/biến thể = 16 trials)** cho cả 4 biến thể (`24h_load_only`, `24h_core`, `24h_cal`, `168h_diag`) và kiểm định độ ổn định qua 3 random seeds (`42, 123, 2026`).\n",
             ],
         },
         {
@@ -589,6 +604,8 @@ def _build_and_execute_notebook(root: Path) -> Path:
             "execution_count": None,
             "outputs": [],
             "source": [
+                "from practice_4.models.lstm_model import MultivariateLSTM\n",
+                "show_code(MultivariateLSTM, 'Mã nguồn kiến trúc PyTorch CUDA `MultivariateLSTM` (`lstm_model.py`)')\n",
                 "show_doc('docs/results/lstm_findings.md')\n",
                 "display(Image(filename=str(ROOT / 'outputs/figures' / 'lstm_learning_curves.png')))\n",
             ],
@@ -610,9 +627,11 @@ def _build_and_execute_notebook(root: Path) -> Path:
             "execution_count": None,
             "outputs": [],
             "source": [
+                "from practice_4.analysis.error_analysis import diebold_mariano_test\n",
+                "show_code(diebold_mariano_test, 'Mã nguồn kiểm định Diebold–Mariano (`error_analysis.py`)')\n",
                 "display(Markdown('### Bảng xếp hạng chính thức trên tập Test'))\n",
-                "leaderboard = test_metrics[['model', 'n_scored', 'mae_mw', 'rmse_mw', 'mape_percent']].rename(\n",
-                "    columns={'model': 'Model', 'n_scored': 'Scored', 'mae_mw': 'MAE (kW)', 'rmse_mw': 'RMSE (kW)', 'mape_percent': 'MAPE (%)'}\n",
+                "leaderboard = test_metrics[['model', 'n_scored', 'mae_kw', 'rmse_kw', 'mape_percent']].rename(\n",
+                "    columns={'model': 'Model', 'n_scored': 'Scored', 'mae_kw': 'MAE (kW)', 'rmse_kw': 'RMSE (kW)', 'mape_percent': 'MAPE (%)'}\n",
                 ")\n",
                 "display(leaderboard.style.format({'Scored': '{:,}', 'MAE (kW)': '{:,.2f}', 'RMSE (kW)': '{:,.2f}', 'MAPE (%)': '{:.4f}'}).hide(axis='index'))\n",
                 "\n",

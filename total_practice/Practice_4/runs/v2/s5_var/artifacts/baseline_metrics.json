@@ -1,8 +1,8 @@
 {
   "persistence": {
     "train": {
-      "mae_mw": 15463.352997227039,
-      "rmse_mw": 23432.798015088774,
+      "mae_kw": 15463.352997227039,
+      "rmse_kw": 23432.798015088774,
       "mape_percent": 8.585618647018547,
       "mape_null_reason": null,
       "n_considered": 18244,
@@ -12,8 +12,8 @@
       "n_input_excluded": 0
     },
     "validation": {
-      "mae_mw": 14490.636804772947,
-      "rmse_mw": 21265.95201950314,
+      "mae_kw": 14490.636804772947,
+      "rmse_kw": 21265.95201950314,
       "mape_percent": 8.587436296871378,
       "mape_null_reason": null,
       "n_considered": 3945,
@@ -25,8 +25,8 @@
   },
   "seasonal24": {
     "train": {
-      "mae_mw": 7208.387306155949,
-      "rmse_mw": 12522.400727370205,
+      "mae_kw": 7208.387306155949,
+      "rmse_kw": 12522.400727370205,
       "mape_percent": 3.5660565118347827,
       "mape_null_reason": null,
       "n_considered": 18244,
@@ -36,8 +36,8 @@
       "n_input_excluded": 0
     },
     "validation": {
-      "mae_mw": 5792.473722525427,
-      "rmse_mw": 8846.94035651927,
+      "mae_kw": 5792.473722525427,
+      "rmse_kw": 8846.94035651927,
       "mape_percent": 2.9551917833119634,
       "mape_null_reason": null,
       "n_considered": 3945,
@@ -49,8 +49,8 @@
   },
   "seasonal168": {
     "train": {
-      "mae_mw": 12116.225109183251,
-      "rmse_mw": 20506.9769094132,
+      "mae_kw": 12116.225109183251,
+      "rmse_kw": 20506.9769094132,
       "mape_percent": 5.359244129445064,
       "mape_null_reason": null,
       "n_considered": 18244,
@@ -60,8 +60,8 @@
       "n_input_excluded": 0
     },
     "validation": {
-      "mae_mw": 12407.933351651714,
-      "rmse_mw": 21537.947794265823,
+      "mae_kw": 12407.933351651714,
+      "rmse_kw": 21537.947794265823,
       "mape_percent": 5.504512386406771,
       "mape_null_reason": null,
       "n_considered": 3945,

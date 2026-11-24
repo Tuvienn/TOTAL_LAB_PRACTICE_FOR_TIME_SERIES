@@ -177,7 +177,7 @@ def transform_causal(
     country_code: str = "PT",
 ) -> tuple[pd.DataFrame, dict[str, int]]:
     ts = pd.DatetimeIndex(pd.to_datetime(frame["timestamp_utc"], utc=True, errors="raise"))
-    if len(ts) > 1 and not ((ts[1:] - ts[:-1]) == pd.Timedelta(hours=1)).all():
+    if len(ts) > 1 and not ((ts[1:].asi8 - ts[:-1].asi8) == 3_600_000_000_000).all():
         raise ValueError("Non-contiguous hourly timestamps in transform_causal")
     if stream_state.last_timestamp is not None:
         expected_next = pd.Timestamp(stream_state.last_timestamp) + pd.Timedelta(hours=1)

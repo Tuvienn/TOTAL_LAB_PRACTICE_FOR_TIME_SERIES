@@ -2,7 +2,7 @@
 
 Metrics reported in original load unit (`kW`) on identical eligible origins.
 
-| Model | Split | Scored | MAE | RMSE | MAPE (%) |
+| Model | Split | Scored | MAE (kW) | RMSE (kW) | MAPE (%) |
 |---|---|---:|---:|---:|---:|
 | `persistence` | train | 18,244 | 15,463.35 | 23,432.80 | 8.5856 |
 | `persistence` | validation | 3,945 | 14,490.64 | 21,265.95 | 8.5874 |

@@ -10,10 +10,11 @@
 
 | Subset | Count | Description |
 |---|---:|---|
-| `XGB_load_only` | 34 | 24h load lags + lag47/lag167 + 8 rolling load stats |
-| `XGB_load_weather` | 104 | 96 base 24h multivariate lags + 8 rolling load stats |
-| `XGB_load_calendar` | 43 | `XGB_load_only` + 9 local calendar/DST/holiday target features |
-| `XGB_full` | 121 | All load, weather, calendar/DST/holiday, and 6 cross-variable interactions |
+| `XGB_24h_4var` | 102 | Strictly 24h (`t-23..t`) 4-variable lags (96) + 6 pure-24h load stats (exact window match to `LSTM_24h_core`) |
+| `XGB_load_only` | 34 | 24h load lags + `lag47_load`/`lag167_load` + 8 rolling load stats |
+| `XGB_load_weather` | 106 | Strictly nested: `XGB_load_only` + 72 weather lags (24h) |
+| `XGB_load_calendar` | 43 | Strictly nested: `XGB_load_only` + 9 local calendar/DST/holiday features at `t+1` |
+| `XGB_full` | 121 | Strictly nested superset: `XGB_load_weather` + 9 target calendar + 6 cross-variable interactions |
 
 ## Cross-Variable Interaction Features (Slide 7, `chapter4-5.pdf`)
 

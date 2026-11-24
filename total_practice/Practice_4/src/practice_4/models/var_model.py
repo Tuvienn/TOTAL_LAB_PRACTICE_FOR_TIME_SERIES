@@ -149,7 +149,7 @@ def fit_and_evaluate_var(
         selected_tag = "VAR_diff1"
         selection_reason = "Selected VAR_diff1 per chapter4-5.pdf Slide 5 (KPSS rejects level stationarity; diff1 achieves both ADF & KPSS stationarity and stable eigenvalues)."
     else:
-        selected_tag = min(stable_candidates, key=lambda v: v["metrics"]["rmse_mw"])["variant"]
+        selected_tag = min(stable_candidates, key=lambda v: v["metrics"]["rmse_kw"])["variant"]
         selection_reason = "Selected lowest validation RMSE among stable VAR variants."
 
     return {
@@ -191,13 +191,13 @@ def format_var_markdown(result: dict[str, Any], baseline_metrics: dict[str, Any]
     for bname in ("persistence", "seasonal24", "seasonal168"):
         bm = baseline_metrics[bname]["validation"]
         lines.append(
-            f"| `{bname}` | - | - | - | - | {bm['mae_mw']:,.2f} | {bm['rmse_mw']:,.2f} | {bm['mape_percent']:.4f} |"
+            f"| `{bname}` | - | - | - | - | {bm['mae_kw']:,.2f} | {bm['rmse_kw']:,.2f} | {bm['mape_percent']:.4f} |"
         )
     for tag, v in result["variants"].items():
         vm = v["metrics"]
         lines.append(
             f"| `{tag}` | {v['diff_order']} | {v['p']} | {v['max_eigenvalue_modulus']:.6f} | "
-            f"{v['whiteness_p']:.4g} | {vm['mae_mw']:,.2f} | {vm['rmse_mw']:,.2f} | {vm['mape_percent']:.4f} |"
+            f"{v['whiteness_p']:.4g} | {vm['mae_kw']:,.2f} | {vm['rmse_kw']:,.2f} | {vm['mape_percent']:.4f} |"
         )
     lines.append("")
     return "\n".join(lines)

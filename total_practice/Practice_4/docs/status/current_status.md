@@ -1,6 +1,6 @@
 # Current Status — Practice 4 (v2 Overhaul)
 
-- **State:** `COMPLETED` (2026-11-23T16:36:49.671039+00:00)
+- **State:** `COMPLETED` (2026-11-24T18:03:36.595281+00:00)
 - **Stages Executed & Verified:** `S0 → S8` with dedicated per-stage pytest gates.
 - **Dataset:** `UCI ElectricityLoadDiagrams20112014 + Open-Meteo ERA5 Portugal`
 - **Hardware:** NVIDIA GeForce RTX 5050 (PyTorch CUDA + XGBoost CUDA).

@@ -51,7 +51,7 @@ def format_baseline_markdown(metrics: dict[str, dict[str, Any]], unit: str = "kW
         "",
         f"Metrics reported in original load unit (`{unit}`) on identical eligible origins.",
         "",
-        "| Model | Split | Scored | MAE | RMSE | MAPE (%) |",
+        f"| Model | Split | Scored | MAE ({unit}) | RMSE ({unit}) | MAPE (%) |",
         "|---|---|---:|---:|---:|---:|",
     ]
     for model_name in ("persistence", "seasonal24", "seasonal168"):
@@ -59,7 +59,7 @@ def format_baseline_markdown(metrics: dict[str, dict[str, Any]], unit: str = "kW
             m = metrics[model_name][split_name]
             lines.append(
                 f"| `{model_name}` | {split_name} | {m['n_scored']:,} | "
-                f"{m['mae_mw']:,.2f} | {m['rmse_mw']:,.2f} | {m['mape_percent']:.4f} |"
+                f"{m['mae_kw']:,.2f} | {m['rmse_kw']:,.2f} | {m['mape_percent']:.4f} |"
             )
     lines.append("")
     return "\n".join(lines)

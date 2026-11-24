@@ -19,6 +19,14 @@ LAG24_FEATURE_NAMES = tuple(
     for name in BASE_NAMES
 )
 EXTENDED_LOAD_LAGS = ("lag47_load", "lag167_load")
+ROLLING_24H_PURE = (
+    "mean6h",
+    "mean24h",
+    "std24h",
+    "min24h",
+    "max24h",
+    "diff1h",
+)
 ROLLING_LOAD_FEATURES = (
     "mean6h",
     "mean24h",
@@ -50,10 +58,12 @@ XGB_FULL_FEATURES = (
 
 def xgb_ablation_subsets() -> dict[str, list[str]]:
     load_lags_24 = [name for name in LAG24_FEATURE_NAMES if name.endswith("_load")]
+    xgb_24h_4var = [*LAG24_FEATURE_NAMES, *ROLLING_24H_PURE]
     load_only = [*load_lags_24, *EXTENDED_LOAD_LAGS, *ROLLING_LOAD_FEATURES]
-    load_weather = [*LAG24_FEATURE_NAMES, *ROLLING_LOAD_FEATURES]
+    load_weather = [*LAG24_FEATURE_NAMES, *EXTENDED_LOAD_LAGS, *ROLLING_LOAD_FEATURES]
     load_calendar = [*load_only, *TARGET_CALENDAR_FEATURES]
     return {
+        "XGB_24h_4var": xgb_24h_4var,
         "XGB_load_only": load_only,
         "XGB_load_weather": load_weather,
         "XGB_load_calendar": load_calendar,
@@ -213,6 +223,7 @@ def materialize_supervised_dataset(
     m = len(eligible_targets)
     x_lstm_core = np.empty((m, WINDOW_HOURS, 4), dtype=np.float32)
     x_lstm_cal = np.empty((m, WINDOW_HOURS, 4 + len(CALENDAR_COLS)), dtype=np.float32)
+    target_cal_arr = np.empty((m, len(CALENDAR_COLS)), dtype=np.float32)
     x_xgb = np.empty((m, len(XGB_FULL_FEATURES)), dtype=np.float32)
     y_true = np.empty(m, dtype=np.float64)
     target_rows_arr = np.asarray(eligible_targets, dtype=np.int64)
@@ -223,6 +234,7 @@ def materialize_supervised_dataset(
         )
         x_lstm_core[idx] = seq_core
         x_lstm_cal[idx] = seq_cal
+        target_cal_arr[idx] = cal_matrix[trow].astype(np.float32)
         x_xgb[idx] = xgb_vec
         y_true[idx] = raw_load[trow]
 
@@ -271,6 +283,7 @@ def materialize_supervised_dataset(
             "target_row": target_rows_arr,
             "x_lstm_core": x_lstm_core,
             "x_lstm_cal": x_lstm_cal,
+            "target_cal": target_cal_arr,
             "x_xgb": x_xgb,
             "y_true": y_true,
             "var_train_levels": var_train_levels,
@@ -294,10 +307,11 @@ def format_feature_dictionary_markdown(counts: dict[str, Any]) -> str:
         "",
         "| Subset | Count | Description |",
         "|---|---:|---|",
-        f"| `XGB_load_only` | {len(subsets['XGB_load_only'])} | 24h load lags + lag47/lag167 + 8 rolling load stats |",
-        f"| `XGB_load_weather` | {len(subsets['XGB_load_weather'])} | 96 base 24h multivariate lags + 8 rolling load stats |",
-        f"| `XGB_load_calendar` | {len(subsets['XGB_load_calendar'])} | `XGB_load_only` + 9 local calendar/DST/holiday target features |",
-        f"| `XGB_full` | {len(subsets['XGB_full'])} | All load, weather, calendar/DST/holiday, and 6 cross-variable interactions |",
+        f"| `XGB_24h_4var` | {len(subsets['XGB_24h_4var'])} | Strictly 24h (`t-23..t`) 4-variable lags (96) + 6 pure-24h load stats (exact window match to `LSTM_24h_core`) |",
+        f"| `XGB_load_only` | {len(subsets['XGB_load_only'])} | 24h load lags + `lag47_load`/`lag167_load` + 8 rolling load stats |",
+        f"| `XGB_load_weather` | {len(subsets['XGB_load_weather'])} | Strictly nested: `XGB_load_only` + 72 weather lags (24h) |",
+        f"| `XGB_load_calendar` | {len(subsets['XGB_load_calendar'])} | Strictly nested: `XGB_load_only` + 9 local calendar/DST/holiday features at `t+1` |",
+        f"| `XGB_full` | {len(subsets['XGB_full'])} | Strictly nested superset: `XGB_load_weather` + 9 target calendar + 6 cross-variable interactions |",
         "",
         "## Cross-Variable Interaction Features (Slide 7, `chapter4-5.pdf`)",
         "",

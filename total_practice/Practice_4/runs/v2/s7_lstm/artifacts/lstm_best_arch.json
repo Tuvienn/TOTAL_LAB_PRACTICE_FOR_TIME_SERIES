@@ -1,6 +1,6 @@
 {
-  "variant": "LSTM_24h_cal",
-  "window_len": 24,
+  "variant": "LSTM_168h_diag",
+  "window_len": 168,
   "col_indices": [
     0,
     1,
@@ -17,11 +17,12 @@
     12
   ],
   "input_size": 13,
+  "future_cal_dim": 9,
   "hidden1": 64,
   "hidden2": 32,
   "dropout": 0.0,
-  "param_count": 32801,
-  "best_epoch": 19,
+  "param_count": 32810,
+  "best_epoch": 27,
   "lr": 0.001,
   "weight_decay": 0.0
 }

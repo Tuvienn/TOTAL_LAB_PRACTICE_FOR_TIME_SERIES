@@ -9,6 +9,7 @@ from practice_4.data.features import (
     CONTEXT_HOURS,
     XGB_FULL_FEATURES,
     build_feature_row_from_arrays,
+    feature_subset_indices,
     xgb_ablation_subsets,
 )
 from practice_4.data.preprocessing import (
@@ -64,6 +65,24 @@ def test_s4_anti_leakage_future_perturbation_and_calendar():
     assert np.array_equal(c1, c2), "LSTM calendar leaked target/future observations"
     assert np.array_equal(x1, x2), "XGB features leaked target/future observations"
 
+    # Strict 24h window invariance for XGB_24h_4var (must not read before t-23)
+    df_past_mut = df.copy()
+    df_past_mut.loc[: target_row - 25, "load"] = 8888888.0
+    df_past_mut.loc[: target_row - 25, "temp"] = 40.0
+    prep_past, _ = transform_causal(df_past_mut, scaler, CausalStreamState.empty(), "Europe/Lisbon", "PT")
+    _, _, x_past = build_feature_row_from_arrays(
+        prep_past[SCALED_VARS].to_numpy(),
+        prep_past[WORK_VARS].to_numpy(),
+        prep_past[CALENDAR_COLS].to_numpy(),
+        target_row,
+    )
+    subsets = xgb_ablation_subsets()
+    idx_24h = feature_subset_indices(subsets["XGB_24h_4var"])
+    assert np.array_equal(x1[idx_24h], x_past[idx_24h]), "XGB_24h_4var leaked observations older than 24h"
+    assert set(subsets["XGB_load_only"]) < set(subsets["XGB_load_weather"]) < set(subsets["XGB_full"])
+    assert set(subsets["XGB_load_only"]) < set(subsets["XGB_load_calendar"]) < set(subsets["XGB_full"])
+    assert set(subsets["XGB_24h_4var"]) < set(subsets["XGB_load_weather"])
+
     roundtrip = inverse_scale_load(prep1["load_scaled"].to_numpy(), scaler)
     assert np.max(np.abs(roundtrip - prep1["load_input"].to_numpy())) < 1e-8
 
@@ -84,6 +103,7 @@ def test_s4_real_materialized_inputs_and_shapes():
         n_elig = int(origins["eligible"].sum())
         assert data["x_lstm_core"].shape == (n_elig, 24, 4)
         assert data["x_lstm_cal"].shape == (n_elig, 24, 13)
+        assert data["target_cal"].shape == (n_elig, 9)
         assert data["x_xgb"].shape == (n_elig, len(XGB_FULL_FEATURES))
         assert data["y_true"].shape == (n_elig,)
         assert data["var_train_levels"].shape == (split["splits"]["train"]["row_count"], 4)

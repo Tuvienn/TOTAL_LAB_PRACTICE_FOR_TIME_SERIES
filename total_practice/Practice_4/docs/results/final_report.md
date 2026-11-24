@@ -12,9 +12,9 @@
 |---|---:|---:|---:|
 | `XGB_best` | 3,564.37 | 5,499.38 | 1.7776 |
 | `LSTM_core` | 4,156.48 | 5,872.02 | 2.1322 |
-| `XGB_4var` | 3,756.09 | 5,889.87 | 1.8802 |
+| `LSTM_best` | 4,301.28 | 6,191.98 | 2.1765 |
 | `VAR` | 4,183.93 | 6,259.22 | 2.0989 |
-| `LSTM_best` | 4,557.90 | 6,433.83 | 2.4024 |
+| `XGB_4var` | 4,129.84 | 6,328.82 | 2.0922 |
 | `seasonal24` | 7,716.33 | 13,502.14 | 3.8434 |
 | `seasonal168` | 12,247.95 | 19,011.91 | 5.5608 |
 | `persistence` | 16,345.12 | 25,507.75 | 8.7756 |
@@ -28,22 +28,23 @@ Best model on held-out test: **`XGB_best`** (MAE `3,564.37`, RMSE `5,499.38 kW`,
 - SHAP Group Attribution trên `XGB_full`: `temperature_lags` = `1,702.7`, `humidity_lags` = `739.9`, `wind_speed_lags` = `324.7`, `cross_interactions` = `2,700.7` (kW). Lưu ý đây là liên hệ dự báo, không chứng minh nhân quả.
 
 ### Q2. Khi nào VAR thất bại?
-- Sau khi sửa flaw v1 (sai phân `d=1` theo Slide 5 và train 100% tập train `18,411` giờ), `VAR(24)` đạt ổn định (`max |λ|=0.9998 < 1`) nhưng vẫn kém ML/DL vì giả định tuyến tính không nắm được tương tác phi tuyến nhiệt độ–tải, hiệu ứng ngày lễ (`is_holiday`) và biến động mạnh lúc chuyển pha giờ cao điểm.
+- Sau khi áp dụng sai phân `d=1` theo Slide 5 (`chapter4-5.pdf`) và train 100% tập train (`18,411` giờ), `VAR(24)` đạt ổn định (`max |λ|=0.9998 < 1`, Test RMSE `6,259.22 kW`) nhưng vẫn kém `XGB_best` (`5,499.38 kW`, DM `p = 1.837e-10`) vì giả định tuyến tính không nắm được tương tác phi tuyến nhiệt độ–tải, hiệu ứng ngày lễ (`is_holiday`) và biến động mạnh lúc chuyển pha giờ cao điểm.
 
 ### Q3. XGBoost học được thông tin gì từ thời tiết và feature engineering?
-- Ablation trên Validation: `XGB_load_only` RMSE `4,577.17` → `XGB_load_calendar` `4,463.62` → `XGB_full` `4,358.22` (kW); `XGB_load_weather` (4 biến thuần) đạt `4,514.44`.
-- SHAP xác nhận lịch sử phụ tải ngắn/tuần và đặc trưng lịch (`calendar_dst_holiday`) đóng góp lớn nhất, trong khi `hdd_proxy`/`cdd_proxy` và nhiệt độ tinh chỉnh phản ứng phi tuyến theo mùa.
+- Ablation lồng nhau chặt trên Validation (kW): `XGB_24h_4var` (thuần 24h) `5,122.91` → `XGB_load_only` (thêm lag 48h/168h) `4,577.17` → `XGB_load_weather` (+72 lags thời tiết) `4,513.26` → `XGB_load_calendar` (+9 lịch `t+1`) `4,463.62` → **`XGB_full` (+6 tương tác chéo) `4,358.22`**.
+- SHAP xác nhận lịch sử phụ tải ngắn/tuần (`lag23_load`, `lag167_load`, `lag47_load`) đóng góp nền tảng, trong khi `load_per_temp_k`, `lag00_temperature`, `temp_diff_24h` và `target_hour_cos` tinh chỉnh phản ứng phi tuyến theo mùa và giờ trong ngày.
 
 ### Q4. LSTM thể hiện chu kỳ ngày/tuần như thế nào?
-- Thực nghiệm đối chứng trực tiếp trên RTX 5050 giải quyết dứt điểm hạn chế v1: `LSTM_24h_core` (24h thuần 4 biến) đạt Val RMSE `5,928.51 kW` vs `LSTM_24h_cal` (thêm kênh lịch) `5,903.38 kW` vs `LSTM_168h_diag` (cửa sổ 168h = 1 tuần) `6,444.57 kW`. Điều này chứng minh nhận định ở Slide 10 (`chapter4-5.pdf`): LSTM xử lý tốt chu kỳ ngắn/ngày 24h nhưng suy giảm trên chuỗi rất dài 168 bước.
-- Residual ACF trên Test: `LSTM_best` vẫn còn tự tương quan ở lag-24 (`0.4965`) và lag-168 (`0.4505`), trong khi `XGB_best` khử gần như triệt để (`-0.0357` và `0.0708`).
+- Khi cấp ngân sách tuning công bằng (4 cấu hình cho mỗi biến thể) và nối đặc trưng lịch tất định tại `t+1` vào tầng cuối (`future_cal_dim=9`), kết quả Validation (kW) là: `LSTM_24h_load_only` `5,986.57` | `LSTM_24h_core` `5,928.51` | `LSTM_24h_cal` `6,054.99` | `LSTM_168h_diag` `5,891.69` (biến thể thắng Validation: **`LSTM_168h_diag`**).
+- Residual ACF trên Test: `LSTM_best` (`LSTM_168h_diag`) có ACF lag-24 = `0.4589` và lag-168 = `0.3832` (so với `LSTM_core`: `0.3703` / `0.3753`), trong khi `XGB_best` khử gần như triệt để (`-0.0357` và `0.0708`).
 
 ### Q5. LSTM có bị overfitting không?
-- Trên validation, `LSTM_24h_cal` chọn thử nghiệm `lr1e3_d00` (`dropout=0.0`, `weight_decay=0.0`) với `ReduceLROnPlateau` và `EarlyStopping` (`patience=10`, dừng ở epoch `29`, khôi phục best epoch `19`, Train MSE scaled = `0.005131` vs Val MSE scaled = `0.005427`).
-- Tuy nhiên khi đánh giá trên Test, `LSTM_24h_cal` (`6,433.83 kW`) tổng quát hóa kém hơn `LSTM_core` (`5,872.02 kW`), cho thấy việc mở rộng từ 4 lên 13 kênh mà không có `dropout` đã dẫn tới hiện tượng quá khớp nhẹ vào giai đoạn validation (và biến động giữa các seed: `6,025.87 ± 174.77 kW`).
+- Trên Validation, `LSTM_168h_diag` chọn cấu hình `lr1e3_d00` (`dropout=0.0`, `weight_decay=0.0`) với `ReduceLROnPlateau` và `EarlyStopping` (`patience=10`, dừng ở epoch `37`, khôi phục best epoch `27`, Train MSE scaled = `0.004058` vs Val MSE scaled = `0.005405`).
+- Tuy nhiên khi đánh giá trên Test, `LSTM_168h_diag` (`6,191.98 kW`) tổng quát hóa kém hơn `LSTM_core` (`5,872.02 kW`), cho thấy việc mở rộng lên 13 kênh chuỗi + 9 kênh lịch đích với `dropout=0.0` đã dẫn tới quá khớp nhẹ vào giai đoạn validation (kèm biến động giữa các seed: `6,027.62 ± 144.62 kW`).
 
 ### Q6. Machine Learning (XGBoost) và Deep Learning (LSTM) khác nhau thế nào?
-- Khi dùng đúng 4 biến thô (`XGB_4var` vs `LSTM_core`), hai mô hình cho kết quả tương đương về mặt thống kê (`5,889.87` vs `5,872.02 kW`, DM `p = 0.8986`). Tuy nhiên khi bổ sung đầy đủ đặc trưng bảng (lags tuần `lag47`/`lag167`, calendar/DST/holiday, và tương tác phi tuyến `load_per_temp_k`, `hdd_proxy`/`cdd_proxy`), `XGB_full` vươn lên dẫn đầu vượt trội (`5,499.38 kW`, DM `p = 1.79e-10`), giải thích minh bạch qua SHAP và train chỉ mất `3.41s` trên RTX 5050.
+- Khi giới hạn công bằng trong đúng cửa sổ 24h thuần 4 biến (`XGB_24h_4var` vs `LSTM_core`, không dùng lag tuần hay lịch), `LSTM_core` nhỉnh hơn có ý nghĩa thống kê (`6,328.82` vs `5,872.02 kW`, DM `p = 0.001167`).
+- Khi mở khóa đầy đủ đặc trưng bảng (lags tuần `lag47`/`lag167`, lịch/DST/ngày lễ `t+1`, tương tác phi tuyến `load_per_temp_k`, `hdd_proxy`/`cdd_proxy`), `XGB_best` (`5,499.38 kW`) vượt trội `LSTM_best` (`6,191.98 kW`, DM stat = `-4.9617`, `p = 6.988e-07`), giải thích minh bạch bằng SHAP và chỉ tốn `3.38s` huấn luyện trên RTX 5050.
 
 ## 4. Giới hạn và Rủi ro còn lại
 

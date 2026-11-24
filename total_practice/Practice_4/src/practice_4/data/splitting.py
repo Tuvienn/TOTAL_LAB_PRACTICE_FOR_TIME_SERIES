@@ -54,7 +54,7 @@ def partition(
     index = pd.DatetimeIndex(pd.to_datetime(values, utc=True, errors="raise"))
     if not index.is_monotonic_increasing or not index.is_unique:
         raise ValueError("Timeline must be sorted and unique")
-    if len(index) > 1 and not ((index[1:] - index[:-1]) == pd.Timedelta(hours=1)).all():
+    if len(index) > 1 and not ((index[1:].asi8 - index[:-1].asi8) == 3_600_000_000_000).all():
         raise ValueError("Timeline must be contiguous hourly")
 
     n = len(index)

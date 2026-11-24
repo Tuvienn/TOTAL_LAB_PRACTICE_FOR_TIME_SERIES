@@ -32,9 +32,9 @@ def test_s8_walk_forward_metrics_dm_and_executed_notebook():
         pd.testing.assert_frame_equal(ref_keys, cur)
 
     tm = pd.read_csv(metrics_path).set_index("model")
-    assert tm.loc["XGB_best", "rmse_mw"] < tm.loc["persistence", "rmse_mw"]
-    assert tm.loc["LSTM_best", "rmse_mw"] < tm.loc["persistence", "rmse_mw"]
-    assert tm.loc["VAR", "rmse_mw"] < tm.loc["persistence", "rmse_mw"]
+    assert tm.loc["XGB_best", "rmse_kw"] < tm.loc["persistence", "rmse_kw"]
+    assert tm.loc["LSTM_best", "rmse_kw"] < tm.loc["persistence", "rmse_kw"]
+    assert tm.loc["VAR", "rmse_kw"] < tm.loc["persistence", "rmse_kw"]
 
     dm = pd.read_csv(dm_path)
     assert len(dm) >= 4

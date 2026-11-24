@@ -30,7 +30,7 @@ def uci_local_to_utc_hourly(
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     ts_col = frame.columns[0]
     raw_ts = pd.to_datetime(frame[ts_col], format="%Y-%m-%d %H:%M:%S", errors="raise")
-    hour_start_local = (raw_ts - pd.Timedelta(minutes=15)).dt.floor("h")
+    hour_start_local = (raw_ts - np.timedelta64(15, "m")).dt.floor("h")
 
     client_values = frame.iloc[:, 1:].to_numpy(dtype=np.float64)
     client_names = list(frame.columns[1:])

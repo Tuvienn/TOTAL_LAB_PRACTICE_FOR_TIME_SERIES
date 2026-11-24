@@ -27,19 +27,28 @@ class SequenceWindowDataset(Dataset):
         y_scaled: np.ndarray,
         window_len: int,
         col_indices: list[int],
+        target_cal: np.ndarray | None = None,
     ):
         self.full_seq = full_seq[:, col_indices].astype(np.float32, copy=False)
         self.target_rows = target_rows.astype(np.int64, copy=False)
         self.y_scaled = y_scaled.astype(np.float32, copy=False)
         self.window_len = int(window_len)
+        if target_cal is None:
+            self.target_cal = np.zeros((len(self.target_rows), 0), dtype=np.float32)
+        else:
+            self.target_cal = target_cal.astype(np.float32, copy=False)
 
     def __len__(self) -> int:
         return len(self.target_rows)
 
-    def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         trow = int(self.target_rows[idx])
         window = self.full_seq[trow - self.window_len : trow]
-        return torch.from_numpy(window.copy()), torch.tensor(self.y_scaled[idx], dtype=torch.float32)
+        return (
+            torch.from_numpy(window.copy()),
+            torch.from_numpy(self.target_cal[idx].copy()),
+            torch.tensor(self.y_scaled[idx], dtype=torch.float32),
+        )
 
 
 class MultivariateLSTM(nn.Module):
@@ -49,23 +58,29 @@ class MultivariateLSTM(nn.Module):
         hidden1: int = 64,
         hidden2: int = 32,
         dropout: float = 0.0,
+        future_cal_dim: int = 0,
     ):
         super().__init__()
         self.input_size = int(input_size)
         self.hidden1 = int(hidden1)
         self.hidden2 = int(hidden2)
         self.dropout_rate = float(dropout)
+        self.future_cal_dim = int(future_cal_dim)
         self.lstm1 = nn.LSTM(input_size, hidden1, batch_first=True)
         self.drop1 = nn.Dropout(dropout) if dropout > 0.0 else nn.Identity()
         self.lstm2 = nn.LSTM(hidden1, hidden2, batch_first=True)
         self.drop2 = nn.Dropout(dropout) if dropout > 0.0 else nn.Identity()
-        self.head = nn.Linear(hidden2, 1)
+        self.head = nn.Linear(hidden2 + self.future_cal_dim, 1)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, future_cal: torch.Tensor | None = None) -> torch.Tensor:
         out, _ = self.lstm1(x)
         out = self.drop1(out)
         out, _ = self.lstm2(out)
         out = self.drop2(out[:, -1, :])
+        if self.future_cal_dim > 0:
+            if future_cal is None or future_cal.shape[-1] != self.future_cal_dim:
+                raise ValueError(f"Expected future_cal with dim {self.future_cal_dim}")
+            out = torch.cat([out, future_cal], dim=-1)
         return self.head(out).squeeze(-1)
 
 
@@ -77,17 +92,26 @@ def count_trainable_parameters(model: nn.Module) -> int:
 def predict_dataset(model: nn.Module, loader: DataLoader, device: torch.device) -> np.ndarray:
     model.eval()
     chunks = []
-    for xb, _ in loader:
+    for xb, fb, _ in loader:
         xb = xb.to(device, non_blocking=True)
-        chunks.append(model(xb).detach().cpu().numpy().astype(np.float64))
+        f_in = fb.to(device, non_blocking=True) if fb.shape[-1] > 0 else None
+        chunks.append(model(xb, f_in).detach().cpu().numpy().astype(np.float64))
     return np.concatenate(chunks, axis=0)
 
 
 @torch.no_grad()
-def predict_single_window(model: nn.Module, window: np.ndarray, device: torch.device) -> float:
+def predict_single_window(
+    model: nn.Module,
+    window: np.ndarray,
+    device: torch.device,
+    future_cal: np.ndarray | None = None,
+) -> float:
     model.eval()
     tensor = torch.from_numpy(np.asarray(window, dtype=np.float32)[None, ...]).to(device)
-    return float(model(tensor).detach().cpu().item())
+    f_tensor = None
+    if future_cal is not None and len(future_cal) > 0:
+        f_tensor = torch.from_numpy(np.asarray(future_cal, dtype=np.float32)[None, ...]).to(device)
+    return float(model(tensor, f_tensor).detach().cpu().item())
 
 
 def train_single_lstm(
@@ -102,6 +126,7 @@ def train_single_lstm(
     batch_size: int,
     seed: int,
     device: torch.device,
+    future_cal_dim: int = 0,
 ) -> dict[str, Any]:
     set_deterministic_seed(seed)
     gen = torch.Generator()
@@ -111,7 +136,13 @@ def train_single_lstm(
     train_eval_loader = DataLoader(train_ds, batch_size=batch_size * 2, shuffle=False)
     val_loader = DataLoader(val_ds, batch_size=batch_size * 2, shuffle=False)
 
-    model = MultivariateLSTM(input_size=input_size, hidden1=64, hidden2=32, dropout=dropout).to(device)
+    model = MultivariateLSTM(
+        input_size=input_size,
+        hidden1=64,
+        hidden2=32,
+        dropout=dropout,
+        future_cal_dim=future_cal_dim,
+    ).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="min", factor=0.5, patience=max(3, patience // 3), min_lr=1e-5
@@ -129,11 +160,12 @@ def train_single_lstm(
         model.train()
         tr_loss_sum = 0.0
         tr_count = 0
-        for xb, yb in train_loader:
+        for xb, fb, yb in train_loader:
             xb = xb.to(device, non_blocking=True)
+            f_in = fb.to(device, non_blocking=True) if fb.shape[-1] > 0 else None
             yb = yb.to(device, non_blocking=True)
             optimizer.zero_grad(set_to_none=True)
-            pred = model(xb)
+            pred = model(xb, f_in)
             loss = criterion(pred, yb)
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=5.0)
@@ -146,10 +178,11 @@ def train_single_lstm(
         va_loss_sum = 0.0
         va_count = 0
         with torch.no_grad():
-            for xb, yb in val_loader:
+            for xb, fb, yb in val_loader:
                 xb = xb.to(device, non_blocking=True)
+                f_in = fb.to(device, non_blocking=True) if fb.shape[-1] > 0 else None
                 yb = yb.to(device, non_blocking=True)
-                pred = model(xb)
+                pred = model(xb, f_in)
                 loss = criterion(pred, yb)
                 bs = len(yb)
                 va_loss_sum += float(loss.item()) * bs
@@ -192,6 +225,7 @@ def train_single_lstm(
 def run_lstm_stage(
     full_scaled_seq: np.ndarray,
     target_rows: np.ndarray,
+    target_cal: np.ndarray,
     y_true: np.ndarray,
     origin_df: pd.DataFrame,
     scaler_state: dict[str, Any],
@@ -219,15 +253,17 @@ def run_lstm_stage(
     n_invalid = int((val_all["exclusion_reason"] == "invalid_context").sum())
 
     tr_targets, va_targets = target_rows[train_mask], target_rows[val_mask]
+    tr_tcal, va_tcal = target_cal[train_mask], target_cal[val_mask]
     tr_y_s, va_y_s = y_scaled[train_mask], y_scaled[val_mask]
     va_y_orig = y_true[val_mask]
 
     n_total_cols = full_scaled_seq.shape[1]
+    n_cal_cols = int(target_cal.shape[1])
     variant_specs = {
-        "LSTM_24h_load_only": {"window_len": 24, "cols": [0]},
-        "LSTM_24h_core": {"window_len": 24, "cols": [0, 1, 2, 3]},
-        "LSTM_24h_cal": {"window_len": 24, "cols": list(range(n_total_cols))},
-        "LSTM_168h_diag": {"window_len": 168, "cols": list(range(n_total_cols))},
+        "LSTM_24h_load_only": {"window_len": 24, "cols": [0], "future_cal_dim": 0},
+        "LSTM_24h_core": {"window_len": 24, "cols": [0, 1, 2, 3], "future_cal_dim": 0},
+        "LSTM_24h_cal": {"window_len": 24, "cols": list(range(n_total_cols)), "future_cal_dim": n_cal_cols},
+        "LSTM_168h_diag": {"window_len": 168, "cols": list(range(n_total_cols)), "future_cal_dim": n_cal_cols},
     }
 
     trial_records = []
@@ -235,9 +271,15 @@ def run_lstm_stage(
     best_per_variant: dict[str, dict[str, Any]] = {}
 
     for variant_name, spec in variant_specs.items():
-        tr_ds = SequenceWindowDataset(full_scaled_seq, tr_targets, tr_y_s, spec["window_len"], spec["cols"])
-        va_ds = SequenceWindowDataset(full_scaled_seq, va_targets, va_y_s, spec["window_len"], spec["cols"])
-        grid_to_run = lstm_cfg["grid"] if variant_name in ("LSTM_24h_core", "LSTM_24h_cal") else [lstm_cfg["grid"][1]]
+        fdim = int(spec["future_cal_dim"])
+        tr_ds = SequenceWindowDataset(
+            full_scaled_seq, tr_targets, tr_y_s, spec["window_len"], spec["cols"], tr_tcal if fdim > 0 else None
+        )
+        va_ds = SequenceWindowDataset(
+            full_scaled_seq, va_targets, va_y_s, spec["window_len"], spec["cols"], va_tcal if fdim > 0 else None
+        )
+        # Fair tuning budget: evaluate the exact same hyperparameter grid for all 4 variants
+        grid_to_run = lstm_cfg["grid"]
         best_run = None
 
         for hp in grid_to_run:
@@ -253,6 +295,7 @@ def run_lstm_stage(
                 batch_size=int(lstm_cfg["batch_size"]),
                 seed=seed,
                 device=device,
+                future_cal_dim=fdim,
             )
             preds_orig = inverse_scale_load(out["val_preds_scaled"], scaler_state)
             scores = calculate_metrics(va_y_orig, preds_orig, n_missing, n_invalid)
@@ -261,6 +304,7 @@ def run_lstm_stage(
                 "trial_id": f"{variant_name}_{hp['trial_id']}",
                 "window_len": spec["window_len"],
                 "input_size": len(spec["cols"]),
+                "future_cal_dim": fdim,
                 "lr": float(hp["lr"]),
                 "dropout": float(hp["dropout"]),
                 "weight_decay": float(hp["weight_decay"]),
@@ -276,22 +320,23 @@ def run_lstm_stage(
             for row in out["history"]:
                 histories.append({"variant": variant_name, "trial_id": rec["trial_id"], **row})
 
-            if best_run is None or scores["rmse_mw"] < best_run["record"]["rmse_mw"]:
+            if best_run is None or scores["rmse_kw"] < best_run["record"]["rmse_kw"]:
                 best_run = {"record": rec, "out": out, "preds_orig": preds_orig, "spec": spec, "hp": hp}
 
         assert best_run is not None
         best_per_variant[variant_name] = best_run
 
-    trials_df = pd.DataFrame(trial_records).sort_values("rmse_mw").reset_index(drop=True)
+    trials_df = pd.DataFrame(trial_records).sort_values("rmse_kw").reset_index(drop=True)
     trials_df.to_csv(artifacts_dir / "trials.csv", index=False)
     pd.DataFrame(histories).to_csv(artifacts_dir / "training_history.csv", index=False)
 
-    winner_name = min(best_per_variant, key=lambda k: best_per_variant[k]["record"]["rmse_mw"])
+    winner_name = min(best_per_variant, key=lambda k: best_per_variant[k]["record"]["rmse_kw"])
     winner = best_per_variant[winner_name]
 
     saved_checkpoints = {}
     for save_key, vname in (("lstm_best", winner_name), ("lstm_core", "LSTM_24h_core")):
         entry = best_per_variant[vname]
+        fdim = int(entry["spec"]["future_cal_dim"])
         ckpt_path = artifacts_dir / f"{save_key}.pt"
         torch.save(entry["out"]["state_dict"], ckpt_path)
         meta = {
@@ -299,6 +344,7 @@ def run_lstm_stage(
             "window_len": entry["spec"]["window_len"],
             "col_indices": entry["spec"]["cols"],
             "input_size": len(entry["spec"]["cols"]),
+            "future_cal_dim": fdim,
             "hidden1": 64,
             "hidden2": 32,
             "dropout": float(entry["hp"]["dropout"]),
@@ -314,10 +360,16 @@ def run_lstm_stage(
             hidden1=meta["hidden1"],
             hidden2=meta["hidden2"],
             dropout=meta["dropout"],
+            future_cal_dim=fdim,
         ).to(device)
         reloaded.load_state_dict(torch.load(ckpt_path, map_location=device, weights_only=True))
         va_ds = SequenceWindowDataset(
-            full_scaled_seq, va_targets, va_y_s, meta["window_len"], meta["col_indices"]
+            full_scaled_seq,
+            va_targets,
+            va_y_s,
+            meta["window_len"],
+            meta["col_indices"],
+            va_tcal if fdim > 0 else None,
         )
         reloaded_batch = inverse_scale_load(
             predict_dataset(reloaded, DataLoader(va_ds, batch_size=256, shuffle=False), device),
@@ -325,7 +377,10 @@ def run_lstm_stage(
         )
         batch_diff = float(np.max(np.abs(reloaded_batch - entry["preds_orig"])))
         w0 = full_scaled_seq[int(va_targets[0]) - meta["window_len"] : int(va_targets[0]), meta["col_indices"]]
-        single_pred = float(inverse_scale_load(np.array([predict_single_window(reloaded, w0, device)]), scaler_state)[0])
+        f0 = va_tcal[0] if fdim > 0 else None
+        single_pred = float(
+            inverse_scale_load(np.array([predict_single_window(reloaded, w0, device, f0)]), scaler_state)[0]
+        )
         single_diff = abs(single_pred - float(reloaded_batch[0]))
         if batch_diff > 1e-2 or single_diff > 1e-2:
             raise ValueError(f"LSTM reload parity failure ({save_key}): batch={batch_diff}, single={single_diff}")
@@ -340,16 +395,31 @@ def run_lstm_stage(
     seed_rows = []
     win_spec = winner["spec"]
     win_hp = winner["hp"]
-    tr_win = SequenceWindowDataset(full_scaled_seq, tr_targets, tr_y_s, win_spec["window_len"], win_spec["cols"])
-    va_win = SequenceWindowDataset(full_scaled_seq, va_targets, va_y_s, win_spec["window_len"], win_spec["cols"])
+    win_fdim = int(win_spec["future_cal_dim"])
+    tr_win = SequenceWindowDataset(
+        full_scaled_seq,
+        tr_targets,
+        tr_y_s,
+        win_spec["window_len"],
+        win_spec["cols"],
+        tr_tcal if win_fdim > 0 else None,
+    )
+    va_win = SequenceWindowDataset(
+        full_scaled_seq,
+        va_targets,
+        va_y_s,
+        win_spec["window_len"],
+        win_spec["cols"],
+        va_tcal if win_fdim > 0 else None,
+    )
     for s in lstm_cfg["seeds_stability"]:
         if int(s) == seed:
             seed_rows.append(
                 {
                     "seed": int(s),
                     "best_epoch": winner["record"]["best_epoch"],
-                    "mae_mw": winner["record"]["mae_mw"],
-                    "rmse_mw": winner["record"]["rmse_mw"],
+                    "mae_kw": winner["record"]["mae_kw"],
+                    "rmse_kw": winner["record"]["rmse_kw"],
                     "mape_percent": winner["record"]["mape_percent"],
                 }
             )
@@ -366,6 +436,7 @@ def run_lstm_stage(
             batch_size=int(lstm_cfg["batch_size"]),
             seed=int(s),
             device=device,
+            future_cal_dim=win_fdim,
         )
         preds_s = inverse_scale_load(out_s["val_preds_scaled"], scaler_state)
         sc = calculate_metrics(va_y_orig, preds_s, n_missing, n_invalid)
@@ -373,8 +444,8 @@ def run_lstm_stage(
             {
                 "seed": int(s),
                 "best_epoch": out_s["best_epoch"],
-                "mae_mw": sc["mae_mw"],
-                "rmse_mw": sc["rmse_mw"],
+                "mae_kw": sc["mae_kw"],
+                "rmse_kw": sc["rmse_kw"],
                 "mape_percent": sc["mape_percent"],
             }
         )
@@ -423,15 +494,16 @@ def format_lstm_markdown(res: dict[str, Any], unit: str = "kW") -> str:
         "",
         "## 1. Variant & Ablation Comparison (Validation)",
         "",
-        f"| Variant | Window | Input Dim | Params | Best/Stop Epoch | Fit (s) | Train MSE (scaled) | Val MSE (scaled) | MAE ({unit}) | RMSE ({unit}) | MAPE (%) |",
-        "|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|",
+        f"| Variant | Window | Seq Dim | Target Cal (t+1) | Best Trial | Params | Best/Stop Epoch | Fit (s) | Train MSE (scaled) | Val MSE (scaled) | MAE ({unit}) | RMSE ({unit}) | MAPE (%) |",
+        "|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|---:|",
     ]
     for r in res["variants_summary"]:
+        trial_short = r["trial_id"].replace(f"{r['variant']}_", "")
         lines.append(
-            f"| `{r['variant']}` | {r['window_len']}h | {r['input_size']} | {r['param_count']:,} | "
+            f"| `{r['variant']}` | {r['window_len']}h | {r['input_size']} | {r.get('future_cal_dim', 0)} | `{trial_short}` | {r['param_count']:,} | "
             f"{r['best_epoch']}/{r['stop_epoch']} | {r['elapsed_seconds']:.2f} | "
             f"{r['restored_train_mse_scaled']:.6f} | {r['restored_val_mse_scaled']:.6f} | "
-            f"{r['mae_mw']:,.2f} | {r['rmse_mw']:,.2f} | {r['mape_percent']:.4f} |"
+            f"{r['mae_kw']:,.2f} | {r['rmse_kw']:,.2f} | {r['mape_percent']:.4f} |"
         )
     lines += [
         "",
@@ -442,9 +514,9 @@ def format_lstm_markdown(res: dict[str, Any], unit: str = "kW") -> str:
     ]
     rmses = []
     for row in res["seed_stability"]:
-        rmses.append(row["rmse_mw"])
+        rmses.append(row["rmse_kw"])
         lines.append(
-            f"| {row['seed']} | {row['best_epoch']} | {row['mae_mw']:,.2f} | {row['rmse_mw']:,.2f} | {row['mape_percent']:.4f} |"
+            f"| {row['seed']} | {row['best_epoch']} | {row['mae_kw']:,.2f} | {row['rmse_kw']:,.2f} | {row['mape_percent']:.4f} |"
         )
     lines += [
         "",

@@ -73,7 +73,7 @@ def run_locked_test_walk_forward(
     xgb_best_name = xgb_meta["best_subset"]
     subsets = xgb_ablation_subsets()
     xgb_boosters: dict[str, tuple[xgb.Booster, list[int], list[str]]] = {}
-    for label, subset_key in (("XGB_best", xgb_best_name), ("XGB_4var", "XGB_load_weather")):
+    for label, subset_key in (("XGB_best", xgb_best_name), ("XGB_4var", "XGB_24h_4var")):
         b = xgb.Booster()
         b.load_model(root / "runs/v2/s6_xgb/artifacts" / f"{subset_key}.json")
         xgb_boosters[label] = (b, feature_subset_indices(subsets[subset_key]), subsets[subset_key])
@@ -87,6 +87,7 @@ def run_locked_test_walk_forward(
             hidden1=int(arch["hidden1"]),
             hidden2=int(arch["hidden2"]),
             dropout=float(arch["dropout"]),
+            future_cal_dim=int(arch.get("future_cal_dim", 0)),
         ).to(device)
         net.load_state_dict(
             torch.load(root / "runs/v2/s7_lstm/artifacts" / f"{stem}.pt", map_location=device, weights_only=True)
@@ -170,11 +171,15 @@ def run_locked_test_walk_forward(
                 step_preds[label] = float(booster.predict(dmat)[0])
 
             full_seq_ctx = np.concatenate([ctx_scaled, ctx_cal], axis=1).astype(np.float32)
+            tcal_f32 = target_cal.astype(np.float32)
             for label, (net, arch) in lstm_models.items():
                 wlen = int(arch["window_len"])
                 cidx = arch["col_indices"]
+                fdim = int(arch.get("future_cal_dim", 0))
                 win = full_seq_ctx[-wlen:, cidx]
-                pred_s = predict_single_window(net, win, device)
+                if win.shape[0] != wlen:
+                    raise ValueError(f"Window length mismatch for {label}: {win.shape[0]} != {wlen}")
+                pred_s = predict_single_window(net, win, device, future_cal=tcal_f32 if fdim > 0 else None)
                 step_preds[label] = float(inverse_scale_load(np.array([pred_s]), scaler)[0])
 
         # Reveal observed row strictly AFTER forecasts are issued
@@ -258,7 +263,7 @@ def run_locked_test_walk_forward(
         {"model": m, **metrics_summary[m]}
         for m in model_names
     ]
-    metrics_df = pd.DataFrame(metrics_rows).sort_values("rmse_mw").reset_index(drop=True)
+    metrics_df = pd.DataFrame(metrics_rows).sort_values("rmse_kw").reset_index(drop=True)
 
     pred_df.to_csv(artifacts_dir / "test_predictions.csv", index=False)
     diag_df.to_csv(artifacts_dir / "diagnostic_context.csv", index=False)
@@ -280,6 +285,7 @@ def run_locked_test_walk_forward(
         },
         "model_hashes": model_hashes_before,
         "xgb_best_subset": xgb_best_name,
+        "xgb_4var_subset": "XGB_24h_4var",
         "lstm_best_variant": lstm_models["LSTM_best"][1]["variant"],
         "var_spec": {"p": var_p, "d": var_d},
         "metrics": metrics_summary,

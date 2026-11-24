@@ -64,8 +64,8 @@
       "whiteness_df": 384,
       "whiteness_p": 0.0,
       "metrics": {
-        "mae_mw": 3317.1906679539593,
-        "rmse_mw": 4793.348415244037,
+        "mae_kw": 3317.1906679539593,
+        "rmse_kw": 4793.348415244037,
         "mape_percent": 1.7830300672251596,
         "mape_null_reason": null,
         "n_considered": 3945,
@@ -87,8 +87,8 @@
       "whiteness_df": 384,
       "whiteness_p": 0.0,
       "metrics": {
-        "mae_mw": 4935.826408339057,
-        "rmse_mw": 6992.346832642985,
+        "mae_kw": 4935.826408339057,
+        "rmse_kw": 6992.346832642985,
         "mape_percent": 2.6692630884617965,
         "mape_null_reason": null,
         "n_considered": 3945,

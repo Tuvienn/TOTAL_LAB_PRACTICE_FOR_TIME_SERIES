@@ -215,7 +215,7 @@ def run_error_analysis_and_reports(
     for row in test_metrics.itertuples():
         ac = resid_acf[row.model]
         comp_lines.append(
-            f"| `{row.model}` | {int(row.n_scored):,} | {row.mae_mw:,.2f} | {row.rmse_mw:,.2f} | "
+            f"| `{row.model}` | {int(row.n_scored):,} | {row.mae_kw:,.2f} | {row.rmse_kw:,.2f} | "
             f"{row.mape_percent:.4f} | {ac['lag24']:.4f} | {ac['lag168']:.4f} |"
         )
     comp_lines += [
@@ -233,14 +233,51 @@ def run_error_analysis_and_reports(
     comp_lines.append("")
     (root / "docs/results/model_comparison.md").write_text("\n".join(comp_lines), encoding="utf-8")
 
-    # Build Final Report answering all 6 questions with exact verified evidence
+    # Build Final Report answering all 6 questions with 100% dynamically computed evidence
     pearson = eda_sum["pearson"]["load"]
     spearman = eda_sum["spearman"]["load"]
     best_test = test_metrics.iloc[0]
+    test_map = test_metrics.set_index("model").to_dict(orient="index")
+    dm_map = {(r["model_a"], r["model_b"]): r for r in dm_rows}
     var_sel = var_res["variants"][var_res["selected_tag"]]
     ab_map = {r["subset"]: r for r in xgb_res["ablation"]}
     lstm_map = {r["variant"]: r for r in lstm_res["variants_summary"]}
-    win_lstm = lstm_map[lstm_res["winner_variant"]]
+    win_lstm_name = lstm_res["winner_variant"]
+    win_lstm = lstm_map[win_lstm_name]
+    win_trial_short = win_lstm["trial_id"].replace(f"{win_lstm_name}_", "")
+    seed_rmses = [float(r["rmse_kw"]) for r in lstm_res["seed_stability"]]
+    seed_mean, seed_std = float(np.mean(seed_rmses)), float(np.std(seed_rmses))
+
+    dm_xgb_lstm = dm_map[("XGB_best", "LSTM_best")]
+    dm_4var_core = dm_map[("XGB_4var", "LSTM_core")]
+    test_lstm_best_rmse = float(test_map["LSTM_best"]["rmse_kw"])
+    test_lstm_core_rmse = float(test_map["LSTM_core"]["rmse_kw"])
+    test_xgb_best_rmse = float(test_map["XGB_best"]["rmse_kw"])
+    test_xgb_4var_rmse = float(test_map["XGB_4var"]["rmse_kw"])
+
+    if test_lstm_best_rmse <= test_lstm_core_rmse:
+        q5_test_cmp = (
+            f"Trên Test, `{win_lstm_name}` (`{test_lstm_best_rmse:,.2f} {unit}`) tổng quát hóa tốt hơn "
+            f"`LSTM_core` (`{test_lstm_core_rmse:,.2f} {unit}`), nhưng vẫn có khoảng chênh giữa Train MSE (`{win_lstm['restored_train_mse_scaled']:.6f}`) "
+            f"và Val MSE (`{win_lstm['restored_val_mse_scaled']:.6f}`) cùng phương sai giữa các seed (`{seed_mean:,.2f} ± {seed_std:,.2f} {unit}`)."
+        )
+    else:
+        q5_test_cmp = (
+            f"Tuy nhiên khi đánh giá trên Test, `{win_lstm_name}` (`{test_lstm_best_rmse:,.2f} {unit}`) tổng quát hóa kém hơn "
+            f"`LSTM_core` (`{test_lstm_core_rmse:,.2f} {unit}`), cho thấy việc mở rộng lên 13 kênh chuỗi + 9 kênh lịch đích với "
+            f"`dropout={win_lstm['dropout']}` đã dẫn tới quá khớp nhẹ vào giai đoạn validation (kèm biến động giữa các seed: `{seed_mean:,.2f} ± {seed_std:,.2f} {unit}`)."
+        )
+
+    if dm_4var_core["significant_5pct"]:
+        q6_fair_cmp = (
+            f"Khi giới hạn công bằng trong đúng cửa sổ 24h thuần 4 biến (`XGB_24h_4var` vs `LSTM_core`, không dùng lag tuần hay lịch), "
+            f"`{dm_4var_core['better_model']}` nhỉnh hơn có ý nghĩa thống kê (`{test_xgb_4var_rmse:,.2f}` vs `{test_lstm_core_rmse:,.2f} {unit}`, DM `p = {dm_4var_core['p_value']:.4g}`)."
+        )
+    else:
+        q6_fair_cmp = (
+            f"Khi giới hạn công bằng trong đúng cửa sổ 24h thuần 4 biến (`XGB_24h_4var` vs `LSTM_core`, không dùng lag tuần hay lịch), "
+            f"hai mô hình tương đương nhau về mặt thống kê (`{test_xgb_4var_rmse:,.2f}` vs `{test_lstm_core_rmse:,.2f} {unit}`, DM `p = {dm_4var_core['p_value']:.4g}`)."
+        )
 
     report_lines = [
         "# Practice 4 (v2) — Final Report",
@@ -257,11 +294,11 @@ def run_error_analysis_and_reports(
         "|---|---:|---:|---:|",
     ]
     for row in test_metrics.itertuples():
-        report_lines.append(f"| `{row.model}` | {row.mae_mw:,.2f} | {row.rmse_mw:,.2f} | {row.mape_percent:.4f} |")
+        report_lines.append(f"| `{row.model}` | {row.mae_kw:,.2f} | {row.rmse_kw:,.2f} | {row.mape_percent:.4f} |")
 
     report_lines += [
         "",
-        f"Best model on held-out test: **`{best_test['model']}`** (MAE `{best_test['mae_mw']:,.2f}`, RMSE `{best_test['rmse_mw']:,.2f} {unit}`, MAPE `{best_test['mape_percent']:.4f}%`).",
+        f"Best model on held-out test: **`{best_test['model']}`** (MAE `{best_test['mae_kw']:,.2f}`, RMSE `{best_test['rmse_kw']:,.2f} {unit}`, MAPE `{best_test['mape_percent']:.4f}%`).",
         "",
         "## 3. Answers to the 6 Assignment Questions (Evidence-Backed)",
         "",
@@ -270,22 +307,23 @@ def run_error_analysis_and_reports(
         f"- SHAP Group Attribution trên `XGB_full`: `temperature_lags` = `{xgb_res['shap_group_totals'].get('temperature_lags', 0):,.1f}`, `humidity_lags` = `{xgb_res['shap_group_totals'].get('humidity_lags', 0):,.1f}`, `wind_speed_lags` = `{xgb_res['shap_group_totals'].get('wind_speed_lags', 0):,.1f}`, `cross_interactions` = `{xgb_res['shap_group_totals'].get('cross_interactions', 0):,.1f}` ({unit}). Lưu ý đây là liên hệ dự báo, không chứng minh nhân quả.",
         "",
         "### Q2. Khi nào VAR thất bại?",
-        f"- Sau khi sửa flaw v1 (sai phân `d={var_sel['diff_order']}` theo Slide 5 và train 100% tập train `{var_sel['train_rows_used']:,}` giờ), `VAR({var_sel['p']})` đạt ổn định (`max |λ|={var_sel['max_eigenvalue_modulus']:.4f} < 1`) nhưng vẫn kém ML/DL vì giả định tuyến tính không nắm được tương tác phi tuyến nhiệt độ–tải, hiệu ứng ngày lễ (`is_holiday`) và biến động mạnh lúc chuyển pha giờ cao điểm.",
+        f"- Sau khi áp dụng sai phân `d={var_sel['diff_order']}` theo Slide 5 (`chapter4-5.pdf`) và train 100% tập train (`{var_sel['train_rows_used']:,}` giờ), `VAR({var_sel['p']})` đạt ổn định (`max |λ|={var_sel['max_eigenvalue_modulus']:.4f} < 1`, Test RMSE `{test_map['VAR']['rmse_kw']:,.2f} {unit}`) nhưng vẫn kém `XGB_best` (`{test_xgb_best_rmse:,.2f} {unit}`, DM `p = {dm_map[('XGB_best', 'VAR')]['p_value']:.4g}`) vì giả định tuyến tính không nắm được tương tác phi tuyến nhiệt độ–tải, hiệu ứng ngày lễ (`is_holiday`) và biến động mạnh lúc chuyển pha giờ cao điểm.",
         "",
         "### Q3. XGBoost học được thông tin gì từ thời tiết và feature engineering?",
-        f"- Ablation trên Validation: `XGB_load_only` RMSE `{ab_map['XGB_load_only']['rmse_mw']:,.2f}` → `XGB_load_calendar` `{ab_map['XGB_load_calendar']['rmse_mw']:,.2f}` → `XGB_full` `{ab_map['XGB_full']['rmse_mw']:,.2f}` ({unit}); `XGB_load_weather` (4 biến thuần) đạt `{ab_map['XGB_load_weather']['rmse_mw']:,.2f}`.",
-        "- SHAP xác nhận lịch sử phụ tải ngắn/tuần và đặc trưng lịch (`calendar_dst_holiday`) đóng góp lớn nhất, trong khi `hdd_proxy`/`cdd_proxy` và nhiệt độ tinh chỉnh phản ứng phi tuyến theo mùa.",
+        f"- Ablation lồng nhau chặt trên Validation ({unit}): `XGB_24h_4var` (thuần 24h) `{ab_map['XGB_24h_4var']['rmse_kw']:,.2f}` → `XGB_load_only` (thêm lag 48h/168h) `{ab_map['XGB_load_only']['rmse_kw']:,.2f}` → `XGB_load_weather` (+72 lags thời tiết) `{ab_map['XGB_load_weather']['rmse_kw']:,.2f}` → `XGB_load_calendar` (+9 lịch `t+1`) `{ab_map['XGB_load_calendar']['rmse_kw']:,.2f}` → **`XGB_full` (+6 tương tác chéo) `{ab_map['XGB_full']['rmse_kw']:,.2f}`**.",
+        "- SHAP xác nhận lịch sử phụ tải ngắn/tuần (`lag23_load`, `lag167_load`, `lag47_load`) đóng góp nền tảng, trong khi `load_per_temp_k`, `lag00_temperature`, `temp_diff_24h` và `target_hour_cos` tinh chỉnh phản ứng phi tuyến theo mùa và giờ trong ngày.",
         "",
         "### Q4. LSTM thể hiện chu kỳ ngày/tuần như thế nào?",
-        f"- Thực nghiệm đối chứng trực tiếp trên RTX 5050 giải quyết dứt điểm hạn chế v1: `LSTM_24h_core` (24h thuần 4 biến) đạt Val RMSE `{lstm_map['LSTM_24h_core']['rmse_mw']:,.2f} {unit}` vs `LSTM_24h_cal` (thêm kênh lịch) `{lstm_map['LSTM_24h_cal']['rmse_mw']:,.2f} {unit}` vs `LSTM_168h_diag` (cửa sổ 168h = 1 tuần) `{lstm_map['LSTM_168h_diag']['rmse_mw']:,.2f} {unit}`. Điều này chứng minh nhận định ở Slide 10 (`chapter4-5.pdf`): LSTM xử lý tốt chu kỳ ngắn/ngày 24h nhưng suy giảm trên chuỗi rất dài 168 bước.",
-        f"- Residual ACF trên Test: `LSTM_best` vẫn còn tự tương quan ở lag-24 (`{resid_acf['LSTM_best']['lag24']:.4f}`) và lag-168 (`{resid_acf['LSTM_best']['lag168']:.4f}`), trong khi `XGB_best` khử gần như triệt để (`{resid_acf['XGB_best']['lag24']:.4f}` và `{resid_acf['XGB_best']['lag168']:.4f}`).",
+        f"- Khi cấp ngân sách tuning công bằng (4 cấu hình cho mỗi biến thể) và nối đặc trưng lịch tất định tại `t+1` vào tầng cuối (`future_cal_dim=9`), kết quả Validation ({unit}) là: `LSTM_24h_load_only` `{lstm_map['LSTM_24h_load_only']['rmse_kw']:,.2f}` | `LSTM_24h_core` `{lstm_map['LSTM_24h_core']['rmse_kw']:,.2f}` | `LSTM_24h_cal` `{lstm_map['LSTM_24h_cal']['rmse_kw']:,.2f}` | `LSTM_168h_diag` `{lstm_map['LSTM_168h_diag']['rmse_kw']:,.2f}` (biến thể thắng Validation: **`{win_lstm_name}`**).",
+        f"- Residual ACF trên Test: `LSTM_best` (`{win_lstm_name}`) có ACF lag-24 = `{resid_acf['LSTM_best']['lag24']:.4f}` và lag-168 = `{resid_acf['LSTM_best']['lag168']:.4f}` (so với `LSTM_core`: `{resid_acf['LSTM_core']['lag24']:.4f}` / `{resid_acf['LSTM_core']['lag168']:.4f}`), trong khi `XGB_best` khử gần như triệt để (`{resid_acf['XGB_best']['lag24']:.4f}` và `{resid_acf['XGB_best']['lag168']:.4f}`).",
         "",
         "### Q5. LSTM có bị overfitting không?",
-        f"- Trên validation, `{lstm_res['winner_variant']}` chọn thử nghiệm `lr1e3_d00` (`dropout=0.0`, `weight_decay=0.0`) với `ReduceLROnPlateau` và `EarlyStopping` (`patience=10`, dừng ở epoch `{win_lstm['stop_epoch']}`, khôi phục best epoch `{win_lstm['best_epoch']}`, Train MSE scaled = `{win_lstm['restored_train_mse_scaled']:.6f}` vs Val MSE scaled = `{win_lstm['restored_val_mse_scaled']:.6f}`).",
-        "- Tuy nhiên khi đánh giá trên Test, `LSTM_24h_cal` (`6,433.83 kW`) tổng quát hóa kém hơn `LSTM_core` (`5,872.02 kW`), cho thấy việc mở rộng từ 4 lên 13 kênh mà không có `dropout` đã dẫn tới hiện tượng quá khớp nhẹ vào giai đoạn validation (và biến động giữa các seed: `6,025.87 ± 174.77 kW`).",
+        f"- Trên Validation, `{win_lstm_name}` chọn cấu hình `{win_trial_short}` (`dropout={win_lstm['dropout']}`, `weight_decay={win_lstm['weight_decay']}`) với `ReduceLROnPlateau` và `EarlyStopping` (`patience=10`, dừng ở epoch `{win_lstm['stop_epoch']}`, khôi phục best epoch `{win_lstm['best_epoch']}`, Train MSE scaled = `{win_lstm['restored_train_mse_scaled']:.6f}` vs Val MSE scaled = `{win_lstm['restored_val_mse_scaled']:.6f}`).",
+        f"- {q5_test_cmp}",
         "",
         "### Q6. Machine Learning (XGBoost) và Deep Learning (LSTM) khác nhau thế nào?",
-        "- Khi dùng đúng 4 biến thô (`XGB_4var` vs `LSTM_core`), hai mô hình cho kết quả tương đương về mặt thống kê (`5,889.87` vs `5,872.02 kW`, DM `p = 0.8986`). Tuy nhiên khi bổ sung đầy đủ đặc trưng bảng (lags tuần `lag47`/`lag167`, calendar/DST/holiday, và tương tác phi tuyến `load_per_temp_k`, `hdd_proxy`/`cdd_proxy`), `XGB_full` vươn lên dẫn đầu vượt trội (`5,499.38 kW`, DM `p = 1.79e-10`), giải thích minh bạch qua SHAP và train chỉ mất `3.41s` trên RTX 5050.",
+        f"- {q6_fair_cmp}",
+        f"- Khi mở khóa đầy đủ đặc trưng bảng (lags tuần `lag47`/`lag167`, lịch/DST/ngày lễ `t+1`, tương tác phi tuyến `load_per_temp_k`, `hdd_proxy`/`cdd_proxy`), `XGB_best` (`{test_xgb_best_rmse:,.2f} {unit}`) vượt trội `LSTM_best` (`{test_lstm_best_rmse:,.2f} {unit}`, DM stat = `{dm_xgb_lstm['dm_stat']:.4f}`, `p = {dm_xgb_lstm['p_value']:.4g}`), giải thích minh bạch bằng SHAP và chỉ tốn `{ab_map['XGB_full']['elapsed_seconds']:.2f}s` huấn luyện trên RTX 5050.",
         "",
         "## 4. Giới hạn và Rủi ro còn lại",
         "",
