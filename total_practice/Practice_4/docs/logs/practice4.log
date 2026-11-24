@@ -1,0 +1,45 @@
+2026-11-24 23:24:13 | INFO     | Khởi tạo hệ thống logging thành công.
+2026-11-24 23:24:13 | INFO     | Log file: D:\Practice_Time_Series_Data\Practice_4\total_practice\Practice_4\docs\logs\practice4.log
+2026-11-24 23:24:13 | INFO     | Khởi tạo cấu hình hiển thị biểu đồ thành công.
+2026-11-24 23:24:13 | INFO     | Bắt đầu đọc dữ liệu từ: ..\datasets\processed\electricity_load_weather_hourly.csv
+2026-11-24 23:24:13 | INFO     | Đọc dữ liệu thành công.
+2026-11-24 23:24:13 | INFO     | Kích thước ban đầu: 35064 dòng x 5 cột
+2026-11-24 23:24:13 | INFO     | Chuyển đổi cột time sang datetime thành công.
+2026-11-24 23:24:13 | INFO     | Khoảng thời gian dữ liệu: 2014-12-31 23:00:00+00:00 -> 2018-12-31 22:00:00+00:00
+2026-11-24 23:24:13 | INFO     | Danh sách cột dữ liệu:
+2026-11-24 23:24:13 | INFO     | ['time', 'load', 'temperature', 'humidity', 'wind_speed']
+2026-11-24 23:24:13 | INFO     | Số lượng giá trị thiếu theo cột:
+2026-11-24 23:24:13 | INFO     | 
+time           0
+load           0
+temperature    0
+humidity       0
+wind_speed     0
+2026-11-24 23:24:13 | INFO     | Phân bố bước nhảy thời gian:
+2026-11-24 23:24:13 | INFO     | 
+time
+0 days 01:00:00    35063
+2026-11-24 23:24:13 | INFO     | Thống kê mô tả các biến số:
+2026-11-24 23:24:13 | INFO     | 
+               count      mean      std       min      25%       50%       75%       max
+load         35064.0  28698.28  4575.83  18041.00  24807.0  28902.00  32194.25  41015.00
+temperature  35064.0     15.13     9.33     -9.02      8.0     13.78     21.80     40.18
+humidity     35064.0     58.73    24.88      0.00     38.0     59.00     81.00    100.00
+wind_speed   35064.0      2.43     1.97      0.00      1.0      2.00      3.00     18.00
+2026-11-24 23:24:13 | INFO     | Hoàn thành bước khám phá tổng quan dữ liệu.
+2026-11-24 23:24:13 | INFO     | Bảng kiểm tra Missing Values:
+             Missing Count  Missing (%)
+time                     0          0.0
+load                     0          0.0
+temperature              0          0.0
+humidity                 0          0.0
+wind_speed               0          0.0
+2026-11-24 23:24:13 | INFO     | Số dòng trùng lặp hoàn toàn: 0 | Số mốc thời gian trùng lặp: 0
+2026-11-24 23:24:13 | WARNING  | Phát hiện 2 điểm nghi ngờ lỗi cảm biến (temperature == 0 & humidity == 0):
+                          time     load  temperature  humidity  wind_speed
+2116 2015-03-30 03:00:00+00:00  21335.0          0.0       0.0         1.0
+2124 2015-03-30 11:00:00+00:00  31578.0          0.0       0.0         3.0
+2026-11-24 23:24:13 | INFO     | Biến load        | IQR Bounds=[13726.12, 43275.12] | Low=0, High=0 (0.00%)
+2026-11-24 23:24:13 | INFO     | Biến temperature | IQR Bounds=[-12.70, 42.50] | Low=0, High=0 (0.00%)
+2026-11-24 23:24:13 | INFO     | Biến humidity    | IQR Bounds=[-26.50, 145.50] | Low=0, High=0 (0.00%)
+2026-11-24 23:24:13 | INFO     | Biến wind_speed  | IQR Bounds=[-2.00, 6.00] | Low=0, High=1705 (4.86%)
