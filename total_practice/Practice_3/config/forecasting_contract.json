@@ -1,0 +1,63 @@
+{
+  "project": "Practice_3",
+  "target": "AEP_MW",
+  "frequency": "h",
+  "forecast_origin": "t",
+  "available_target_history": "through_t",
+  "primary_task": {
+    "name": "one_step_hourly_forecasting",
+    "horizon": 1,
+    "update_cadence": "hourly",
+    "selection_role": "primary"
+  },
+  "secondary_task": {
+    "name": "recursive_24_hour_forecasting",
+    "horizon": 24,
+    "future_actual_target_allowed": false,
+    "selection_role": "secondary_stress_test"
+  },
+  "temporal_design": {
+    "development_start": "2004-10-01 01:00:00",
+    "development_end_exclusive": "2017-08-03 00:00:00",
+    "holdout_start": "2017-08-03 00:00:00",
+    "holdout_end": "2018-08-03 00:00:00",
+    "holdout_label": "historical_re_evaluation_holdout",
+    "holdout_is_claimed_unseen": false,
+    "cv_method": "expanding_window",
+    "cv_splits": 5,
+    "shuffle": false
+  },
+  "metrics": {
+    "primary": "mae",
+    "secondary": "rmse",
+    "report_fold_mean": true,
+    "report_fold_standard_deviation": true,
+    "report_multistep_per_horizon": true,
+    "report_multistep_pooled": true
+  },
+  "selection_policy": {
+    "protocol": "one_step_train_only_cv",
+    "decision_order": [
+      "lowest_mean_cv_mae",
+      "lower_mean_cv_rmse",
+      "lower_cv_mae_standard_deviation",
+      "simpler_candidate"
+    ],
+    "secondary_recursive_result_may_change_locked_model": false
+  },
+  "baselines": [
+    "persistence",
+    "seasonal_naive_24"
+  ],
+  "candidate_models": [
+    "xgboost_baseline",
+    "xgboost_tuned",
+    "random_forest"
+  ],
+  "eda_policy": {
+    "scope": "development_train_only",
+    "holdout_target_access_allowed": false
+  },
+  "deployment_scope": "out_of_scope",
+  "status": "APPROVED"
+}
