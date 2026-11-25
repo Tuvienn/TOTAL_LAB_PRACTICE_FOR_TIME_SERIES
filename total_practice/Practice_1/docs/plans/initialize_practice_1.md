@@ -259,7 +259,7 @@ src/practice_1/visualization/__init__.py
 src/practice_1/visualization/diagnostic_plots.py
 src/practice_1/visualization/data_quality_plots.py
 src/practice_1/visualization/seasonal_plots.py
-notebooks/practice_1.ipynb
+notebooks/practice_1_present.ipynb
 docs/logs/environment_snapshot.txt
 tests/test_air_passengers.py
 tests/test_acf_pacf.py
@@ -368,7 +368,7 @@ Sau khi Nhóm 4 tạo environment và package:
 
 ```bash
 .venv/bin/python -m pytest
-.venv/bin/python -m jupyter nbconvert --execute --to notebook --inplace --ExecutePreprocessor.kernel_name=time-series-practice-1 notebooks/practice_1.ipynb
+.venv/bin/python -m jupyter nbconvert --execute --to notebook --inplace --ExecutePreprocessor.kernel_name=time-series-practice-1 notebooks/practice_1_present.ipynb
 ```
 
 Notebook execution phải dùng registered kernel `time-series-practice-1`. Nếu command,

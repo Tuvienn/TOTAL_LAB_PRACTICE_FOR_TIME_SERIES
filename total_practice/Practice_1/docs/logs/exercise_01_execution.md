@@ -46,7 +46,7 @@ outputs/results/pacf_values.csv
 outputs/results/exercise_01_findings.json
 ```
 
-The notebook `notebooks/practice_1.ipynb` was executed end-to-end with four
+The notebook `notebooks/practice_1_present.ipynb` was executed end-to-end with four
 ordered code-cell execution counts and no error output.
 
 ## Validation

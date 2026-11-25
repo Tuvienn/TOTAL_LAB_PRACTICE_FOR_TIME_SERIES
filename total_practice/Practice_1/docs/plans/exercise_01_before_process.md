@@ -145,7 +145,7 @@ Các file dự kiến có thể cần tạo:
 src/practice_1/data/air_passengers.py
 src/practice_1/analysis/acf_pacf.py
 src/practice_1/visualization/diagnostic_plots.py
-notebooks/practice_1.ipynb
+notebooks/practice_1_present.ipynb
 ```
 
 Tên file cuối cùng phải tuân thủ structure hiện có và naming rule của project.
