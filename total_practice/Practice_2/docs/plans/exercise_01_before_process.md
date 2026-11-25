@@ -8,14 +8,14 @@ Exercise ID: EXERCISE_01
 Topic: EDA and Time-Series Preparation
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: APPROVED
+Status: CONFIRMED
 Implementation authorized: YES
 Execution result: COMPLETED
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_01_execution.md
 ```
 
-Plan và implementation scope của Exercise 1 đã được Human phê duyệt. Mọi lần chạy lại
+Plan và implementation scope của Exercise 1 đã được xác nhận. Mọi lần chạy lại
 phải tiếp tục tuân thủ đúng scope, validation và stop conditions trong file này.
 
 ## 2. Objective
@@ -47,7 +47,7 @@ total_practice/Practice_2/docs/exercise_details/exercise_01_eda_time_series_prep
 total_practice/Practice_2/docs/status/current_status.md nếu đã tồn tại
 ```
 
-Nếu thiếu tài liệu hoặc có conflict: `STOP → report missing/conflict → chờ Human quyết định`.
+Nếu thiếu tài liệu hoặc có conflict: `STOP → report missing/conflict → chờ xử lý xung đột`.
 
 ## 4. Input
 
@@ -86,15 +86,15 @@ Không tạo duplicate module nếu owner tương đương đã tồn tại.
 datasets/raw/a10.csv
 working_rule.md
 .agents/ rules
-approved scoped rule files
-approved project_overview.md
-approved plan_overview.md
+confirmed scoped rule files
+confirmed project_overview.md
+confirmed plan_overview.md
 Exercise 2–6 specifications nếu có
 Practice/Lab khác
 unrelated repository configuration
 ```
 
-Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → wait for approval`.
+Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → chờ xác nhận`.
 
 ## 7. Scientific Parameters
 
@@ -199,7 +199,7 @@ Required narrative evidence: validated schema/time index, EDA observations và s
 
 ## 11. Stop Conditions
 
-Agent phải dừng khi plan chưa được approve, required document missing, rule conflict,
+Quy trình phải dừng khi plan chưa được approve, required document missing, rule conflict,
 schema/date/frequency unexpected, duplicate hoặc missing interval chưa giải quyết,
 boundary không hợp lệ, plot không inspect được, dependency mới cần thêm, unrelated file
 cần sửa hoặc raw data bị thay đổi.
@@ -211,7 +211,7 @@ Khi dừng:
 2. Ghi observed và expected behavior.
 3. Ghi evidence và impact.
 4. Đề xuất next action.
-5. Chờ Human approval.
+5. Chờ xác nhận.
 ```
 
 ## 12. Completion Gate
@@ -227,12 +227,12 @@ AND raw data unchanged
 AND no unresolved blocking issue
 ```
 
-## 13. Approval Gate
+## 13. confirmation gate
 
 ```text
 EXERCISE_01_BEFORE_PROCESS_CREATED=true
 EXERCISE_01_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_01_BEFORE_PROCESS_APPROVED=true
+EXERCISE_01_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_01_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_01_IMPLEMENTED=true
 EXERCISE_01_VALIDATED=true
@@ -242,13 +242,13 @@ EXERCISE_01_COMPLETED=true
 Actual result và runtime state phải được đọc từ execution log và current status;
 before-process plan không thay thế hai evidence owner này.
 
-## 14. Agent Execution Rule
+## 14. workflow Execution Rule
 
-Sau approval:
+Sau confirmation:
 
 ```text
 one step → execute → run → verify → report → next step
 ```
 
 Không được tự đổi dataset, shuffle dữ liệu, chạy ADF trong E01, thêm forecasting model,
-sửa raw data, sửa approved specification, bỏ qua validation hoặc claim completion.
+sửa raw data, sửa confirmed specification, bỏ qua validation hoặc claim completion.

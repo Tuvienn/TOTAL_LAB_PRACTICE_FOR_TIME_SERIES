@@ -8,11 +8,11 @@ Exercise ID: EXERCISE_03
 Topic: Differencing and ADF Retest
 Dataset: Monthly Retail Sales
 Input: Original training series and E02 ADF result
-Transformation protocol: raw first difference, then approved log + first difference remediation
+Transformation protocol: raw first difference, then confirmed log + first difference remediation
 Regular differencing order tested: 1
 Significance level: 0.05
 Model training required: NO
-Specification status: APPROVED
+Specification status: CONFIRMED
 Current execution result: COMPLETED_WITH_LOG_TRANSFORMATION
 Downstream gate: OPEN_FOR_E04_REVIEW
 Execution state owner: docs/status/current_status.md
@@ -38,7 +38,7 @@ Exercise 3 không chạy ACF/PACF, không fit model và không forecast.
 Original training series from Exercise 1
 ADF result and stationarity conclusion from Exercise 2
 Test set: sealed and excluded
-Approved transformation: natural logarithm
+Confirmed transformation: natural logarithm
 Regular differencing: first order
 Significance level α: 0.05
 ```
@@ -140,7 +140,7 @@ Phải dừng nếu E02 chưa validated, input không phải original training s
 leakage xảy ra, có giá trị không dương, log/differencing fail, ADF fail, remediation
 chưa stationary hoặc cần đổi parameter/scope.
 
-Khi dừng: `STOP → document issue → explain impact → propose next action → wait for approval`.
+Khi dừng: `STOP → document issue → explain impact → propose next action → chờ xác nhận`.
 
 ## 11. Execution Completion và Scientific Handoff
 

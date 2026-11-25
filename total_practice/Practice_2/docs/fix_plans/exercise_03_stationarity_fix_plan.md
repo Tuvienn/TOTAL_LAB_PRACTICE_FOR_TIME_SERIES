@@ -58,7 +58,7 @@ kernel/process sạch và không được hard-code kết quả dự kiến.
 
 ## 4. Scope
 
-### 4.1. Files allowed to modify after approval
+### 4.1. Files allowed to modify after confirmation
 
 ```text
 total_practice/Practice_2/src/practice_2/analysis/stationarity.py
@@ -88,7 +88,7 @@ repository and Practice architecture rules
 
 Không dùng notebook legacy làm canonical owner và không sửa notebook legacy trong fix này.
 
-## 5. Approved Scientific Boundary Proposed by This Plan
+## 5. Confirmed Scientific Boundary Proposed by This Plan
 
 ```text
 input: original training series from E01
@@ -111,8 +111,7 @@ Notebook và outputs phải ghi rõ analysis scale là `log` để tránh diễn
 
 ### Step 1 — Synchronize the E03 Contract
 
-Cập nhật E03 specification và before-process plan để ghi nhận protocol đã được Human
-duyệt: log transformation trước first differencing, training-only boundary, output
+Cập nhật E03 specification và before-process plan để ghi nhận protocol đã được xác nhận trong project record: log transformation trước first differencing, training-only boundary, output
 contract, validation criteria và stop conditions.
 
 Không đổi E01/E02 results và không mở E04 ở bước này.
@@ -128,7 +127,7 @@ autolag="AIC"
 
 Không thay đổi `alpha=0.05` và không đổi decision rule.
 
-### Step 3 — Add the Approved Transformation Path
+### Step 3 — Add the Confirmed Transformation Path
 
 Đặt reusable transformation logic trong `src/practice_2/analysis/` theo ownership
 hiện tại. Logic phải:
@@ -147,7 +146,7 @@ Không duplicate logic trong notebook.
 Trong `Practice_2_Exercise.ipynb`:
 
 1. giữ raw first-difference attempt và kết luận blocker làm evidence;
-2. tạo approved log-transformed training series;
+2. tạo confirmed log-transformed training series;
 3. tạo log first-differenced training series;
 4. hiển thị số observations và NaN count;
 5. vẽ và inspect transformed differenced series;
@@ -275,7 +274,7 @@ Risk: forecasts and interpretation later require explicit back-transformation ha
 Status: NOT SELECTED AS FIRST FIX
 Benefit: may remove remaining non-stationarity
 Risk: over-differencing, noisier series and less stable model interpretation
-Requirement: separate approval and over-differencing diagnostics
+Requirement: separate confirmation and over-differencing diagnostics
 ```
 
 ### Option C — Seasonal differencing
@@ -294,7 +293,7 @@ Requirement: separate scope decision that distinguishes d from D
 | Test leakage | Construct transformation only from `train_series` and assert boundary |
 | Hidden notebook state | Restart kernel and run sequentially |
 | Hard-coded favorable result | Derive decision from actual ADF output |
-| Over-differencing | Do not introduce `d=2` without separate approval |
+| Over-differencing | Do not introduce `d=2` without separate confirmation |
 | Confusing raw and log scales | Encode transformation in variable, plot, table and artifact names |
 | Output provenance loss | Preserve failed raw-difference outputs separately |
 | Reproducibility drift | Pass ADF configuration explicitly and test it |
@@ -303,7 +302,7 @@ Requirement: separate scope decision that distinguishes d from D
 ## 10. Acceptance Criteria
 
 ```text
-[x] Human approved this fix plan
+[x] confirmationd this fix plan
 [x] E03 specification and before-process contract are synchronized
 [x] Only the 163-observation training series is transformed
 [x] The 41-observation test series remains sealed
@@ -324,7 +323,7 @@ Requirement: separate scope decision that distinguishes d from D
 
 ## 11. Stop Conditions
 
-Phải dừng và báo Human nếu:
+Phải dừng và báo cáo theo workflow nếu:
 
 - training series có zero, negative hoặc missing values;
 - input không đúng 163-observation training boundary;
@@ -336,16 +335,16 @@ Phải dừng và báo Human nếu:
 - implementation cần chạm E04/E05;
 - actual result mâu thuẫn với specification hoặc rule hiện hành.
 
-## 12. Approval Gate
+## 12. confirmation gate
 
 ```text
 E03_FIX_PLAN_CREATED=true
 E03_FIX_PLAN_REVIEWED=true
-E03_FIX_PLAN_APPROVED=true
+E03_FIX_PLAN_CONFIRMED=true
 E03_FIX_IMPLEMENTATION_AUTHORIZED=true
 E03_FIX_IMPLEMENTED=true
 E03_FIX_VALIDATED=true
 E04_HANDOFF_OPEN=true
 ```
 
-Fix đã được Human phê duyệt, triển khai và kiểm chứng. E04/E05 không bị sửa trong scope này.
+Fix đã được xác nhận, triển khai và kiểm chứng. E04/E05 không bị sửa trong scope này.

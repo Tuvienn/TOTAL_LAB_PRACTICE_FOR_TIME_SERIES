@@ -10,7 +10,7 @@ Dataset: Monthly Retail Sales
 Frequency: Monthly
 Chronological split: approximately 80% train / 20% test
 Model training required: NO
-Specification status: APPROVED
+Specification status: CONFIRMED
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_01_execution.md
 ```
@@ -111,7 +111,7 @@ Phải dừng nếu source/schema/date/frequency không xác minh được, dupl
 missing interval chưa được giải thích, raw data bị thay đổi, boundary không xác lập
 được, figure không inspect được, hoặc scope/dependency cần mở rộng.
 
-Khi dừng: `STOP → document issue → explain impact → propose next action → wait for approval`.
+Khi dừng: `STOP → document issue → explain impact → propose next action → chờ xác nhận`.
 
 ## 10. Completion Condition
 

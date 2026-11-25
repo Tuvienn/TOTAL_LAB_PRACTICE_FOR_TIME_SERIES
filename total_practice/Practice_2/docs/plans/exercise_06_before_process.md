@@ -8,16 +8,16 @@ Exercise ID: EXERCISE_06
 Topic: AirPassengers ARIMA Baseline and SARIMA Extension
 Plan type: Exercise Before-Process Plan
 Dataset: AirPassengers
-Status: APPROVED_FOR_IMPLEMENTATION
+Status: CONFIRMED_FOR_IMPLEMENTATION
 Implementation authorized: YES
 Scientific dependency: independent Dataset 2 workflow
 Process gate: EXERCISE_05_COMPLETED
-Downstream gate: CLOSED_PENDING_E06_VALIDATION
+Downstream gate: CLOSED_NOT_COMPLETED_E06_VALIDATION
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_06_execution.md
 ```
 
-File này mô tả kế hoạch chi tiết cho E06. Human đã duyệt scope để triển khai; E06
+File này mô tả kế hoạch chi tiết cho E06. Đã xác nhận scope để triển khai; E06
 chỉ được ghi completed sau khi clean-kernel validation và evidence review đạt.
 
 ## 2. Objective
@@ -65,11 +65,11 @@ total_practice/Practice_2/docs/rules/rule_code.md
 total_practice/Practice_2/docs/plans/project_overview.md
 total_practice/Practice_2/docs/plans/plan_overview.md
 total_practice/Practice_2/docs/status/current_status.md
-approved E05 specification/plan/log when they exist
+confirmed E05 specification/plan/log when they exist
 ```
 
 Nếu thiếu tài liệu, E05 chưa hoàn thành, reusable interface chưa ổn định hoặc có
-conflict: `STOP → report issue → chờ Human quyết định`.
+conflict: `STOP → report issue → chờ xử lý xung đột`.
 
 ## 5. Dataset Contract
 
@@ -92,7 +92,7 @@ Raw file mutability: immutable
 ```
 
 Mọi parse, sort, split, transformation và differencing chỉ được thực hiện trên object
-trong bộ nhớ hoặc approved derived artifacts. Không sửa hoặc ghi đè raw CSV.
+trong bộ nhớ hoặc confirmed derived artifacts. Không sửa hoặc ghi đè raw CSV.
 
 ## 6. Holdout and Leakage Contract
 
@@ -157,7 +157,7 @@ Alpha: 0.05
 PACF method: ywm
 Lag 0: excluded from order interpretation
 Seasonal reference lags: 12, 24, 36
-Input: approved stationary transformed training series only
+Input: confirmed stationary transformed training series only
 ```
 
 ACF/PACF chỉ cung cấp candidate evidence. Không tự động chứng minh một order là final.
@@ -182,15 +182,15 @@ khác nhau, plan phải được cập nhật với rationale trước khi fit.
 
 ## 8. Provisional Files Allowed to Create or Modify
 
-Chỉ sau khi E05 hoàn thành và E06 plan được Human phê duyệt, E06 dự kiến được phép
+Chỉ sau khi E05 hoàn thành và E06 plan được xác nhận, E06 dự kiến được phép
 tạo hoặc cập nhật:
 
 ```text
-docs/exercise_details/exercise_06_sarima_extension.md, only when Human requests it
+docs/exercise_details/exercise_06_sarima_extension.md, only when requested by the project scope
 docs/plans/exercise_06_before_process.md
-approved existing modules under src/practice_2/data/
-approved existing modules under src/practice_2/analysis/
-approved existing modules under src/practice_2/visualization/
+confirmed existing modules under src/practice_2/data/
+confirmed existing modules under src/practice_2/analysis/
+confirmed existing modules under src/practice_2/visualization/
 tests/test_exercise_06.py
 notebooks/Practice_2_Advanced.ipynb (E06 draft notebook only; not execution evidence)
 outputs/figures/06_airpassengers_original_series.png
@@ -221,26 +221,26 @@ datasets/raw/airline-passengers.csv
 working_rule.md
 AGENTS.md
 .agents/ rules and workflows
-approved Practice_2 rule files
+confirmed Practice_2 rule files
 E01–E05 validated evidence and outputs
 historical Practice2_latest.ipynb reference (not present in the current repository)
-README.md before the approved final-documentation stage
+README.md before the confirmed final-documentation stage
 unrelated Practice/Lab files
 ```
 
 Nếu cần sửa E01–E05 hoặc thay đổi architecture để hoàn thành E06:
-`STOP → explain reason and impact → propose scope update → wait for approval`.
+`STOP → explain reason and impact → propose scope update → chờ xác nhận`.
 
 ## 10. Sequential Execution Steps
 
 ### Step 0 — Verify Entry Gate
 
-Xác minh E05 đã completed và được Human duyệt, required documents đã đọc, E06 plan
-đã approved và reusable interfaces đã được review. Nếu chưa đạt thì không code.
+Xác minh E05 đã completed và được xác nhận, required documents đã đọc, E06 plan
+đã confirmed và reusable interfaces đã được review. Nếu chưa đạt thì không code.
 
 ### Step 1 — Load and Validate AirPassengers
 
-Load raw CSV qua approved data owner và kiểm tra:
+Load raw CSV qua confirmed data owner và kiểm tra:
 
 ```text
 schema
@@ -270,7 +270,7 @@ raw hoặc natural-log scale chỉ từ training evidence và ghi rationale.
 
 ### Step 4 — Run Original-Training ADF
 
-Chạy ADF trên training series ở approved scale. Ghi null hypothesis, statistic,
+Chạy ADF trên training series ở confirmed scale. Ghi null hypothesis, statistic,
 p-value, critical values, used lag, nobs, regression, autolag và decision.
 
 ### Step 5 — Evaluate Regular and Seasonal Differencing
@@ -295,12 +295,12 @@ và seasonal lags 12, 24, 36; đề xuất số lượng candidate nhỏ, có ra
 
 ### Step 7 — Fit AirPassengers ARIMA Baseline
 
-Fit approved non-seasonal ARIMA candidate trên full E06 training set ở approved
+Fit confirmed non-seasonal ARIMA candidate trên full E06 training set ở confirmed
 scale. Capture convergence, warnings, AIC, BIC và residuals.
 
 ### Step 8 — Fit SARIMA Candidate
 
-Fit approved SARIMA candidate với `s = 12` trên cùng training set và scale. Capture
+Fit confirmed SARIMA candidate với `s = 12` trên cùng training set và scale. Capture
 convergence, warnings, AIC, BIC và residuals. Không bỏ qua fitting failure.
 
 ### Step 9 — Run Residual Diagnostics
@@ -332,7 +332,7 @@ Không dùng từ ngữ tuyệt đối như “hoàn toàn vượt trội” ho�
 ### Step 12 — Update E06 Draft Notebook
 
 Thêm E06 vào `Practice_2_Advanced.ipynb` với cấu trúc ngắn. Notebook này chỉ là
-draft cho E06 và không là evidence completion cho đến khi entry gate, approval và
+draft cho E06 và không là evidence completion cho đến khi entry gate, confirmation và
 validation đều hoàn tất:
 
 ```text
@@ -399,7 +399,7 @@ Visual evidence:
 
 ```text
 original/training AirPassengers series
-approved differenced training series
+confirmed differenced training series
 ACF/PACF of stationary transformed training data
 residual diagnostics for both models
 same-horizon ARIMA/SARIMA forecast comparison
@@ -409,14 +409,14 @@ same-horizon ARIMA/SARIMA forecast comparison
 
 ```text
 [ ] E05 is completed and reusable interfaces are reviewed
-[ ] E06 implementation receives explicit Human approval
+[ ] E06 implementation receives explicit confirmation
 [ ] AirPassengers contract and checksum are validated
 [ ] Test set remains sealed until final evaluation
 [ ] Scale decision uses training evidence only
 [ ] d, D and s have traceable evidence
-[ ] ACF/PACF uses only approved transformed training data
+[ ] ACF/PACF uses only confirmed transformed training data
 [ ] ARIMA and SARIMA candidates have explicit rationale
-[ ] Both models fit the same approved training setup
+[ ] Both models fit the same confirmed training setup
 [ ] Convergence, AIC/BIC and residual diagnostics are recorded
 [ ] Forecast horizon and test index are identical
 [ ] MAE/RMSE use the same test observations
@@ -437,7 +437,7 @@ Phải dừng E06 nếu:
 - test information đã tham gia transformation, order selection hoặc fitting;
 - scale hoặc inverse-transformation policy chưa rõ;
 - differencing chưa có evidence hoặc có dấu hiệu over-differencing;
-- ACF/PACF input chưa stationary theo approved evidence;
+- ACF/PACF input chưa stationary theo confirmed evidence;
 - model không hội tụ hoặc fitting warning chưa được xử lý;
 - forecast index không khớp test index;
 - hai model không dùng cùng evaluation setup;
@@ -451,7 +451,7 @@ Khi dừng:
 2. Ghi observed và expected behavior.
 3. Xác định owner và impact.
 4. Tạo error analysis/fix plan khi issue không hiển nhiên.
-5. Chờ Human approval trước khi sửa.
+5. Chờ xác nhận trước khi sửa.
 ```
 
 ## 15. Risks and Controls
@@ -482,17 +482,17 @@ AND both models have convergence and residual evidence
 AND forecasts are index-aligned
 AND MAE/RMSE comparison is reproducible
 AND tests and clean notebook execution pass
-AND Human reviews the final result
+AND Technical review of the final result
 ```
 
 E06 completion không thay thế, sửa lại hoặc che lấp trạng thái của E01–E05.
 
-## 17. Approval Gate
+## 17. confirmation gate
 
 ```text
 EXERCISE_06_BEFORE_PROCESS_CREATED=true
 EXERCISE_06_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_06_BEFORE_PROCESS_APPROVED=true
+EXERCISE_06_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_06_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_06_WAITING_FOR_E05=false
 EXERCISE_06_IMPLEMENTED=false

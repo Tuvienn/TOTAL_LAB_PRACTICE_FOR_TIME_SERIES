@@ -20,6 +20,6 @@ Test set được giữ kín cho đến E05.
 
 ## Evidence
 
-- [Execution evidence E01](../logs/exercise_01_execution.md)
-- [Biểu đồ chuỗi gốc](../../outputs/figures/01_original_time_series.png)
-- [Notebook core](../../notebooks/Practice_2_Exercise.ipynb)
+- <a href="../logs/exercise_01_execution.md" style="color:#1f6feb;">Execution evidence E01</a>
+- <a href="../../outputs/figures/01_original_time_series.png" style="color:#1f6feb;">Biểu đồ chuỗi gốc</a>
+- <a href="../../notebooks/Practice_2_Exercise.ipynb" style="color:#1f6feb;">Notebook core</a>

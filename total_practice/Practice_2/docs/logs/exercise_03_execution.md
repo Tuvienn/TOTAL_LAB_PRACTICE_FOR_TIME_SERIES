@@ -5,7 +5,7 @@
 - Source: `notebooks/Practice_2_Exercise.ipynb`
 - Input: original training series only (`n=163`)
 - Test values used: false
-- Status: validated with approved log transformation
+- Status: validated with confirmed log transformation
 
 ## Transformation and ADF result
 

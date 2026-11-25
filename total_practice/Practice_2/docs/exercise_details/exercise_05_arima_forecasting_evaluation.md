@@ -10,7 +10,7 @@ Dataset: Monthly Retail Sales
 Input: E01 chronological holdout + E04 provisional ARIMA candidates
 Inherited transformation: natural_log
 Inherited regular differencing order: d = 1
-Specification status: APPROVED_AND_VALIDATED
+Specification status: CONFIRMED_AND_VALIDATED
 Implementation authorized: YES
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_05_execution.md
@@ -19,14 +19,14 @@ Execution evidence: docs/logs/exercise_05_execution.md
 This specification defines E05's scientific and reporting contract. It does not
 authorize implementation, notebook edits, model fitting, output creation, or an
 E05 completion status until the specification and applicable execution scope have
-been approved.
+been confirmed.
 
 ## 2. Objective
 
 - fit one or two ARIMA candidates handed off by E04;
 - compare candidates using training-fit evidence, convergence, residual diagnostics,
   and out-of-sample evaluation;
-- compare ARIMA forecasts with an approved seasonal-naive baseline;
+- compare ARIMA forecasts with an confirmed seasonal-naive baseline;
 - preserve the E01 chronological train/test boundary;
 - report MAE, RMSE, and MAPE on the original sales scale;
 - identify the largest absolute forecast error for each evaluated model;
@@ -46,7 +46,7 @@ E05: fit + residual diagnostics + forecast + evaluation
 ```
 
 E05 may proceed only when the upstream handoffs and their evidence are verified.
-The current status record and approval records must be reconciled before E05 is
+The current status record and confirmation records must be reconciled before E05 is
 formally treated as started or completed.
 
 ## 4. Input Contract
@@ -88,20 +88,20 @@ protocol have been fixed, for final forecast evaluation.
 
 ## 5. Required Steps
 
-1. Verify E01–E04 completion evidence and current approval/status state.
+1. Verify E01–E04 completion evidence and current confirmation/status state.
 2. Load the validated Monthly Retail Sales series without changing the raw file.
 3. Reproduce and verify the E01 chronological 163/41 train/test split.
 4. Confirm that E02–E04 did not use test observations.
 5. Verify the E03 natural-log transformation and selected `d = 1`.
 6. Verify one or two provisional ARIMA candidates and their rationale from E04.
 7. Create a seasonal-naive baseline with seasonal lag 12 using training data.
-8. Fit each approved ARIMA candidate on log-transformed training levels.
+8. Fit each confirmed ARIMA candidate on log-transformed training levels.
 9. Record convergence, fitting warnings, AIC, and BIC for each candidate.
 10. Inspect residual mean, residual time plot, residual ACF, and Ljung–Box results.
 11. Lock the candidate/evaluation setup before opening test values.
 12. Forecast exactly 41 monthly observations for every candidate and baseline.
 13. Verify forecast timestamps match the test index exactly.
-14. Invert the log transformation using the approved, explicitly recorded policy.
+14. Invert the log transformation using the confirmed, explicitly recorded policy.
 15. Compute MAE, RMSE, and MAPE on the same original-scale test observations.
 16. Compare all candidates against each other and the seasonal-naive baseline.
 17. Compute the largest absolute error timestamp and value for each candidate.
@@ -125,7 +125,7 @@ Test usage: final evaluation only
 
 Do not recompute a different split in E05. Reuse the E01 boundary. Any test
 information used for transformation, order selection, or candidate changes
-invalidates the evaluation and requires a new approved procedure.
+invalidates the evaluation and requires a new confirmed procedure.
 
 ### 6.2 Candidate Models
 
@@ -154,7 +154,7 @@ Ljung–Box test statistic and p-value
 Ljung–Box lag(s), model degrees of freedom, and significance level
 ```
 
-Use `alpha = 0.05` for Ljung–Box unless a separately approved protocol specifies
+Use `alpha = 0.05` for Ljung–Box unless a separately confirmed protocol specifies
 otherwise. Choose statistically valid lags and record them. A residual mean near
 zero or visual inspection alone is not sufficient to claim white noise.
 
@@ -211,7 +211,7 @@ docs/logs/exercise_05_execution.md
 docs/status/current_status.md
 ```
 
-Exact filenames may be aligned with existing approved outputs during planning;
+Exact filenames may be aligned with existing confirmed outputs during planning;
 do not overwrite E01–E04 evidence. Machine-readable forecast output must retain
 model name, timestamp, actual value, forecast, and error so the largest-error
 claim is reproducible.
@@ -219,7 +219,7 @@ claim is reproducible.
 ## 9. Validation Criteria
 
 ```text
-[ ] E01–E04 handoffs and approval/status state verified
+[ ] E01–E04 handoffs and confirmation/status state verified
 [ ] Raw input remains unchanged
 [ ] Split matches E01: 163 train / 41 test, chronological, no shuffle
 [ ] Test observations excluded from E02–E04 and all fitting/model selection
@@ -253,7 +253,7 @@ Stop E05 if:
 - residual diagnostics or forecast/test alignment cannot be reproduced;
 - actual and forecast indices differ;
 - a metric is computed on mismatched observations or scales;
-- completing E05 requires an unapproved dependency, architecture, or scope change.
+- completing E05 requires an unconfirmed dependency, architecture, or scope change.
 
 When blocked:
 
@@ -262,7 +262,7 @@ STOP
 → record observed evidence and expected behavior
 → explain impact
 → propose the next action
-→ wait for Human approval where required
+→ chờ xác nhận where required
 ```
 
 ## 11. Completion Condition
@@ -270,7 +270,7 @@ STOP
 ```text
 upstream handoffs verified
 AND chronological holdout preserved
-AND approved ARIMA candidates and seasonal-naive baseline fitted
+AND confirmed ARIMA candidates and seasonal-naive baseline fitted
 AND convergence and residual evidence recorded
 AND forecasts aligned to the 41-observation test horizon
 AND MAE/RMSE/MAPE computed on the same original-scale observations
@@ -280,12 +280,12 @@ AND execution log and current status updated
 AND no unresolved blocking issue
 ```
 
-## 12. Approval Gate
+## 12. confirmation gate
 
 ```text
 EXERCISE_05_SPECIFICATION_CREATED=true
 EXERCISE_05_SPECIFICATION_REVIEWED=true
-EXERCISE_05_SPECIFICATION_APPROVED=true
+EXERCISE_05_SPECIFICATION_CONFIRMED=true
 EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_05_IMPLEMENTED=true
 EXERCISE_05_VALIDATED=true

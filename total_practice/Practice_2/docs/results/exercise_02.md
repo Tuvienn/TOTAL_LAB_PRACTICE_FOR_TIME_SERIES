@@ -18,5 +18,5 @@ Chuỗi train gốc được xem là chưa dừng ở mức ý nghĩa 5%.
 
 ## Evidence
 
-- [Execution evidence E02](../logs/exercise_02_execution.md)
-- [Notebook core](../../notebooks/Practice_2_Exercise.ipynb)
+- <a href="../logs/exercise_02_execution.md" style="color:#1f6feb;">Execution evidence E02</a>
+- <a href="../../notebooks/Practice_2_Exercise.ipynb" style="color:#1f6feb;">Notebook core</a>

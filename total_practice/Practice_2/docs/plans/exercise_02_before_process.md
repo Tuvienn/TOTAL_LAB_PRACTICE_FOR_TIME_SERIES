@@ -8,14 +8,14 @@ Exercise ID: EXERCISE_02
 Topic: ADF on Original Series
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: APPROVED
+Status: CONFIRMED
 Implementation authorized: YES
 Execution result: COMPLETED
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_02_execution.md
 ```
 
-Plan và implementation scope của Exercise 2 đã được Human phê duyệt. Mọi lần chạy lại
+Plan và implementation scope của Exercise 2 đã được xác nhận. Mọi lần chạy lại
 phải tiếp tục tuân thủ đúng scope, validation và stop conditions trong file này.
 
 ## 2. Objective
@@ -45,7 +45,7 @@ total_practice/Practice_2/docs/plans/exercise_01_before_process.md
 total_practice/Practice_2/docs/status/current_status.md nếu đã tồn tại
 ```
 
-Nếu thiếu tài liệu, E01 evidence hoặc có conflict: `STOP → report issue → chờ Human quyết định`.
+Nếu thiếu tài liệu, E01 evidence hoặc có conflict: `STOP → report issue → chờ xử lý xung đột`.
 
 ## 4. Input
 
@@ -79,15 +79,15 @@ Không tạo duplicate ADF logic nếu reusable owner tương đương đã tồ
 datasets/raw/a10.csv
 working_rule.md
 .agents/ rules
-approved scoped rule files
+confirmed scoped rule files
 Exercise 1 validated outputs
-approved Exercise 1 documents
+confirmed Exercise 1 documents
 Exercise 3–6 specifications nếu có
 Practice/Lab khác
 unrelated configuration
 ```
 
-Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → wait for approval`.
+Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → chờ xác nhận`.
 
 ## 7. Scientific Parameters
 
@@ -112,7 +112,7 @@ Nếu chưa đủ evidence thì STOP.
 
 ### Step 2 — Verify Repository Context
 
-Xác minh Practice_2 root, active rules, Exercise 2 specification, approved plan state và current status.
+Xác minh Practice_2 root, active rules, Exercise 2 specification, confirmed plan state và current status.
 
 ### Step 3 — Prepare ADF Input
 
@@ -187,7 +187,7 @@ stationary/non-stationary conclusion
 
 ## 11. Stop Conditions
 
-Agent phải dừng khi E01 handoff thiếu, test leakage xảy ra, input không phải original
+Quy trình phải dừng khi E01 handoff thiếu, test leakage xảy ra, input không phải original
 training series, ADF fail, output thiếu statistic/p-value/critical values, parameter cần
 đổi, dependency mới cần thêm hoặc unrelated file cần sửa.
 
@@ -198,7 +198,7 @@ Khi dừng:
 2. Ghi observed và expected behavior.
 3. Ghi evidence và impact.
 4. Đề xuất next action.
-5. Chờ Human approval.
+5. Chờ xác nhận.
 ```
 
 ## 12. Completion Gate
@@ -213,12 +213,12 @@ AND output inspected
 AND no unresolved blocking issue
 ```
 
-## 13. Approval Gate
+## 13. confirmation gate
 
 ```text
 EXERCISE_02_BEFORE_PROCESS_CREATED=true
 EXERCISE_02_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_02_BEFORE_PROCESS_APPROVED=true
+EXERCISE_02_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_02_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_02_IMPLEMENTED=true
 EXERCISE_02_VALIDATED=true
@@ -228,9 +228,9 @@ EXERCISE_02_COMPLETED=true
 Actual result và runtime state phải được đọc từ execution log và current status;
 before-process plan không thay thế hai evidence owner này.
 
-## 14. Agent Execution Rule
+## 14. workflow Execution Rule
 
-Sau approval:
+Sau confirmation:
 
 ```text
 one step → execute → run → verify → report → next step

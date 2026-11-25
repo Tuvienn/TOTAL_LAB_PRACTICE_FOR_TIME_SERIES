@@ -10,8 +10,8 @@ Dataset: AirPassengers
 Frequency: Monthly
 Seasonal period: s = 12
 Chronological split: 80% train / 20% test
-Model training required: YES, after approval
-Specification status: APPROVED_FOR_IMPLEMENTATION
+Model training required: YES, after confirmation
+Specification status: CONFIRMED_FOR_IMPLEMENTATION
 Implementation authorized: YES
 Direct data dependency on E01–E05: NO
 Process gate: EXERCISE_05_COMPLETED
@@ -19,7 +19,7 @@ Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_06_execution.md
 ```
 
-Specification này định nghĩa yêu cầu khoa học của E06. E06 đã được Human duyệt để
+Specification này định nghĩa yêu cầu khoa học của E06. E06 đã được xác nhận để
 triển khai; completion vẫn phụ thuộc clean-kernel validation và execution evidence.
 
 ## 2. Objective
@@ -59,7 +59,7 @@ Raw SHA-256: 8cb51be753a718d9be5d76d7e238cc224792754676adc21faa59e954b0201621
 ```
 
 Raw file là immutable source evidence. Parsing, sorting, splitting, scale
-transformation và differencing chỉ được thực hiện trên working objects hoặc approved
+transformation và differencing chỉ được thực hiện trên working objects hoặc confirmed
 derived artifacts.
 
 ## 4. Relationship with Core Practice
@@ -78,12 +78,12 @@ của E01–E05.
 
 ## 5. Required Steps
 
-1. Verify E05 completion, E06 approval state và reusable interfaces.
+1. Verify E05 completion, E06 confirmation state và reusable interfaces.
 2. Load, inspect và validate AirPassengers schema/time index/data quality.
 3. Tạo chronological 80/20 split, không shuffle, rồi seal test set.
 4. Vẽ training series để nhận diện trend, seasonality và variance behavior.
 5. Chốt raw hoặc natural-log scale chỉ từ training evidence.
-6. Chạy ADF trên original training series ở approved scale.
+6. Chạy ADF trên original training series ở confirmed scale.
 7. Thực hiện và đánh giá regular differencing `d = 1` khi evidence yêu cầu.
 8. Thực hiện và đánh giá seasonal differencing `D = 1, s = 12` khi evidence yêu cầu.
 9. Validate NaN handling, timestamp alignment và stationarity sau transformation.
@@ -149,7 +149,7 @@ ARIMA và SARIMA phải dùng cùng:
 
 ```text
 AirPassengers training set
-approved analysis scale
+confirmed analysis scale
 test boundary
 forecast horizon
 target observations
@@ -238,7 +238,7 @@ Không viết kết luận hoặc metrics trước khi actual outputs được t
 ## 10. Validation Criteria
 
 ```text
-[ ] E05 completion và E06 approval state được xác minh
+[ ] E05 completion và E06 confirmation state được xác minh
 [ ] Raw checksum, schema, date range và monthly continuity hợp lệ
 [ ] Missing values và duplicate timestamps được kiểm tra
 [ ] Split đúng 115 train / 29 test, không shuffle
@@ -249,7 +249,7 @@ Không viết kết luận hoặc metrics trước khi actual outputs được t
 [ ] Differencing NaN và timestamp alignment được kiểm tra
 [ ] ACF/PACF chỉ dùng stationary transformed training series
 [ ] Candidate orders có actual rationale
-[ ] ARIMA và SARIMA dùng cùng approved evaluation setup
+[ ] ARIMA và SARIMA dùng cùng confirmed evaluation setup
 [ ] Convergence, warnings, AIC và BIC được ghi
 [ ] Residual mean, plot, ACF và Ljung–Box được ghi
 [ ] Forecasts có đúng 29 observations và khớp test index
@@ -262,12 +262,12 @@ Không viết kết luận hoặc metrics trước khi actual outputs được t
 
 ## 11. Stop Conditions
 
-Phải dừng nếu E05 chưa hoàn thành, E06 chưa approved, dataset contract sai, xuất hiện
+Phải dừng nếu E05 chưa hoàn thành, E06 chưa confirmed, dataset contract sai, xuất hiện
 test leakage, scale/inverse-transform policy chưa rõ, differencing thiếu evidence,
 ACF/PACF input chưa stationary, model không hội tụ, forecast index lệch test index,
 hai model không dùng cùng setup hoặc scope/dependency cần mở rộng.
 
-Khi dừng: `STOP → document issue → explain impact → propose next action → wait for approval`.
+Khi dừng: `STOP → document issue → explain impact → propose next action → chờ xác nhận`.
 
 ## 12. Completion Condition
 
@@ -276,7 +276,7 @@ AirPassengers validated
 AND independent chronological holdout sealed
 AND scale and differencing decisions supported by training evidence
 AND ACF/PACF candidates documented
-AND ARIMA and SARIMA fitted on the same approved training setup
+AND ARIMA and SARIMA fitted on the same confirmed training setup
 AND convergence and residual diagnostics inspected
 AND forecasts aligned to the same test horizon
 AND MAE/RMSE comparison reproduced
@@ -291,12 +291,12 @@ E06 hoàn thành Advanced Extension và cung cấp kết luận về tác độn
 modeling trên AirPassengers. E06 không thay thế, sửa lại hoặc che lấp completion state
 của Core Practice E01–E05.
 
-## 14. Approval Gate
+## 14. confirmation gate
 
 ```text
 EXERCISE_06_SPECIFICATION_CREATED=true
 EXERCISE_06_SPECIFICATION_REVIEWED=true
-EXERCISE_06_SPECIFICATION_APPROVED=true
+EXERCISE_06_SPECIFICATION_CONFIRMED=true
 EXERCISE_06_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_06_WAITING_FOR_E05=false
 ```

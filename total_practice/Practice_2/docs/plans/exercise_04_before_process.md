@@ -8,16 +8,16 @@ Exercise ID: EXERCISE_04
 Topic: ACF/PACF and ARIMA Candidate Identification
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: APPROVED_AND_COMPLETED
+Status: CONFIRMED_AND_COMPLETED
 Implementation authorized: YES
 Upstream handoff: EXERCISE_03_COMPLETED_WITH_LOG_TRANSFORMATION
-Downstream gate: CLOSED_PENDING_E04_VALIDATION
+Downstream gate: CLOSED_NOT_COMPLETED_E04_VALIDATION
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_04_execution.md
 ```
 
 File này chỉ mô tả kế hoạch chi tiết cho E04. Việc tạo plan không cho phép triển khai
-code, chỉnh notebook, tạo output hoặc mở handoff sang E05 khi chưa có Human approval.
+code, chỉnh notebook, tạo output hoặc mở handoff sang E05 khi chưa có confirmation.
 
 ## 2. Objective
 
@@ -50,7 +50,7 @@ total_practice/Practice_2/docs/status/current_status.md
 ```
 
 Nếu thiếu tài liệu, upstream evidence hoặc có conflict:
-`STOP → report issue → chờ Human quyết định`.
+`STOP → report issue → chờ xử lý xung đột`.
 
 ## 4. Upstream Input Contract
 
@@ -97,7 +97,7 @@ không tự động xác nhận final model.
 
 ## 6. Files Allowed to Create or Modify
 
-Sau khi plan được Human phê duyệt, E04 chỉ được phép tạo hoặc cập nhật:
+Sau khi plan được xác nhận, E04 chỉ được phép tạo hoặc cập nhật:
 
 ```text
 docs/exercise_details/exercise_04_acf_pacf_arima_candidates.md
@@ -125,7 +125,7 @@ datasets/raw/airline-passengers.csv
 working_rule.md
 AGENTS.md
 .agents/ rules and workflows
-approved Practice_2 rule files
+confirmed Practice_2 rule files
 E01–E03 validated source logic and result files
 historical Practice2_latest.ipynb reference (not present in the current repository)
 E05/E06 implementation or documents
@@ -134,7 +134,7 @@ unrelated Practice/Lab files
 ```
 
 Nếu cần sửa ngoài scope:
-`STOP → explain reason and impact → propose scope update → wait for approval`.
+`STOP → explain reason and impact → propose scope update → chờ xác nhận`.
 
 ## 8. Planned Reusable Logic
 
@@ -162,7 +162,7 @@ significant
 
 ### 8.2. Visualization Owner
 
-Mở rộng approved visualization owner để tạo một figure gồm:
+Mở rộng confirmed visualization owner để tạo một figure gồm:
 
 ```text
 left panel: ACF
@@ -179,14 +179,14 @@ Figure phải:
 
 ## 9. Sequential Execution Steps
 
-### Step 1 — Verify Repository and Approval State
+### Step 1 — Verify Repository and confirmation state
 
-Xác minh required documents, E03 completion, E04 plan approval và current status.
-Nếu plan chưa được Human phê duyệt thì không triển khai bước tiếp theo.
+Xác minh required documents, E03 completion, E04 plan confirmation và current status.
+Nếu plan chưa được xác nhận thì không triển khai bước tiếp theo.
 
 ### Step 2 — Verify E03 Handoff
 
-Tái tạo approved E03 input bằng reusable source logic và xác minh:
+Tái tạo confirmed E03 input bằng reusable source logic và xác minh:
 
 ```text
 train observations = 163
@@ -304,7 +304,7 @@ Tests tối thiểu:
 [ ] No test timestamp appears in E04 input
 [ ] Empty input is rejected
 [ ] Input containing NaN is rejected
-[ ] Output covers the approved lag range
+[ ] Output covers the confirmed lag range
 [ ] PACF method is ywm
 [ ] Confidence level is 95%
 [ ] Significant flag agrees with the confidence interval
@@ -376,7 +376,7 @@ Khi dừng:
 2. Ghi observed và expected behavior.
 3. Ghi evidence và impact.
 4. Đề xuất next action.
-5. Chờ Human approval.
+5. Chờ xác nhận.
 ```
 
 ## 14. Risks and Limitations
@@ -415,12 +415,12 @@ one or two provisional ARIMA candidates
 remaining seasonal-lag limitation when applicable
 ```
 
-## 16. Approval Gate
+## 16. confirmation gate
 
 ```text
 EXERCISE_04_BEFORE_PROCESS_CREATED=true
 EXERCISE_04_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_04_BEFORE_PROCESS_APPROVED=true
+EXERCISE_04_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_04_IMPLEMENTED=true
 EXERCISE_04_VALIDATED=true
@@ -428,4 +428,4 @@ EXERCISE_04_COMPLETED=true
 EXERCISE_05_HANDOFF_OPEN=false
 ```
 
-Human approval is required before any E04 implementation begins.
+confirmation is required before any E04 implementation begins.

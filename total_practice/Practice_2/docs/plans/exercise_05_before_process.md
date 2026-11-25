@@ -8,9 +8,9 @@ Exercise ID: EXERCISE_05
 Topic: ARIMA Training, Residual Diagnostics, Forecasting and Evaluation
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: APPROVED_AND_COMPLETED
+Status: CONFIRMED_AND_COMPLETED
 Implementation authorized: NO
-Human-reported execution: YES, notebook evidence requires formal reconciliation
+reported execution: YES, notebook evidence requires formal reconciliation
 Upstream handoff: E04 ARIMA candidates; formal status discrepancy remains
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_05_execution.md
@@ -23,12 +23,12 @@ or establish formal Exercise completion.
 ## 2. Objective
 
 - verify the E01 chronological holdout and the E04 candidate handoff;
-- fit the approved one or two ARIMA candidates on training data;
+- fit the confirmed one or two ARIMA candidates on training data;
 - compare each candidate with a seasonal-naive baseline using seasonal lag 12;
 - inspect convergence, fitting warnings, AIC/BIC, and residual diagnostics;
 - forecast the sealed test horizon and evaluate MAE, RMSE, and MAPE;
 - answer the E05 interpretation questions from inspected execution evidence;
-- reconcile the human-reported E04/E05 completion with formal status and approval
+- reconcile the reported E04/E05 completion with formal status and confirmation
   records before marking E05 complete.
 
 E05 covers ARIMA on Monthly Retail Sales. SARIMA on AirPassengers is E06 and is
@@ -57,26 +57,26 @@ E01–E04 validated evidence, execution logs, and outputs
 notebooks/Practice_2_Exercise.ipynb
 ```
 
-If required upstream evidence is missing or status/approval records conflict,
+If required upstream evidence is missing or status/confirmation records conflict,
 stop and report the discrepancy before formal execution or completion.
 
 ## 4. Entry Gate and Current State
 
-The current status records that the Human approved E04/E05 completion and that
+The current status records that the confirmationd E04/E05 completion and that
 validated notebook execution evidence exists. `EXERCISE_04_HANDOFF_OPEN=false`
-records the approved E04 handoff to E05.
+records the confirmed E04 handoff to E05.
 
 Therefore:
 
 ```text
-Human-approved E05 notebook run: validated
+confirmed E05 notebook run: validated
 Formal E04 handoff state: resolved
-E05 specification approval: approved
-E05 plan approval: approved
-Formal E05 completion: approved with residual-autocorrelation limitation
+E05 specification confirmation: confirmed
+E05 plan confirmation: confirmed
+Formal E05 completion: confirmed with residual-autocorrelation limitation
 ```
 
-The Human-approved run is now treated as official E05 evidence. The residual
+The confirmed run is now treated as official E05 evidence. The residual
 autocorrelation limitation remains visible in the execution evidence and is not
 silently converted into a white-noise claim.
 
@@ -94,7 +94,7 @@ Split: chronological 80/20
 Shuffle: false
 Transformation: natural_log
 Selected regular differencing order: d = 1
-E04 handoff: two approved ARIMA(p,1,q) candidates with rationale
+E04 handoff: two confirmed ARIMA(p,1,q) candidates with rationale
 Test set: sealed until final evaluation
 ```
 
@@ -129,7 +129,7 @@ explicitly; do not silently remove those observations.
 
 ## 7. Files Allowed to Create or Modify
 
-After this plan and the E05 specification are approved, work may create or update
+After this plan and the E05 specification are confirmed, work may create or update
 only the following, as needed:
 
 ```text
@@ -148,7 +148,7 @@ docs/status/current_status.md
 
 Reuse existing package owners and interfaces. Do not add a duplicate model,
 diagnostic, visualization, or metric module. If reusable code changes are needed,
-first identify the approved owner and update the file scope with Human approval.
+first identify the confirmed owner and update the file scope with confirmation.
 
 ## 8. Files Not to Modify
 
@@ -158,11 +158,11 @@ datasets/raw/airline-passengers.csv
 working_rule.md
 AGENTS.md
 .agents/rules/ and .agents/workflows/
-approved Practice_2 rule files
+confirmed Practice_2 rule files
 E01–E04 validated source logic, outputs, and execution evidence
 historical Practice2_latest.ipynb reference (not present in the current repository)
 E06 implementation, outputs, or execution evidence
-README.md before the approved final-documentation stage
+README.md before the confirmed final-documentation stage
 unrelated Practice/Lab files
 ```
 
@@ -170,21 +170,21 @@ If the work requires modifying an excluded file, changing the E01 split,
 changing the dataset or metrics, or expanding architecture/dependencies:
 
 ```text
-STOP → explain reason and impact → propose scope update → wait for approval
+STOP → explain reason and impact → propose scope update → chờ xác nhận
 ```
 
 ## 9. Sequential Execution Steps
 
-### Step 0 — Verify Approval and Reconcile Existing State
+### Step 0 — Verify confirmation and Reconcile Existing State
 
-Review the approved E05 specification and this plan approval state. Confirm the
-E04 handoff evidence and the two approved ARIMA candidates. The clean-kernel
+Review the confirmed E05 specification and this plan confirmation state. Confirm the
+E04 handoff evidence and the two confirmed ARIMA candidates. The clean-kernel
 run is retained as formal evidence, with residual autocorrelation documented as
 a limitation.
 
 ### Step 1 — Verify the Dataset and E01 Boundary
 
-Use the approved data loader and validate the raw dataset contract. Verify:
+Use the confirmed data loader and validate the raw dataset contract. Verify:
 
 ```text
 rows = 204
@@ -203,12 +203,12 @@ values, duplicates, or monthly continuity differ from the contract.
 ### Step 2 — Verify E03/E04 Handoffs
 
 Reproduce the natural-log and first-difference training transformation through
-approved reusable logic. Confirm the selected `d=1`, expected 162 transformed
+confirmed reusable logic. Confirm the selected `d=1`, expected 162 transformed
 observations, no remaining missing values, and correct timestamp alignment.
 Verify that E04 candidates are limited to one or two orders with actual
 training-only ACF/PACF rationale.
 
-Do not use E04 candidates from legacy notebook output unless the approved E04
+Do not use E04 candidates from legacy notebook output unless the confirmed E04
 handoff confirms them.
 
 ### Step 3 — Lock the Model and Evaluation Setup
@@ -225,7 +225,7 @@ Do not use test metrics to add, remove, or change candidates.
 
 ### Step 4 — Fit Seasonal-Naive Baseline and ARIMA Candidates
 
-Create the seasonal-naive forecast using training data only. Fit each approved
+Create the seasonal-naive forecast using training data only. Fit each confirmed
 ARIMA candidate to log-transformed training levels with its inherited `d=1`.
 Record convergence, fitting warnings or failures, AIC, and BIC. Do not silently
 discard a warning or failed candidate.
@@ -257,7 +257,7 @@ After the setup is locked, evaluate the test set:
 - compute absolute error by timestamp and identify its maximum for each model;
 - inspect the Train/Test/Forecast figure and metric tables.
 
-Do not use an unaligned forecast, omit test points without an approved reason, or
+Do not use an unaligned forecast, omit test points without an confirmed reason, or
 compare metrics computed on different scales or horizons.
 
 ### Step 7 — Answer the E05 Questions
@@ -288,7 +288,7 @@ verified state and retain the residual-autocorrelation limitation.
 ## 10. Test and Validation Plan
 
 ```text
-[ ] E04 candidate handoff and E05 approval state reviewed
+[ ] E04 candidate handoff and E05 confirmation state reviewed
 [ ] Dataset schema, monthly continuity, and raw immutability verified
 [ ] E01 split reproduced exactly as 163/41 with no shuffle
 [ ] Test data excluded from order selection and model fitting
@@ -313,7 +313,7 @@ verified state and retain the residual-autocorrelation limitation.
 
 Stop and report the issue if:
 
-- E04 handoff, E05 approval, or formal E04/E05 status reconciliation is unresolved;
+- E04 handoff, E05 confirmation, or formal E04/E05 status reconciliation is unresolved;
 - dataset or E01 split contract fails;
 - test leakage is detected;
 - the E03 transformation or selected `d` cannot be reproduced;
@@ -322,7 +322,7 @@ Stop and report the issue if:
 - residual diagnostics reveal structure that blocks an evidence-based conclusion;
 - forecast timestamps do not align exactly with test timestamps;
 - inverse transformation or metric scale is unclear;
-- a required file or architecture change is outside this approved scope.
+- a required file or architecture change is outside this confirmed scope.
 
 When blocked:
 
@@ -331,14 +331,14 @@ STOP
 → document observed and expected behavior
 → explain impact
 → propose the next action
-→ wait for Human approval when required
+→ chờ xác nhận when required
 ```
 
 ## 12. Risks and Controls
 
 | Risk | Control |
 |---|---|
-| Treating an exploratory notebook run as formally approved | Reconcile approval and status records before claiming completion |
+| Treating an exploratory notebook run as formally confirmed | Reconcile confirmation and status records before claiming completion |
 | E04 handoff remains formally open | Verify candidate evidence and update status only after review |
 | Double differencing the ARIMA input | Fit `ARIMA(log(train levels), order=(p,1,q))` |
 | Test leakage during candidate selection | Lock orders and evaluation setup before opening test values |
@@ -354,23 +354,23 @@ STOP
 E05 is complete only when:
 
 ```text
-E01–E04 handoffs and approvals are reconciled
-AND approved ARIMA candidates and seasonal-naive baseline are evaluated
+E01–E04 handoffs and confirmation are reconciled
+AND confirmed ARIMA candidates and seasonal-naive baseline are evaluated
 AND convergence and residual evidence are recorded
 AND forecast indices match the 41-observation test horizon
 AND MAE/RMSE/MAPE are reproducible on the same original-scale observations
 AND all required questions are answered from actual evidence
 AND tests and clean-kernel notebook validation pass
 AND execution log and status reflect verified state
-AND Human reviews the final result
+AND Technical review of the final result
 ```
 
-## 14. Approval Gate
+## 14. confirmation gate
 
 ```text
 EXERCISE_05_BEFORE_PROCESS_CREATED=true
 EXERCISE_05_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_05_BEFORE_PROCESS_APPROVED=true
+EXERCISE_05_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_05_IMPLEMENTED=true
 EXERCISE_05_VALIDATED=true

@@ -8,7 +8,7 @@
 - PACF method: `ywm`
 - Confidence level: `95%`
 - Test values used: false
-- Status: approved and validated
+- Status: confirmed and validated
 
 ## Handoff
 
@@ -21,4 +21,4 @@ The two candidates passed to E05 are `ARIMA(1,1,1)` and
 `ARIMA(0,1,1)`, matching the 1–2 ARIMA-candidate scope in the exercise brief.
 SARIMA is reserved for the E06 extension. E04 does not choose a final model.
 Candidate performance is not treated as final selection evidence until the
-formal E04/E05 approval state is reconciled.
+formal E04/E05 confirmation state is reconciled.

@@ -273,8 +273,8 @@ Một Practice vẫn đạt mục tiêu học tập nếu model chưa có sai s�
 
 ## 10. Related Documents
 
-- [Đề bài Practice 2](../../../../references/excercise_stats_models.pdf)
-- [Kế hoạch triển khai cấp cao](plan_overview.md)
-- Exercise specifications sẽ được lưu trong `docs/exercise_details/` sau khi được thiết kế và phê duyệt.
+- <a href="../../../../references/excercise_stats_models.pdf" style="color:#1f6feb;">Đề bài Practice 2</a>
+- <a href="plan_overview.md" style="color:#1f6feb;">Kế hoạch triển khai cấp cao</a>
+- Exercise specifications sẽ được lưu trong `docs/exercise_details/` sau khi được thiết kế và xác nhận.
 
 `project_overview.md` sở hữu mục tiêu, phạm vi, dataset, deliverables và Definition of Done tổng thể. `plan_overview.md` sở hữu trình tự, dependency, input/output và validation gate của từng Exercise.

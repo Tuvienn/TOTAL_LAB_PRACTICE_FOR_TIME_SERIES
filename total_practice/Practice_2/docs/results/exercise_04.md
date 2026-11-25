@@ -18,12 +18,12 @@ formal của E05 core.
 
 ## Trạng thái
 
-`Đã phê duyệt và kiểm tra`. E04 bàn giao candidates, không tự chọn final model.
+`Đã xác nhận và kiểm tra`. E04 bàn giao candidates, không tự chọn final model.
 
 Không chọn model cuối cùng chỉ từ một spike ACF/PACF hoặc chỉ từ AIC/BIC.
 
 ## Evidence
 
-- [Execution evidence E04](../logs/exercise_04_execution.md)
-- [ACF/PACF figure](../../outputs/figures/03_acf_pacf_log_first_differenced.png)
-- [Notebook core](../../notebooks/Practice_2_Exercise.ipynb)
+- <a href="../logs/exercise_04_execution.md" style="color:#1f6feb;">Execution evidence E04</a>
+- <a href="../../outputs/figures/03_acf_pacf_log_first_differenced.png" style="color:#1f6feb;">ACF/PACF figure</a>
+- <a href="../../notebooks/Practice_2_Exercise.ipynb" style="color:#1f6feb;">Notebook core</a>

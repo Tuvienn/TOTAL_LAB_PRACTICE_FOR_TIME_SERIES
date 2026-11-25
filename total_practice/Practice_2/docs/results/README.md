@@ -6,12 +6,12 @@ evidence gốc.
 
 | Exercise | Chủ đề | Trạng thái | Kết quả |
 |---|---|---|---|
-| [E01](./exercise_01.md) | Khám phá và chuẩn bị dữ liệu | Đã kiểm tra | [Mở kết quả](./exercise_01.md) |
-| [E02](./exercise_02.md) | Kiểm định ADF | Đã kiểm tra | [Mở kết quả](./exercise_02.md) |
-| [E03](./exercise_03.md) | Sai phân và tính dừng | Đã kiểm tra | [Mở kết quả](./exercise_03.md) |
-| [E04](./exercise_04.md) | ACF/PACF và candidates | Đã phê duyệt | [Mở kết quả](./exercise_04.md) |
-| [E05](./exercise_05.md) | ARIMA, diagnostics và forecast | Đã phê duyệt, có limitation | [Mở kết quả](./exercise_05.md) |
-| [E06](./exercise_06.md) | SARIMA AirPassengers | Đã duyệt triển khai | [Mở kết quả](./exercise_06.md) |
+| <a href="./exercise_01.md" style="color:#1f6feb;">E01</a> | Khám phá và chuẩn bị dữ liệu | Đã kiểm tra | <a href="./exercise_01.md" style="color:#1f6feb;">Mở kết quả</a> |
+| <a href="./exercise_02.md" style="color:#1f6feb;">E02</a> | Kiểm định ADF | Đã kiểm tra | <a href="./exercise_02.md" style="color:#1f6feb;">Mở kết quả</a> |
+| <a href="./exercise_03.md" style="color:#1f6feb;">E03</a> | Sai phân và tính dừng | Đã kiểm tra | <a href="./exercise_03.md" style="color:#1f6feb;">Mở kết quả</a> |
+| <a href="./exercise_04.md" style="color:#1f6feb;">E04</a> | ACF/PACF và candidates | Đã xác nhận | <a href="./exercise_04.md" style="color:#1f6feb;">Mở kết quả</a> |
+| <a href="./exercise_05.md" style="color:#1f6feb;">E05</a> | ARIMA, diagnostics và forecast | Đã xác nhận, có limitation | <a href="./exercise_05.md" style="color:#1f6feb;">Mở kết quả</a> |
+| <a href="./exercise_06.md" style="color:#1f6feb;">E06</a> | SARIMA AirPassengers | Đã xác nhận phạm vi triển khai | <a href="./exercise_06.md" style="color:#1f6feb;">Mở kết quả</a> |
 
 ## Quy ước thư mục
 
@@ -23,6 +23,6 @@ evidence gốc.
 
 ## Cảnh báo chung
 
-E04 và E05 đã được phê duyệt từ clean-kernel run. E05 vẫn ghi rõ limitation về
-residual autocorrelation. E06 đã được duyệt để triển khai nhưng chưa completed;
+E04 và E05 đã được xác nhận từ clean-kernel run. E05 vẫn ghi rõ limitation về
+residual autocorrelation. E06 đã được xác nhận để triển khai nhưng chưa completed;
 nó không thay thế trạng thái của core practice.

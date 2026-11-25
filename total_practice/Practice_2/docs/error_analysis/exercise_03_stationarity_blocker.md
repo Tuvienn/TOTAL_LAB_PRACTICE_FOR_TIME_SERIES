@@ -96,7 +96,7 @@ transformation hiện tại chưa xử lý đầy đủ cấu trúc của chuỗ
 EDA cho thấy level tăng, biên độ biến động tăng theo level và có pattern mùa vụ hàng
 năm. Các đặc điểm này có thể làm first difference trên raw scale vẫn giữ variance
 không ổn định hoặc seasonal dependence. Đây là giả thuyết cần kiểm tra trong fix plan,
-không phải kết luận đã được phê duyệt.
+không phải kết luận đã được xác nhận.
 
 ### 5.3. Confirmed legacy workflow root cause
 
@@ -147,7 +147,7 @@ tích risk over-differencing và phân biệt rõ regular order `d` với season
 
 ## 8. Required Decision Before Fixing
 
-Human cần duyệt một fix plan riêng để chọn transformation protocol. Fix plan tối thiểu
+phạm vi cần xác nhận một fix plan riêng để chọn transformation protocol. Fix plan tối thiểu
 phải xác định:
 
 - transformation candidate và lý do;
@@ -163,7 +163,7 @@ phải xác định:
 ```text
 [ ] Only the 163-observation training series is used
 [ ] Test values remain sealed
-[ ] Transformation protocol is Human-approved
+[ ] Transformation protocol is confirmed
 [ ] Transformation scale and differencing order are recorded
 [ ] NaN count and timestamp alignment are validated
 [ ] ADF uses alpha=0.05, regression="c", autolag="AIC"
@@ -177,5 +177,5 @@ phải xác định:
 ## 10. Stop Condition
 
 Không sửa hoặc chạy tiếp E04/E05 từ kết quả E03 hiện tại. Bước kế tiếp là lập và
-Human duyệt fix plan cho E03; chỉ sau khi fix được triển khai, kiểm chứng và cập nhật
+Đã xác nhận fix plan cho E03; chỉ sau khi fix được triển khai, kiểm chứng và cập nhật
 state thì mới review handoff sang E04.

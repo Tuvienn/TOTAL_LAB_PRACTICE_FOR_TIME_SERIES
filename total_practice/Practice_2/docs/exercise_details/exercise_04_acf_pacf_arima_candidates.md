@@ -11,14 +11,14 @@ Input: Stationary log first-differenced training series from E03
 Inherited transformation: natural_log
 Inherited regular differencing order: d = 1
 Model training required: NO
-Specification status: APPROVED_AND_VALIDATED
+Specification status: CONFIRMED_AND_VALIDATED
 Implementation authorized: YES
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_04_execution.md
 ```
 
 Specification này định nghĩa yêu cầu khoa học của E04. Nó không cho phép triển khai
-code, chỉnh notebook, tạo output hoặc mở handoff sang E05 khi chưa có Human approval.
+code, chỉnh notebook, tạo output hoặc mở handoff sang E05 khi chưa có confirmation.
 
 ## 2. Objective
 
@@ -56,7 +56,7 @@ legacy hoặc bất kỳ test observation nào.
 ## 4. Required Steps
 
 1. Verify E03 completion, transformation metadata, selected `d` và sealed test set.
-2. Reproduce đúng log first-differenced training series bằng approved reusable logic.
+2. Reproduce đúng log first-differenced training series bằng confirmed reusable logic.
 3. Validate identity, length, timestamps, missing values và stationarity handoff.
 4. Tính ACF đến lag 36 với confidence interval 95%.
 5. Tính PACF đến lag 36 bằng `method="ywm"` với confidence interval 95%.
@@ -184,13 +184,13 @@ training series, có test leakage, missing/alignment sai, stationarity evidence 
 còn đạt, ACF/PACF computation fail, parameters cần đổi, hoặc không có candidate nào
 có rationale truy vết được.
 
-Khi dừng: `STOP → document issue → explain impact → propose next action → wait for approval`.
+Khi dừng: `STOP → document issue → explain impact → propose next action → chờ xác nhận`.
 
 ## 11. Completion Condition
 
 ```text
 E03 input identity validated
-AND ACF/PACF executed with approved parameters
+AND ACF/PACF executed with confirmed parameters
 AND tables and figure inspected
 AND short and seasonal lags interpreted from actual evidence
 AND one or two provisional candidates recorded
@@ -212,13 +212,13 @@ remaining seasonal-dependence limitation when present
 ```
 
 E04 không chọn final model. E05 phải fit candidates, kiểm tra convergence,
-AIC/BIC, residuals và đánh giá trên sealed test set cùng approved baseline.
+AIC/BIC, residuals và đánh giá trên sealed test set cùng confirmed baseline.
 
-## 13. Approval Gate
+## 13. confirmation gate
 
 ```text
 EXERCISE_04_SPECIFICATION_CREATED=true
 EXERCISE_04_SPECIFICATION_REVIEWED=true
-EXERCISE_04_SPECIFICATION_APPROVED=true
+EXERCISE_04_SPECIFICATION_CONFIRMED=true
 EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
 ```

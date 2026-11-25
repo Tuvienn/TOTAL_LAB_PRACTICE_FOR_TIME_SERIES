@@ -28,7 +28,7 @@ chính thức. E04 phải dùng đúng chuỗi log-first-difference training ser
 
 ## Evidence
 
-- [Execution evidence E03](../logs/exercise_03_execution.md)
-- [Chuỗi first difference](../../outputs/figures/02_first_differenced_series.png)
-- [Chuỗi log-first-difference](../../outputs/figures/02_log_first_differenced_series.png)
-- [Notebook core](../../notebooks/Practice_2_Exercise.ipynb)
+- <a href="../logs/exercise_03_execution.md" style="color:#1f6feb;">Execution evidence E03</a>
+- <a href="../../outputs/figures/02_first_differenced_series.png" style="color:#1f6feb;">Chuỗi first difference</a>
+- <a href="../../outputs/figures/02_log_first_differenced_series.png" style="color:#1f6feb;">Chuỗi log-first-difference</a>
+- <a href="../../notebooks/Practice_2_Exercise.ipynb" style="color:#1f6feb;">Notebook core</a>

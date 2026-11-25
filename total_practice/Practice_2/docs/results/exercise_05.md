@@ -23,12 +23,12 @@ reconciliation evidence, chưa phải formal model selection.
 
 ## Trạng thái
 
-`Đã phê duyệt và kiểm tra`, với giới hạn residual-autocorrelation được ghi nhận.
+`Đã xác nhận và kiểm tra`, với giới hạn residual-autocorrelation được ghi nhận.
 
 ## Evidence
 
-- [Execution evidence E05](../logs/exercise_05_execution.md)
-- [Forecast comparison](../../outputs/figures/05_forecast_comparison_log_d1.png)
-- [Residual diagnostics](../../outputs/figures/05_residual_diagnostics_log_d1.png)
-- [Model summary](../../outputs/results/Model_Summary_Prac2_Exercise.txt)
-- [Run log](../../runs/2026-11-25_core_arima_two_candidates_v2/Practice_2_Exercise.log)
+- <a href="../logs/exercise_05_execution.md" style="color:#1f6feb;">Execution evidence E05</a>
+- <a href="../../outputs/figures/05_forecast_comparison_log_d1.png" style="color:#1f6feb;">Forecast comparison</a>
+- <a href="../../outputs/figures/05_residual_diagnostics_log_d1.png" style="color:#1f6feb;">Residual diagnostics</a>
+- <a href="../../outputs/results/Model_Summary_Prac2_Exercise.txt" style="color:#1f6feb;">Model summary</a>
+- <a href="../../runs/2026-11-25_core_arima_two_candidates_v2/Practice_2_Exercise.log" style="color:#1f6feb;">Run log</a>

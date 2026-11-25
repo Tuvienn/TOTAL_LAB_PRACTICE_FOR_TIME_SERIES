@@ -7,7 +7,7 @@
 **Planning level:** High-level execution plan  
 **Core scope:** Exercise 01–05  
 **Advanced scope:** Exercise 06  
-**Status:** APPROVED
+**Status:** CONFIRMED
 
 Tài liệu này xác định trình tự, input, nhiệm vụ, evidence, output và điều kiện hoàn thành của từng Exercise. Mục tiêu, dataset, phạm vi và Definition of Done tổng thể thuộc `project_overview.md`.
 
@@ -15,7 +15,7 @@ Tài liệu này xác định trình tự, input, nhiệm vụ, evidence, output
 
 ## 2. Purpose and Source Basis
 
-Plan được xây dựng từ các yêu cầu trong [đề bài Practice 2](../../../../references/excercise_stats_models.pdf):
+Plan được xây dựng từ các yêu cầu trong <a href="../../../../references/excercise_stats_models.pdf" style="color:#1f6feb;">đề bài Practice 2</a>:
 
 1. Khám phá dữ liệu.
 2. Kiểm định ADF trên chuỗi gốc.
@@ -29,7 +29,7 @@ Hai dataset được sử dụng:
 - Dataset 1: Monthly Retail Sales — dữ liệu chính cho Exercise 01–05.
 - Dataset 2: AirPassengers — dữ liệu cho Exercise 06.
 
-Plan không mô tả implementation ở mức tên hàm hoặc code cell. Chi tiết đó thuộc exercise specification được phê duyệt trước khi triển khai.
+Plan không mô tả implementation ở mức tên hàm hoặc code cell. Chi tiết đó thuộc exercise specification được xác nhận trước khi triển khai.
 
 ---
 
@@ -482,7 +482,7 @@ Final ARIMA assessment
 [ ] Train/test split được trình bày và không shuffle
 [ ] Test holdout integrity được xác nhận
 [ ] Seasonal-naive baseline được đánh giá
-[ ] Tất cả approved candidates được fit
+[ ] Tất cả confirmed candidates được fit
 [ ] Convergence, AIC và BIC được ghi
 [ ] Residual diagnostics hoàn thành
 [ ] Forecast đúng test horizon
@@ -647,39 +647,39 @@ Exercise 06 sử dụng Dataset 2. Completion của E06 không thay thế hoặc
 
 ---
 
-## 14. Approval Gates
+## 14. confirmation gate
 
-### Gate 1 — Overview Approval
+### Gate 1 — Overview confirmation
 
 ```text
-PROJECT_OVERVIEW approved
+PROJECT_OVERVIEW confirmed
 +
-PLAN_OVERVIEW approved
+PLAN_OVERVIEW confirmed
 ```
 
-### Gate 2 — Exercise Design Approval
+### Gate 2 — Exercise Design confirmation
 
 Trước khi code một Exercise:
 
 ```text
-approved Exercise scope trong plan hoặc specification riêng khi cần
+confirmed Exercise scope trong plan hoặc specification riêng khi cần
 +
 input contract available
 +
 scientific protocol understood
 ```
 
-### Gate 3 — Implementation Approval
+### Gate 3 — Implementation confirmation
 
 ```text
-approved implementation scope
+confirmed implementation scope
 +
 entry condition satisfied
 +
 upstream evidence available
 ```
 
-### Gate 4 — Exercise Completion Approval
+### Gate 4 — Exercise Completion confirmation
 
 ```text
 required output generated
@@ -688,7 +688,7 @@ validation passed
 +
 interpretation documented
 +
-Human review completed
+Technical review completed
 ```
 
 Không chuyển Exercise nếu gate hiện tại chưa đạt.
@@ -698,7 +698,7 @@ Không chuyển Exercise nếu gate hiện tại chưa đạt.
 ## 15. Optional Exercise Detail Files
 
 Không bắt buộc tạo một file riêng cho từng Exercise khi scope, input, output và
-validation trong plan này đã đủ rõ. Chỉ tạo specification riêng khi Human yêu cầu
+validation trong plan này đã đủ rõ. Chỉ tạo specification riêng khi phạm vi dự án yêu cầu
 hoặc khi Exercise cần quyết định bổ sung trước implementation.
 
 Nếu được tạo, dùng các tên:
@@ -736,18 +736,18 @@ Mỗi exercise detail dự kiến bao gồm:
 ```text
 PROJECT_OVERVIEW
         ↓
-     APPROVED
+     CONFIRMED
         ↓
 PLAN_OVERVIEW
         ↓
-     APPROVED
+     CONFIRMED
 ```
 
 Trạng thái tiếp theo:
 
 1. Không tự động triển khai Exercise.
-2. Hoàn thành readiness cleanup đã được Human yêu cầu.
-3. Code tuần tự từ E01 khi implementation scope tương ứng được phê duyệt.
-4. Chỉ tạo exercise specification riêng khi Human yêu cầu hoặc plan chưa đủ rõ.
+2. Hoàn thành readiness cleanup đã được phạm vi dự án yêu cầu.
+3. Code tuần tự từ E01 khi implementation scope tương ứng được xác nhận.
+4. Chỉ tạo exercise specification riêng khi phạm vi dự án yêu cầu hoặc plan chưa đủ rõ.
 
 Commit và push Git không thuộc phạm vi của plan này.

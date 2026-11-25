@@ -8,7 +8,7 @@
 - Train/test: `163/41`
 - Forecast horizon: `41` months
 - Baseline: seasonal-naive with period `12`
-- Status: approved and validated with residual-autocorrelation limitation
+- Status: confirmed and validated with residual-autocorrelation limitation
 
 ## Candidate fit and diagnostics
 

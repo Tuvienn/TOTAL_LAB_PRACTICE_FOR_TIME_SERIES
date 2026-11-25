@@ -8,7 +8,7 @@ Exercise ID: EXERCISE_03
 Topic: Differencing and ADF Retest
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: APPROVED
+Status: CONFIRMED
 Implementation authorized: YES
 Execution result: EXECUTED_AND_VALIDATED
 Scientific result: STATIONARITY_SUPPORTED_ON_LOG_FIRST_DIFFERENCE
@@ -17,7 +17,7 @@ Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_03_execution.md
 ```
 
-Plan và implementation scope của Exercise 3 đã được Human phê duyệt. Mọi lần chạy lại
+Plan và implementation scope của Exercise 3 đã được xác nhận. Mọi lần chạy lại
 phải tiếp tục tuân thủ đúng scope, validation và stop conditions trong file này.
 
 ## 2. Objective
@@ -49,7 +49,7 @@ total_practice/Practice_2/docs/plans/exercise_02_before_process.md
 total_practice/Practice_2/docs/status/current_status.md nếu đã tồn tại
 ```
 
-Nếu thiếu E02 evidence hoặc có conflict: `STOP → report issue → chờ Human quyết định`.
+Nếu thiếu E02 evidence hoặc có conflict: `STOP → report issue → chờ xử lý xung đột`.
 
 ## 4. Input
 
@@ -57,7 +57,7 @@ Nếu thiếu E02 evidence hoặc có conflict: `STOP → report issue → chờ
 Original training series from Exercise 1
 ADF result from Exercise 2
 Test set: sealed and excluded
-Approved remediation transformation: natural logarithm
+Confirmed remediation transformation: natural logarithm
 Regular differencing order: 1
 Significance level α: 0.05
 ```
@@ -86,14 +86,14 @@ Không tạo duplicate differencing hoặc ADF function nếu owner tương đư
 datasets/raw/a10.csv
 working_rule.md
 .agents/ rules
-approved scoped rule files
+confirmed scoped rule files
 Exercise 1 và Exercise 2 validated outputs
 Exercise 4–6 specifications nếu có
 Practice/Lab khác
 unrelated configuration
 ```
 
-Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → wait for approval`.
+Nếu cần sửa ngoài scope: `STOP → explain reason → propose change → chờ xác nhận`.
 
 ## 7. Scientific Parameters
 
@@ -212,7 +212,7 @@ evidence chưa đủ để chọn một giá trị số, `REVIEW_REQUIRED` là k
 
 ## 11. Stop Conditions
 
-Agent phải dừng khi E02 evidence thiếu, input sai, test leakage xảy ra, giá trị train
+Quy trình phải dừng khi E02 evidence thiếu, input sai, test leakage xảy ra, giá trị train
 không dương, log/differencing hoặc ADF fail, remediation chưa stationary,
 parameter/scope cần đổi, dependency mới cần thêm hoặc raw/unrelated file cần sửa.
 
@@ -223,7 +223,7 @@ Khi dừng:
 2. Ghi observed và expected behavior.
 3. Ghi evidence và impact.
 4. Đề xuất next action.
-5. Chờ Human approval.
+5. Chờ xác nhận.
 ```
 
 ## 12. Execution Completion và Scientific Handoff
@@ -254,12 +254,12 @@ AND no unresolved scientific blocker
 Nếu gate chưa đạt, `selected_d = REVIEW_REQUIRED`, Exercise 3 chưa complete và
 Exercise 4 không được bắt đầu.
 
-## 13. Approval Gate
+## 13. confirmation gate
 
 ```text
 EXERCISE_03_BEFORE_PROCESS_CREATED=true
 EXERCISE_03_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_03_BEFORE_PROCESS_APPROVED=true
+EXERCISE_03_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_03_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_03_IMPLEMENTED=true
 EXERCISE_03_VALIDATED=true
@@ -271,9 +271,9 @@ EXERCISE_04_HANDOFF_OPEN=false
 Actual result và runtime state phải được đọc từ execution log và current status;
 before-process plan không thay thế hai evidence owner này.
 
-## 14. Agent Execution Rule
+## 14. workflow Execution Rule
 
-Sau approval:
+Sau confirmation:
 
 ```text
 one step → execute → run → verify → report → next step

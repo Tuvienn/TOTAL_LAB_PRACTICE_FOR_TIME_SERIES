@@ -10,19 +10,19 @@ EXERCISE_04_COMPLETED
 EXERCISE_05_COMPLETED_WITH_RESIDUAL_AUTOCORRELATION_LIMITATION
 EXERCISE_06_EXPLORATORY_NOTEBOOK_RESULTS_AVAILABLE
 EXERCISE_06_IMPLEMENTATION_AUTHORIZED
-EXERCISE_06_VALIDATION_PENDING
+EXERCISE_06_VALIDATION_NOT_COMPLETED
 ```
 
 ## Exercise 04–05 Status Note
 
 ```text
-Human-approved state: E04 and E05 completed
+confirmed state: E04 and E05 completed
 Canonical core notebook: notebooks/Practice_2_Exercise.ipynb
 Notebook contents: validated clean-kernel execution evidence
 E04/E05 formal execution logs and status reconciliation: completed
 ```
 
-The E04 and E05 specifications and before-process plans are now approved and
+The E04 and E05 specifications and before-process plans are now confirmed and
 validated. E05 retains a documented residual-autocorrelation limitation.
 
 ## Protocol Reconciliation Rerun
@@ -40,19 +40,19 @@ E05 fit scale: log training levels with d=1
 E05 forecast horizon: 41 months
 E05 baseline: seasonal-naive, seasonal period 12
 E05 residual diagnostics: Ljung–Box included
-formal completion: approved by Human with residual-autocorrelation limitation
+formal completion: confirmed in the project record with residual-autocorrelation limitation
 ```
 
 The rerun establishes reproducible train-only and holdout boundaries for the
-approved E04/E05 workflow. The residual limitation remains part of the formal
+confirmed E04/E05 workflow. The residual limitation remains part of the formal
 result and does not get hidden by the model comparison.
 
 ## Exercise 06 — AirPassengers Exploratory Evidence
 
 ```text
-execution source: notebook cells run by Human from a chat-provided template
+execution source: notebook cells run from the notebook from a chat-provided template
 implementation authorization: true
-validation status: pending clean-kernel execution
+validation status: not completed clean-kernel execution
 completion status: not completed
 dataset: airline-passengers.csv
 rows: 144
@@ -82,7 +82,7 @@ The exploratory results show lower MAE and RMSE for SARIMA on this holdout.
 Ljung–Box indicates remaining autocorrelation in SARIMA residuals at lag 12.
 These notebook outputs remain exploratory evidence only: no formal E06 execution
 log, clean-kernel run, targeted tests, or final output inspection has been recorded.
-The E06 specification and before-process plan are approved for implementation;
+The E06 specification and before-process plan are confirmed for implementation;
 E06 is not yet marked complete.
 
 ## Exercise 01 Evidence
@@ -109,7 +109,7 @@ seasonality and likely non-stationarity; E02 is required for statistical testing
 ## Authorization State
 
 The authorization block below preserves the existing formal E01–E04 record.
-`EXERCISE_04_HANDOFF_OPEN=false`; E04 has handed two approved ARIMA candidates
+`EXERCISE_04_HANDOFF_OPEN=false`; E04 has handed two confirmed ARIMA candidates
 to E05. E05 is complete with the residual-autocorrelation limitation recorded.
 
 ```text

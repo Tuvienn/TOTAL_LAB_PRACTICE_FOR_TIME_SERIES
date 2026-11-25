@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-`Đã duyệt triển khai — validation pending`.
+`Đã xác nhận phạm vi triển khai — validation not completed`.
 
 E06 hiện chưa có formal execution evidence. Các kết quả exploratory không được
 dùng để tuyên bố completion hoặc che lấp trạng thái E01–E05.
@@ -12,7 +12,7 @@ dùng để tuyên bố completion hoặc che lấp trạng thái E01–E05.
 - Dataset: `datasets/raw/airline-passengers.csv`.
 - Chronological split: 115 train và 29 test observations.
 - Seasonal period: `s=12`.
-- Notebook: [Practice_2_Advanced.ipynb](../../notebooks/Practice_2_Advanced.ipynb).
+- Notebook: <a href="../../notebooks/Practice_2_Advanced.ipynb" style="color:#1f6feb;">Practice_2_Advanced.ipynb</a>.
 
 ## Điểm cần chú ý
 

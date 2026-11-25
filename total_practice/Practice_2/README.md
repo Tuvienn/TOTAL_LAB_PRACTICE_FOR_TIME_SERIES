@@ -64,11 +64,11 @@ observations. Test set được sealed cho đến E05.
 Practice_2/
 ├── config/                    # cấu hình ổn định
 ├── datasets/raw/              # raw data bất biến
-├── datasets/processed/        # derived datasets nếu được phê duyệt
+├── datasets/processed/        # derived datasets nếu được xác nhận
 ├── docs/
 │   ├── exercise_details/      # exercise specifications
 │   ├── plans/                 # before-process plans
-│   ├── logs/                  # human-readable execution evidence
+│   ├── logs/                  # readable execution evidence
 │   ├── status/                # current project status
 │   └── rules/                 # scoped architecture/code rules
 ├── runs/                      # raw runtime logs theo từng run ID
@@ -113,7 +113,7 @@ exploratory draft.
 
 ## 7. Dashboard kết quả
 
-Mở [dashboard kết quả](docs/results/README.md) để xem kết luận từng Exercise và
+Mở <a href="docs/results/README.md" style="color:#1f6feb;">dashboard kết quả</a> để xem kết luận từng Exercise và
 bấm tới execution evidence, hình, model summary và raw run log tương ứng.
 
 ## 8. Chạy tests và kiểm tra nhanh
@@ -154,12 +154,12 @@ giải.
 - E01: completed và validated.
 - E02: train-only evidence validated.
 - E03: natural-log first difference, `d=1`, evidence validated.
-- E04: đã phê duyệt và kiểm tra; bàn giao candidates cho E05.
-- E05: đã phê duyệt và kiểm tra; residual-autocorrelation là limitation cần ghi nhận.
-- E06: đã duyệt triển khai SARIMA; validation và execution evidence pending.
+- E04: đã xác nhận và kiểm tra; bàn giao candidates cho E05.
+- E05: đã xác nhận và kiểm tra; residual-autocorrelation là limitation cần ghi nhận.
+- E06: đã xác nhận phạm vi triển khai SARIMA; validation và execution evidence not completed.
 
 E04/E05 chưa được ghi là formal completion chỉ vì notebook đã chạy thành công.
-Residual Ljung–Box và approval/status reconciliation vẫn phải được review.
+Residual Ljung–Box và confirmation/status reconciliation vẫn phải được review.
 
 ## 11. Nguyên tắc merge
 

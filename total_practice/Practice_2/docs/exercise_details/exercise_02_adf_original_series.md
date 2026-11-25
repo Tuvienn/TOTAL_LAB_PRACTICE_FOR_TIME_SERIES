@@ -10,7 +10,7 @@ Dataset: Monthly Retail Sales
 Input: Original training series from Exercise 1
 Significance level: 0.05
 Model training required: NO
-Specification status: APPROVED
+Specification status: CONFIRMED
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_02_execution.md
 ```
@@ -135,7 +135,7 @@ Phải dừng nếu Exercise 1 chưa có validated training series, test leakage
 ADF input không đúng original series, ADF computation fail, output thiếu thông tin
 cần thiết, significance level cần đổi ngoài specification hoặc dependency/scope cần mở rộng.
 
-Khi dừng: `STOP → document issue → explain impact → propose next action → wait for approval`.
+Khi dừng: `STOP → document issue → explain impact → propose next action → chờ xác nhận`.
 
 ## 11. Completion Condition
 
