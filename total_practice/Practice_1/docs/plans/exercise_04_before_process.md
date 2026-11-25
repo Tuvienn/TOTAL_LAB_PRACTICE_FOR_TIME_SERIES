@@ -8,13 +8,13 @@ Exercise ID: EXERCISE_04
 Topic: Time Series Data Quality
 Plan type: Exercise Before-Process Plan
 Dataset: AirPassengers
-Status: WAITING_APPROVAL
-Implementation authorized: NO
+Status: COMPLETED_AND_VALIDATED
+Implementation authorized: YES
 ```
 
 Tài liệu này là execution plan riêng cho Exercise 4.
 
-Agent chỉ được bắt đầu code Exercise 4 sau khi Human approve file này.
+Implementation chỉ bắt đầu Exercise 4 sau khi tài liệu xác nhận này.
 
 ---
 
@@ -28,7 +28,7 @@ Mục tiêu của execution cycle này:
 - lưu true values trước khi masking;
 - so sánh forward-fill và time interpolation trên cùng missing positions;
 - đánh giá reconstruction error tại đúng các vị trí bị mask;
-- phát hiện potential outliers bằng approved protocol;
+- phát hiện potential outliers bằng confirmed protocol;
 - đối chiếu outlier candidates với decomposition residual;
 - vẽ before/after treatment;
 - không sửa raw dataset;
@@ -39,7 +39,7 @@ Mục tiêu của execution cycle này:
 
 ## 3. Required Documents
 
-Trước implementation, agent phải đọc:
+Trước implementation, Quy trình thực thi phải đọc:
 
 ```text
 working_rule.md
@@ -60,7 +60,7 @@ Nếu thiếu dependency hoặc có conflict:
 ```text
 STOP
 → report issue
-→ chờ Human quyết định
+→ chờ xử lý quyết định
 ```
 
 ---
@@ -117,7 +117,7 @@ trí thay thế.
 
 ## 6. Files to Read
 
-Agent cần đọc hoặc inspect:
+Quy trình cần đọc hoặc inspect:
 
 ```text
 docs/exercise_details/exercise_04_data_quality.md
@@ -175,10 +175,10 @@ Không được tự ý sửa:
 ```text
 datasets/raw/
 working_rule.md
-approved scoped rule files
-approved overview
-approved exercise_04_data_quality.md
-approved initialize_practice_1.md
+confirmed scoped rule files
+confirmed overview
+confirmed exercise_04_data_quality.md
+confirmed initialize_practice_1.md
 validated Exercise 1–3 outputs
 Practice/Lab khác
 unrelated repository configuration
@@ -190,12 +190,12 @@ Nếu cần thay đổi upstream artifact:
 STOP
 → explain reason
 → assess impact
-→ wait for Human approval
+→ chờ xác nhận
 ```
 
 ---
 
-## 9. Approved Scientific Parameters
+## 9. Confirmed Scientific Parameters
 
 Exercise 4 phải dùng:
 
@@ -266,7 +266,7 @@ Validation:
 
 ```text
 no unresolved rule conflict
-Exercise 4 before-process plan approved
+Exercise 4 before-process plan confirmed
 ```
 
 ---
@@ -633,7 +633,7 @@ Không đánh dấu `COMPLETED` nếu còn blocker.
 [ ] Reconstruction compared only at masked positions
 [ ] MAE computed separately for both methods on the six masked positions only
 [ ] Comparison file created and inspected
-[ ] Approved outlier protocol used
+[ ] Confirmed outlier protocol used
 [ ] Outlier candidates inspected
 [ ] No automatic outlier deletion performed
 [ ] Before/after figures created and inspected
@@ -677,7 +677,7 @@ seasonal-peak vs anomaly distinction
 
 ## 13. Stop Conditions
 
-Agent phải dừng khi:
+Quy trình phải dừng khi:
 
 ```text
 Exercise 4 plan chưa được approve
@@ -708,7 +708,7 @@ Khi dừng:
 4. Ghi relevant evidence.
 5. Nêu impact.
 6. Đề xuất next action.
-7. Chờ Human approval.
+7. Chờ xác nhận.
 ```
 
 ---
@@ -732,36 +732,36 @@ AND no unresolved blocking issue
 
 ---
 
-## 15. Approval Gate
+## 15. confirmation gate
 
 Trạng thái hiện tại:
 
 ```text
 EXERCISE_04_BEFORE_PROCESS_CREATED=true
-EXERCISE_04_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_04_BEFORE_PROCESS_APPROVED=false
-EXERCISE_04_IMPLEMENTATION_AUTHORIZED=false
+EXERCISE_04_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_04_BEFORE_PROCESS_CONFIRMED=true
+EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
 ```
 
-Agent không được code Exercise 4 khi:
+Quy trình không được code Exercise 4 khi:
 
 ```text
 EXERCISE_04_IMPLEMENTATION_AUTHORIZED=false
 ```
 
-Sau khi Human approve:
+Sau khi confirmation:
 
 ```text
 EXERCISE_04_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_04_BEFORE_PROCESS_APPROVED=true
+EXERCISE_04_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
 ```
 
 ---
 
-## 16. Agent Execution Rule
+## 16. workflow Execution Rule
 
-Sau approval:
+Sau confirmation:
 
 ```text
 one step

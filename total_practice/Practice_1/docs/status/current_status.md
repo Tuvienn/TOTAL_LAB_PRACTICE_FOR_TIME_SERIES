@@ -6,7 +6,7 @@
 Practice: Practice_1
 Document type: Current Flow / Current Status
 Primary dataset: AirPassengers
-Current stage: EXERCISE_1_COMPLETED / WAITING_FOR_EXERCISE_2_APPROVAL
+Current stage: EXERCISE_5_COMPLETED / PRACTICE_1_TECHNICAL_CLOSURE_COMPLETED
 Implementation started: YES
 Model training required: NO
 ```
@@ -15,7 +15,7 @@ Tài liệu này là nguồn trạng thái hiện tại của Practice 1.
 
 Mục đích:
 
-- giúp Human và agent biết project đang ở đâu;
+- giúp team biết project đang ở đâu;
 - tránh chạy lại công việc đã hoàn thành;
 - chỉ rõ task hiện tại;
 - chỉ rõ bước tiếp theo;
@@ -46,10 +46,10 @@ Các công việc đã hoàn thành:
 [COMPLETED] Exercise 4 before-process plan created
 [COMPLETED] Exercise 5 before-process plan created
 [COMPLETED] AirPassengers canonical source contract standardized
-[COMPLETED] Exercise 1–5 scientific parameters standardized for Human review
-[COMPLETED] Exercise 6 excluded from AI planning and retained as TuVien-owned Word report
-[COMPLETED] Practice 1 architecture rule approved and activated by Human
-[COMPLETED] Practice 1 code/execution rule approved and activated by Human
+[COMPLETED] Exercise 1–5 scientific parameters standardized for Technical review
+[COMPLETED] Exercise 6 excluded from implementation planning and retained as Word report outside the repository
+[COMPLETED] Practice 1 architecture rule confirmed and activated in the project record
+[COMPLETED] Practice 1 code/execution rule confirmed and activated in the project record
 [COMPLETED] Group 1 runtime/package/import contract standardized
 [COMPLETED] Group 2 scientific API details standardized
 [COMPLETED] Group 3 minimum test matrix and validation commands standardized
@@ -58,8 +58,27 @@ Các công việc đã hoàn thành:
 [COMPLETED] Reusable data, ACF/PACF, and plotting modules implemented
 [COMPLETED] Exercise 1 notebook executed end-to-end
 [COMPLETED] Exercise 1 tests, figures, tables, and findings validated
+[COMPLETED] practice_1_present.ipynb confirmed as the sole primary notebook
+[COMPLETED] Exercise 1 notebook alignment fix implemented and validated
+[COMPLETED] Exercise 2 specification and before-process plan confirmed
+[COMPLETED] Reusable white-noise generator and visualization logic implemented
+[COMPLETED] Exercise 2 notebook cells 22–27 aligned and executed
+[COMPLETED] Exercise 2 tests, figures, ACF table, and interpretation validated
 [COMPLETED] Practice 1 folders standardized to datasets and simplified docs structure
 [COMPLETED] Error-analysis and fix-plan workflow standardized in dedicated folders
+[COMPLETED] Exercise 3 error analysis and fix plan confirmed
+[COMPLETED] Reusable log-STL decomposition and residual diagnostic logic implemented
+[COMPLETED] Exercise 3 notebook cells 28–31 aligned and executed
+[COMPLETED] Exercise 3 tests, figures, component table, diagnostics, and interpretation validated
+[COMPLETED] Exercise 4 error analysis and fix plan confirmed
+[COMPLETED] Reusable missing-value and residual-IQR logic implemented
+[COMPLETED] Exercise 4 notebook cells 32–44 aligned and executed
+[COMPLETED] Exercise 4 tests, figures, result tables, and interpretation validated
+[COMPLETED] Exercise 5 error analysis and fix plan confirmed
+[COMPLETED] Reusable rolling-statistics and seasonal-matrix logic implemented
+[COMPLETED] Exercise 5 notebook cells 45–51 aligned and executed
+[COMPLETED] Exercise 5 tests, four figures, rolling table, and interpretation validated
+[COMPLETED] Practice 1 technical closure for Exercise 1–5
 ```
 
 Exercise 6 không có exercise specification riêng.
@@ -70,8 +89,8 @@ Exercise 6 được xem là:
 User-owned Final Word Report
 ```
 
-TuVien tự viết báo cáo trên Word. Agent không tạo exercise specification, before-process
-plan hoặc report artifact cho Exercise 6; phần AI implementation dừng ở validated
+Báo cáo Word được hoàn thiện ngoài repository. Quy trình triển khai không tạo exercise specification, before-process
+plan hoặc report artifact cho Exercise 6; phần implementation dừng ở validated
 evidence từ Exercise 1–5.
 
 ---
@@ -81,11 +100,21 @@ evidence từ Exercise 1–5.
 Task hiện tại:
 
 ```text
-Exercise 1 completed; stop before Exercise 2 pending Human approval
+Exercise 1–5 implementation completed and validated; evidence ready for the Word report
 ```
 
-Initialization và Exercise 1 đã có actual execution evidence. Không triển khai Exercise 2
-cho đến khi Human duyệt specification/before-process plan và cấp authorization riêng.
+Notebook chính và duy nhất là:
+
+```text
+notebooks/practice_1_present.ipynb
+```
+
+Initialization và Exercise 1–5 đã có bằng chứng thực thi thực tế. E3 dùng natural-log
+transform, STL `period=12`, `robust=True`, residual ACF 40 lag và Ljung–Box lag 12.
+E4 mô phỏng đúng 6 giá trị thiếu đã khóa, so sánh forward fill với nội suy theo thời
+gian bằng MAE, đồng thời chỉ gắn cờ ứng viên ngoại lai trên residual E3. E5 dùng
+trailing rolling 12 tháng, monthly seasonal plot và heatmap 12 × 12, đồng thời đối
+chiếu E1, E3 và E4. Notebook đã chạy sạch toàn bộ 52 cell bằng kernel Python 3.12.
 
 ---
 
@@ -94,13 +123,9 @@ cho đến khi Human duyệt specification/before-process plan và cấp authori
 Thứ tự tiếp theo:
 
 ```text
-1. Human reviews the validated Exercise 1 evidence.
-2. Human reviews and approves the Exercise 2 specification and before-process plan.
-3. Human explicitly authorizes Exercise 2 implementation.
-4. Agent executes and validates Exercise 2 within that approved scope.
-5. Repeat the same approval gate sequentially for Exercise 3–5.
-6. Hand validated Exercise 1–5 evidence to TuVien for the user-owned Word report.
-7. Perform final Practice 1 technical closure review for Exercise 1–5.
+1. Technical review of the validated Exercise 5 and technical-closure evidence.
+2. Hand validated Exercise 1–5 evidence to báo cáo for the Word report outside the repository.
+3. Reopen implementation only if a concrete correction is identified.
 ```
 
 ---
@@ -118,18 +143,18 @@ Outlier method: IQR multiplier 1.5 on natural-log STL residual
 Action: flag and inspect only
 ```
 
-### Resolved — Scoped-rule approval
+### Resolved — Scoped-rule confirmation
 
-Practice architecture/code rules đã được Human phê duyệt và kích hoạt:
+Practice architecture/code rules đã được xác nhận và kích hoạt:
 
 ```text
-ARCHITECTURE_RULE_APPROVED=true
-RULE_CODE_APPROVED=true
+ARCHITECTURE_RULE_CONFIRMED=true
+RULE_CODE_CONFIRMED=true
 ```
 
 ### Resolved — Implementation authorization
 
-Master initialization plan và Exercise 1 before-process plan đã được Human phê duyệt:
+Master initialization plan và Exercise 1 before-process plan đã được xác nhận:
 
 ```text
 IMPLEMENTATION_AUTHORIZED=true
@@ -138,11 +163,11 @@ IMPLEMENTATION_AUTHORIZED=true
 theo governance rule hiện hành.
 
 Nhóm 4 được phép tạo environment, package, config, tests, notebook, raw dataset và
-Exercise 1 outputs trong phạm vi approved plan.
+Exercise 1 outputs trong phạm vi confirmed plan.
 
 ### Resolved — Dataset provenance and integrity
 
-AirPassengers đã được tải từ canonical URL đã duyệt:
+AirPassengers đã được tải từ canonical URL đã xác nhận:
 
 ```text
 https://vincentarelbundock.github.io/Rdatasets/csv/datasets/AirPassengers.csv
@@ -210,8 +235,8 @@ Các config trên không được tự đổi trong implementation.
 ### Exercise 1 — ACF/PACF
 
 ```text
-Specification: APPROVED
-Before-process plan: APPROVED
+Specification: CONFIRMED
+Before-process plan: CONFIRMED
 Implementation: COMPLETED
 Validation: COMPLETED
 Status: COMPLETED
@@ -220,42 +245,44 @@ Status: COMPLETED
 ### Exercise 2 — White Noise
 
 ```text
-Specification: CREATED
-Before-process plan: CREATED
-Implementation: NOT_STARTED
-Validation: NOT_STARTED
-Status: READY_FOR_HUMAN_APPROVAL
+Specification: CONFIRMED
+Before-process plan: CONFIRMED
+Implementation: COMPLETED
+Validation: COMPLETED
+Status: COMPLETED
 ```
 
 ### Exercise 3 — Decomposition
 
 ```text
-Specification: CREATED
-Before-process plan: CREATED
-Implementation: NOT_STARTED
-Validation: NOT_STARTED
-Status: WAITING_FOR_UPSTREAM_EXECUTION
+Specification: CONFIRMED
+Before-process plan: CONFIRMED
+Implementation: COMPLETED
+Validation: COMPLETED
+Status: COMPLETED
 ```
 
 ### Exercise 4 — Data Quality
 
 ```text
-Specification: CREATED
-Before-process plan: CREATED
-Implementation: NOT_STARTED
-Validation: NOT_STARTED
+Specification: CONFIRMED
+Before-process plan: CONFIRMED
+Implementation: COMPLETED
+Validation: COMPLETED
 Scientific parameters: LOCKED_FOR_REVIEW
-Status: WAITING_FOR_UPSTREAM_EXECUTION
+Upstream Exercise 3 dependency: SATISFIED
+Status: COMPLETED
 ```
 
 ### Exercise 5 — Visualization
 
 ```text
-Specification: CREATED
-Before-process plan: CREATED
-Implementation: NOT_STARTED
-Validation: NOT_STARTED
-Status: WAITING_FOR_UPSTREAM_EXECUTION
+Specification: CONFIRMED
+Before-process plan: CONFIRMED
+Implementation: COMPLETED
+Validation: COMPLETED
+Upstream Exercise 1, 3 and 4 evidence: SATISFIED
+Status: COMPLETED
 ```
 
 ### Exercise 6 — Final Word Report
@@ -263,9 +290,9 @@ Status: WAITING_FOR_UPSTREAM_EXECUTION
 ```text
 Separate exercise specification: NOT_REQUIRED
 Implementation: NOT_STARTED
-Input dependency: validated outputs from Exercise 1–5
-Expected deliverable: managed by TuVien outside the AI implementation plan
-Status: WAITING_FOR_EXERCISE_1_TO_5
+Input dependency: validated outputs from Exercise 1–5 — SATISFIED
+Expected deliverable: managed by báo cáo outside the implementation plan
+Status: READY_FOR_USER_REPORT
 ```
 
 ---
@@ -313,8 +340,8 @@ Chỉ tạo optional results khi có giá trị cho traceability hoặc downstre
 
 ### Final Report
 
-Word report path and file lifecycle are managed by TuVien. No report file is created
-or modified by the agent in the Exercise 1–5 implementation plan.
+Word report path and file lifecycle are managed by báo cáo. No report file is created
+or modified by the workflow in the Exercise 1–5 implementation plan.
 
 ---
 
@@ -333,7 +360,7 @@ no automatic outlier deletion
 no fabricated results
 ```
 
-Không có cleaned forecasting dataset nào được phê duyệt trong Practice 1.
+Không có cleaned forecasting dataset nào được xác nhận trong Practice 1.
 
 ---
 
@@ -355,15 +382,21 @@ Planning
   ✅ Exercise 5 before-process plan
 
 Current
-  → Exercise 1 completed and validated
-  → Waiting for Human review/approval of Exercise 2
+  → Exercise 1–5 completed and validated
+  → Practice 1 technical implementation closed
+  → Validated evidence ready for Word report outside the repository
 
 Implementation
   ✅ INITIALIZATION_COMPLETED
   ✅ EXERCISE_1_COMPLETED
+  ✅ EXERCISE_2_COMPLETED
+  ✅ EXERCISE_3_COMPLETED
+  ✅ EXERCISE_4_COMPLETED
+  ✅ EXERCISE_5_COMPLETED
+  ✅ PRACTICE_1_TECHNICAL_CLOSURE_COMPLETED
 
 Next execution target
-  → After separate Human authorization: Exercise 2 — White Noise
+  → No remaining implementation exercise; the Word report may be prepared outside the repository
 ```
 
 ---
@@ -380,7 +413,7 @@ a scientific parameter changes
 a new blocker appears
 a blocker is resolved
 implementation authorization changes
-TuVien reports an Exercise 6 status change
+the Word reports an Exercise 6 status change
 Practice 1 reaches closure
 ```
 
@@ -400,8 +433,20 @@ IMPLEMENTATION_STARTED=true
 INITIALIZATION_COMPLETED=true
 EXERCISE_01_COMPLETED=true
 INITIALIZATION_AND_EXERCISE_01_AUTHORIZATION_CONSUMED=true
-EXERCISE_02_IMPLEMENTATION_AUTHORIZED=false
-PRACTICE_1_COMPLETED=false
+EXERCISE_02_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_02_COMPLETED=true
+EXERCISE_02_AUTHORIZATION_CONSUMED=true
+EXERCISE_03_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_03_COMPLETED=true
+EXERCISE_03_AUTHORIZATION_CONSUMED=true
+EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_04_COMPLETED=true
+EXERCISE_04_AUTHORIZATION_CONSUMED=true
+EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_05_COMPLETED=true
+EXERCISE_05_AUTHORIZATION_CONSUMED=true
+PRACTICE_1_TECHNICAL_CLOSURE_COMPLETED=true
+PRACTICE_1_COMPLETED=true
 ```
 
-Human phải xác nhận authorization riêng trước khi agent bắt đầu Exercise 2.
+Không còn exercise implementation nào đang chờ authorization trong Practice 1.

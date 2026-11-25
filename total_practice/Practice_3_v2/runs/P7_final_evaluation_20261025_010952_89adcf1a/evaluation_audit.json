@@ -1,0 +1,113 @@
+{
+  "phase": "phase_07_final_forecasting_evaluation",
+  "contract_version": "1.0.0",
+  "run_id": "P7_final_evaluation_20261025_010952_89adcf1a",
+  "opening_event": {
+    "holdout_label": "historical_re_evaluation_holdout",
+    "opened_at": "2026-10-25T01:09:52+07:00",
+    "after_preflight": true
+  },
+  "upstream_evidence": {
+    "phase_05_audit_sha256": "21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5",
+    "phase_06_cv_results_sha256": "1c1647a458b9261956e831045ed1c4b2f84791fd9843839bd088b31a239d31d4",
+    "phase_06_model_lock_sha256": "ad31cb65daa36c394d7d5afc2cf0af333760c8e75ba718e702368e260db70eee",
+    "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+    "development_eligible_samples": 108083,
+    "feature_order": [
+      "lag_1h",
+      "lag_2h",
+      "lag_3h",
+      "lag_23h",
+      "lag_24h",
+      "lag_25h",
+      "lag_48h",
+      "lag_168h",
+      "rolling_mean_24h",
+      "rolling_std_24h",
+      "rolling_mean_168h",
+      "rolling_std_168h",
+      "hour",
+      "day_of_week",
+      "month",
+      "is_weekend",
+      "hour_sin",
+      "hour_cos",
+      "day_of_week_sin",
+      "day_of_week_cos",
+      "month_sin",
+      "month_cos"
+    ],
+    "locked_parameters": {
+      "objective": "reg:squarederror",
+      "tree_method": "hist",
+      "random_state": 42,
+      "n_jobs": -1,
+      "n_estimators": 500,
+      "max_depth": 7,
+      "learning_rate": 0.1,
+      "subsample": 0.7,
+      "colsample_bytree": 0.7,
+      "min_child_weight": 1,
+      "reg_alpha": 1.0,
+      "reg_lambda": 10.0
+    },
+    "package_versions": {
+      "python": "3.14.3",
+      "numpy": "2.5.4",
+      "pandas": "3.1.0",
+      "scikit-learn": "1.9.1",
+      "xgboost": "3.4.1"
+    },
+    "holdout_opened": false
+  },
+  "candidate_registry": [
+    "persistence",
+    "seasonal_naive_24",
+    "xgboost_tuned"
+  ],
+  "locked_candidate": "xgboost_tuned",
+  "locked_parameters": {
+    "objective": "reg:squarederror",
+    "tree_method": "hist",
+    "random_state": 42,
+    "n_jobs": -1,
+    "n_estimators": 500,
+    "max_depth": 7,
+    "learning_rate": 0.1,
+    "subsample": 0.7,
+    "colsample_bytree": 0.7,
+    "min_child_weight": 1,
+    "reg_alpha": 1.0,
+    "reg_lambda": 10.0
+  },
+  "development_refit_samples": 108083,
+  "one_step": {
+    "structural_holdout_rows": 8761,
+    "common_eligible_rows": 8592,
+    "prediction_sha256": "d06b30db1a49592682039677b919cde19a4240ef37865ae5238991c43eee16f3",
+    "metrics_sha256": "336cdd18a6441c5a05efa76e65a280553e7166cbca190230453efe79525449b5"
+  },
+  "recursive": {
+    "scheduled_origins": 365,
+    "eligible_common_origins": 357,
+    "excluded_origins": 8,
+    "horizon_hours": 24,
+    "prediction_sha256": "b99f9a3fbd18f8677bd8175db208e2360a1da5674a12e670b2f19d4a4c96f913",
+    "metrics_sha256": "7cab2c6943cb0df9f034f78ebe82254bf60270ddcc6f53830fa09db51915db07"
+  },
+  "figures": {
+    "one_step_full_sha256": "6bbfab03cd6e76fb2ae04319f4ed513d669eb932ded2bdd65b272238f3f564ff",
+    "one_step_diagnostic_sha256": "d7cd84429b5522b357ecfca75a4a2d23e767dd322a6d095f66fd110fc1dde416",
+    "recursive_horizon_sha256": "2e08d2d7a39622d00af194af7a8142159254a0c74a37fd79feea4295303ace20"
+  },
+  "checks": {
+    "common_one_step_timestamps": true,
+    "common_recursive_origins": true,
+    "future_actual_used_in_recursive_history": false,
+    "holdout_used_for_model_selection": false,
+    "post_holdout_model_change": false,
+    "binary_model_persisted": false,
+    "official_audit_is_promotion_marker": true
+  },
+  "status": "PASS"
+}

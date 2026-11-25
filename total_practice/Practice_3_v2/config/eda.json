@@ -1,0 +1,60 @@
+{
+  "phase": "phase_03_train_only_eda",
+  "contract_version": "1.0.0",
+  "prepared_input": "datasets/processed/aep_hourly_prepared.csv",
+  "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+  "split_audit": "outputs/results/phase_02_temporal_split.json",
+  "split_audit_sha256": "f18452573cedd321ea8097539560899bc5dbce43ba0b47cda3b51dc504bcf735",
+  "development": {
+    "start_inclusive": "2004-10-01 01:00:00",
+    "end_exclusive": "2017-08-03 00:00:00",
+    "expected_rows": 112535,
+    "expected_observed_targets": 112509,
+    "expected_missing_targets": 26
+  },
+  "distribution": {
+    "quantiles": [0.01, 0.05, 0.25, 0.5, 0.75, 0.95, 0.99],
+    "histogram_bins": 50
+  },
+  "trend": {
+    "aggregation": "daily_mean",
+    "rolling_window_days": 30,
+    "rolling_min_periods": 30,
+    "centered": false
+  },
+  "seasonality": {
+    "profiles": ["hour_of_day", "day_of_week", "month"],
+    "heatmap": "day_of_week_by_hour_of_day"
+  },
+  "lag_correlation": {
+    "minimum_lag_hours": 1,
+    "maximum_lag_hours": 168,
+    "highlighted_lags": [1, 24, 168],
+    "method": "pairwise_pearson_hourly_aligned"
+  },
+  "anomaly_screening": {
+    "grouping": "calendar_year_by_hour_of_week",
+    "method": "modified_mad_score",
+    "threshold": 3.5,
+    "minimum_group_support": 20,
+    "top_candidates": 20,
+    "treatment": "none"
+  },
+  "figures": {
+    "dpi": 120,
+    "trend": "outputs/figures/phase_03_trend.png",
+    "distribution": "outputs/figures/phase_03_distribution.png",
+    "seasonality_profiles": "outputs/figures/phase_03_seasonality_profiles.png",
+    "hour_day_heatmap": "outputs/figures/phase_03_hour_day_heatmap.png",
+    "lag_correlation": "outputs/figures/phase_03_lag_correlation.png",
+    "anomaly_screening": "outputs/figures/phase_03_anomaly_screening.png"
+  },
+  "outputs": {
+    "summary": "outputs/results/phase_03_eda_summary.json"
+  },
+  "holdout_policy": {
+    "excluded_from_eda": true,
+    "target_values_inspected": false
+  },
+  "status": "APPROVED"
+}

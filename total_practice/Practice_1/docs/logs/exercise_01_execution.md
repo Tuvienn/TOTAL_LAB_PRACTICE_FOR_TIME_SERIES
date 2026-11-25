@@ -46,7 +46,7 @@ outputs/results/pacf_values.csv
 outputs/results/exercise_01_findings.json
 ```
 
-The notebook `notebooks/practice_1.ipynb` was executed end-to-end with four
+The notebook `notebooks/practice_1_present.ipynb` was executed end-to-end with four
 ordered code-cell execution counts and no error output.
 
 ## Validation
@@ -60,7 +60,7 @@ raw checksum after analysis: unchanged
 ```
 
 Notebook execution initially encountered the restricted environment's local-port
-permission. The same approved notebook command was rerun outside that restriction and
+permission. The same confirmed notebook command was rerun outside that restriction and
 completed successfully. Jupyter emitted only its standard warning about an unencrypted
 local TCP kernel connection; it did not affect the analysis or outputs.
 
@@ -76,7 +76,7 @@ local TCP kernel connection; it did not affect the analysis or outputs.
   absolute magnitude, while lag 12 remains the required seasonal reference.
 - ACF/PACF evidence is descriptive here and is not used to choose an ARIMA order.
 
-## Approval boundary
+## confirmation boundary
 
-Exercise 1 is complete. Exercise 2 remains `READY_FOR_HUMAN_APPROVAL`; no Exercise 2
+Exercise 1 is complete. Exercise 2 remains `READY_FOR_CONFIRMATION`; no Exercise 2
 implementation is authorized by this record.

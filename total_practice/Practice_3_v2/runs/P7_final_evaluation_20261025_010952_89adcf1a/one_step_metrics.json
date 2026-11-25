@@ -1,0 +1,33 @@
+{
+  "protocol": "one_step_rolling_observed_history",
+  "candidate_metrics": [
+    {
+      "candidate": "persistence",
+      "mae": 408.97881750465547,
+      "rmse": 520.9398734235388,
+      "n_observations": 8592,
+      "evaluation_start": "2017-08-03 00:00:00",
+      "evaluation_end": "2018-08-03 00:00:00"
+    },
+    {
+      "candidate": "seasonal_naive_24",
+      "mae": 935.8021415270018,
+      "rmse": 1212.2738424880054,
+      "n_observations": 8592,
+      "evaluation_start": "2017-08-03 00:00:00",
+      "evaluation_end": "2018-08-03 00:00:00"
+    },
+    {
+      "candidate": "xgboost_tuned",
+      "mae": 102.84078405511667,
+      "rmse": 137.92923461760375,
+      "n_observations": 8592,
+      "evaluation_start": "2017-08-03 00:00:00",
+      "evaluation_end": "2018-08-03 00:00:00"
+    }
+  ],
+  "status": "PASS",
+  "prediction_file": "outputs/results/phase_07_one_step_predictions.csv",
+  "prediction_sha256": "d06b30db1a49592682039677b919cde19a4240ef37865ae5238991c43eee16f3",
+  "holdout_label": "historical_re_evaluation_holdout"
+}

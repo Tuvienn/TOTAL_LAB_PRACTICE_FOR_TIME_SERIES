@@ -14,7 +14,7 @@ Rolling min_periods: 12
 Rolling center: False
 Rolling std ddof: 1
 Model training required: NO
-Status: READY_FOR_HUMAN_APPROVAL
+Status: COMPLETED_AND_VALIDATED
 ```
 
 ---
@@ -374,22 +374,22 @@ Không được viết kết luận trước khi actual figures được tạo.
 Exercise 5 đạt khi:
 
 ```text
-[ ] Validated AirPassengers series được sử dụng
-[ ] Raw dataset không bị sửa
-[ ] Full-series line chart được tạo
-[ ] Rolling mean dùng window = 12
-[ ] Rolling std dùng window = 12
-[ ] Rolling mean/std dùng min_periods = 12 và center = False
-[ ] Rolling std dùng ddof = 1
-[ ] Rolling calculation không dùng future information ngoài protocol
-[ ] Monthly seasonal plot được tạo
-[ ] Month-year heatmap được tạo
-[ ] Heatmap rows = month, columns = year, shape = 12 × 12
-[ ] Figure labels và axes rõ ràng
-[ ] Figures đã được inspect
-[ ] Interpretation dựa trên actual outputs
-[ ] Potential anomalies được đối chiếu với previous evidence
-[ ] Không fabricate conclusion
+[x] Validated AirPassengers series được sử dụng
+[x] Raw dataset không bị sửa
+[x] Full-series line chart được tạo
+[x] Rolling mean dùng window = 12
+[x] Rolling std dùng window = 12
+[x] Rolling mean/std dùng min_periods = 12 và center = False
+[x] Rolling std dùng ddof = 1
+[x] Rolling calculation không dùng future information ngoài protocol
+[x] Monthly seasonal plot được tạo
+[x] Month-year heatmap được tạo
+[x] Heatmap rows = month, columns = year, shape = 12 × 12
+[x] Figure labels và axes rõ ràng
+[x] Figures đã được inspect
+[x] Interpretation dựa trên actual outputs
+[x] Potential anomalies được đối chiếu với previous evidence
+[x] Không fabricate conclusion
 ```
 
 ---
@@ -417,7 +417,7 @@ STOP
 → document issue
 → explain impact
 → propose next action
-→ wait for approval
+→ chờ xác nhận
 ```
 
 ---
@@ -444,7 +444,7 @@ AND no unresolved blocking issue
 Kết quả Exercise 5 sẽ được dùng trực tiếp cho:
 
 ```text
-User-owned Word report — outside the AI implementation plan
+User-owned Word report — outside the implementation plan
 ```
 
 Exercise 5 là bước tổng hợp visualization cuối trước khi viết báo cáo.

@@ -1,0 +1,92 @@
+{
+  "phase": "phase_01_structural_data_preparation",
+  "contract_version": "1.0.0",
+  "raw_path": "datasets/raw/AEP_hourly.csv",
+  "raw_sha256_before": "109d122f7b485555c609eecdec2cd5a03172e0a08acd358d863acc93eb452585",
+  "raw_sha256_after": "109d122f7b485555c609eecdec2cd5a03172e0a08acd358d863acc93eb452585",
+  "raw_rows": 121273,
+  "raw_columns": [
+    "Datetime",
+    "AEP_MW"
+  ],
+  "raw_time_start": "2004-10-01 01:00:00",
+  "raw_time_end": "2018-08-03 00:00:00",
+  "raw_chronologically_sorted_before": false,
+  "raw_missing_cells": 0,
+  "raw_non_finite_target": 0,
+  "raw_non_positive_target": 0,
+  "fully_duplicated_rows": 0,
+  "duplicate_rows_before": 8,
+  "duplicate_timestamps_before": 4,
+  "duplicate_timestamps": [
+    "2014-11-02 02:00:00",
+    "2015-11-01 02:00:00",
+    "2016-11-06 02:00:00",
+    "2017-11-05 02:00:00"
+  ],
+  "missing_hourly_timestamps_before": 27,
+  "missing_hourly_timestamps": [
+    "2004-10-31 02:00:00",
+    "2005-04-03 03:00:00",
+    "2005-10-30 02:00:00",
+    "2006-04-02 03:00:00",
+    "2006-10-29 02:00:00",
+    "2007-03-11 03:00:00",
+    "2007-11-04 02:00:00",
+    "2008-03-09 03:00:00",
+    "2008-11-02 02:00:00",
+    "2009-03-08 03:00:00",
+    "2009-11-01 02:00:00",
+    "2010-03-14 03:00:00",
+    "2010-11-07 02:00:00",
+    "2010-12-10 00:00:00",
+    "2011-03-13 03:00:00",
+    "2011-11-06 02:00:00",
+    "2012-03-11 03:00:00",
+    "2012-11-04 02:00:00",
+    "2012-12-06 04:00:00",
+    "2013-03-10 03:00:00",
+    "2013-11-03 02:00:00",
+    "2014-03-09 03:00:00",
+    "2014-03-11 14:00:00",
+    "2015-03-08 03:00:00",
+    "2016-03-13 03:00:00",
+    "2017-03-12 03:00:00",
+    "2018-03-11 03:00:00"
+  ],
+  "prepared_rows": 121296,
+  "prepared_columns": [
+    "Datetime",
+    "AEP_MW",
+    "source_count",
+    "quality_flag"
+  ],
+  "prepared_time_start": "2004-10-01 01:00:00",
+  "prepared_time_end": "2018-08-03 00:00:00",
+  "unique_timestamps": 121296,
+  "duplicate_timestamps_after": 0,
+  "missing_target_after": 27,
+  "source_count_distribution": {
+    "1": 121265,
+    "0": 27,
+    "2": 4
+  },
+  "quality_flag_distribution": {
+    "observed": 121265,
+    "missing_timestamp": 27,
+    "duplicate_aggregated": 4
+  },
+  "sum_source_count": 121273,
+  "source_conservation": true,
+  "timeline_continuous_hourly": true,
+  "policies": {
+    "duplicate_treatment": "mean",
+    "missing_target_treatment": "preserve_nan",
+    "outlier_treatment": "none",
+    "timezone": "timezone_naive_source_no_offset",
+    "sort": "stable_ascending"
+  },
+  "processed_path": "datasets/processed/aep_hourly_prepared.csv",
+  "processed_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+  "status": "PASS"
+}

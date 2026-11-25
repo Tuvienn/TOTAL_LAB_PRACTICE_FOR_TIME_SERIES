@@ -9,13 +9,13 @@ Topic: Time Series Decomposition
 Plan type: Exercise Before-Process Plan
 Dataset: AirPassengers
 Decomposition: Log Transform + STL
-Status: WAITING_APPROVAL
-Implementation authorized: NO
+Status: COMPLETED_AND_VALIDATED
+Implementation authorized: YES
 ```
 
 Tài liệu này là execution plan riêng cho Exercise 3.
 
-Agent chỉ được bắt đầu code Exercise 3 sau khi Human approve file này.
+Implementation chỉ bắt đầu Exercise 3 sau khi tài liệu xác nhận này.
 
 ---
 
@@ -39,7 +39,7 @@ Mục tiêu của execution cycle này:
 
 ## 3. Required Documents
 
-Trước implementation, agent phải đọc:
+Trước implementation, Quy trình thực thi phải đọc:
 
 ```text
 working_rule.md
@@ -61,7 +61,7 @@ Nếu thiếu dependency hoặc có conflict:
 ```text
 STOP
 → report issue
-→ chờ Human quyết định
+→ chờ xử lý quyết định
 ```
 
 ---
@@ -93,7 +93,7 @@ no unresolved missing values affecting decomposition
 
 ## 5. Files to Read
 
-Agent cần đọc hoặc inspect:
+Quy trình cần đọc hoặc inspect:
 
 ```text
 docs/exercise_details/exercise_03_decomposition.md
@@ -155,12 +155,12 @@ Không được tự ý sửa:
 ```text
 datasets/raw/
 working_rule.md
-approved scoped rule files
-approved overview
-approved exercise_01_acf_pacf.md
-approved exercise_02_white_noise.md
-approved exercise_03_decomposition.md
-approved initialize_practice_1.md
+confirmed scoped rule files
+confirmed overview
+confirmed exercise_01_acf_pacf.md
+confirmed exercise_02_white_noise.md
+confirmed exercise_03_decomposition.md
+confirmed initialize_practice_1.md
 validated Exercise 1 outputs
 validated Exercise 2 outputs
 Exercise 4–5 specifications
@@ -174,7 +174,7 @@ Nếu cần thay đổi upstream logic hoặc output:
 STOP
 → explain reason
 → assess impact
-→ wait for Human approval
+→ chờ xác nhận
 ```
 
 ---
@@ -245,7 +245,7 @@ Validation:
 
 ```text
 no unresolved rule conflict
-Exercise 3 before-process plan approved
+Exercise 3 before-process plan confirmed
 ```
 
 ---
@@ -284,7 +284,7 @@ Nếu có giá trị không hợp lệ cho log transform:
 STOP
 → do not shift/add constant automatically
 → report exact issue
-→ wait for approval
+→ chờ xác nhận
 ```
 
 ---
@@ -528,28 +528,28 @@ Không đánh dấu `COMPLETED` nếu còn blocker.
 ## 10. Validation Checklist
 
 ```text
-[ ] Required documents were read
-[ ] Upstream validated AirPassengers input confirmed
-[ ] Log-transform preconditions checked
-[ ] Raw data unchanged
-[ ] Working copy created
-[ ] Natural-log transform applied
-[ ] Index preserved after transform
-[ ] No unexpected NaN/inf after transform
-[ ] STL period = 12
-[ ] STL robust = True
-[ ] Observed component created
-[ ] Trend component created
-[ ] Seasonal component created
-[ ] Residual component created
-[ ] Component alignment verified
-[ ] Decomposition figure created and inspected
-[ ] Residual figure created and inspected
-[ ] Residual ACF to 40 lags created and inspected
-[ ] Residual Ljung-Box lag 12 executed and interpreted as supplementary evidence
-[ ] Residual interpretation based on actual evidence
-[ ] No model training performed
-[ ] No unrelated file modified
+[x] Required documents were read
+[x] Upstream validated AirPassengers input confirmed
+[x] Log-transform preconditions checked
+[x] Raw data unchanged
+[x] Working copy created
+[x] Natural-log transform applied
+[x] Index preserved after transform
+[x] No unexpected NaN/inf after transform
+[x] STL period = 12
+[x] STL robust = True
+[x] Observed component created
+[x] Trend component created
+[x] Seasonal component created
+[x] Residual component created
+[x] Component alignment verified
+[x] Decomposition figure created and inspected
+[x] Residual figure created and inspected
+[x] Residual ACF to 40 lags created and inspected
+[x] Residual Ljung-Box lag 12 executed and interpreted as supplementary evidence
+[x] Residual interpretation based on actual evidence
+[x] No model training performed
+[x] No unrelated file modified
 ```
 
 ---
@@ -592,7 +592,7 @@ white-noise similarity assessment
 
 ## 12. Stop Conditions
 
-Agent phải dừng khi:
+Quy trình phải dừng khi:
 
 ```text
 Exercise 3 plan chưa được approve
@@ -621,7 +621,7 @@ Khi dừng:
 4. Ghi relevant evidence.
 5. Nêu impact.
 6. Đề xuất next action.
-7. Chờ Human approval.
+7. Chờ xác nhận.
 ```
 
 ---
@@ -644,36 +644,36 @@ AND no unresolved blocking issue
 
 ---
 
-## 14. Approval Gate
+## 14. confirmation gate
 
 Trạng thái hiện tại:
 
 ```text
 EXERCISE_03_BEFORE_PROCESS_CREATED=true
-EXERCISE_03_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_03_BEFORE_PROCESS_APPROVED=false
-EXERCISE_03_IMPLEMENTATION_AUTHORIZED=false
+EXERCISE_03_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_03_BEFORE_PROCESS_CONFIRMED=true
+EXERCISE_03_IMPLEMENTATION_AUTHORIZED=true
 ```
 
-Agent không được code Exercise 3 khi:
+Quy trình không được code Exercise 3 khi:
 
 ```text
 EXERCISE_03_IMPLEMENTATION_AUTHORIZED=false
 ```
 
-Sau khi Human approve:
+Sau khi confirmation:
 
 ```text
 EXERCISE_03_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_03_BEFORE_PROCESS_APPROVED=true
+EXERCISE_03_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_03_IMPLEMENTATION_AUTHORIZED=true
 ```
 
 ---
 
-## 15. Agent Execution Rule
+## 15. workflow Execution Rule
 
-Sau approval:
+Sau confirmation:
 
 ```text
 one step

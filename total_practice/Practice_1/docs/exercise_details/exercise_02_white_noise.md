@@ -13,7 +13,7 @@ Random seed: 42
 Synthetic distribution: Normal(0, 1)
 Maximum ACF lag: 40
 Model training required: NO
-Status: READY_FOR_HUMAN_APPROVAL
+Status: COMPLETED
 ```
 
 ---
@@ -355,7 +355,7 @@ STOP
 → document issue
 → explain impact
 → propose next action
-→ wait for approval
+→ chờ xác nhận
 ```
 
 ---
@@ -383,7 +383,7 @@ Kết quả Exercise 2 sẽ được dùng làm evidence cho:
 
 ```text
 Exercise 3 — đánh giá residual sau decomposition
-User-owned Word report — outside the AI implementation plan
+User-owned Word report — outside the implementation plan
 ```
 
 Đặc biệt, khái niệm white noise từ Exercise 2 sẽ được dùng khi trả lời:

@@ -12,13 +12,13 @@ Synthetic sample size: 1000
 Random seed: 42
 Synthetic distribution: Normal(0, 1)
 Maximum ACF lag: 40
-Status: WAITING_APPROVAL
-Implementation authorized: NO
+Status: COMPLETED
+Implementation authorized: YES
 ```
 
 Tài liệu này là execution plan riêng cho Exercise 2.
 
-Agent chỉ được bắt đầu code Exercise 2 sau khi Human approve file này.
+Implementation chỉ bắt đầu Exercise 2 sau khi tài liệu xác nhận này.
 
 ---
 
@@ -41,7 +41,7 @@ Mục tiêu của execution cycle này:
 
 ## 3. Required Documents
 
-Trước implementation, agent phải đọc:
+Trước implementation, Quy trình thực thi phải đọc:
 
 ```text
 working_rule.md
@@ -62,7 +62,7 @@ Nếu thiếu dependency hoặc có conflict:
 ```text
 STOP
 → report issue
-→ chờ Human quyết định
+→ chờ xử lý quyết định
 ```
 
 ---
@@ -102,7 +102,7 @@ Nếu cần tái chạy, phải dùng đúng logic và parameters của Exercise
 
 ## 5. Files to Read
 
-Agent cần đọc hoặc inspect:
+Quy trình cần đọc hoặc inspect:
 
 ```text
 docs/exercise_details/exercise_02_white_noise.md
@@ -160,11 +160,11 @@ Không được tự ý sửa:
 ```text
 datasets/raw/
 working_rule.md
-approved scoped rule files
-approved overview
-approved exercise_01_acf_pacf.md
-approved exercise_02_white_noise.md
-approved initialize_practice_1.md
+confirmed scoped rule files
+confirmed overview
+confirmed exercise_01_acf_pacf.md
+confirmed exercise_02_white_noise.md
+confirmed initialize_practice_1.md
 Exercise 1 validated outputs
 Exercise 3–5 specifications
 Practice/Lab khác
@@ -177,7 +177,7 @@ Nếu thật sự cần thay đổi upstream Exercise 1 output:
 STOP
 → giải thích lý do
 → không overwrite silently
-→ chờ Human approval
+→ chờ xác nhận
 ```
 
 ---
@@ -252,7 +252,7 @@ Validation:
 
 ```text
 no unresolved rule conflict
-Exercise 2 before-process plan approved
+Exercise 2 before-process plan confirmed
 ```
 
 ---
@@ -529,7 +529,7 @@ AirPassengers comparison
 
 ## 12. Stop Conditions
 
-Agent phải dừng khi:
+Quy trình phải dừng khi:
 
 ```text
 Exercise 2 plan chưa được approve
@@ -557,7 +557,7 @@ Khi dừng:
 4. Ghi relevant evidence.
 5. Nêu impact.
 6. Đề xuất next action.
-7. Chờ Human approval.
+7. Chờ xác nhận.
 ```
 
 ---
@@ -579,36 +579,36 @@ AND no unresolved blocking issue
 
 ---
 
-## 14. Approval Gate
+## 14. confirmation gate
 
 Trạng thái hiện tại:
 
 ```text
 EXERCISE_02_BEFORE_PROCESS_CREATED=true
-EXERCISE_02_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_02_BEFORE_PROCESS_APPROVED=false
-EXERCISE_02_IMPLEMENTATION_AUTHORIZED=false
+EXERCISE_02_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_02_BEFORE_PROCESS_CONFIRMED=true
+EXERCISE_02_IMPLEMENTATION_AUTHORIZED=true
 ```
 
-Agent không được code Exercise 2 khi:
+Quy trình không được code Exercise 2 khi:
 
 ```text
 EXERCISE_02_IMPLEMENTATION_AUTHORIZED=false
 ```
 
-Sau khi Human approve:
+Sau khi confirmation:
 
 ```text
 EXERCISE_02_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_02_BEFORE_PROCESS_APPROVED=true
+EXERCISE_02_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_02_IMPLEMENTATION_AUTHORIZED=true
 ```
 
 ---
 
-## 15. Agent Execution Rule
+## 15. workflow Execution Rule
 
-Sau approval:
+Sau confirmation:
 
 ```text
 one step

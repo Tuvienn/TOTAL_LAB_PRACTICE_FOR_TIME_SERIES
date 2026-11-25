@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "time-series-practice-2"
+version = "0.1.0"
+description = "Project scaffold for Time Series Practice 2"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.9,<4",
+    "numpy>=2.0,<3",
+    "pandas>=2.2,<4",
+    "statsmodels>=0.14,<0.16",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ipykernel>=6.29,<8",
+    "nbconvert>=7,<8",
+    "pytest>=8,<10",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

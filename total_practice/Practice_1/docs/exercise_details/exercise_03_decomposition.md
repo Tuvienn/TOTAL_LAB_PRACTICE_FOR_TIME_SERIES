@@ -13,7 +13,7 @@ Decomposition method: STL
 Log transform: YES
 STL robust: TRUE
 Model training required: NO
-Status: READY_FOR_HUMAN_APPROVAL
+Status: COMPLETED_AND_VALIDATED
 ```
 
 ---
@@ -340,21 +340,21 @@ Không được trả lời trước khi actual decomposition output được t�
 Exercise 3 đạt khi:
 
 ```text
-[ ] Validated AirPassengers series được sử dụng
-[ ] Raw data không bị sửa
-[ ] Log transform được áp dụng trên working copy
-[ ] STL sử dụng period = 12
-[ ] STL robust = True
-[ ] Observed component được tạo
-[ ] Trend component được tạo
-[ ] Seasonal component được tạo
-[ ] Residual component được tạo
-[ ] Decomposition plot đã được inspect
-[ ] Residual đã được inspect
-[ ] Residual ACF đến 40 lags đã được inspect
-[ ] Residual Ljung-Box lag 12 đã được chạy và diễn giải như supplementary evidence
-[ ] Interpretation dựa trên actual outputs
-[ ] Không fabricate conclusion
+[x] Validated AirPassengers series được sử dụng
+[x] Raw data không bị sửa
+[x] Log transform được áp dụng trên working copy
+[x] STL sử dụng period = 12
+[x] STL robust = True
+[x] Observed component được tạo
+[x] Trend component được tạo
+[x] Seasonal component được tạo
+[x] Residual component được tạo
+[x] Decomposition plot đã được inspect
+[x] Residual đã được inspect
+[x] Residual ACF đến 40 lags đã được inspect
+[x] Residual Ljung-Box lag 12 đã được chạy và diễn giải như supplementary evidence
+[x] Interpretation dựa trên actual outputs
+[x] Không fabricate conclusion
 ```
 
 ---
@@ -380,7 +380,7 @@ STOP
 → document cause
 → explain scientific impact
 → propose alternative
-→ wait for approval
+→ chờ xác nhận
 ```
 
 Không tự chuyển sang decomposition khác.
@@ -411,7 +411,7 @@ Kết quả Exercise 3 sẽ được dùng làm evidence cho:
 ```text
 Exercise 4 — Outlier analysis
 Exercise 5 — Visualization synthesis
-User-owned Word report — outside the AI implementation plan
+User-owned Word report — outside the implementation plan
 ```
 
 Đặc biệt:

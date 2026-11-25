@@ -1,0 +1,343 @@
+{
+  "phase": "phase_03_eda_presentation",
+  "contract_version": "1.0.0",
+  "canonical_eda_sha256": "5d542d5c8cc9f2436ef817646d0413765a62dee6805ee41556991c1c0e125dd7",
+  "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+  "scope": {
+    "partition": "development_train_validation_only",
+    "start": "2004-10-01 01:00:00",
+    "end": "2017-08-02 23:00:00",
+    "holdout_target_values_inspected": false
+  },
+  "data_profile": {
+    "dataset": "PJM Hourly Energy Consumption — AEP",
+    "target": "AEP_MW",
+    "unit": "MW",
+    "frequency": "hourly",
+    "rows": 112535,
+    "observed_targets": 112509,
+    "missing_targets": 26
+  },
+  "quality_recap": {
+    "raw_duplicate_timestamps": 4,
+    "raw_missing_hourly_timestamps": 27,
+    "development_missing_targets": 26,
+    "duplicate_policy": "mean",
+    "missing_policy": "Giữ timeline theo giờ; không impute trong EDA",
+    "anomaly_policy": "Chỉ screening; không xóa, clip hoặc thay target"
+  },
+  "annual_stability": [
+    {
+      "index": 0,
+      "year": 2004,
+      "mean_target": 15176.7243880326,
+      "standard_deviation": 2076.6691222431,
+      "median_target": 15340.5,
+      "observed_count": 2206,
+      "timeline_count": 2207,
+      "coverage_rate": 0.9995468962,
+      "partial_year": true
+    },
+    {
+      "index": 1,
+      "year": 2005,
+      "mean_target": 15842.9908654944,
+      "standard_deviation": 2570.8980037655,
+      "median_target": 15632.0,
+      "observed_count": 8758,
+      "timeline_count": 8760,
+      "coverage_rate": 0.9997716895,
+      "partial_year": false
+    },
+    {
+      "index": 2,
+      "year": 2006,
+      "mean_target": 15737.2242521124,
+      "standard_deviation": 2374.7236172841,
+      "median_target": 15667.0,
+      "observed_count": 8758,
+      "timeline_count": 8760,
+      "coverage_rate": 0.9997716895,
+      "partial_year": false
+    },
+    {
+      "index": 3,
+      "year": 2007,
+      "mean_target": 16645.5192966431,
+      "standard_deviation": 2663.6111358028,
+      "median_target": 16449.0,
+      "observed_count": 8758,
+      "timeline_count": 8760,
+      "coverage_rate": 0.9997716895,
+      "partial_year": false
+    },
+    {
+      "index": 4,
+      "year": 2008,
+      "mean_target": 16536.6556593031,
+      "standard_deviation": 2507.4505136103,
+      "median_target": 16314.0,
+      "observed_count": 8782,
+      "timeline_count": 8784,
+      "coverage_rate": 0.9997723133,
+      "partial_year": false
+    },
+    {
+      "index": 5,
+      "year": 2009,
+      "mean_target": 15254.1116693309,
+      "standard_deviation": 2565.9147467271,
+      "median_target": 15071.0,
+      "observed_count": 8758,
+      "timeline_count": 8760,
+      "coverage_rate": 0.9997716895,
+      "partial_year": false
+    },
+    {
+      "index": 6,
+      "year": 2010,
+      "mean_target": 16008.6195043965,
+      "standard_deviation": 2752.3899106022,
+      "median_target": 15684.0,
+      "observed_count": 8757,
+      "timeline_count": 8760,
+      "coverage_rate": 0.9996575342,
+      "partial_year": false
+    },
+    {
+      "index": 7,
+      "year": 2011,
+      "mean_target": 15815.3894724823,
+      "standard_deviation": 2485.7423146652,
+      "median_target": 15567.0,
+      "observed_count": 8758,
+      "timeline_count": 8760,
+      "coverage_rate": 0.9997716895,
+      "partial_year": false
+    },
+    {
+      "index": 8,
+      "year": 2012,
+      "mean_target": 15352.94066735,
+      "standard_deviation": 2410.7816376781,
+      "median_target": 15164.0,
+      "observed_count": 8781,
+      "timeline_count": 8784,
+      "coverage_rate": 0.9996584699,
+      "partial_year": false
+    },
+    {
+      "index": 9,
+      "year": 2013,
+      "mean_target": 15198.2115779858,
+      "standard_deviation": 2388.027670284,
+      "median_target": 15091.0,
+      "observed_count": 8758,
+      "timeline_count": 8760,
+      "coverage_rate": 0.9997716895,
+      "partial_year": false
+    },
+    {
+      "index": 10,
+      "year": 2014,
+      "mean_target": 15169.3160538936,
+      "standard_deviation": 2589.0662908548,
+      "median_target": 14902.0,
+      "observed_count": 8758,
+      "timeline_count": 8760,
+      "coverage_rate": 0.9997716895,
+      "partial_year": false
+    },
+    {
+      "index": 11,
+      "year": 2015,
+      "mean_target": 14869.402728622,
+      "standard_deviation": 2613.5458796291,
+      "median_target": 14515.0,
+      "observed_count": 8759,
+      "timeline_count": 8760,
+      "coverage_rate": 0.9998858447,
+      "partial_year": false
+    },
+    {
+      "index": 12,
+      "year": 2016,
+      "mean_target": 14784.65843106,
+      "standard_deviation": 2589.6662301302,
+      "median_target": 14367.0,
+      "observed_count": 8783,
+      "timeline_count": 8784,
+      "coverage_rate": 0.9998861566,
+      "partial_year": false
+    },
+    {
+      "index": 13,
+      "year": 2017,
+      "mean_target": 14472.8915287244,
+      "standard_deviation": 2311.4090269841,
+      "median_target": 14213.0,
+      "observed_count": 5135,
+      "timeline_count": 5136,
+      "coverage_rate": 0.999805296,
+      "partial_year": true
+    }
+  ],
+  "top_lag_correlations": [
+    {
+      "lag_hours": 1,
+      "correlation": 0.9760611612,
+      "valid_pairs": 112482
+    },
+    {
+      "lag_hours": 2,
+      "correlation": 0.914240271,
+      "valid_pairs": 112481
+    },
+    {
+      "lag_hours": 24,
+      "correlation": 0.8736184032,
+      "valid_pairs": 112459
+    },
+    {
+      "lag_hours": 23,
+      "correlation": 0.8572346329,
+      "valid_pairs": 112460
+    },
+    {
+      "lag_hours": 25,
+      "correlation": 0.8465663032,
+      "valid_pairs": 112458
+    },
+    {
+      "lag_hours": 3,
+      "correlation": 0.8284935059,
+      "valid_pairs": 112480
+    },
+    {
+      "lag_hours": 22,
+      "correlation": 0.8050906168,
+      "valid_pairs": 112461
+    },
+    {
+      "lag_hours": 26,
+      "correlation": 0.7837609037,
+      "valid_pairs": 112457
+    },
+    {
+      "lag_hours": 168,
+      "correlation": 0.7656465936,
+      "valid_pairs": 112315
+    },
+    {
+      "lag_hours": 167,
+      "correlation": 0.7439327535,
+      "valid_pairs": 112316
+    }
+  ],
+  "top_anomaly_candidates": [
+    {
+      "timestamp": "2015-02-20 07:00:00",
+      "target": 24210.0,
+      "robust_score": 9.006634541984733,
+      "year": 2015,
+      "hour_of_week": 103
+    },
+    {
+      "timestamp": "2015-02-20 08:00:00",
+      "target": 24739.0,
+      "robust_score": 8.990078980490875,
+      "year": 2015,
+      "hour_of_week": 104
+    },
+    {
+      "timestamp": "2015-02-20 06:00:00",
+      "target": 23412.0,
+      "robust_score": 8.816619817073171,
+      "year": 2015,
+      "hour_of_week": 102
+    },
+    {
+      "timestamp": "2015-01-08 06:00:00",
+      "target": 22182.0,
+      "robust_score": 8.466045634920635,
+      "year": 2015,
+      "hour_of_week": 78
+    },
+    {
+      "timestamp": "2015-02-20 05:00:00",
+      "target": 22693.0,
+      "robust_score": 8.391445390487375,
+      "year": 2015,
+      "hour_of_week": 101
+    },
+    {
+      "timestamp": "2015-01-08 05:00:00",
+      "target": 21435.0,
+      "robust_score": 8.358246347941567,
+      "year": 2015,
+      "hour_of_week": 77
+    },
+    {
+      "timestamp": "2015-02-19 06:00:00",
+      "target": 22028.0,
+      "robust_score": 8.328647486772486,
+      "year": 2015,
+      "hour_of_week": 78
+    },
+    {
+      "timestamp": "2015-02-20 04:00:00",
+      "target": 22486.0,
+      "robust_score": 8.249533603707995,
+      "year": 2015,
+      "hour_of_week": 100
+    },
+    {
+      "timestamp": "2015-01-10 07:00:00",
+      "target": 20330.0,
+      "robust_score": 8.224123916184972,
+      "year": 2015,
+      "hour_of_week": 127
+    },
+    {
+      "timestamp": "2015-02-19 05:00:00",
+      "target": 21271.0,
+      "robust_score": 8.211343293492696,
+      "year": 2015,
+      "hour_of_week": 77
+    }
+  ],
+  "eda_to_feature_decisions": [
+    {
+      "eda_finding": "Phụ thuộc rất mạnh ở lag 1 giờ",
+      "evidence": "r=0.9761",
+      "phase_04_decision": "lag_1h, lag_2h, lag_3h"
+    },
+    {
+      "eda_finding": "Chu kỳ ngày nổi bật",
+      "evidence": "lag 24h: r=0.8736",
+      "phase_04_decision": "lag_23h/24h/25h, rolling 24h, hour"
+    },
+    {
+      "eda_finding": "Chu kỳ tuần còn rõ",
+      "evidence": "lag 168h: r=0.7656",
+      "phase_04_decision": "lag_168h, rolling 168h, day_of_week, is_weekend"
+    },
+    {
+      "eda_finding": "Profile thay đổi theo tháng",
+      "evidence": "Mean target theo 12 tháng khác nhau",
+      "phase_04_decision": "month và cyclic month features"
+    },
+    {
+      "eda_finding": "Có robust anomaly candidates",
+      "evidence": "1,053 candidates",
+      "phase_04_decision": "Không dùng anomaly flag; giữ nguyên target"
+    }
+  ],
+  "figure": {
+    "name": "annual_stability",
+    "path": "outputs/figures/phase_03_annual_stability.png",
+    "sha256": "e42180afd126c67880b7bffccc51be76a2b66fd52af8b41ec37641abc19dd70f",
+    "bytes": 142349
+  },
+  "status": "PASS"
+}

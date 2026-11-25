@@ -1,0 +1,112 @@
+{
+  "phase": "phase_06_supplemental_assignment_experiments",
+  "contract_version": "1.0.0",
+  "evidence_label": "post_hoc_supplemental_evidence",
+  "upstream": {
+    "phase_05_audit": "outputs/results/phase_05_supervised_dataset.json",
+    "phase_05_audit_sha256": "21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5",
+    "phase_06_cv_results": "outputs/results/phase_06_cv_results.json",
+    "phase_06_cv_results_sha256": "1c1647a458b9261956e831045ed1c4b2f84791fd9843839bd088b31a239d31d4",
+    "phase_06_model_lock": "outputs/results/phase_06_model_lock.json",
+    "phase_06_model_lock_sha256": "ad31cb65daa36c394d7d5afc2cf0af333760c8e75ba718e702368e260db70eee",
+    "features_contract": "config/features.json",
+    "features_contract_sha256": "3191bb66323b96c305722511808a8c5dfa18a5a64b0527709696bc47f75dca5e",
+    "supervised_contract": "config/supervised_dataset.json",
+    "supervised_contract_sha256": "5b1960fb6ca841df9e0dc619f54374152f793e75f596235408fdd3e7b337c649",
+    "temporal_split_contract": "config/temporal_split.json",
+    "temporal_split_contract_sha256": "abcd404e9d6509564391a60e152faa7fd2241fa979333ed249c1fb55454f788b",
+    "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+    "development_eligible_samples": 108083,
+    "official_validation_predictions": 42413,
+    "folds": 5,
+    "feature_count": 22,
+    "selected_candidate": "xgboost_tuned"
+  },
+  "linear_regression": {
+    "candidate": "linear_regression_scaled",
+    "feature_population": "official_phase_05_22_features",
+    "pipeline": [
+      "StandardScaler",
+      "LinearRegression"
+    ],
+    "scaler_fit_scope": "fold_train_only",
+    "regularization": "none",
+    "tuning": false,
+    "same_validation_timestamps_as_phase_06": true,
+    "comparison_candidate": "xgboost_tuned",
+    "xgboost_retrained": false
+  },
+  "lag_sensitivity": {
+    "p_values": [
+      1,
+      6,
+      12,
+      24,
+      48,
+      168
+    ],
+    "feature_pattern": "lag_1h_through_lag_ph",
+    "included_feature_groups": [
+      "consecutive_lags_only"
+    ],
+    "rolling_features_included": false,
+    "calendar_features_included": false,
+    "imputation": "none",
+    "natural_eligibility_reported": true,
+    "common_population_reference_p": 168,
+    "same_train_timestamps_for_all_p": true,
+    "same_validation_timestamps_for_all_p": true,
+    "model": "xgboost_tuned_locked_parameters",
+    "tuning": false,
+    "parameters": {
+      "objective": "reg:squarederror",
+      "tree_method": "hist",
+      "random_state": 42,
+      "n_jobs": -1,
+      "n_estimators": 500,
+      "max_depth": 7,
+      "learning_rate": 0.1,
+      "subsample": 0.7,
+      "colsample_bytree": 0.7,
+      "min_child_weight": 1,
+      "reg_alpha": 1.0,
+      "reg_lambda": 10.0
+    }
+  },
+  "metrics": {
+    "primary": "mae",
+    "secondary": "rmse",
+    "aggregate": [
+      "mean",
+      "standard_deviation"
+    ],
+    "standard_deviation_ddof": 0,
+    "training_mae_diagnostic": true,
+    "duration_is_selection_metric": false
+  },
+  "execution": {
+    "executor": "human_terminal_only",
+    "project_data_fits": 35,
+    "checkpoint_after_each_fit": true,
+    "resume_supported": true,
+    "atomic_bundle_promotion": true,
+    "binary_model_persisted": false,
+    "run_directory_pattern": "runs/P6_supplemental_<timestamp>_<execution_identity>"
+  },
+  "scope": {
+    "development_only": true,
+    "holdout_access_allowed": false,
+    "holdout_evaluated": false,
+    "changes_model_lock": false,
+    "selection_authority": "none",
+    "final_answer_owner": "phase_09"
+  },
+  "outputs": {
+    "linear_regression": "outputs/results/phase_06_supplemental_linear_regression.json",
+    "lag_sensitivity": "outputs/results/phase_06_supplemental_lag_sensitivity.json",
+    "audit": "outputs/results/phase_06_supplemental_audit.json",
+    "model_comparison_figure": "outputs/figures/phase_06_supplemental_model_comparison.png",
+    "lag_sensitivity_figure": "outputs/figures/phase_06_supplemental_lag_sensitivity.png"
+  },
+  "status": "APPROVED"
+}
