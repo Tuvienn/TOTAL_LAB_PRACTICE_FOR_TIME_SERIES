@@ -14,7 +14,7 @@ Implementation authorized: YES
 
 Tài liệu này là execution plan riêng cho Exercise 1.
 
-Agent chỉ được bắt đầu code Exercise 1 sau khi Human approve file này.
+Implementation chỉ bắt đầu Exercise 1 sau khi tài liệu xác nhận này.
 
 ---
 
@@ -38,7 +38,7 @@ Mục tiêu của execution cycle này:
 
 ## 3. Required Documents
 
-Trước khi implementation, agent phải đọc:
+Trước khi implementation, Quy trình thực thi phải đọc:
 
 ```text
 working_rule.md
@@ -56,7 +56,7 @@ Nếu thiếu tài liệu bắt buộc hoặc có conflict:
 ```text
 STOP
 → report missing/conflict
-→ chờ Human quyết định
+→ chờ xử lý quyết định
 ```
 
 ---
@@ -72,7 +72,7 @@ Seasonal period: 12
 Observed variable: passenger count in thousands
 ```
 
-Approved source contract:
+Confirmed source contract:
 
 ```text
 CSV URL: https://vincentarelbundock.github.io/Rdatasets/csv/datasets/AirPassengers.csv
@@ -106,7 +106,7 @@ observation count sufficient
 
 ## 5. Files to Read
 
-Agent cần đọc hoặc inspect:
+Quy trình cần đọc hoặc inspect:
 
 ```text
 datasets/raw/air_passengers.csv
@@ -161,10 +161,10 @@ Không được tự ý sửa:
 ```text
 datasets/raw/air_passengers.csv
 working_rule.md
-approved scoped rule files
-approved practice_1_overview.md
-approved exercise_01_acf_pacf.md
-approved initialize_practice_1.md
+confirmed scoped rule files
+confirmed practice_1_overview.md
+confirmed exercise_01_acf_pacf.md
+confirmed initialize_practice_1.md
 Exercise 2–5 specifications
 Practice/Lab khác
 unrelated repository configuration
@@ -176,7 +176,7 @@ Nếu implementation thật sự yêu cầu sửa ngoài scope:
 STOP
 → explain reason
 → propose change
-→ wait for Human approval
+→ chờ xác nhận
 ```
 
 ---
@@ -241,14 +241,14 @@ Validation:
 ```text
 no unresolved rule conflict
 correct Practice_1 root
-Exercise 1 plan is approved
+Exercise 1 plan is confirmed
 ```
 
 ---
 
 ### Step 2 — Verify Dataset Availability
 
-Xác minh AirPassengers đã tồn tại trong approved raw-data location.
+Xác minh AirPassengers đã tồn tại trong confirmed raw-data location.
 
 Nếu chưa có:
 
@@ -561,7 +561,7 @@ Exercise 1 phải có interpretation dựa trên actual execution.
 
 ## 12. Stop Conditions
 
-Agent phải dừng khi:
+Quy trình phải dừng khi:
 
 ```text
 Exercise 1 plan chưa được approve
@@ -592,7 +592,7 @@ Khi dừng:
 4. Ghi relevant evidence.
 5. Nêu impact.
 6. Đề xuất next action.
-7. Chờ Human approval.
+7. Chờ xác nhận.
 ```
 
 ---
@@ -614,38 +614,38 @@ AND no unresolved blocking issue
 
 ---
 
-## 14. Approval Gate
+## 14. confirmation gate
 
 Trạng thái hiện tại:
 
 ```text
 EXERCISE_01_BEFORE_PROCESS_CREATED=true
 EXERCISE_01_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_01_BEFORE_PROCESS_APPROVED=true
+EXERCISE_01_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_01_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_01_IMPLEMENTED=true
 EXERCISE_01_VALIDATED=true
 ```
 
-Agent không được code Exercise 1 khi:
+Quy trình không được code Exercise 1 khi:
 
 ```text
 EXERCISE_01_IMPLEMENTATION_AUTHORIZED=false
 ```
 
-Sau khi Human approve:
+Sau khi confirmation:
 
 ```text
 EXERCISE_01_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_01_BEFORE_PROCESS_APPROVED=true
+EXERCISE_01_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_01_IMPLEMENTATION_AUTHORIZED=true
 ```
 
 ---
 
-## 15. Agent Execution Rule
+## 15. workflow Execution Rule
 
-Sau approval:
+Sau confirmation:
 
 ```text
 one step
@@ -664,7 +664,7 @@ tự giảm lag
 tự đổi confidence level
 tự thêm forecasting model
 tự sửa raw data
-tự sửa approved specification
+tự sửa confirmed specification
 tự bỏ qua validation
 tự claim completion
 ```

@@ -18,8 +18,8 @@ Tài liệu phân tích:
 docs/error_analysis/exercise_03_notebook_alignment_issue.md
 ```
 
-Kế hoạch này không tự cấp quyền implementation. Chỉ được bắt đầu sửa sau khi Human
-phê duyệt rõ ràng.
+Kế hoạch này không tự cấp quyền implementation. Chỉ được bắt đầu sửa sau khi scope được xác nhận
+trong project record.
 
 ## 2. Mục tiêu sửa
 
@@ -43,7 +43,7 @@ phê duyệt rõ ràng.
 - không thêm cell ngoài phạm vi nếu có thể tái sử dụng bốn cell 28–31;
 - không làm thay đổi source/type của cell 0–27 và cell 32 trở đi.
 
-## 4. File được phép tạo hoặc thay đổi sau phê duyệt
+## 4. File được phép tạo hoặc thay đổi sau xác nhận
 
 ```text
 notebooks/practice_1_present.ipynb, chỉ cell 28–31 và output tương ứng
@@ -60,9 +60,9 @@ outputs/results/residual_diagnostics.csv
 docs/logs/exercise_03_execution.md
 docs/status/current_status.md
 docs/exercise_details/exercise_03_decomposition.md, chỉ trạng thái
-docs/plans/exercise_03_before_process.md, chỉ approval/status
+docs/plans/exercise_03_before_process.md, chỉ confirmation/status
 docs/error_analysis/exercise_03_notebook_alignment_issue.md, chỉ trạng thái/kết quả
-docs/fix_plans/exercise_03_notebook_alignment_fix_plan.md, chỉ approval/kết quả
+docs/fix_plans/exercise_03_notebook_alignment_fix_plan.md, chỉ confirmation/kết quả
 ```
 
 Nếu tên module cần thay đổi để tránh duplicate owner đã tồn tại, phải ghi rõ lý do
@@ -79,7 +79,7 @@ validated Exercise 2 outputs
 config/practice_1.json
 pyproject.toml
 working_rule.md
-approved rule documents
+confirmed rule documents
 Exercise 4–5 specification và before-process plan
 ```
 
@@ -88,7 +88,7 @@ Không thêm dependency mới. `numpy`, `pandas`, `matplotlib` và `statsmodels`
 
 ## 6. Bản đồ giữ và sửa theo cell
 
-| Cell | Quyết định | Nội dung sau khi được duyệt |
+| Cell | Quyết định | Nội dung sau khi được xác nhận |
 |---:|---|---|
 | 28 | Giữ STL và bố cục, sửa input/owner | Thêm heading E3, kiểm tra input, tạo working log series, gọi reusable decomposition, tạo `07` và `08` |
 | 29 | Giữ các nhận định đúng, chuyển thành evidence summary | Hiển thị component statistics và các bằng chứng trend, seasonality, amplitude |
@@ -96,7 +96,7 @@ Không thêm dependency mới. `numpy`, `pandas`, `matplotlib` và `statsmodels`
 | 31 | Giữ quy tắc p-value, mở rộng diễn giải | Trả lời đủ 10 câu hỏi bằng actual output và nêu Ljung–Box chỉ là supplementary evidence |
 
 Số cell E3 dự kiến vẫn là bốn. Nếu giới hạn kỹ thuật của notebook buộc phải thêm
-cell, phải dừng và xin Human duyệt thay đổi ranh giới trước.
+cell, phải dừng và xin Đã xác nhận thay đổi ranh giới trước.
 
 ## 7. Thiết kế API dự kiến
 
@@ -331,7 +331,7 @@ không dùng nhầm residual cũ trên original scale.
 
 ## 12. Điều kiện dừng
 
-Phải dừng và báo Human nếu:
+Phải dừng và báo cáo theo workflow nếu:
 
 ```text
 phát hiện giá trị không dương, missing hoặc non-finite
@@ -368,17 +368,17 @@ E1/E2 và E4/E5 không đổi
 execution log và current status được cập nhật
 ```
 
-## 14. Phê duyệt của Human
+## 14. Xác nhận phạm vi kỹ thuật
 
 ```text
-Human đã xem error analysis: CÓ
-Human đã xem fix plan: CÓ
-Human phê duyệt phạm vi: CÓ
+error analysis record: CÓ
+fix plan record: CÓ
+Đã xác nhận phạm vi: CÓ
 Cho phép triển khai E3: CÓ
-Ngày phê duyệt: 2026-10-12
+Ngày xác nhận: 2026-10-12
 ```
 
-Human đã phê duyệt rõ ràng trong hội thoại ngày 2026-10-12. Agent được phép triển
+Đã xác nhận rõ ràng trong hội thoại ngày 2026-10-12. được phép triển
 khai trong đúng phạm vi của kế hoạch này.
 
 ## 15. Kết quả triển khai

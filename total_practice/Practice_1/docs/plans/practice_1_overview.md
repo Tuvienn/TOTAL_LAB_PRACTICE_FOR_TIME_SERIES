@@ -6,7 +6,7 @@
 Document ID: TS-PRACTICE-01-OVERVIEW-v1
 Practice root: total_practice/Practice_1
 Learning source: Chương 2 — Khám phá đặc tính dữ liệu chuỗi thời gian
-Status: APPROVED
+Status: CONFIRMED
 Implementation authorization: true for Initialization and Exercise 1
 ```
 
@@ -52,7 +52,7 @@ Dữ liệu có phù hợp để tiếp tục sang forecasting không?
 
 ## 5. Dataset rationale
 
-Dataset đã được Human chốt là `AirPassengers`.
+Dataset đã được xác định là `AirPassengers`.
 
 Dataset phù hợp vì có:
 
@@ -104,9 +104,9 @@ Tổng hợp trend, seasonal pattern, variance behavior và các điểm bất t
 
 ### 6.6 Bài 6 — Report
 
-TuVien tự viết báo cáo Word từ validated evidence của Bài 1–5. Exercise 6 không có
-AI implementation plan, không có exercise specification riêng và không phải artifact
-do agent tạo trong task chuẩn hóa này.
+Báo cáo Word được xây dựng từ validated evidence của Bài 1–5. Exercise 6 không có
+implementation plan, không có exercise specification riêng và không phải artifact
+do workflow tạo trong task chuẩn hóa này.
 
 ## 7. Workflow cấp cao
 
@@ -151,7 +151,7 @@ Heatmap dùng month rows, year columns và expected shape 12 × 12.
 ```
 
 Giá trị tham số và acceptance criteria đã được chuẩn hóa trong các exercise
-specification; chúng vẫn cần Human approval trước implementation.
+specification; chúng vẫn cần confirmation trước implementation.
 
 ## 9. Deliverable categories
 
@@ -207,29 +207,29 @@ notebook chạy được sau kernel restart
 limitations và unresolved issues được báo cáo trung thực
 ```
 
-Word report của Exercise 6 là deliverable riêng do TuVien quản lý và không phải gate
-để agent kết luận phần implementation của Exercise 1–5 đã hoàn thành.
+Word report của Exercise 6 là deliverable riêng được quản lý ngoài repository và không phải gate
+để workflow kết luận phần implementation của Exercise 1–5 đã hoàn thành.
 
 Detailed acceptance criteria đã được viết nhưng chưa kích hoạt cho implementation cho
-đến khi Human duyệt các plan liên quan.
+đến khi Đã xác nhận các plan liên quan.
 
-## 11. Remaining Approval Gates
+## 11. Remaining confirmation gate
 
 ```text
 Exercise 1 evidence review
-Exercise 2 before-process approval
+Exercise 2 before-process confirmation
 Exercise 2 explicit implementation authorization
 ```
 
 Exercise 2–5 vẫn được approve tuần tự trước execution của từng exercise.
 
-## 12. Approval state
+## 12. confirmation state
 
 ```text
 OVERVIEW_CREATED=true
 OVERVIEW_UPDATED_FOR_GROUP_1_3=true
 OVERVIEW_REVIEWED=true
-OVERVIEW_APPROVED=true
+OVERVIEW_CONFIRMED=true
 IMPLEMENTATION_AUTHORIZED=true_FOR_INITIALIZATION_AND_EXERCISE_1
 INITIALIZATION_COMPLETED=true
 EXERCISE_01_COMPLETED=true

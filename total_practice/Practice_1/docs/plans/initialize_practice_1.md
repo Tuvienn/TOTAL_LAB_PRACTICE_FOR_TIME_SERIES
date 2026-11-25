@@ -34,14 +34,14 @@ Mục tiêu của bước khởi tạo:
 - chuẩn bị shared reusable structure;
 - khóa các scientific parameters dùng chung;
 - xác định thứ tự thực thi Exercise 1–5;
-- đảm bảo agent không tự mở rộng scope;
+- đảm bảo Quy trình không tự mở rộng scope;
 - chuẩn bị điều kiện để từng exercise có thể được thực thi độc lập theo before-process plan riêng.
 
 ---
 
 ## 3. Required Documents
 
-Agent phải đọc trước khi bắt đầu:
+Quy trình thực thi phải đọc trước khi bắt đầu:
 
 ```text
 working_rule.md
@@ -91,7 +91,7 @@ Outlier method: IQR 1.5 on natural-log STL residual
 Model training: NO
 ```
 
-Các config này chỉ được thay đổi khi Human approve.
+Các config này chỉ được thay đổi khi confirmation.
 
 ---
 
@@ -280,7 +280,7 @@ Notebook section order:
 4. Exercise 3 — Decomposition
 5. Exercise 4 — Data Quality
 6. Exercise 5 — Visualization
-7. Evidence summary for TuVien's Word report
+7. Evidence summary for the Word report
 ```
 
 Notebook chỉ orchestration, display và interpretation; reusable logic thuộc các
@@ -389,8 +389,8 @@ Initialization
 → Exercise 5 — Visualization
 ```
 
-Exercise 6 là Word report do TuVien tự thực hiện và không thuộc AI implementation
-plan. Agent chỉ cung cấp validated evidence từ Exercise 1–5.
+Exercise 6 là Word report do được hoàn thiện ngoài repository và không thuộc implementation
+plan. chỉ cung cấp validated evidence từ Exercise 1–5.
 
 Mỗi exercise chỉ được bắt đầu khi:
 
@@ -428,14 +428,14 @@ Sequential execution steps
 Validation steps
 Expected outputs
 Stop conditions
-Approval gate
+confirmation gate
 ```
 
 ---
 
 ## 9. Shared Files Allowed to Create or Modify
 
-Agent chỉ được làm việc trong các khu vực đã duyệt:
+Quy trình chỉ được làm việc trong các khu vực đã xác nhận:
 
 ```text
 config/practice_1.json
@@ -465,9 +465,9 @@ Không tự ý sửa:
 
 ```text
 working_rule.md
-approved scoped rule files
-approved overview
-approved exercise specification files
+confirmed scoped rule files
+confirmed overview
+confirmed exercise specification files
 raw dataset sau khi đã xác minh
 các Practice/Lab khác
 unrelated repository configuration
@@ -478,7 +478,7 @@ Nếu cần sửa:
 ```text
 STOP
 → giải thích lý do
-→ xin Human approval
+→ xin confirmation
 ```
 
 ---
@@ -498,7 +498,7 @@ no fabricated results
 actual outputs inspected
 ```
 
-Agent không được claim:
+Không được claim:
 
 ```text
 PASS
@@ -537,7 +537,7 @@ Khi dừng:
 3. Ghi expected behavior.
 4. Nêu impact.
 5. Đề xuất next action.
-6. Chờ Human approval.
+6. Chờ xác nhận.
 ```
 
 ---
@@ -553,10 +553,10 @@ Exercise 4 specification: CREATED
 Exercise 5 specification: CREATED
 
 Exercise 1 before-process plan: COMPLETED
-Exercise 2 before-process plan: CREATED / WAITING_APPROVAL
-Exercise 3 before-process plan: CREATED / WAITING_APPROVAL
-Exercise 4 before-process plan: CREATED / WAITING_APPROVAL
-Exercise 5 before-process plan: CREATED / WAITING_APPROVAL
+Exercise 2 before-process plan: CREATED / WAITING_CONFIRMATION
+Exercise 3 before-process plan: CREATED / WAITING_CONFIRMATION
+Exercise 4 before-process plan: CREATED / WAITING_CONFIRMATION
+Exercise 5 before-process plan: CREATED / WAITING_CONFIRMATION
 
 Initialization: COMPLETED
 Exercise 1 implementation: COMPLETED / VALIDATED
@@ -569,38 +569,38 @@ Exercise 6 Word report: USER_OWNED / OUTSIDE_AI_IMPLEMENTATION_PLAN
 ## 14. Next Step
 
 ```text
-1. Human reviews the validated Exercise 1 evidence.
-2. Human reviews Exercise 2 specification and before-process plan.
-3. Human explicitly authorizes Exercise 2 implementation.
+1. Technical review of the validated Exercise 1 evidence.
+2. Technical review Exercise 2 specification and before-process plan.
+3. implementation authorization for Exercise 2 is recorded.
 4. Only then may Exercise 2 execution begin.
 ```
 
 ---
 
-## 15. Approval Gate
+## 15. confirmation gate
 
 ```text
 MASTER_PLAN_CREATED=true
 MASTER_PLAN_UPDATED_FOR_GROUP_1_3=true
 MASTER_PLAN_REVIEWED=true
-MASTER_PLAN_APPROVED=true
+MASTER_PLAN_CONFIRMED=true
 IMPLEMENTATION_AUTHORIZED=true_FOR_INITIALIZATION_AND_EXERCISE_1
 INITIALIZATION_COMPLETED=true
 EXERCISE_01_COMPLETED=true
 NEXT_IMPLEMENTATION_AUTHORIZED=false
 ```
 
-Sau khi Human approve:
+Sau khi confirmation:
 
 ```text
 MASTER_PLAN_REVIEWED=true
-MASTER_PLAN_APPROVED=true
+MASTER_PLAN_CONFIRMED=true
 ```
 
 Lưu ý:
 
 ```text
-MASTER_PLAN_APPROVED=true
+MASTER_PLAN_CONFIRMED=true
 ```
 
 không tự động cho phép chạy tất cả exercise.
@@ -608,7 +608,7 @@ không tự động cho phép chạy tất cả exercise.
 Mỗi exercise vẫn phải có:
 
 ```text
-exercise-specific before-process approval
+exercise-specific before-process confirmation
 ```
 
 trước khi implementation.

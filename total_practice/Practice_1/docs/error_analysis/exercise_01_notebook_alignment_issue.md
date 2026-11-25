@@ -25,7 +25,7 @@ Các hành vi hiện tại trong notebook:
 ```text
 đọc dataset trực tiếp bằng pandas.read_csv
 đường dẫn tương đối phụ thuộc thư mục làm việc của notebook
-bỏ cột định danh dòng mà không chạy quy trình kiểm tra schema đã duyệt
+bỏ cột định danh dòng mà không chạy quy trình kiểm tra schema đã xác nhận
 tự chuyển fractional year thành timestamp ngay trong notebook
 kiểm tra dòng trùng lặp thay vì kiểm tra timestamp trùng lặp
 không trình bày rõ missing value, frequency, chronology và khoảng thời gian chính xác
@@ -37,7 +37,7 @@ kết luận đề cập chuẩn bị cho SARIMA vượt ra ngoài mục tiêu E
 ```
 
 Metadata của notebook đang khai báo kernel Python 3.11 thuộc project
-`credit-default-prediction`, trong khi runtime đã duyệt của Practice 1 là Python 3.12
+`credit-default-prediction`, trong khi runtime đã xác nhận của Practice 1 là Python 3.12
 với kernel `time-series-practice-1`.
 
 ## 3. Hành vi mong đợi
@@ -54,7 +54,7 @@ trình bày đúng đơn vị nghìn hành khách
 báo cáo nhất quán các giá trị thực tế tại lag 1, 12, 24 và 36
 trả lời trực tiếp bốn câu hỏi diễn giải của Exercise 1
 không lựa chọn hoặc đề xuất ARIMA/SARIMA order từ chuỗi raw
-chạy theo runtime contract Python 3.12 đã duyệt
+chạy theo runtime contract Python 3.12 đã xác nhận
 tái tạo outputs Exercise 1 mà không thay đổi raw data
 ```
 
@@ -133,7 +133,7 @@ Các file được bảo vệ:
 
 ```text
 datasets/raw/air_passengers.csv
-các rule, specification và before-process plan đã được duyệt
+các rule, specification và before-process plan đã được xác nhận
 ```
 
 ## 7. Ảnh hưởng đến các bước sau
@@ -152,7 +152,7 @@ và chạy lại notebook theo cách tái lập được.
 Quá trình sửa phải:
 
 ```text
-chỉ thay đổi notebook chính practice_1_present.ipynb và các generated outputs đã duyệt
+chỉ thay đổi notebook chính practice_1_present.ipynb và các generated outputs đã xác nhận
 tái sử dụng các hàm source đã được kiểm chứng thay vì tạo thêm implementation khác
 giữ nguyên các kết quả số Exercise 1 đã được xác minh
 hiển thị đầy đủ bằng chứng data integrity và khoảng tin cậy

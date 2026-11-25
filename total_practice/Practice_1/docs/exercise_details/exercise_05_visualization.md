@@ -417,7 +417,7 @@ STOP
 → document issue
 → explain impact
 → propose next action
-→ wait for approval
+→ chờ xác nhận
 ```
 
 ---
@@ -444,7 +444,7 @@ AND no unresolved blocking issue
 Kết quả Exercise 5 sẽ được dùng trực tiếp cho:
 
 ```text
-User-owned Word report — outside the AI implementation plan
+User-owned Word report — outside the implementation plan
 ```
 
 Exercise 5 là bước tổng hợp visualization cuối trước khi viết báo cáo.

@@ -10,7 +10,7 @@ Phạm vi cell: 45–51
 Exercise 5 là exercise implementation cuối cùng
 Trạng thái phân tích: ĐÃ_PHÂN_TÍCH
 Trạng thái triển khai: ĐÃ_HOÀN_THÀNH_VÀ_XÁC_MINH
-Human authorization cho implementation: CÓ — 2026-10-12
+scope confirmation cho implementation: CÓ — 2026-10-12
 Ngày phân tích: 2026-10-12
 ```
 
@@ -39,7 +39,7 @@ owner, chạy được trong environment chuẩn và tạo output có thể truy
 ```text
 Observed: cell 48 import seaborn as sn
 Observed: seaborn không tồn tại trong .venv và không được khai báo trong pyproject.toml
-Expected: E5 chạy bằng dependency đã được duyệt, không cần thêm dependency mới
+Expected: E5 chạy bằng dependency đã được xác nhận, không cần thêm dependency mới
 ```
 
 Output hình đang nhúng trong notebook là output cũ. Execution count của ba code cell
@@ -196,7 +196,7 @@ Tháng có trung bình thấp nhất: November — 232.833333
 ```
 
 Các số trên chỉ là baseline phục vụ review. Output chính thức phải đến từ reusable
-logic đã kiểm thử và notebook execution sau khi plan được Human phê duyệt.
+logic đã kiểm thử và notebook execution sau khi plan được xác nhận.
 
 ## 5. Root cause
 
@@ -256,15 +256,15 @@ E4 outlier candidates: 6f08fd16b5dd2c240801a83dc78b675302ad6e916dddb0ef8634c3611
 - lưu bốn figure và rolling-statistics CSV;
 - đối chiếu trực tiếp ACF/PACF, decomposition và outlier candidates;
 - tạo diễn giải động trả lời đủ 12 câu hỏi;
-- chạy tests và notebook từ đầu đến hết E5 sau khi được duyệt.
+- chạy tests và notebook từ đầu đến hết E5 sau khi được xác nhận.
 
 ## 9. Quyết định hiện tại
 
 ```text
 Error analysis đã được tạo: CÓ
 Fix plan đã được tạo: CÓ
-Error analysis reviewed by Human: CÓ
-Fix plan approved by Human: CÓ
+Error analysis reviewed in the technical record: CÓ
+Fix plan confirmed in the project record: CÓ
 Cho phép triển khai E5: CÓ
 ```
 

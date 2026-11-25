@@ -9,12 +9,12 @@ Phạm vi cell: 45–51
 Trạng thái kế hoạch: ĐÃ_TRIỂN_KHAI_VÀ_XÁC_MINH
 Được phép triển khai: CÓ
 Ngày tạo: 2026-10-12
-Ngày phê duyệt: 2026-10-12
+Ngày xác nhận: 2026-10-12
 ```
 
 Tài liệu này là fix plan cho các vấn đề đã ghi tại
-`docs/error_analysis/exercise_05_notebook_alignment_issue.md`. Chỉ khi Human duyệt
-rõ ràng thì agent mới được sửa code, notebook, tạo output và chạy E5.
+`docs/error_analysis/exercise_05_notebook_alignment_issue.md`. Chỉ khi Đã xác nhận
+rõ ràng thì chỉ được sửa code, notebook, tạo output và chạy E5.
 
 ## 2. Mục tiêu
 
@@ -29,7 +29,7 @@ rõ ràng thì agent mới được sửa code, notebook, tạo output và chạ
 - tạo output có thể tái tạo và kiểm thử;
 - giữ nguyên E1–E4, raw dataset và dependency contract.
 
-## 3. Phạm vi được phép thay đổi sau approval
+## 3. Phạm vi được phép thay đổi sau confirmation
 
 ```text
 notebooks/practice_1_present.ipynb, chỉ cell 45–51
@@ -58,7 +58,7 @@ validated E1–E4 result tables
 working_rule.md
 .agents rules
 docs/rules/
-approved Practice overview và initialization plan
+confirmed Practice overview và initialization plan
 pyproject.toml hoặc dependency versions
 Practice/Lab khác
 ```
@@ -238,7 +238,7 @@ Notebook phải trả lời bằng actual variables:
 Kết luận phải nói rõ E4 candidates là residual-based flags, không phải confirmed
 anomalies. E5 không xóa, clip, replace hoặc điều chỉnh observation.
 
-## 11. Trình tự triển khai sau approval
+## 11. Trình tự triển khai sau confirmation
 
 ```text
 1. Ghi nhận authorization và baseline checksum.
@@ -312,7 +312,7 @@ machine-readable rolling CSV.
 ### Thêm seaborn vào dependency
 
 Không chọn vì E5 có thể tạo đầy đủ seasonal plot và heatmap bằng Matplotlib hiện có;
-thêm dependency không tạo giá trị khoa học tương xứng và cần approval riêng.
+thêm dependency không tạo giá trị khoa học tương xứng và cần confirmation riêng.
 
 ### Giữ toàn bộ logic trong notebook
 
@@ -329,7 +329,7 @@ Không chọn việc đổi tên hoặc ghi đè figure E1. E5 sẽ gọi lại 
 Dừng implementation nếu:
 
 ```text
-plan chưa được Human duyệt
+plan chưa được xác nhận
 validated AirPassengers input sai schema/index/frequency
 cần sửa cell 0–44 hoặc upstream scientific logic
 cần thêm dependency
@@ -341,17 +341,17 @@ notebook hoặc tests fail ngoài expected scope
 raw data hoặc validated upstream result thay đổi
 ```
 
-## 16. Phê duyệt
+## 16. Xác nhận kỹ thuật
 
 ```text
 EXERCISE_05_ERROR_ANALYSIS_CREATED=true
 EXERCISE_05_FIX_PLAN_CREATED=true
 EXERCISE_05_FIX_PLAN_REVIEWED=true
-EXERCISE_05_FIX_PLAN_APPROVED=true
+EXERCISE_05_FIX_PLAN_CONFIRMED=true
 EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
 ```
 
-Human đã phê duyệt plan và yêu cầu bắt đầu triển khai ngày 2026-10-12.
+Đã xác nhận plan và yêu cầu bắt đầu triển khai ngày 2026-10-12.
 
 ## 17. Kết quả triển khai
 

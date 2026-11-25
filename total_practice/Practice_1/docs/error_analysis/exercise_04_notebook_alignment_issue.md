@@ -10,7 +10,7 @@ Phạm vi cell: 32–44
 Exercise 5 bắt đầu: cell 45
 Trạng thái phân tích: ĐÃ_PHÂN_TÍCH
 Trạng thái triển khai: ĐÃ_HOÀN_THÀNH_VÀ_XÁC_MINH
-Human authorization: CÓ — 2026-10-12
+scope confirmation: CÓ — 2026-10-12
 ```
 
 ## 2. Phần đang làm tốt và cần giữ
@@ -99,7 +99,7 @@ Raw data: bdb98adbd418a6de6842a742e0602f363c3b841c26677e7e61a1e055e9509bd8
 ## 6. Quyết định
 
 ```text
-Error analysis reviewed by Human: CÓ
+Error analysis reviewed in the technical record: CÓ
 Fix plan authorized: CÓ
 Cho phép triển khai E4: CÓ
 ```

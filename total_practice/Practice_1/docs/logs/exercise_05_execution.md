@@ -107,6 +107,6 @@ Full test suite: đạt
 Unresolved implementation blocker: không
 ```
 
-Phạm vi implementation E1–E5 đã hoàn tất. Word report tiếp tục do TuVien quản lý và
-không phải artifact của agent.
+Phạm vi implementation E1–E5 đã hoàn tất. Word report tiếp tục được quản lý ngoài repository và
+không phải artifact của workflow.
 

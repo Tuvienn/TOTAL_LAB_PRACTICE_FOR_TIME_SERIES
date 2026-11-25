@@ -12,7 +12,7 @@ Trạng thái triển khai: ĐÃ_HOÀN_THÀNH_VÀ_XÁC_MINH
 ```
 
 Mục tiêu của lần rà soát này là giữ nguyên các phần E2 đang làm tốt và chỉ sửa
-những điểm không đáp ứng specification, before-process plan hoặc kiến trúc đã duyệt.
+những điểm không đáp ứng specification, before-process plan hoặc kiến trúc đã xác nhận.
 
 ## 2. Phần đang làm tốt và cần giữ
 
@@ -52,7 +52,7 @@ gắn với kết quả thực thi thực tế.
 
 ## 3. Điểm chưa phù hợp
 
-### 3.1. Generator không đúng hợp đồng đã duyệt
+### 3.1. Generator không đúng hợp đồng đã xác nhận
 
 Notebook hiện dùng:
 
@@ -71,7 +71,7 @@ rng.normal(loc=0.0, scale=1.0, size=1000)
 Hai API tạo ra hai chuỗi khác nhau dù dùng cùng seed. Vì vậy hình, ACF và diễn
 giải phải được tái tạo từ generator đúng hợp đồng.
 
-Kết quả chẩn đoán chỉ đọc với generator đã duyệt:
+Kết quả chẩn đoán chỉ đọc với generator đã xác nhận:
 
 ```text
 mean: -0.028891550995946837
@@ -81,7 +81,7 @@ lag vượt approximate bound: lag 1, ACF khoảng 0.08705487216529355
 ```
 
 Các giá trị này chỉ là baseline kiểm tra trước triển khai; kết quả chính thức phải
-được tạo lại trong execution cycle đã phê duyệt.
+được tạo lại trong execution cycle đã xác nhận.
 
 ### 3.2. Thiếu kiểm tra dữ liệu tổng hợp
 
@@ -103,7 +103,7 @@ sử dụng `outputs/results/acf_values.csv` hoặc bảng ACF đã được E1 
 
 So sánh hiện dùng ngưỡng cố định `±1.96/sqrt(n)` cho cả hai chuỗi, trong khi
 E1 lưu confidence interval do `statsmodels` tính. Công thức xấp xỉ có thể giữ
-để giảng giải, nhưng bảng và hình so sánh phải dùng cùng protocol đã duyệt.
+để giảng giải, nhưng bảng và hình so sánh phải dùng cùng protocol đã xác nhận.
 
 ### 3.6. Output bắt buộc chưa tồn tại
 

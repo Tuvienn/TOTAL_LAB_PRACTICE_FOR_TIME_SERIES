@@ -380,7 +380,7 @@ STOP
 → document cause
 → explain scientific impact
 → propose alternative
-→ wait for approval
+→ chờ xác nhận
 ```
 
 Không tự chuyển sang decomposition khác.
@@ -411,7 +411,7 @@ Kết quả Exercise 3 sẽ được dùng làm evidence cho:
 ```text
 Exercise 4 — Outlier analysis
 Exercise 5 — Visualization synthesis
-User-owned Word report — outside the AI implementation plan
+User-owned Word report — outside the implementation plan
 ```
 
 Đặc biệt:

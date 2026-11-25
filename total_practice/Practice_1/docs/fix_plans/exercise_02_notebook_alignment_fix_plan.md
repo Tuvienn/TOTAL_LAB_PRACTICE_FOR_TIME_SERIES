@@ -27,7 +27,7 @@ docs/error_analysis/exercise_02_notebook_alignment_issue.md
 - chuyển logic dùng lại về đúng source owner;
 - không thay đổi E1 hoặc E3–E5.
 
-## 3. File được phép thay đổi sau phê duyệt
+## 3. File được phép thay đổi sau xác nhận
 
 ```text
 notebooks/practice_1_present.ipynb, chỉ cell 22–27 và output tương ứng
@@ -43,7 +43,7 @@ outputs/results/white_noise_acf_values.csv
 docs/logs/exercise_02_execution.md
 docs/status/current_status.md
 docs/exercise_details/exercise_02_white_noise.md, chỉ trạng thái
-docs/plans/exercise_02_before_process.md, chỉ approval/status
+docs/plans/exercise_02_before_process.md, chỉ confirmation/status
 ```
 
 Không thêm Ljung–Box hoặc `white_noise_diagnostics.csv` trong lần này vì đây là
@@ -232,15 +232,15 @@ raw data, E1, E3–5 không đổi
 execution log và current status được cập nhật
 ```
 
-## 11. Phê duyệt của người dùng
+## 11. Xác nhận phạm vi
 
 ```text
 Người dùng đã xem xét kế hoạch: CÓ
 Cho phép triển khai: CÓ
-Ngày phê duyệt: 2026-10-12
+Ngày xác nhận: 2026-10-12
 ```
 
-Người dùng đã phê duyệt rõ ràng kế hoạch ngày 2026-10-12. Được phép triển khai
+Người dùng đã xác nhận rõ ràng kế hoạch ngày 2026-10-12. Được phép triển khai
 trong đúng phạm vi đã chốt.
 
 ## 12. Kết quả triển khai

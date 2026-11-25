@@ -38,7 +38,7 @@ dụng cho `notebooks/practice_1_present.ipynb`.
 
 ## 4. Phạm vi thay đổi đề xuất
 
-Các file được phép sửa sau khi người dùng phê duyệt:
+Các file được phép sửa sau khi người dùng xác nhận:
 
 ```text
 notebooks/practice_1_present.ipynb
@@ -69,9 +69,9 @@ Các file và nội dung nằm ngoài phạm vi sửa:
 
 ```text
 datasets/raw/air_passengers.csv
-các rule đã được duyệt
-các exercise specification đã được duyệt
-các before-process plan đã được duyệt
+các rule đã được xác nhận
+các exercise specification đã được xác nhận
+các before-process plan đã được xác nhận
 các cell triển khai Exercise 2–5
 ```
 
@@ -92,7 +92,7 @@ Kiểm tra các outputs Exercise 1 hiện tại và lưu lại những giá tr�
 ### Bước 2 — Đồng bộ runtime và imports của notebook
 
 Cập nhật metadata của notebook chính theo runtime contract Python 3.12 và kernel
-`time-series-practice-1` đã được duyệt.
+`time-series-practice-1` đã được xác nhận.
 
 Thay các phần xử lý dùng lại bằng imports từ public package `practice_1`. Không thêm
 `sys.path` mutation hoặc đường dẫn tuyệt đối phụ thuộc máy.
@@ -135,7 +135,7 @@ practice_1.analysis.compute_acf_table
 practice_1.analysis.compute_pacf_table
 ```
 
-với các tham số đã duyệt:
+với các tham số đã xác nhận:
 
 ```text
 max_lag = 40
@@ -143,7 +143,7 @@ alpha = 0.05
 PACF method = ywm
 ```
 
-Tạo lại các bảng ACF/PACF và lưu vào đúng đường dẫn output đã duyệt.
+Tạo lại các bảng ACF/PACF và lưu vào đúng đường dẫn output đã xác nhận.
 
 ### Bước 6 — Hiển thị biểu đồ chẩn đoán đã được kiểm chứng
 
@@ -179,7 +179,7 @@ Mọi thay đổi downstream cần thiết phải được đề xuất trong k�
 
 ### Bước 9 — Chạy validation
 
-Chạy tests Exercise 1 đã duyệt và thực thi notebook chính từ kernel vừa restart đến hết
+Chạy tests Exercise 1 đã xác nhận và thực thi notebook chính từ kernel vừa restart đến hết
 Exercise 1.
 
 Đối chiếu results được tạo lại với baseline đã xác minh và kiểm tra trực quan cả ba
@@ -193,7 +193,7 @@ Sau khi validation thành công:
 tạo docs/logs/exercise_01_notebook_alignment_execution.md
 ghi lại commands, checksums, values, outputs và limitations
 cập nhật docs/status/current_status.md để xác nhận practice_1_present.ipynb là notebook chính
-giữ Exercise 2 ở trạng thái chưa bắt đầu cho đến khi kế hoạch riêng được phê duyệt
+giữ Exercise 2 ở trạng thái chưa bắt đầu cho đến khi kế hoạch riêng được xác nhận
 ```
 
 ## 6. Kế hoạch validation
@@ -294,7 +294,7 @@ Phải dừng và báo cáo trước khi tiếp tục nếu:
 raw dataset bị thay đổi
 các giá trị Exercise 1 đã xác minh thay đổi ngoài dự kiến
 các source functions hiện có không vượt qua tests
-không có Python 3.12 environment đã duyệt
+không có Python 3.12 environment đã xác nhận
 notebook chính không import được package practice_1 đã cài
 việc sửa Exercise 1 bắt buộc phải thay đổi logic Exercise 2–5
 cần thêm dependency mới
@@ -316,15 +316,15 @@ raw dataset vẫn nguyên vẹn
 execution evidence và current status đã được cập nhật
 ```
 
-## 11. Phê duyệt của người dùng
+## 11. Xác nhận phạm vi
 
 ```text
 Người dùng đã xem xét kế hoạch: CÓ
 Cho phép triển khai: CÓ
-Ngày phê duyệt: 2026-10-12
+Ngày xác nhận: 2026-10-12
 ```
 
-Kế hoạch đã được người dùng phê duyệt rõ ràng ngày 2026-10-12; được phép bắt đầu triển khai trong phạm vi đã chốt.
+Kế hoạch đã được người dùng xác nhận rõ ràng ngày 2026-10-12; được phép bắt đầu triển khai trong phạm vi đã chốt.
 
 ## 12. Kết quả triển khai
 

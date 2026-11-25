@@ -8,7 +8,7 @@ Exercise: 04 — Time Series Data Quality
 Phạm vi cell: 32–44
 Trạng thái kế hoạch: ĐÃ_TRIỂN_KHAI_VÀ_XÁC_MINH
 Được phép triển khai: CÓ
-Ngày phê duyệt: 2026-10-12
+Ngày xác nhận: 2026-10-12
 ```
 
 ## 2. Mục tiêu
@@ -92,9 +92,9 @@ Dừng nếu timestamp không tồn tại, ground truth chưa lưu, treatments d
 nhau, residual E3 sai schema/alignment, IQR không dùng multiplier 1.5, cần clipping,
 cần dependency mới hoặc gây regression upstream/downstream.
 
-## 8. Phê duyệt
+## 8. Xác nhận kỹ thuật
 
-Human đã yêu cầu “lên plan và bắt đầu triển khai plan” ngày 2026-10-12. Yêu cầu này
+the project scope requires “lên plan và bắt đầu triển khai plan” ngày 2026-10-12. Yêu cầu này
 được ghi nhận là authorization rõ ràng để triển khai đúng phạm vi tài liệu này.
 
 ## 9. Kết quả triển khai

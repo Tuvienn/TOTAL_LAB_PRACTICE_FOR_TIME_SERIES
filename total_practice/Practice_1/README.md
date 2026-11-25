@@ -5,18 +5,18 @@
 
 ## Mục lục
 
-- [1. Mục tiêu](#1-mục-tiêu)
-  - [1.1. Truy cập nhanh](#11-truy-cập-nhanh)
-- [2. Phạm vi bài thực hành](#2-phạm-vi-bài-thực-hành)
-- [3. Dataset đã chốt](#3-dataset-đã-chốt)
-- [4. Hướng phân tích đã thống nhất](#4-hướng-phân-tích-đã-thống-nhất)
-  - [4.1. Runtime contract](#41-runtime-contract)
-- [5. Workflow tổng quát](#5-workflow-tổng-quát)
-- [6. Cấu trúc canonical hiện tại](#6-cấu-trúc-canonical-hiện-tại)
-- [7. Rule routing](#7-rule-routing)
-- [8. Kết quả đã hoàn thành](#8-kết-quả-đã-hoàn-thành)
-- [9. Trạng thái hiện tại](#9-trạng-thái-hiện-tại)
-- [10. Phạm vi hoàn thành](#10-phạm-vi-hoàn-thành)
+- <a href="#1-mục-tiêu" style="color:#1f6feb;">1. Mục tiêu</a>
+  - <a href="#11-truy-cập-nhanh" style="color:#1f6feb;">1.1. Truy cập nhanh</a>
+- <a href="#2-phạm-vi-bài-thực-hành" style="color:#1f6feb;">2. Phạm vi bài thực hành</a>
+- <a href="#3-dataset-đã-chốt" style="color:#1f6feb;">3. Dataset đã chốt</a>
+- <a href="#4-hướng-phân-tích-đã-thống-nhất" style="color:#1f6feb;">4. Hướng phân tích đã thống nhất</a>
+  - <a href="#41-runtime-contract" style="color:#1f6feb;">4.1. Runtime contract</a>
+- <a href="#5-workflow-tổng-quát" style="color:#1f6feb;">5. Workflow tổng quát</a>
+- <a href="#6-cấu-trúc-canonical-hiện-tại" style="color:#1f6feb;">6. Cấu trúc canonical hiện tại</a>
+- <a href="#7-rule-routing" style="color:#1f6feb;">7. Rule routing</a>
+- <a href="#8-kết-quả-đã-hoàn-thành" style="color:#1f6feb;">8. Kết quả đã hoàn thành</a>
+- <a href="#9-trạng-thái-hiện-tại" style="color:#1f6feb;">9. Trạng thái hiện tại</a>
+- <a href="#10-phạm-vi-hoàn-thành" style="color:#1f6feb;">10. Phạm vi hoàn thành</a>
 
 ## 1. Mục tiêu
 
@@ -28,14 +28,14 @@ Practice 1 không huấn luyện forecasting model.
 
 ### 1.1. Truy cập nhanh
 
-- [Notebook chính](notebooks/practice_1_present.ipynb)
-- [Dữ liệu AirPassengers bản raw](datasets/raw/air_passengers.csv)
-- [Nguồn dữ liệu, schema và checksum](datasets/README.md)
-- [Trạng thái hiện tại của Practice 1](docs/status/current_status.md)
-- [Source code](src/practice_1/)
-- [Tests](tests/)
-- [Toàn bộ biểu đồ](outputs/figures/)
-- [Toàn bộ kết quả dạng bảng](outputs/results/)
+- <a href="notebooks/practice_1_present.ipynb" style="color:#1f6feb;">Notebook chính</a>
+- <a href="datasets/raw/air_passengers.csv" style="color:#1f6feb;">Dữ liệu AirPassengers bản raw</a>
+- <a href="datasets/README.md" style="color:#1f6feb;">Nguồn dữ liệu, schema và checksum</a>
+- <a href="docs/status/current_status.md" style="color:#1f6feb;">Trạng thái hiện tại của Practice 1</a>
+- <a href="src/practice_1/" style="color:#1f6feb;">Source code</a>
+- <a href="tests/" style="color:#1f6feb;">Tests</a>
+- <a href="outputs/figures/" style="color:#1f6feb;">Toàn bộ biểu đồ</a>
+- <a href="outputs/results/" style="color:#1f6feb;">Toàn bộ kết quả dạng bảng</a>
 
 ## 2. Phạm vi bài thực hành
 
@@ -48,7 +48,7 @@ Practice 1 gồm sáu phần:
 5. Trực quan hóa dữ liệu chuỗi thời gian.
 6. Viết báo cáo và đánh giá forecastability.
 
-Repository không tạo exercise specification hoặc before-process plan riêng cho Exercise 6; AI implementation chỉ
+Repository không tạo exercise specification hoặc before-process plan riêng cho Exercise 6; implementation chỉ
 chuẩn bị validated evidence từ Exercise 1–5.
 
 Ngoài phạm vi:
@@ -64,14 +64,14 @@ model backtesting
 
 ## 3. Dataset đã chốt
 
-Dataset chính được Human phê duyệt cho Practice 1 là `AirPassengers`.
+Dataset chính được xác nhận cho Practice 1 là `AirPassengers`.
 
 Nguồn canonical:
 
-- CSV: [Rdatasets — AirPassengers.csv](https://vincentarelbundock.github.io/Rdatasets/csv/datasets/AirPassengers.csv)
-- Documentation: [R `datasets::AirPassengers`](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/AirPassengers.html)
-- File được sử dụng trong bài: [`datasets/raw/air_passengers.csv`](datasets/raw/air_passengers.csv)
-- Provenance, schema và checksum: [`datasets/README.md`](datasets/README.md)
+- CSV: <a href="https://vincentarelbundock.github.io/Rdatasets/csv/datasets/AirPassengers.csv" style="color:#1f6feb;">Rdatasets — AirPassengers.csv</a>
+- Documentation: <a href="https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/AirPassengers.html" style="color:#1f6feb;">R `datasets::AirPassengers`</a>
+- File được sử dụng trong bài: <a href="datasets/raw/air_passengers.csv" style="color:#1f6feb;">`datasets/raw/air_passengers.csv`</a>
+- Provenance, schema và checksum: <a href="datasets/README.md" style="color:#1f6feb;">`datasets/README.md`</a>
 - Số quan sát: 144.
 - Khoảng thời gian: 1949-01 đến 1960-12.
 - Tần suất: hằng tháng.
@@ -124,7 +124,7 @@ Notebook kernel: time-series-practice-1
 
 Notebook và tests import reusable logic qua `practice_1.*`; không dùng `sys.path`
 mutation hoặc absolute path. Environment, dependencies và notebook kernel đã được
-khởi tạo theo approval Nhóm 4.
+khởi tạo theo confirmation Nhóm 4.
 
 ## 5. Workflow tổng quát
 
@@ -139,7 +139,7 @@ Dataset provenance
 → Evaluate missing-value treatments
 → Analyze outliers
 → Assess forecastability
-→ Hand validated evidence to TuVien for the user-owned Word report
+→ Hand validated evidence to báo cáo for the Word report outside the repository
 ```
 
 ## 6. Cấu trúc canonical hiện tại
@@ -181,7 +181,7 @@ Khi có bug hoặc scientific issue không trivial:
 
 ```text
 error_analysis/ = phân tích lỗi và root cause
-fix_plans/      = kế hoạch sửa chờ Human phê duyệt
+fix_plans/      = kế hoạch sửa chờ Đã xác nhận
 logs/           = bằng chứng thực thi và validation sau khi sửa
 ```
 
@@ -189,41 +189,41 @@ logs/           = bằng chứng thực thi và validation sau khi sửa
 
 Nguồn bắt buộc:
 
-1. [`.agents/RULES_INDEX.md`](../../.agents/RULES_INDEX.md)
-2. [`docs/rules/architecture_rule.md`](docs/rules/architecture_rule.md)
-3. [`docs/rules/rule_code.md`](docs/rules/rule_code.md)
-4. Exercise detail đã được duyệt.
-5. Before-process plan đã được duyệt.
+1. <a href="../../.agents/RULES_INDEX.md" style="color:#1f6feb;">`.agents/RULES_INDEX.md`</a>
+2. <a href="docs/rules/architecture_rule.md" style="color:#1f6feb;">`docs/rules/architecture_rule.md`</a>
+3. <a href="docs/rules/rule_code.md" style="color:#1f6feb;">`docs/rules/rule_code.md`</a>
+4. Exercise detail đã được xác nhận.
+5. Before-process plan đã được xác nhận.
 
 Rule precedence tuân theo `.agents/RULES_INDEX.md`.
 
-Nếu có conflict giữa các rule, phải dừng và chờ Human quyết định.
+Nếu có conflict giữa các rule, phải dừng và chờ xử lý xung đột.
 
 ## 8. Kết quả đã hoàn thành
 
 Notebook tổng hợp toàn bộ bài làm E1–E5 tại
-[`notebooks/practice_1_present.ipynb`](notebooks/practice_1_present.ipynb).
+<a href="notebooks/practice_1_present.ipynb" style="color:#1f6feb;">`notebooks/practice_1_present.ipynb`</a>.
 
 | Exercise | Biểu đồ | Kết quả số liệu | Bằng chứng thực thi |
 |---|---|---|---|
-| **E1 — ACF/PACF** | [Chuỗi gốc](outputs/figures/01_time_series_overview.png), [ACF 40 lag](outputs/figures/02_acf_40_lags.png), [PACF 40 lag](outputs/figures/03_pacf_40_lags.png) | [ACF CSV](outputs/results/acf_values.csv), [PACF CSV](outputs/results/pacf_values.csv), [Findings JSON](outputs/results/exercise_01_findings.json) | [Exercise 1 execution log](docs/logs/exercise_01_execution.md) |
-| **E2 — White noise** | [Chuỗi white noise](outputs/figures/04_white_noise_series.png), [White-noise ACF](outputs/figures/05_white_noise_acf.png), [So sánh ACF](outputs/figures/06_white_noise_vs_airpassengers_acf.png) | [White-noise ACF CSV](outputs/results/white_noise_acf_values.csv) | [Exercise 2 execution log](docs/logs/exercise_02_execution.md) |
-| **E3 — Decomposition** | [Chuỗi log](outputs/figures/07_log_transformed_series.png), [STL decomposition](outputs/figures/08_stl_decomposition.png), [Residual diagnostics](outputs/figures/09_decomposition_residual.png) | [Decomposition components](outputs/results/decomposition_components.csv), [Residual diagnostics](outputs/results/residual_diagnostics.csv) | [Exercise 3 execution log](docs/logs/exercise_03_execution.md) |
-| **E4 — Data quality** | [Missing simulation](outputs/figures/10_missing_values_simulation.png), [So sánh xử lý missing](outputs/figures/11_missing_treatment_comparison.png), [Outlier analysis](outputs/figures/12_outlier_analysis.png) | [Missing-value comparison](outputs/results/missing_value_comparison.csv), [Outlier candidates](outputs/results/outlier_candidates.csv) | [Exercise 4 execution log](docs/logs/exercise_04_execution.md) |
-| **E5 — Visualization** | [Toàn bộ chuỗi](outputs/figures/13_full_time_series.png), [Rolling mean/std](outputs/figures/14_rolling_mean_std.png), [Seasonal plot](outputs/figures/15_monthly_seasonal_plot.png), [Heatmap](outputs/figures/16_month_year_heatmap.png) | [Rolling statistics](outputs/results/rolling_statistics.csv) | [Exercise 5 execution log](docs/logs/exercise_05_execution.md) |
+| **E1 — ACF/PACF** | <a href="outputs/figures/01_time_series_overview.png" style="color:#1f6feb;">Chuỗi gốc</a>, <a href="outputs/figures/02_acf_40_lags.png" style="color:#1f6feb;">ACF 40 lag</a>, <a href="outputs/figures/03_pacf_40_lags.png" style="color:#1f6feb;">PACF 40 lag</a> | <a href="outputs/results/acf_values.csv" style="color:#1f6feb;">ACF CSV</a>, <a href="outputs/results/pacf_values.csv" style="color:#1f6feb;">PACF CSV</a>, <a href="outputs/results/exercise_01_findings.json" style="color:#1f6feb;">Findings JSON</a> | <a href="docs/logs/exercise_01_execution.md" style="color:#1f6feb;">Exercise 1 execution log</a> |
+| **E2 — White noise** | <a href="outputs/figures/04_white_noise_series.png" style="color:#1f6feb;">Chuỗi white noise</a>, <a href="outputs/figures/05_white_noise_acf.png" style="color:#1f6feb;">White-noise ACF</a>, <a href="outputs/figures/06_white_noise_vs_airpassengers_acf.png" style="color:#1f6feb;">So sánh ACF</a> | <a href="outputs/results/white_noise_acf_values.csv" style="color:#1f6feb;">White-noise ACF CSV</a> | <a href="docs/logs/exercise_02_execution.md" style="color:#1f6feb;">Exercise 2 execution log</a> |
+| **E3 — Decomposition** | <a href="outputs/figures/07_log_transformed_series.png" style="color:#1f6feb;">Chuỗi log</a>, <a href="outputs/figures/08_stl_decomposition.png" style="color:#1f6feb;">STL decomposition</a>, <a href="outputs/figures/09_decomposition_residual.png" style="color:#1f6feb;">Residual diagnostics</a> | <a href="outputs/results/decomposition_components.csv" style="color:#1f6feb;">Decomposition components</a>, <a href="outputs/results/residual_diagnostics.csv" style="color:#1f6feb;">Residual diagnostics</a> | <a href="docs/logs/exercise_03_execution.md" style="color:#1f6feb;">Exercise 3 execution log</a> |
+| **E4 — Data quality** | <a href="outputs/figures/10_missing_values_simulation.png" style="color:#1f6feb;">Missing simulation</a>, <a href="outputs/figures/11_missing_treatment_comparison.png" style="color:#1f6feb;">So sánh xử lý missing</a>, <a href="outputs/figures/12_outlier_analysis.png" style="color:#1f6feb;">Outlier analysis</a> | <a href="outputs/results/missing_value_comparison.csv" style="color:#1f6feb;">Missing-value comparison</a>, <a href="outputs/results/outlier_candidates.csv" style="color:#1f6feb;">Outlier candidates</a> | <a href="docs/logs/exercise_04_execution.md" style="color:#1f6feb;">Exercise 4 execution log</a> |
+| **E5 — Visualization** | <a href="outputs/figures/13_full_time_series.png" style="color:#1f6feb;">Toàn bộ chuỗi</a>, <a href="outputs/figures/14_rolling_mean_std.png" style="color:#1f6feb;">Rolling mean/std</a>, <a href="outputs/figures/15_monthly_seasonal_plot.png" style="color:#1f6feb;">Seasonal plot</a>, <a href="outputs/figures/16_month_year_heatmap.png" style="color:#1f6feb;">Heatmap</a> | <a href="outputs/results/rolling_statistics.csv" style="color:#1f6feb;">Rolling statistics</a> | <a href="docs/logs/exercise_05_execution.md" style="color:#1f6feb;">Exercise 5 execution log</a> |
 
 Các tài liệu giải thích yêu cầu và quyết định triển khai nằm trong
-[`docs/exercise_details/`](docs/exercise_details/). Phân tích lỗi, kế hoạch sửa và log
-kiểm chứng được lưu lần lượt tại [`docs/error_analysis/`](docs/error_analysis/),
-[`docs/fix_plans/`](docs/fix_plans/) và [`docs/logs/`](docs/logs/).
+<a href="docs/exercise_details/" style="color:#1f6feb;">`docs/exercise_details/`</a>. Phân tích lỗi, kế hoạch sửa và log
+kiểm chứng được lưu lần lượt tại <a href="docs/error_analysis/" style="color:#1f6feb;">`docs/error_analysis/`</a>,
+<a href="docs/fix_plans/" style="color:#1f6feb;">`docs/fix_plans/`</a> và <a href="docs/logs/" style="color:#1f6feb;">`docs/logs/`</a>.
 
 ## 9. Trạng thái hiện tại
 
 ```text
 Repository governance: active
-Practice architecture/code rules: approved and active
+Practice architecture/code rules: confirmed and active
 Exercise 1–5: completed and validated
-Exercise 6: user-owned Word report
+Exercise 6: Word report outside the repository
 Primary notebook: notebooks/practice_1_present.ipynb
 Notebook execution: 32 code cells, 0 errors
 Tests: 31 passed
@@ -233,12 +233,12 @@ Outputs: Exercise 1–5 figures and machine-readable results generated and valid
 
 Practice 1 đã hoàn thành phần kỹ thuật của E1–E5. Notebook, source code, tests,
 biểu đồ và kết quả dạng bảng đã được chạy và kiểm chứng. E6 không nằm trong phạm vi
-triển khai của repository; TuVien sử dụng các bằng chứng E1–E5 để viết báo cáo Word.
+triển khai của repository; Báo cáo Word sử dụng các bằng chứng E1–E5 đã kiểm chứng.
 
 ## 10. Phạm vi hoàn thành
 
-- E1–E5 đã được Human phê duyệt, triển khai, chạy notebook và kiểm thử.
+- E1–E5 đã được xác nhận, triển khai, chạy notebook và kiểm thử.
 - Raw dataset được giữ bất biến; missing-value simulation chỉ thao tác trên working copy.
 - Repository không huấn luyện forecasting model trong Practice 1.
-- E6 là báo cáo Word do TuVien thực hiện từ các kết quả đã kiểm chứng của E1–E5.
-- Mọi thay đổi kỹ thuật mới ngoài phạm vi trên vẫn phải tuân theo approval workflow của project.
+- E6 là báo cáo Word được xây dựng từ các kết quả đã kiểm chứng của E1–E5.
+- Mọi thay đổi kỹ thuật mới ngoài phạm vi trên vẫn phải tuân theo confirmation workflow của project.

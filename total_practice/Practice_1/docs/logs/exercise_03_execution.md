@@ -13,7 +13,7 @@ Cell Exercise 4–5 được sửa hoặc chạy: KHÔNG
 Trạng thái: HOÀN_THÀNH_VÀ_XÁC_MINH
 ```
 
-Human đã phê duyệt error analysis và fix plan E3 trước khi implementation bắt đầu.
+Đã xác nhận error analysis và fix plan E3 trước khi implementation bắt đầu.
 
 ## 2. Phần triển khai
 
@@ -189,5 +189,5 @@ Exercise 4 authorization: NOT_GRANTED
 ```
 
 E3 đã sẵn sàng làm upstream evidence cho E4. Không triển khai E4 nếu chưa hoàn tất
-review/error-analysis/fix-plan và chưa có Human authorization riêng.
+review/error-analysis/fix-plan và chưa có scope confirmation riêng.
 

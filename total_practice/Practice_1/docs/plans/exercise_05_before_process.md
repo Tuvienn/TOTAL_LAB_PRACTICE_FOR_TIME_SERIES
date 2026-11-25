@@ -14,7 +14,7 @@ Implementation authorized: YES
 
 Tài liệu này là execution plan riêng cho Exercise 5.
 
-Human đã phê duyệt và Exercise 5 đã được triển khai, chạy và xác minh.
+Đã xác nhận và Exercise 5 đã được triển khai, chạy và xác minh.
 
 ---
 
@@ -30,7 +30,7 @@ Mục tiêu của execution cycle này:
 - tạo monthly seasonal plot;
 - tạo month-year heatmap;
 - đối chiếu possible anomalies với evidence từ Exercise 3 và Exercise 4;
-- tổng hợp visual evidence để TuVien sử dụng trong user-owned Word report;
+- tổng hợp visual evidence để báo cáo sử dụng trong Word report outside the repository;
 - không train model;
 - không thay đổi raw dataset.
 
@@ -38,7 +38,7 @@ Mục tiêu của execution cycle này:
 
 ## 3. Required Documents
 
-Trước implementation, agent phải đọc:
+Trước implementation, Quy trình thực thi phải đọc:
 
 ```text
 working_rule.md
@@ -60,7 +60,7 @@ Nếu thiếu dependency hoặc có conflict:
 ```text
 STOP
 → report issue
-→ chờ Human quyết định
+→ chờ xử lý quyết định
 ```
 
 ---
@@ -91,7 +91,7 @@ Visualization phải dựa trên actual validated data.
 
 ## 5. Files to Read
 
-Agent cần đọc hoặc inspect:
+Quy trình cần đọc hoặc inspect:
 
 ```text
 docs/exercise_details/exercise_05_visualization.md
@@ -148,10 +148,10 @@ Không được tự ý sửa:
 ```text
 datasets/raw/
 working_rule.md
-approved scoped rule files
-approved overview
-approved exercise_05_visualization.md
-approved initialize_practice_1.md
+confirmed scoped rule files
+confirmed overview
+confirmed exercise_05_visualization.md
+confirmed initialize_practice_1.md
 validated Exercise 1–4 outputs
 Practice/Lab khác
 unrelated repository configuration
@@ -163,7 +163,7 @@ Nếu cần thay đổi upstream logic hoặc artifact:
 STOP
 → explain reason
 → assess impact
-→ wait for Human approval
+→ chờ xác nhận
 ```
 
 ---
@@ -229,7 +229,7 @@ Validation:
 
 ```text
 no unresolved rule conflict
-Exercise 5 before-process plan approved
+Exercise 5 before-process plan confirmed
 ```
 
 ---
@@ -595,7 +595,7 @@ cross-check with prior exercises
 
 ## 12. Stop Conditions
 
-Agent phải dừng khi:
+Quy trình phải dừng khi:
 
 ```text
 Exercise 5 plan chưa được approve
@@ -626,7 +626,7 @@ Khi dừng:
 4. Ghi relevant evidence.
 5. Nêu impact.
 6. Đề xuất next action.
-7. Chờ Human approval.
+7. Chờ xác nhận.
 ```
 
 ---
@@ -650,38 +650,38 @@ AND no unresolved blocking issue
 
 ---
 
-## 14. Approval Gate
+## 14. confirmation gate
 
 Trạng thái hiện tại:
 
 ```text
 EXERCISE_05_BEFORE_PROCESS_CREATED=true
 EXERCISE_05_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_05_BEFORE_PROCESS_APPROVED=true
+EXERCISE_05_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
 EXERCISE_05_COMPLETED=true
 EXERCISE_05_VALIDATED=true
 ```
 
-Agent không được code Exercise 5 khi:
+Quy trình không được code Exercise 5 khi:
 
 ```text
 EXERCISE_05_IMPLEMENTATION_AUTHORIZED=false
 ```
 
-Sau khi Human approve:
+Sau khi confirmation:
 
 ```text
 EXERCISE_05_BEFORE_PROCESS_REVIEWED=true
-EXERCISE_05_BEFORE_PROCESS_APPROVED=true
+EXERCISE_05_BEFORE_PROCESS_CONFIRMED=true
 EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
 ```
 
 ---
 
-## 15. Agent Execution Rule
+## 15. workflow Execution Rule
 
-Sau approval:
+Sau confirmation:
 
 ```text
 one step

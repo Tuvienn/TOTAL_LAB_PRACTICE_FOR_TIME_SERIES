@@ -135,4 +135,4 @@ dace4669019161485248d41afcf8bdbfcad4532e22ebd8ccc2c4ffc19d40b69d
 ## 9. Ranh giới tiếp theo
 
 Exercise 2 đã hoàn tất. Exercise 3 chưa được sửa hoặc triển khai trong lần này và
-vẫn cần người dùng review, phê duyệt plan và cấp authorization riêng.
+vẫn cần người dùng review, xác nhận plan và cấp authorization riêng.

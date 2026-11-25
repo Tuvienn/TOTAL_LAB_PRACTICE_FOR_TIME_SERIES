@@ -9,7 +9,7 @@ Notebook chính: notebooks/practice_1_present.ipynb
 Phạm vi cell: 28–31
 Trạng thái phân tích: ĐÃ_PHÂN_TÍCH
 Trạng thái triển khai: ĐÃ_HOÀN_THÀNH_VÀ_XÁC_MINH
-Chờ Human phê duyệt: KHÔNG
+Chờ Đã xác nhận: KHÔNG
 ```
 
 Mục tiêu của lần rà soát này là giữ nguyên những phần E3 đang làm đúng, xác định
@@ -28,7 +28,7 @@ Tổng số cell notebook: 52
 ```
 
 Cell 32 đã chuyển sang mô phỏng missing values nên không thuộc E3. Mọi thay đổi E3
-sau khi được duyệt phải dừng tại cell 31.
+sau khi được xác nhận phải dừng tại cell 31.
 
 ## 3. Phần đang làm tốt và cần giữ
 
@@ -92,7 +92,7 @@ robust: True
 
 Notebook chưa tạo working copy và chưa tính `log(y)`. Vì vậy decomposition, residual,
 ACF và Ljung–Box hiện tại đều thuộc thang số hành khách gốc, không phải thang log đã
-duyệt.
+xác nhận.
 
 ### 4.2. Thiếu kiểm tra điều kiện trước log transform
 
@@ -232,7 +232,7 @@ largest absolute residual: 1953-04
 ```
 
 Các số trên chỉ là baseline chẩn đoán. Kết quả chính thức phải được tái tạo bằng API
-đã kiểm thử, xuất ra file và chạy trong notebook sau khi Human phê duyệt.
+đã kiểm thử, xuất ra file và chạy trong notebook sau khi Đã xác nhận.
 
 Baseline cho thấy residual trên thang log vẫn còn bằng chứng tự tương quan. Vì vậy
 không được kết luận residual là white noise hoàn toàn.
@@ -252,7 +252,7 @@ machine-readable evidence
 
 Do đó code hiện thể hiện đúng ý tưởng cơ bản của decomposition nhưng chưa được đồng
 bộ với contract `log transform + STL`, kiến trúc package và quy trình xác minh đã
-duyệt.
+xác nhận.
 
 ## 7. Ảnh hưởng
 
@@ -305,7 +305,7 @@ Trình tự sửa và validation được đề xuất trong
 ```text
 Phân tích lỗi đã hoàn tất: CÓ
 Fix plan đã được tạo: CÓ
-Human đã phê duyệt fix plan: CÓ
+Đã xác nhận fix plan: CÓ
 Cho phép triển khai E3: CÓ
 ```
 

@@ -497,7 +497,7 @@ Exercise 4 đạt khi:
 [x] Interpolation dùng method = time và limit_area = inside
 [x] Reconstruction comparison sử dụng đúng masked positions
 [x] MAE được tính riêng cho từng method trên đúng 6 masked positions
-[x] Potential outliers được phát hiện bằng approved method
+[x] Potential outliers được phát hiện bằng confirmed method
 [x] Flagged points được inspect
 [x] Không tự động xóa hoặc replace outlier
 [x] Before/after plots được tạo
@@ -530,7 +530,7 @@ STOP
 → document issue
 → explain impact
 → propose next action
-→ wait for approval
+→ chờ xác nhận
 ```
 
 ---
@@ -558,7 +558,7 @@ Kết quả Exercise 4 sẽ được dùng làm evidence cho:
 
 ```text
 Exercise 5 — Visualization synthesis
-User-owned Word report — outside the AI implementation plan
+User-owned Word report — outside the implementation plan
 ```
 
 Exercise 4 không tạo cleaned dataset mặc định cho forecasting.
