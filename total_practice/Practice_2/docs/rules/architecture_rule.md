@@ -62,7 +62,9 @@ Practice_2/
 │   ├── error_analysis/        # bằng chứng điều tra lỗi
 │   ├── fix_plans/             # kế hoạch sửa lỗi đã duyệt
 │   ├── status/                # trạng thái dự án khi được tạo
-│   └── logs/                  # execution log có giá trị truy vết
+│   ├── logs/                  # execution log có giá trị truy vết
+│   └── results/               # tóm tắt kết quả cho người đọc và review
+├── runs/                      # raw runtime artifacts for reproducible runs
 ├── notebooks/                 # điều phối, trình bày và diễn giải
 ├── src/practice_2/
 │   ├── data/                  # load và validate dữ liệu
