@@ -1,0 +1,49 @@
+XGBOOST MODEL SUMMARY - ELECTRICITY LOAD FORECASTING
+==============================================================================
+Training samples: 24,519
+Validation samples: 5,260
+Number of input features: 99
+Input: 24-hour lag features for load, temperature, humidity, wind_speed
+Additional features: rolling mean (6h), rolling std (24h), load trend (24h)
+Target: load at the next time step
+
+SELECTED HYPERPARAMETERS (BASED ON VALIDATION RMSE)
+------------------------------------------------------------------------------
+Objective: reg:squarederror
+Evaluation metric: rmse
+Booster: None
+Tree method: hist
+Max depth: 7
+Configured n_estimators: 1500
+Best iteration (0-based): 1497
+Best boosting rounds: 1498
+Early stopping rounds: 50
+Learning rate: 0.05
+Subsample: 0.8
+Column subsample: 0.8
+Random state: 42
+
+VALIDATION METRICS (ORIGINAL LOAD SCALE)
+------------------------------------------------------------------------------
+MAE: 297.657315
+RMSE: 496.544950
+MAPE: 1.044094%
+
+TOP 15 FEATURE IMPORTANCES
+------------------------------------------------------------------------------
+       Feature Importance
+    load_lag_1   0.318104
+    load_lag_2   0.246898
+   load_lag_24   0.099775
+load_trend_24h   0.080860
+   load_lag_22   0.061258
+   load_lag_21   0.038032
+   load_lag_23   0.020621
+    load_lag_4   0.014411
+   load_lag_11   0.009551
+   load_lag_14   0.009384
+   load_lag_12   0.008232
+    load_lag_3   0.007679
+   load_lag_10   0.006214
+   load_lag_15   0.005057
+    load_lag_5   0.004832
