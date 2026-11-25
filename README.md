@@ -378,4 +378,4 @@ Các nội dung dưới đây chưa được cung cấp hoặc chưa thể xác 
 
 **Project:** Practice 4 – Multivariate Time Series Forecasting (Electricity Load + Weather)  
 **Ngôn ngữ:** Python  
-**Môi trường thực thi:** Jupyter Notebook / Anaconda
+**Môi trường thực thi:** Jupyter Notebook / Visual Studio Code
