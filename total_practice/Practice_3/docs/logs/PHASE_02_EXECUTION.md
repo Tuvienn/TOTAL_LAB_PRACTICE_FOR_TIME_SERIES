@@ -1,90 +1,105 @@
 # PHASE 02 — EXECUTION LOG
 
-## 1. Trạng thái
+## 1. Scope
 
-```text
-Phase: 02 — Feature Engineering
-Execution date: 2026-10-19
-Result: PASS
+Triển khai và xác minh temporal split từ prepared hourly dataset đến deterministic split audit. Phase này không thực hiện EDA, feature engineering, X/y construction, model training, prediction hoặc metric evaluation.
+
+## 2. Official execution
+
+```bash
+.venv/bin/python -m practice_3_v2.data.temporal_split
 ```
 
-## 2. Môi trường đã dùng
+Official output:
 
 ```text
-Python: 3.14.3
-pandas: 3.0.6
-NumPy: 2.5.4
-pytest: 9.1.1
+outputs/results/phase_02_temporal_split.json
 ```
 
-## 3. Thành phần đã chạy
-
-1. Kiểm tra processed input và metadata contract từ Phase 1.
-2. Tạo `lag_1 ... lag_168` từ target quá khứ.
-3. Tạo rolling mean/std cho cửa sổ 24 và 168 giờ sau `shift(1)`.
-4. Kiểm tra alignment tại timestamp bình thường và gần missing target.
-5. Kiểm tra config contract, leakage, input mutation và deterministic generation.
-6. Chạy pipeline chính thức và lưu audit JSON.
-7. Chạy toàn bộ automated tests và compile source/tests.
-
-## 4. Kết quả feature engineering
-
-| Chỉ số | Kết quả |
-|---|---:|
-| Input rows | 121.296 |
-| Output rows | 121.296 |
-| Output columns | 176 |
-| Lag features | 168 |
-| Rolling features | 4 |
-| Missing targets được giữ lại | 27 |
-| Input dataframe bị mutation | Không |
-| Full feature table được persist | Không |
-
-Feature experiment đã duyệt:
+## 3. Input identity
 
 ```text
-Lag-only: p = 24, 72, 168
-Lag + Rolling: p = 24, 72, 168
-Rolling windows: 24, 168
+Prepared input: datasets/processed/aep_hourly_prepared.csv
+Prepared SHA256: 5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587
+Prepared rows: 121,296
+Prepared missing targets: 27
 ```
 
-## 5. Kết quả validation
+Prepared checksum khớp Phase 1 audit và approved temporal split contract.
+
+## 4. Development and holdout result
 
 ```text
-Phase 2 tests: 19 passed
-Full project tests: 33 passed
-Source/tests compile: PASS
-Approved config contract: PASS
-Row-level metadata contract: PASS
-Independent lag alignment checks: PASS
-Independent rolling checks: PASS
-Audit JSON round trip: PASS
-Future/current-target leakage checks: PASS
+Development rows: 112,535
+Development observed targets: 112,509
+Development missing targets: 26
+Development end exclusive: 2017-08-03 00:00:00
+
+Historical holdout rows: 8,761
+Historical holdout observed targets: 8,760
+Historical holdout missing targets: 1
+Holdout start inclusive: 2017-08-03 00:00:00
+Holdout end inclusive: 2018-08-03 00:00:00
+Holdout claimed unseen: false
 ```
 
-Các thay đổi không được duyệt đối với lag, rolling hoặc missing-value policy đều làm pipeline dừng thay vì vẫn báo `PASS`.
+Development và holdout không overlap, đồng thời phủ đủ 121,296 timestamps.
 
-## 6. Artifacts bàn giao
-
-- Configuration: `config/feature_engineering.json`
-- Source implementation: `src/practice_3/analysis/feature_engineering.py`
-- Automated tests: `tests/test_feature_engineering.py`
-- Machine-readable audit: `outputs/results/phase_02_feature_quality.json`
-
-Full feature table không được lưu theo persistence policy. Phase 3 phải tái tạo bảng feature từ processed dataset, source và config chính thức.
-
-## 7. Giới hạn được giữ lại
-
-- Phase 2 không fill hoặc drop missing value.
-- Phase 2 chưa chia `X/y`, chưa tạo common validity mask và chưa split train/test.
-- Metadata được giữ để truy vết nhưng không thuộc model feature set.
-- Chưa train, tune hoặc đánh giá model.
-
-## 8. Kết luận
+## 5. Expanding-window result
 
 ```text
-PHASE 02: PASS
-HANDOFF TO PHASE 03: READY FOR HUMAN APPROVAL
+Method: expanding_window
+Folds: 5
+Shuffle: false
+Gap: 0 hours
+Validation rows by fold: 8,760; 8,760; 8,760; 8,784; 8,760
 ```
 
-Phase 3 chỉ được triển khai sau khi Human phê duyệt. Việc tạo common validity mask và loại sample không hợp lệ thuộc phạm vi Phase 3.
+Fold 4 chứa ngày nhuận năm 2016 nên có 8,784 giờ. Fold-train mở rộng đơn điệu; validation folds liên tục, không overlap và kết thúc đúng tại development end.
+
+## 6. Missing-target policy
+
+```text
+Timeline rows retained: true
+Imputation: none
+Training-label eligible: false
+Metric eligible: false
+```
+
+Phase 2 chỉ audit target availability; không đọc holdout target values để tính distribution, trend, seasonality hoặc lựa chọn feature/model.
+
+## 7. Validation evidence
+
+```text
+Focused Phase 2 tests: 13/13 PASS
+Full v2 regression suite: 33/33 PASS
+Independent audit validation: PASS
+Deterministic official rerun: PASS
+Official audit SHA256: f18452573cedd321ea8097539560899bc5dbce43ba0b47cda3b51dc504bcf735
+Trailing-whitespace check: PASS
+git diff --check: PASS
+Legacy runtime import: NONE
+```
+
+## 8. Resolved implementation issues
+
+Hai vấn đề kỹ thuật được phát hiện trước khi có official Phase 2 artifact:
+
+1. `pd.Timestamp.strptime` chưa được pandas 3.1.0 hỗ trợ. Sau Human approval, boundary parser được đổi sang strict `pd.to_datetime(..., format=..., errors="raise")`; split logic không thay đổi.
+2. Môi trường đã bị chuyển từ editable install sang wheel khi cài presentation dependencies. Package được khôi phục bằng editable local install để official module command nhận source mới; scientific logic và artifact không thay đổi.
+
+Self-review bổ sung fail-fast validation để đối chiếu toàn bộ temporal boundary, holdout claim, CV method, fold count, shuffle policy và primary target semantics giữa forecasting contract với split contract.
+
+Không có partial official artifact được chấp nhận trước khi hai vấn đề trên được xử lý.
+
+## 9. Completion state
+
+```text
+Phase 2 technical status: PASS
+Human result review: APPROVED TO PROCEED
+Presentation notebook: READY THROUGH PHASE 2
+Notebook clean-kernel execution: PASS — 8/8 code cells, no errors
+Next phase implementation: NOT AUTHORIZED
+```
+
+Human đã yêu cầu chuyển sang Phase 3 sau khi trình bày Phase 2 vào notebook. Phase 3 hiện chỉ được bắt đầu ở bước thảo luận và thiết kế; implementation vẫn cần phase-detail được duyệt.

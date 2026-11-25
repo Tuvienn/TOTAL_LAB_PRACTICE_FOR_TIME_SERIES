@@ -1,86 +1,117 @@
 # PHASE 01 — EXECUTION LOG
 
-## 1. Trạng thái
+## 1. Scope
 
-```text
-Phase: 01 — Data Preparation
-Execution date: 2026-10-19
-Result: PASS
-```
+Triển khai và xác minh Structural Data Preparation từ raw `AEP_hourly.csv` đến prepared CSV và machine-readable audit. Phase này không thực hiện split, EDA, feature engineering, training hoặc prediction.
 
-## 2. Môi trường đã dùng
+## 2. Environment
 
 ```text
 Python: 3.14.3
-pandas: 3.0.6
+NumPy: 2.5.4
+pandas: 3.1.0
 pytest: 9.1.1
-Notebook kernel: practice3-timeseries
+Package mode: editable local install
 ```
 
-## 3. Thành phần đã chạy
-
-1. Chạy pipeline chính thức bằng `python -m practice_3.data.data_preparation`.
-2. Đọc lại và validate processed CSV sau khi serialize.
-3. Chạy `pytest tests/test_data_preparation.py -v`.
-4. Chạy toàn bộ `notebooks/Practice_3_present.ipynb` từ đầu bằng `nbconvert`.
-5. Kiểm tra compile cho source và tests.
-
-## 4. Kết quả dữ liệu
-
-| Chỉ số | Kết quả |
-|---|---:|
-| Raw rows | 121.273 |
-| Raw missing target | 0 |
-| Raw non-positive target | 0 |
-| Duplicate rows trước xử lý | 8 |
-| Duplicate timestamps trước xử lý | 4 |
-| Missing hourly timestamps trước reindex | 27 |
-| Prepared rows | 121.296 |
-| Duplicate timestamps sau xử lý | 0 |
-| Missing `AEP_MW` sau reindex | 27 |
-| `source_count = 0 / 1 / 2` | 27 / 121.265 / 4 |
-| Tổng `source_count` | 121.273 |
-| Timeline liên tục theo giờ | PASS |
-| Timezone policy | timezone-naive |
-
-Raw SHA-256 trước và sau execution đều là:
+Môi trường riêng:
 
 ```text
+Practice_3/.venv
+```
+
+## 3. Official execution
+
+```bash
+.venv/bin/python -m practice_3_v2.data.data_preparation
+```
+
+Official outputs:
+
+```text
+datasets/processed/aep_hourly_prepared.csv
+outputs/results/phase_01_data_quality.json
+```
+
+## 4. Checksums
+
+```text
+Raw CSV:
 109d122f7b485555c609eecdec2cd5a03172e0a08acd358d863acc93eb452585
+
+Prepared CSV:
+5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587
+
+Audit JSON:
+d53235227f6375c2b75e9e695848a953151823daa8c1a3af16834ce36bf8fe0a
 ```
 
-## 5. Kết quả validation
+Raw checksum trước và sau execution giống nhau.
+
+## 5. Result summary
 
 ```text
-Pytest: 14 passed
-Source/tests compile: PASS
-Notebook: 6/6 code cells executed
-Notebook errors: 0
-Notebook validation gate: PASS
+Raw rows: 121,273
+Prepared rows: 121,296
+Unique prepared timestamps: 121,296
+Duplicate rows before: 8
+Duplicate timestamps before: 4
+Duplicate timestamps after: 0
+Missing hourly timestamps inserted: 27
+Missing targets preserved: 27
+source_count = 0: 27
+source_count = 1: 121,265
+source_count = 2: 4
+sum(source_count): 121,273
+Timeline continuous hourly: true
+Status: PASS
 ```
 
-Bộ test bao phủ schema, timeline, missing timestamp, duplicate aggregation bằng trung bình, source conservation, audit trước/sau, stop conditions và việc tạo/đọc lại artifacts.
+Audit lưu danh sách cụ thể của 4 duplicate timestamps và 27 missing timestamps.
 
-## 6. Artifacts bàn giao
-
-- Processed dataset: `datasets/processed/aep_hourly_prepared.csv`
-- Machine-readable audit: `outputs/results/phase_01_data_quality.json`
-- Presentation notebook: `notebooks/Practice_3_present.ipynb`
-- Source implementation: `src/practice_3/data/data_preparation.py`
-- Automated tests: `tests/test_data_preparation.py`
-
-## 7. Giới hạn được giữ lại
-
-- Raw source không có timezone hoặc UTC offset; không tự gán timezone.
-- Bốn timestamp trùng được lấy trung bình theo contract, nên không khôi phục được hai giờ vật lý có thể liên quan DST.
-- Hai mươi bảy target thiếu vẫn là `NaN`; Phase 1 không interpolation, forward-fill hoặc tạo target giả.
-- Không xóa hoặc clip outlier trong Phase 1.
-
-## 8. Kết luận
+## 6. Validation
 
 ```text
-PHASE 01: PASS
-HANDOFF TO PHASE 02: READY
+Phase 0 contract tests: PASS
+Phase 1 focused tests: PASS
+Full v2 regression suite: 20/20 PASS
+Serialized artifact validation: PASS
+Independent checksum/count recalculation: PASS
+Deterministic official rerun: PASS
+git diff --check: PASS
+Legacy runtime import: NONE
 ```
 
-Phase 2 phải tiếp tục giữ metadata chất lượng và không đưa hàng có target `NaN` vào model training.
+Deterministic official rerun giữ nguyên prepared SHA256:
+
+```text
+5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587
+```
+
+## 7. Implementation notes
+
+Trong pre-official validation, một path-identity issue xuất hiện khi test ghi artifact ngoài project root. Fix đã được Human duyệt và chỉ thay đổi serialization metadata path handling; data-treatment logic không thay đổi. Official artifacts chưa được tạo tại thời điểm issue xảy ra.
+
+## 8. Notebook presentation
+
+Notebook trình bày:
+
+```text
+notebooks/Practice_3_present.ipynb
+Scope: Phase 0–1
+Mode: read-only artifact presentation
+Clean-kernel execution: PASS
+Executed code cells: 5/5
+Error outputs: 0
+Pipeline/training/prediction calls: NONE
+```
+
+Notebook chỉ đọc forecasting contract, data contract, prepared CSV và audit JSON chính thức. Notebook không tái chạy data-preparation pipeline; EDA chưa được đưa vào Phase 1 vì phải thực hiện trên TRAIN sau Phase 2.
+
+## 9. Completion
+
+```text
+Phase 1 status: PASS
+Next phase: Phase 2 — Temporal Split & Validation Design
+Phase 2 implementation authorization: NOT GRANTED
+```

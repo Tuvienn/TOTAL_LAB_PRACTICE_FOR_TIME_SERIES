@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 from pathlib import Path
 
@@ -5,246 +6,328 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3.analysis.feature_engineering import (
-    generate_feature_table,
-    validate_phase_02_entry,
+from practice_3_v2.analysis.eda import extract_development_data
+from practice_3_v2.data.supervised_dataset import (
+    PROJECT_ROOT,
+    apply_expanding_window_folds,
+    build_supervised_candidates,
+    extract_eligible_xy,
+    load_phase_05_inputs,
+    run_phase_05,
+    validate_supervised_contract,
+    validate_supervised_population,
 )
-from practice_3.data.supervised_dataset import (
-    EXPECTED_FIRST_TIMESTAMP,
-    EXPECTED_LAG_ONLY_COUNTS,
-    EXPECTED_LAST_TIMESTAMP,
-    EXPECTED_REMOVED_ROWS,
-    EXPECTED_USABLE_ROWS,
-    FORBIDDEN_FEATURES,
-    build_common_validity_mask,
-    build_feature_definitions,
-    run_phase_03,
-    validate_deterministic_construction,
-    validate_feature_table,
-    validate_phase_03_entry,
-    validate_supervised_datasets,
-)
+from practice_3_v2.data.temporal_split import validate_prepared_input
 
 
-CONFIG_PATH = Path("config/feature_engineering.json")
+(
+    DATA_CONTRACT,
+    PREPARATION_CONTRACT,
+    SPLIT_CONTRACT,
+    FEATURE_CONTRACT,
+    SUPERVISED_CONTRACT,
+    PHASE_01_AUDIT,
+    PHASE_02_AUDIT,
+    PHASE_03_AUDIT,
+    PHASE_04_AUDIT,
+) = load_phase_05_inputs()
 
 
-@pytest.fixture(scope="module")
-def feature_context():
-    source_df, config, _ = validate_phase_02_entry(CONFIG_PATH)
-    feature_df = generate_feature_table(source_df, config)
-    return config, feature_df
-
-
-@pytest.fixture(scope="module")
-def phase_03_result(tmp_path_factory):
-    audit_path = tmp_path_factory.mktemp("phase_03") / "audit.json"
-    datasets, audit = run_phase_03(
-        config_path=CONFIG_PATH,
-        audit_path=audit_path,
+def load_prepared_and_development() -> tuple[pd.DataFrame, pd.DataFrame]:
+    prepared, _ = validate_prepared_input(
+        PROJECT_ROOT / SUPERVISED_CONTRACT["prepared_input"],
+        DATA_CONTRACT,
+        PREPARATION_CONTRACT,
+        SPLIT_CONTRACT,
+        PHASE_01_AUDIT,
     )
-    return datasets, audit, audit_path
+    development = extract_development_data(
+        prepared,
+        DATA_CONTRACT,
+        SPLIT_CONTRACT,
+    )
+    return prepared, development
 
 
-def test_phase_03_entry_gate():
-    source_df, config, feature_df, audit = validate_phase_03_entry(
-        config_path=CONFIG_PATH
+def load_development_candidates() -> tuple[pd.DataFrame, pd.DataFrame]:
+    _, development = load_prepared_and_development()
+    candidates = build_supervised_candidates(
+        development,
+        DATA_CONTRACT,
+        FEATURE_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    return development, candidates
+
+
+def synthetic_data(periods: int = 220) -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "Datetime": pd.date_range("2020-01-01", periods=periods, freq="h"),
+            "AEP_MW": np.arange(1, periods + 1, dtype="float64"),
+        }
     )
 
-    assert len(source_df) == 121_296
-    assert len(feature_df) == 121_296
-    assert config["lag_features"]["max_lag"] == 168
-    assert audit == {
-        "phase_01": "PASS",
-        "phase_02": "PASS",
-        "input_contract": "PASS",
-        "feature_integrity": "PASS",
-        "status": "PASS",
-    }
 
-
-def test_phase_03_entry_rejects_failed_upstream_audit(tmp_path):
-    failed_audit_path = tmp_path / "phase_02_failed.json"
-    failed_audit = {
-        "phase": "phase_02_feature_engineering",
-        "status": "FAIL",
-    }
-    with failed_audit_path.open("w", encoding="utf-8") as file:
-        json.dump(failed_audit, file)
-
-    with pytest.raises(ValueError, match="has not passed"):
-        validate_phase_03_entry(
-            config_path=CONFIG_PATH,
-            phase_02_audit_path=failed_audit_path,
-        )
-
-
-def test_feature_definitions_are_complete_and_ordered(feature_context):
-    config, _ = feature_context
-    definitions = build_feature_definitions(config)
-
-    assert list(definitions) == [
-        "lag_only_p24",
-        "lag_only_p72",
-        "lag_only_p168",
-        "lag_rolling_p24",
-        "lag_rolling_p72",
-        "lag_rolling_p168",
+def test_upstream_identities_and_status_are_locked() -> None:
+    assert PHASE_02_AUDIT["status"] == "PASS"
+    assert PHASE_03_AUDIT["status"] == "PASS"
+    assert PHASE_04_AUDIT["status"] == "PASS"
+    assert PHASE_04_AUDIT["feature_order"] == SUPERVISED_CONTRACT[
+        "feature_order"
     ]
-    assert {name: len(columns) for name, columns in definitions.items()} == {
-        "lag_only_p24": 24,
-        "lag_only_p72": 72,
-        "lag_only_p168": 168,
-        "lag_rolling_p24": 28,
-        "lag_rolling_p72": 76,
-        "lag_rolling_p168": 172,
-    }
-    assert definitions["lag_only_p168"][0] == "lag_1"
-    assert definitions["lag_only_p168"][-1] == "lag_168"
-    assert definitions["lag_rolling_p24"][-4:] == (
-        "rolling_mean_24",
-        "rolling_std_24",
-        "rolling_mean_168",
-        "rolling_std_168",
+
+
+def test_supervised_contract_matches_approved_protocol() -> None:
+    validate_supervised_contract(
+        SUPERVISED_CONTRACT,
+        DATA_CONTRACT,
+        SPLIT_CONTRACT,
+        FEATURE_CONTRACT,
     )
+    assert len(SUPERVISED_CONTRACT["feature_order"]) == 22
+    assert SUPERVISED_CONTRACT["scope"]["persist_xy_table"] is False
+    assert SUPERVISED_CONTRACT["scope"][
+        "holdout_features_materialized"
+    ] is False
 
 
-def test_feature_table_contract(feature_context):
-    config, feature_df = feature_context
-    audit = validate_feature_table(feature_df, config)
-
-    assert audit["rows"] == 121_296
-    assert audit["columns"] == 176
-    assert audit["schema_and_order_valid"] is True
-    assert audit["timestamps_unique"] is True
-    assert audit["chronologically_sorted"] is True
-    assert audit["status"] == "PASS"
-
-
-def test_common_validity_mask_and_row_loss(feature_context):
-    config, feature_df = feature_context
-    common_valid, audit = build_common_validity_mask(feature_df, config)
-
-    assert common_valid.dtype == bool
-    assert int(common_valid.sum()) == EXPECTED_USABLE_ROWS
-    assert audit["lag_only_usable_rows"] == EXPECTED_LAG_ONLY_COUNTS
-    assert audit["removed_unique_rows"] == EXPECTED_REMOVED_ROWS
-    assert audit["usable_rows"] == EXPECTED_USABLE_ROWS
-    assert audit["first_usable_timestamp"] == str(EXPECTED_FIRST_TIMESTAMP)
-    assert audit["last_usable_timestamp"] == str(EXPECTED_LAST_TIMESTAMP)
-    assert sum(audit["reason_counts"].values()) > EXPECTED_REMOVED_ROWS
-    assert audit["status"] == "PASS"
-
-
-def test_common_validity_mask_rejects_unexpected_input(feature_context):
-    config, feature_df = feature_context
-    truncated_feature_df = feature_df.iloc[:-1]
-
-    with pytest.raises(ValueError, match="acceptance values changed"):
-        build_common_validity_mask(truncated_feature_df, config)
-
-
-def test_six_supervised_dataset_contracts(phase_03_result, feature_context):
-    datasets, _, _ = phase_03_result
-    config, _ = feature_context
-    audit = validate_supervised_datasets(datasets, config)
-
-    assert audit["configuration_count"] == 6
-    assert audit["shared_timestamp_index"] is True
-    assert all(
-        result["samples"] == EXPECTED_USABLE_ROWS
-        for result in audit["datasets"].values()
-    )
-    assert audit["status"] == "PASS"
-
-
-def test_supervised_alignment_and_values(phase_03_result, feature_context):
-    datasets, _, _ = phase_03_result
-    _, feature_df = feature_context
-    indexed_features = feature_df.set_index("Datetime")
-
-    for dataset in datasets.values():
-        expected_target = indexed_features.loc[
-            dataset.timestamp_index,
-            "AEP_MW",
-        ]
-        expected_metadata = indexed_features.loc[
-            dataset.timestamp_index,
-            ["source_count", "quality_flag"],
-        ]
-
-        pd.testing.assert_series_equal(dataset.y, expected_target)
-        pd.testing.assert_frame_equal(
-            dataset.aligned_metadata,
-            expected_metadata,
+@pytest.mark.parametrize(
+    ("section", "key", "value", "message"),
+    [
+        ("alignment", "forecast_origin_offset_hours", 0, "alignment"),
+        ("eligibility", "imputation", "median", "Eligibility"),
+        ("cross_validation", "gap_hours", 24, "Cross-validation"),
+        ("scope", "persist_xy_table", True, "scope"),
+    ],
+)
+def test_invalid_supervised_contract_is_rejected(
+    section: str,
+    key: str,
+    value: object,
+    message: str,
+) -> None:
+    contract = deepcopy(SUPERVISED_CONTRACT)
+    contract[section][key] = value
+    with pytest.raises(ValueError, match=message):
+        validate_supervised_contract(
+            contract,
+            DATA_CONTRACT,
+            SPLIT_CONTRACT,
+            FEATURE_CONTRACT,
         )
-        assert dataset.X.index.equals(dataset.y.index)
-        assert dataset.X.index.equals(dataset.aligned_metadata.index)
-        assert dataset.X.index.equals(dataset.timestamp_index)
 
 
-def test_supervised_outputs_have_no_leakage_or_invalid_values(
-    phase_03_result,
-):
-    datasets, _, _ = phase_03_result
-
-    for dataset in datasets.values():
-        assert not FORBIDDEN_FEATURES.intersection(dataset.X.columns)
-        assert np.isfinite(dataset.X.to_numpy()).all()
-        assert np.isfinite(dataset.y.to_numpy()).all()
-        assert dataset.timestamp_index[0] == EXPECTED_FIRST_TIMESTAMP
-        assert dataset.timestamp_index[-1] == EXPECTED_LAST_TIMESTAMP
-        assert dataset.timestamp_index.is_monotonic_increasing
-        assert dataset.timestamp_index.is_unique
-
-
-def test_all_configurations_use_identical_timestamp_population(
-    phase_03_result,
-):
-    datasets, _, _ = phase_03_result
-    reference_index = datasets["lag_only_p24"].timestamp_index
-
-    for dataset in datasets.values():
-        assert dataset.timestamp_index.equals(reference_index)
-
-
-def test_phase_03_does_not_mutate_feature_table(
-    phase_03_result,
-):
-    _, audit, _ = phase_03_result
-
-    assert audit["input_mutation"] == {
-        "feature_table_mutated": False,
-        "status": "PASS",
-    }
-
-
-def test_supervised_construction_is_deterministic(
-    phase_03_result,
-    feature_context,
-):
-    datasets, audit, _ = phase_03_result
-    config, feature_df = feature_context
-    validation = validate_deterministic_construction(
-        feature_df,
-        config,
-        datasets,
+def test_one_step_target_origin_and_feature_alignment() -> None:
+    data = synthetic_data()
+    candidates = build_supervised_candidates(
+        data,
+        DATA_CONTRACT,
+        FEATURE_CONTRACT,
+        SUPERVISED_CONTRACT,
     )
+    row = candidates.iloc[168]
+    assert row["target_timestamp"] == data.loc[168, "Datetime"]
+    assert row["forecast_origin"] == data.loc[167, "Datetime"]
+    assert row["lag_1h"] == data.loc[167, "AEP_MW"]
+    assert row["AEP_MW"] == data.loc[168, "AEP_MW"]
+    assert row["is_eligible"]
 
-    assert validation == {
-        "deterministic_construction": True,
-        "status": "PASS",
+
+def test_X_schema_excludes_target_metadata_and_control_fields() -> None:
+    data = synthetic_data()
+    candidates = build_supervised_candidates(
+        data,
+        DATA_CONTRACT,
+        FEATURE_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    mask = pd.Series(True, index=candidates.index)
+    partition = extract_eligible_xy(
+        candidates,
+        mask,
+        DATA_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    assert partition.X.columns.tolist() == SUPERVISED_CONTRACT["feature_order"]
+    forbidden = {
+        "AEP_MW",
+        "Datetime",
+        "target_timestamp",
+        "forecast_origin",
+        "quality_flag",
+        "source_count",
+        "is_eligible",
+        "exclusion_reason",
     }
-    assert audit["determinism"] == validation
+    assert forbidden.isdisjoint(partition.X.columns)
 
 
-def test_phase_03_audit_round_trip(phase_03_result):
-    _, audit, audit_path = phase_03_result
+def test_development_eligibility_and_exclusion_counts() -> None:
+    _, candidates = load_development_candidates()
+    counts = candidates["exclusion_reason"].value_counts().to_dict()
+    assert len(candidates) == 112_535
+    assert counts == {
+        "eligible": 108_083,
+        "invalid_feature_vector": 4_427,
+        "missing_target_with_valid_features": 25,
+    }
+    assert sum(counts.values()) == len(candidates)
 
-    with audit_path.open("r", encoding="utf-8") as file:
-        saved_audit = json.load(file)
 
-    assert saved_audit == audit
-    assert audit["phase"] == "phase_03_x_y_preparation"
-    assert audit["full_supervised_datasets_persisted"] is False
-    assert audit["status"] == "PASS"
+def test_eligible_X_y_are_finite_aligned_and_chronological() -> None:
+    _, candidates = load_development_candidates()
+    partition = extract_eligible_xy(
+        candidates,
+        pd.Series(True, index=candidates.index),
+        DATA_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    assert len(partition.X) == 108_083
+    assert np.isfinite(partition.X.to_numpy(dtype="float64")).all()
+    assert np.isfinite(partition.y.to_numpy(dtype="float64")).all()
+    assert partition.X.index.equals(partition.y.index)
+    assert partition.X.index.is_unique
+    assert partition.X.index.is_monotonic_increasing
+    assert partition.X.index.min() == pd.Timestamp("2004-10-08 01:00:00")
+    assert partition.X.index.max() == pd.Timestamp("2017-08-02 23:00:00")
+
+
+def test_five_fold_eligible_counts_and_chronology() -> None:
+    development, candidates = load_development_candidates()
+    folds = apply_expanding_window_folds(
+        candidates,
+        DATA_CONTRACT,
+        SPLIT_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    validate_supervised_population(
+        candidates,
+        folds,
+        development,
+        DATA_CONTRACT,
+        SPLIT_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    assert [(len(fold.train.X), len(fold.validation.X)) for fold in folds] == [
+        (65_670, 8_253),
+        (73_923, 8_363),
+        (82_286, 8_591),
+        (90_877, 8_615),
+        (99_492, 8_591),
+    ]
+    for fold in folds:
+        assert fold.train.X.index.max() < fold.validation.X.index.min()
+        assert fold.train.X.index.intersection(fold.validation.X.index).empty
+
+
+def test_one_step_validation_uses_actual_previous_hour() -> None:
+    _, candidates = load_development_candidates()
+    folds = apply_expanding_window_folds(
+        candidates,
+        DATA_CONTRACT,
+        SPLIT_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    for fold in folds:
+        second_timestamp = fold.validation.X.index[1]
+        previous_timestamp = second_timestamp - pd.Timedelta(hours=1)
+        previous_actual = candidates.loc[
+            candidates["target_timestamp"].eq(previous_timestamp), "AEP_MW"
+        ].iloc[0]
+        assert fold.validation.X.loc[second_timestamp, "lag_1h"] == previous_actual
+
+
+def test_current_and_future_target_mutation_does_not_change_current_X() -> None:
+    data = synthetic_data()
+    target_row = 190
+    expected = build_supervised_candidates(
+        data,
+        DATA_CONTRACT,
+        FEATURE_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    mutated = data.copy(deep=True)
+    mutated.loc[target_row:, "AEP_MW"] = 9_999_999.0
+    actual = build_supervised_candidates(
+        mutated,
+        DATA_CONTRACT,
+        FEATURE_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    feature_order = SUPERVISED_CONTRACT["feature_order"]
+    pd.testing.assert_series_equal(
+        actual.loc[target_row, feature_order],
+        expected.loc[target_row, feature_order],
+    )
+    assert actual.loc[target_row, "AEP_MW"] != expected.loc[target_row, "AEP_MW"]
+
+
+def test_holdout_mutation_cannot_change_development_candidates() -> None:
+    prepared, development = load_prepared_and_development()
+    expected = build_supervised_candidates(
+        development,
+        DATA_CONTRACT,
+        FEATURE_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    mutated = prepared.copy(deep=True)
+    holdout_mask = mutated["Datetime"].ge(
+        SPLIT_CONTRACT["holdout"]["start_inclusive"]
+    )
+    mutated.loc[holdout_mask, "AEP_MW"] = 9_999_999.0
+    mutated_development = extract_development_data(
+        mutated,
+        DATA_CONTRACT,
+        SPLIT_CONTRACT,
+    )
+    actual = build_supervised_candidates(
+        mutated_development,
+        DATA_CONTRACT,
+        FEATURE_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    pd.testing.assert_frame_equal(actual, expected)
+
+
+def test_supervised_builder_does_not_modify_input() -> None:
+    data = synthetic_data()
+    before = data.copy(deep=True)
+    build_supervised_candidates(
+        data,
+        DATA_CONTRACT,
+        FEATURE_CONTRACT,
+        SUPERVISED_CONTRACT,
+    )
+    pd.testing.assert_frame_equal(data, before)
+
+
+def test_phase_05_audit_is_deterministic_and_development_only(
+    tmp_path: Path,
+) -> None:
+    first_path = tmp_path / "first.json"
+    second_path = tmp_path / "second.json"
+    first = run_phase_05(PROJECT_ROOT, first_path)
+    second = run_phase_05(PROJECT_ROOT, second_path)
+    assert first == second
+    assert first_path.read_bytes() == second_path.read_bytes()
+    assert first["development"]["eligible_rows"] == 108_083
+    assert first["holdout"] == {
+        "reserved": True,
+        "features_materialized": False,
+        "target_statistics_reported": False,
+        "evaluation_owner": "phase_07",
+    }
+    assert first["recursive_24h"]["matrix_materialized"] is False
+    assert first["persistence"]["xy_table_written"] is False
+    assert first["status"] == "PASS"
+    with first_path.open(encoding="utf-8") as file:
+        assert json.load(file) == first
+
+
+def test_pipeline_source_does_not_import_legacy_package() -> None:
+    source = (
+        PROJECT_ROOT / "src/practice_3_v2/data/supervised_dataset.py"
+    ).read_text(encoding="utf-8")
+    assert "from practice_3 " not in source
+    assert "import practice_3" not in source

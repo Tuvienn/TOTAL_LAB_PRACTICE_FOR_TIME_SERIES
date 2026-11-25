@@ -5,358 +5,218 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3.data.data_preparation import (
-    DATETIME_FORMAT,
-    EXPECTED_RAW_SHA256,
+from practice_3_v2.data.data_preparation import (
+    PROJECT_ROOT,
+    aggregate_duplicate_timestamps,
+    build_complete_hourly_timeline,
     calculate_sha256,
+    load_and_validate_saved_dataset,
+    load_json_contract,
+    load_raw_data,
     normalize_raw_data,
     prepare_aep_data,
     run_phase_01,
-    validate_saved_dataset,
+    save_prepared_artifacts,
 )
 
 
-# ============================================================
-# Data path used by the tests
-# ============================================================
-
-RAW_DATA_PATH = Path("datasets/raw/AEP_hourly.csv")
-
-
-# ============================================================
-# Simple fixture
-# ============================================================
-
-def get_prepared_data():
-    """
-    Run the Phase 1 pipeline and return:
-    - prepared dataframe
-    - audit result
-
-    This helper avoids repeating the pipeline call in each test.
-    """
-
-    return prepare_aep_data(RAW_DATA_PATH)
+DATA_CONTRACT = load_json_contract(PROJECT_ROOT / "config/data_contract.json")
+PREPARATION_CONTRACT = load_json_contract(
+    PROJECT_ROOT / "config/data_preparation.json"
+)
+RAW_PATH = PROJECT_ROOT / DATA_CONTRACT["raw_path"]
 
 
-# ============================================================
-# 1. Validate the raw dataset
-# ============================================================
-
-def test_raw_file_exists():
-    """Check that the raw dataset exists."""
-
-    assert RAW_DATA_PATH.exists()
+@pytest.fixture(scope="module")
+def prepared_bundle() -> tuple[pd.DataFrame, dict]:
+    return prepare_aep_data(RAW_PATH, DATA_CONTRACT, PREPARATION_CONTRACT)
 
 
-def test_raw_sha256():
-    """Check that the raw dataset matches the approved baseline."""
+def test_raw_file_identity_and_schema() -> None:
+    assert RAW_PATH.is_file()
+    assert calculate_sha256(RAW_PATH) == DATA_CONTRACT["raw_sha256"]
+    raw_data = load_raw_data(RAW_PATH, DATA_CONTRACT)
+    assert raw_data.columns.tolist() == ["Datetime", "AEP_MW"]
+    assert raw_data.shape == (121_273, 2)
 
-    actual_sha256 = calculate_sha256(RAW_DATA_PATH)
 
-    assert actual_sha256 == EXPECTED_RAW_SHA256
+def test_invalid_schema_stops_loading(tmp_path: Path) -> None:
+    invalid_path = tmp_path / "invalid.csv"
+    pd.DataFrame({"timestamp": ["2004-10-01 01:00:00"]}).to_csv(
+        invalid_path,
+        index=False,
+    )
+    with pytest.raises(ValueError, match="Unexpected raw schema"):
+        load_raw_data(invalid_path, DATA_CONTRACT)
 
 
-# ============================================================
-# 2. Validate the prepared dataset schema
-# ============================================================
+@pytest.mark.parametrize(
+    ("timestamp", "target", "message"),
+    [
+        ("10/01/2004 01:00", 14_000, "Datetime parsing failed"),
+        ("2004-10-01 01:00:00", "invalid", "Target conversion failed"),
+        ("2004-10-01 01:00:00", np.nan, "missing values"),
+        ("2004-10-01 01:00:00", np.inf, "non-finite values"),
+        ("2004-10-01 01:00:00", 0, "non-positive values"),
+    ],
+)
+def test_invalid_raw_values_stop_normalization(
+    timestamp: str,
+    target: object,
+    message: str,
+) -> None:
+    invalid = pd.DataFrame({"Datetime": [timestamp], "AEP_MW": [target]})
+    with pytest.raises((RuntimeError, ValueError), match=message):
+        normalize_raw_data(invalid, DATA_CONTRACT, PREPARATION_CONTRACT)
 
-def test_prepared_schema():
-    """Check the columns of the prepared dataset."""
 
-    df, _ = get_prepared_data()
+def test_normalization_is_stable_and_chronological() -> None:
+    raw_data = pd.DataFrame(
+        {
+            "Datetime": [
+                "2004-10-01 02:00:00",
+                "2004-10-01 01:00:00",
+                "2004-10-01 01:00:00",
+            ],
+            "AEP_MW": [3.0, 1.0, 2.0],
+        }
+    )
+    normalized = normalize_raw_data(
+        raw_data,
+        DATA_CONTRACT,
+        PREPARATION_CONTRACT,
+    )
+    assert normalized["Datetime"].is_monotonic_increasing
+    assert normalized.loc[:1, "AEP_MW"].tolist() == [1.0, 2.0]
+    assert str(normalized["Datetime"].dtype) == "datetime64[ns]"
 
-    expected_columns = [
+
+def test_prepared_schema_and_timeline(prepared_bundle) -> None:
+    prepared_data, _ = prepared_bundle
+    assert prepared_data.columns.tolist() == [
         "Datetime",
         "AEP_MW",
         "source_count",
         "quality_flag",
     ]
-
-    assert list(df.columns) == expected_columns
-
-    assert str(df["Datetime"].dtype) == "datetime64[ns]"
-
-    assert pd.api.types.is_numeric_dtype(
-        df["AEP_MW"]
-    )
-
-    assert pd.api.types.is_integer_dtype(
-        df["source_count"]
-    )
+    assert len(prepared_data) == 121_296
+    assert prepared_data["Datetime"].nunique() == 121_296
+    assert prepared_data["Datetime"].is_monotonic_increasing
+    assert prepared_data["Datetime"].diff().dropna().eq(
+        pd.Timedelta(hours=1)
+    ).all()
 
 
-# ============================================================
-# 3. Validate the timeline
-# ============================================================
-
-def test_hourly_timeline():
-    """
-    Validate the timeline:
-    - Contains 121,296 timestamps.
-    - Timestamps are unique.
-    - Contains no duplicates.
-    - Is monotonically increasing.
-    - Is continuous at hourly intervals.
-    """
-
-    df, _ = get_prepared_data()
-
-    assert len(df) == 121_296
-
-    assert df["Datetime"].nunique() == 121_296
-
-    assert df["Datetime"].duplicated().sum() == 0
-
-    assert df["Datetime"].is_monotonic_increasing
-
-    assert (
-        df["Datetime"]
-        .diff()
-        .dropna()
-        .eq(pd.Timedelta(hours=1))
-        .all()
-    )
-
-
-# ============================================================
-# 4. Validate missing timestamps
-# ============================================================
-
-def test_missing_timestamps():
-    """
-    Validate the 27 missing timestamps:
-    - AEP_MW must be NaN.
-    - source_count must equal 0.
-    - quality_flag must be missing_timestamp.
-    """
-
-    df, _ = get_prepared_data()
-
-    missing_rows = df.loc[
-        df["quality_flag"] == "missing_timestamp"
+def test_missing_timestamps_are_preserved_without_fabricated_targets(
+    prepared_bundle,
+) -> None:
+    prepared_data, audit = prepared_bundle
+    missing_rows = prepared_data.loc[
+        prepared_data["quality_flag"] == "missing_timestamp"
     ]
-
     assert len(missing_rows) == 27
-
     assert missing_rows["AEP_MW"].isna().all()
-
-    assert (
-        missing_rows["source_count"] == 0
-    ).all()
+    assert missing_rows["source_count"].eq(0).all()
+    assert len(audit["missing_hourly_timestamps"]) == 27
 
 
-# ============================================================
-# 5. Validate duplicate aggregation
-# ============================================================
-
-def test_duplicate_aggregation():
-    """
-    Validate that the 4 duplicate timestamps are aggregated
-    and flagged correctly.
-    """
-
-    df, _ = get_prepared_data()
-
-    duplicate_rows = df.loc[
-        df["quality_flag"] == "duplicate_aggregated"
-    ]
-
-    assert len(duplicate_rows) == 4
-
-    assert (
-        duplicate_rows["source_count"] == 2
-    ).all()
-
-
-def test_duplicate_values_are_aggregated_by_mean():
-    """Check that duplicate values are averaged according to the contract."""
-
-    df_raw = pd.read_csv(RAW_DATA_PATH)
-    df_raw["Datetime"] = pd.to_datetime(
-        df_raw["Datetime"],
-        format=DATETIME_FORMAT,
+def test_duplicate_values_are_aggregated_by_mean(prepared_bundle) -> None:
+    raw_data = load_raw_data(RAW_PATH, DATA_CONTRACT)
+    raw_data["Datetime"] = pd.to_datetime(
+        raw_data["Datetime"],
+        format=PREPARATION_CONTRACT["datetime_format"],
         errors="raise",
     )
-
-    duplicate_raw = df_raw.loc[
-        df_raw["Datetime"].duplicated(keep=False)
+    duplicate_data = raw_data.loc[
+        raw_data["Datetime"].duplicated(keep=False)
     ]
-    expected_means = duplicate_raw.groupby("Datetime")["AEP_MW"].mean()
-
-    df_prepared, _ = get_prepared_data()
+    expected_means = duplicate_data.groupby("Datetime")["AEP_MW"].mean()
+    prepared_data, audit = prepared_bundle
     actual_means = (
-        df_prepared.loc[
-            df_prepared["quality_flag"] == "duplicate_aggregated"
+        prepared_data.loc[
+            prepared_data["quality_flag"] == "duplicate_aggregated"
         ]
         .set_index("Datetime")["AEP_MW"]
         .sort_index()
     )
-
     np.testing.assert_allclose(
         actual_means.to_numpy(),
         expected_means.sort_index().to_numpy(),
     )
+    assert len(actual_means) == 4
+    assert len(audit["duplicate_timestamps"]) == 4
 
 
-# ============================================================
-# 6. Validate source conservation
-# ============================================================
-
-def test_source_conservation():
-    """
-    The total source_count after processing must equal
-    the original number of raw observations.
-    """
-
-    df, _ = get_prepared_data()
-
-    assert df["source_count"].sum() == 121_273
-
-
-# ============================================================
-# 7. Validate the metadata distribution
-# ============================================================
-
-def test_metadata_distribution():
-    """Check source_count and quality_flag."""
-
-    df, _ = get_prepared_data()
-
-    source_counts = (
-        df["source_count"]
-        .value_counts()
-        .to_dict()
-    )
-
-    assert source_counts == {
-        0: 27,
-        1: 121_265,
-        2: 4,
+def test_source_and_quality_metadata_are_conserved(prepared_bundle) -> None:
+    prepared_data, audit = prepared_bundle
+    assert int(prepared_data["source_count"].sum()) == 121_273
+    assert audit["source_count_distribution"] == {
+        "0": 27,
+        "1": 121_265,
+        "2": 4,
     }
-
-    quality_flags = (
-        df["quality_flag"]
-        .value_counts()
-        .to_dict()
-    )
-
-    assert quality_flags == {
+    assert audit["quality_flag_distribution"] == {
         "observed": 121_265,
         "missing_timestamp": 27,
         "duplicate_aggregated": 4,
     }
+    assert audit["source_conservation"] is True
 
 
-# ============================================================
-# 8. Validate the audit
-# ============================================================
-
-def test_phase_01_audit():
-    """Check the key values in the Phase 1 audit."""
-
-    _, audit = get_prepared_data()
-
-    assert audit["raw_rows"] == 121_273
-    assert audit["raw_missing_AEP_MW"] == 0
-    assert audit["raw_non_positive_AEP_MW"] == 0
-    assert audit["duplicate_rows_before"] == 8
-    assert audit["duplicate_timestamps_before"] == 4
-    assert audit["missing_hourly_timestamps_before"] == 27
-    assert audit["prepared_rows"] == 121_296
-    assert audit["unique_timestamps"] == 121_296
-    assert audit["prepared_time_start"] == "2004-10-01 01:00:00"
-    assert audit["prepared_time_end"] == "2018-08-03 00:00:00"
-
-    assert audit["duplicate_timestamps_after"] == 0
-
-    assert audit["missing_AEP_MW"] == 27
-
-    assert audit["source_count_0"] == 27
-    assert audit["source_count_1"] == 121_265
-    assert audit["source_count_2"] == 4
-
-    assert audit["sum_source_count"] == 121_273
-
-    assert audit["timeline_continuous_hourly"] is True
-
-    assert audit["timezone_policy"] == "timezone-naive"
-
-    assert audit["raw_sha256_before"] == EXPECTED_RAW_SHA256
-    assert audit["raw_sha256_after"] == EXPECTED_RAW_SHA256
-
-    assert audit["status"] == "PASS"
+def test_raw_checksum_is_unchanged(prepared_bundle) -> None:
+    _, audit = prepared_bundle
+    assert audit["raw_sha256_before"] == DATA_CONTRACT["raw_sha256"]
+    assert audit["raw_sha256_after"] == DATA_CONTRACT["raw_sha256"]
 
 
-# ============================================================
-# 9. Validate stop conditions
-# ============================================================
-
-def test_invalid_datetime_stops_pipeline():
-    """Datetime values outside the approved format must stop the pipeline."""
-
-    invalid = pd.DataFrame(
-        {
-            "Datetime": ["10/01/2004 01:00"],
-            "AEP_MW": [14_000],
-        }
+def test_serialized_artifact_is_valid_and_deterministic(
+    tmp_path: Path,
+) -> None:
+    first_csv = tmp_path / "first.csv"
+    first_audit = tmp_path / "first.json"
+    second_csv = tmp_path / "second.csv"
+    second_audit = tmp_path / "second.json"
+    result_one = run_phase_01(PROJECT_ROOT, first_csv, first_audit)
+    result_two = run_phase_01(PROJECT_ROOT, second_csv, second_audit)
+    assert result_one["processed_sha256"] == result_two["processed_sha256"]
+    assert calculate_sha256(first_csv) == calculate_sha256(second_csv)
+    load_and_validate_saved_dataset(
+        first_csv,
+        DATA_CONTRACT,
+        PREPARATION_CONTRACT,
     )
-
-    with pytest.raises(RuntimeError, match="Datetime parsing failed"):
-        normalize_raw_data(invalid)
-
-
-def test_invalid_target_stops_pipeline():
-    """Non-numeric target values must stop the pipeline."""
-
-    invalid = pd.DataFrame(
-        {
-            "Datetime": ["2004-10-01 01:00:00"],
-            "AEP_MW": ["not-a-number"],
-        }
-    )
-
-    with pytest.raises(ValueError):
-        normalize_raw_data(invalid)
-
-
-def test_non_positive_target_stops_pipeline():
-    """Non-positive target values must stop the pipeline."""
-
-    invalid = pd.DataFrame(
-        {
-            "Datetime": ["2004-10-01 01:00:00"],
-            "AEP_MW": [0],
-        }
-    )
-
-    with pytest.raises(ValueError, match="non-positive"):
-        normalize_raw_data(invalid)
-
-
-# ============================================================
-# 10. Validate integration and artifacts
-# ============================================================
-
-def test_phase_01_runner_creates_valid_artifacts(tmp_path):
-    """The runner must create readable and verifiable CSV and JSON artifacts."""
-
-    processed_path = tmp_path / "aep_hourly_prepared.csv"
-    audit_path = tmp_path / "phase_01_data_quality.json"
-
-    audit = run_phase_01(
-        raw_path=RAW_DATA_PATH,
-        processed_path=processed_path,
-        audit_path=audit_path,
-    )
-
-    assert processed_path.exists()
-    assert audit_path.exists()
-
-    validate_saved_dataset(processed_path)
-
-    with audit_path.open(encoding="utf-8") as file:
+    with first_audit.open(encoding="utf-8") as file:
         saved_audit = json.load(file)
+    assert saved_audit["processed_sha256"] == calculate_sha256(first_csv)
 
-    assert saved_audit == audit
-    assert saved_audit["status"] == "PASS"
+
+def test_invalid_data_is_not_promoted_over_existing_artifacts(
+    tmp_path: Path,
+) -> None:
+    processed_path = tmp_path / "prepared.csv"
+    audit_path = tmp_path / "audit.json"
+    processed_path.write_text("existing-csv", encoding="utf-8")
+    audit_path.write_text("existing-json", encoding="utf-8")
+    invalid_data = pd.DataFrame()
+    with pytest.raises(ValueError, match="Unexpected prepared-data schema"):
+        save_prepared_artifacts(
+            invalid_data,
+            {"status": "PASS"},
+            processed_path,
+            audit_path,
+            DATA_CONTRACT,
+            PREPARATION_CONTRACT,
+            PROJECT_ROOT,
+        )
+    assert processed_path.read_text(encoding="utf-8") == "existing-csv"
+    assert audit_path.read_text(encoding="utf-8") == "existing-json"
+
+
+def test_pipeline_source_does_not_import_legacy_package() -> None:
+    source_path = (
+        PROJECT_ROOT
+        / "src/practice_3_v2/data/data_preparation.py"
+    )
+    source = source_path.read_text(encoding="utf-8")
+    assert "from practice_3 " not in source
+    assert "import practice_3" not in source

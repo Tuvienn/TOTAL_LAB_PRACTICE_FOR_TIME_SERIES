@@ -1,64 +1,140 @@
 # PHASE 07 — EXECUTION LOG
 
-## 1. Phạm vi
+## 1. Trạng thái
 
-Phase 7 tổng hợp evidence Phase 1–6, refit đúng `xgboost_tuned` trên full top-level TRAIN để lấy gain importance, phân tích rolling/lag-p và tạo kết luận cuối. Phase này không tuning, không chọn lại model và không dùng final test để fit.
+```text
+Phase: 7 — Final Forecasting & Evaluation
+Design: APPROVED
+Implementation: COMPLETED
+Preflight: PASS
+Historical holdout opened: YES — AFTER PREFLIGHT PASS
+Final evaluation executed: YES — HUMAN TERMINAL
+Official Phase 7 outputs: PASS
+Technical review: PASS
+Human result review: APPROVED
+Current gate: READY FOR PHASE 8 DESIGN
+```
 
-## 2. Lệnh Human đã chạy
+Phase 7 đã hoàn tất implementation, Human execution, technical review và Human
+result review.
+
+## 2. Thành phần đã triển khai
+
+```text
+config/final_evaluation.json
+src/practice_3_v2/analysis/forecasting.py
+src/practice_3_v2/analysis/evaluation.py
+src/practice_3_v2/visualization/forecast_evaluation.py
+tests/test_forecasting.py
+tests/test_evaluation.py
+```
+
+Implementation đã khóa:
+
+- candidate registry: `persistence`, `seasonal_naive_24`, `xgboost_tuned`;
+- model đã khóa từ Phase 6, không tuning hoặc model selection lại;
+- refit chỉ trên 108.083 eligible development samples;
+- one-step rolling observed history trên common timestamps;
+- recursive 24-hour với origin lúc 23:00, spacing 24 giờ và không overlap;
+- recursive XGBoost chỉ cập nhật synthetic history bằng prediction;
+- MAE/RMSE one-step, per-horizon và pooled recursive;
+- run log, checkpoint, resume identity và atomic promotion;
+- không persist binary model;
+- notebook không sở hữu fit/predict logic.
+
+## 3. Preflight evidence
+
+Command đã chạy:
 
 ```bash
-python -m practice_3.analysis.interpretation --run
+MPLCONFIGDIR=.matplotlib-cache \
+  .venv/bin/python -m practice_3_v2.analysis.forecasting --preflight
 ```
 
-Thời điểm tạo official outputs: `2026-10-23 02:59:15 +0700`.
-
-## 3. Kết quả execution
+Kết quả:
 
 ```text
-candidate_id: xgboost_tuned
-feature_configuration: lag_only_p168
-training_population: full_top_level_train
-train_rows: 108083
-feature_count: 168
-training_seconds: 7.7639
-warnings: 0
-final_test_used_for_fit: false
-prediction_executed: false
-binary_model_persisted: false
 status: PASS
+selected candidate: xgboost_tuned
+candidate registry: 3 candidates
+development eligible samples: 108,083
+feature count: 22
+Python: 3.14.3
+NumPy: 2.5.4
+pandas: 3.1.0
+scikit-learn: 1.9.1
+XGBoost: 3.4.1
+synthetic dependency fit/predict: PASS
+holdout_opened: false
+evaluation_started: false
 ```
 
-Feature đứng đầu là `lag_1`, normalized gain `0.8021766599`. Đây là fitted-model importance, không phải causal effect.
+Preflight chỉ đọc contract, checksum và official development/model-lock evidence.
+Nó không materialize holdout target, không fit project model và không tạo
+prediction/metric Phase 7.
 
-## 4. Official outputs
+## 4. Validation evidence
 
-| Artifact | SHA-256 |
-|---|---|
-| `outputs/results/phase_07_feature_importance.csv` | `d39cd856e28d8b17612a668414b406d96b6e4e2eefef258f69eb49c790fa1a83` |
-| `outputs/results/phase_07_comparison_summary.csv` | `83ed8ca96b547ad350b5e4bfdc5e2407479a80f04afe9d6ad7067d160737cb03` |
-| `outputs/results/phase_07_interpretation_summary.json` | `48671f1379d23bf930c6425c2ef3cedd1c1f3ddeefd3a60f2a0ac0cf882ba419` |
-| `outputs/results/phase_07_final_analysis.md` | `3ebe1334326a4675cd2909d8ea06d724323542529074127159a6d88b2deba106` |
-| `outputs/figures/phase_07_top20_feature_importance.png` | `ba4bce261788ab77a50ec2308890366298fefba8f52b798bf0c2fdd2563b5ada` |
-
-## 5. Post-execution validation
+Focused tests:
 
 ```text
-importance rows: 168/168
-feature identity: lag_1 ... lag_168, complete
-rank identity: 1 ... 168, complete
-normalized gain sum: 1.0 within numeric tolerance
-comparison rows: 21
-TRAIN-only CV and final-test evidence separated: PASS
-one-step and recursive 24-hour evidence separated: PASS
-Linear Regression and ARIMA labels: THEORETICAL_EXPLANATION
-input checksums validated: 12/12
-Markdown links validated: 10/10
-Top-20 figure visual review: PASS
-focused Phase 7 tests: 10/10 PASS
-full project regression suite: 146/146 PASS
-git diff check: PASS
+tests/test_evaluation.py
+tests/test_forecasting.py
+23/23 PASS
 ```
 
-## 6. Kết luận
+Full regression suite sau thay đổi cuối:
 
-Phase 7 đáp ứng output contract và validation criteria trong detailed design. Official artifacts có thể dùng cho bước presentation/documentation tiếp theo. Trạng thái cuối: `PASS`.
+```text
+130/130 PASS
+```
+
+Các gate đã được kiểm tra gồm contract identity, checksum/package/model lock,
+candidate registry, metric formulas, complete recursive block, common origins,
+future-target leakage, checkpoint/resume identity, no legacy runtime import và
+notebook presentation-only boundary.
+
+## 5. Human execution evidence
+
+Human đã chạy final evaluation ngày 25/10/2026:
+
+```text
+Run: P7_final_evaluation_20261025_010952_89adcf1a
+Checkpoint: COMPLETED
+Official outputs promoted: true
+Development refit samples: 108,083
+One-step rows per candidate: 8,592
+Recursive scheduled origins: 365
+Recursive eligible common origins: 357
+Recursive predictions per candidate: 8,568
+Status: PASS
+```
+
+Official metrics:
+
+| Protocol | Candidate | MAE (MW) | RMSE (MW) |
+|---|---|---:|---:|
+| One-step | Persistence | 408,979 | 520,940 |
+| One-step | Seasonal Naive 24h | 935,802 | 1.212,274 |
+| One-step | XGBoost tuned | 102,841 | 137,929 |
+| Recursive 24h pooled | Persistence | 1.446,348 | 1.773,057 |
+| Recursive 24h pooled | Seasonal Naive 24h | 934,655 | 1.211,547 |
+| Recursive 24h pooled | XGBoost tuned | 509,652 | 720,451 |
+
+Không chạy lại Phase 7 bằng command mới vì official audit đã tồn tại.
+
+## 6. Technical review sau execution
+
+Technical review xác nhận:
+
+1. checkpoint/log đầy đủ và official promotion hoàn tất;
+2. checksum của predictions, metrics và figures khớp audit;
+3. ba candidates dùng chung 8.592 one-step timestamps;
+4. ba candidates dùng chung 357 origins, đủ horizons 1–24;
+5. prediction và metric values đều finite;
+6. recursive synthetic history không dùng future actual;
+7. visualization full-holdout đã được sửa để không nối đường qua timestamp không eligible;
+8. notebook đã trình bày Phase 7 và clean-execute 23/23 code cells, không lỗi;
+9. focused tests 23/23 PASS, full regression 130/130 PASS.
+
+Phase 7 đã được Human phê duyệt. Gate tiếp theo là thảo luận và thiết kế Phase 8.

@@ -1,154 +1,145 @@
+import json
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3.analysis.evaluation import (
-    build_multistep_prediction_frame,
-    build_one_step_prediction_frame,
-    calculate_multistep_metrics,
-    calculate_one_step_metrics,
+from practice_3_v2.analysis.evaluation import (
+    ONE_STEP_COLUMNS,
+    RECURSIVE_COLUMNS,
+    atomic_write_csv,
+    attach_error_columns,
+    build_one_step_metrics,
+    build_recursive_metrics,
+    validate_one_step_predictions,
+    validate_recursive_predictions,
 )
-from practice_3.visualization.forecast_evaluation import (
-    plot_multistep_error_by_horizon,
-    plot_one_step_diagnostic_window,
-    plot_one_step_full_test,
+from practice_3_v2.visualization.forecast_evaluation import (
+    _prepare_one_step_plot_data,
 )
 
 
-CANDIDATES = ["seasonal_naive_24", "xgboost_tuned"]
+CANDIDATES = ["persistence", "seasonal_naive_24", "xgboost_tuned"]
 
 
-def build_one_step_predictions():
-    timestamps = pd.date_range("2026-01-01", periods=4, freq="h")
-    actual = np.asarray([10.0, 12.0, 14.0, 16.0])
-    frames = []
-    for candidate_id, prediction in (
-        ("seasonal_naive_24", np.asarray([9.0, 11.0, 13.0, 15.0])),
-        ("xgboost_tuned", np.asarray([10.0, 11.0, 15.0, 16.0])),
-    ):
-        frames.append(
-            build_one_step_prediction_frame(
-                timestamps,
-                candidate_id,
-                actual,
-                prediction,
-                "lag_only_p168",
+def one_step_frame() -> tuple[pd.DataFrame, pd.DatetimeIndex]:
+    timestamps = pd.date_range("2024-01-01", periods=3, freq="h")
+    records = []
+    for offset, candidate in enumerate(CANDIDATES, start=1):
+        records.append(
+            pd.DataFrame(
+                {
+                    "timestamp": timestamps,
+                    "candidate": candidate,
+                    "actual": [10.0, 20.0, 30.0],
+                    "prediction": np.asarray([10.0, 20.0, 30.0]) + offset,
+                    "forecast_protocol": "one_step_rolling_observed_history",
+                }
             )
         )
-    return pd.concat(frames, ignore_index=True)
+    frame = attach_error_columns(pd.concat(records, ignore_index=True))
+    return frame.loc[:, ONE_STEP_COLUMNS], timestamps
 
 
-def build_multistep_predictions():
-    frames = []
-    for origin_number, origin in enumerate(
-        pd.to_datetime(["2026-01-01 23:00", "2026-01-02 23:00"])
-    ):
-        index = pd.date_range(
-            origin + pd.Timedelta(hours=1),
-            periods=3,
-            freq="h",
-        )
-        actual = pd.Series(
-            np.asarray([10.0, 20.0, 30.0]) + origin_number,
-            index=index,
-        )
-        for candidate_id, offset in (
-            ("seasonal_naive_24", 2.0),
-            ("xgboost_tuned", 1.0),
-        ):
-            prediction = actual - offset * np.arange(1.0, 4.0)
-            frames.append(
-                build_multistep_prediction_frame(
-                    origin,
-                    candidate_id,
-                    actual,
-                    prediction,
-                    "lag_only_p168",
+def recursive_frame() -> tuple[pd.DataFrame, pd.DatetimeIndex]:
+    origins = pd.date_range("2024-01-01 23:00:00", periods=2, freq="24h")
+    records = []
+    for candidate_index, candidate in enumerate(CANDIDATES, start=1):
+        for origin in origins:
+            for horizon in range(1, 25):
+                actual = float(100 + horizon)
+                records.append(
+                    {
+                        "forecast_origin": origin,
+                        "horizon": horizon,
+                        "target_timestamp": origin + pd.Timedelta(hours=horizon),
+                        "candidate": candidate,
+                        "actual": actual,
+                        "prediction": actual + candidate_index * horizon,
+                        "forecast_protocol": "recursive_24_hour",
+                    }
                 )
-            )
-    return pd.concat(frames, ignore_index=True)
+    frame = attach_error_columns(pd.DataFrame(records))
+    return frame.loc[:, RECURSIVE_COLUMNS], origins
 
 
-def test_one_step_metrics_match_independent_calculation():
-    predictions = build_one_step_predictions()
-    result = calculate_one_step_metrics(predictions, CANDIDATES)
+def test_one_step_schema_common_timestamps_and_metrics() -> None:
+    frame, timestamps = one_step_frame()
+    validate_one_step_predictions(frame, CANDIDATES, timestamps)
+    metrics = build_one_step_metrics(frame, CANDIDATES)
+    assert metrics["status"] == "PASS"
+    assert metrics["candidate_metrics"][0]["mae"] == pytest.approx(1.0)
+    assert metrics["candidate_metrics"][0]["rmse"] == pytest.approx(1.0)
+    assert metrics["candidate_metrics"][0]["n_observations"] == 3
 
-    assert result["population"]["rows_per_candidate"] == 4
-    assert result["candidates"]["seasonal_naive_24"]["mae"] == 1.0
-    assert result["candidates"]["seasonal_naive_24"]["rmse"] == 1.0
-    assert result["candidates"]["xgboost_tuned"]["mae"] == 0.5
-    assert result["candidates"]["xgboost_tuned"]["rmse"] == pytest.approx(
-        np.sqrt(0.5)
+
+def test_one_step_rejects_candidate_timestamp_mismatch() -> None:
+    frame, timestamps = one_step_frame()
+    changed = frame.drop(index=frame.index[-1]).reset_index(drop=True)
+    with pytest.raises(ValueError, match="identical timestamps"):
+        validate_one_step_predictions(changed, CANDIDATES, timestamps)
+
+
+def test_recursive_schema_complete_horizons_and_direct_pooled_rmse() -> None:
+    frame, origins = recursive_frame()
+    validate_recursive_predictions(frame, CANDIDATES, origins)
+    metrics = build_recursive_metrics(frame, CANDIDATES)
+    persistence = metrics["candidate_metrics"][0]
+    expected_rmse = float(np.sqrt(np.mean(np.square(np.tile(np.arange(1, 25), 2)))))
+    assert len(persistence["per_horizon"]) == 24
+    assert persistence["per_horizon"][0]["n_origins"] == 2
+    assert persistence["pooled"]["pooled_rmse"] == pytest.approx(expected_rmse)
+    assert persistence["pooled"]["n_predictions"] == 48
+    assert persistence["pooled"]["n_origins"] == 2
+
+
+def test_recursive_rejects_partial_origin_block() -> None:
+    frame, origins = recursive_frame()
+    changed = frame.drop(index=frame.index[23]).reset_index(drop=True)
+    with pytest.raises(ValueError, match="horizons 1..24"):
+        validate_recursive_predictions(changed, CANDIDATES, origins)
+
+
+def test_non_finite_predictions_are_rejected() -> None:
+    frame, _timestamps = one_step_frame()
+    changed = frame.copy()
+    changed.loc[0, "prediction"] = np.nan
+    with pytest.raises(ValueError, match="finite"):
+        attach_error_columns(changed)
+
+
+def test_atomic_csv_round_trip(tmp_path: Path) -> None:
+    frame, _timestamps = one_step_frame()
+    output = tmp_path / "predictions.csv"
+    atomic_write_csv(frame, output)
+    restored = pd.read_csv(output)
+    assert restored.columns.tolist() == ONE_STEP_COLUMNS
+    assert len(restored) == len(frame)
+
+
+def test_one_step_plot_preserves_ineligible_timestamp_gaps() -> None:
+    frame, timestamps = one_step_frame()
+    changed = frame.loc[~frame["timestamp"].eq(timestamps[1])].copy()
+    actual, predictions = _prepare_one_step_plot_data(changed)
+    assert actual.index.equals(timestamps)
+    assert predictions.index.equals(timestamps)
+    assert pd.isna(actual.loc[timestamps[1]])
+    assert predictions.loc[timestamps[1]].isna().all()
+
+
+def test_notebook_does_not_execute_phase_07_logic() -> None:
+    project_root = Path(__file__).resolve().parents[1]
+    notebook = json.loads(
+        (project_root / "notebooks/Practice_3_present.ipynb").read_text(
+            encoding="utf-8"
+        )
     )
-
-
-def test_one_step_rejects_candidate_population_mismatch():
-    predictions = build_one_step_predictions()
-    predictions = predictions.drop(predictions.index[-1])
-
-    with pytest.raises(ValueError, match="timestamps differ"):
-        calculate_one_step_metrics(predictions, CANDIDATES)
-
-
-def test_multistep_metrics_include_per_horizon_and_pooled_values():
-    predictions = build_multistep_predictions()
-    result = calculate_multistep_metrics(
-        predictions,
-        CANDIDATES,
-        horizon=3,
+    code = "\n".join(
+        "".join(cell.get("source", []))
+        for cell in notebook["cells"]
+        if cell.get("cell_type") == "code"
     )
-
-    tuned = result["candidates"]["xgboost_tuned"]
-    assert result["population"]["origin_count"] == 2
-    assert tuned["n_predictions"] == 6
-    assert [item["mae"] for item in tuned["per_horizon"]] == [
-        1.0,
-        2.0,
-        3.0,
-    ]
-    assert tuned["pooled_mae"] == 2.0
-    assert tuned["pooled_rmse"] == pytest.approx(np.sqrt(14.0 / 3.0))
-    assert tuned["pooled_rmse"] != pytest.approx(
-        np.mean([1.0, 2.0, 3.0])
-    )
-
-
-def test_multistep_rejects_incomplete_horizon():
-    predictions = build_multistep_predictions()
-    predictions = predictions.drop(predictions.index[-1])
-
-    with pytest.raises(ValueError, match="incomplete horizon"):
-        calculate_multistep_metrics(predictions, CANDIDATES, horizon=3)
-
-
-def test_fixed_visualizations_are_created(tmp_path):
-    one_step = build_one_step_predictions()
-    multi_step = build_multistep_predictions()
-    multi_metrics = calculate_multistep_metrics(
-        multi_step,
-        CANDIDATES,
-        horizon=3,
-    )
-    full_path = tmp_path / "full.png"
-    diagnostic_path = tmp_path / "diagnostic.png"
-    horizon_path = tmp_path / "horizon.png"
-
-    plot_one_step_full_test(one_step, "xgboost_tuned", full_path)
-    plot_one_step_diagnostic_window(
-        one_step,
-        CANDIDATES,
-        pd.Timestamp("2026-01-01 00:00"),
-        pd.Timestamp("2026-01-01 03:00"),
-        diagnostic_path,
-    )
-    plot_multistep_error_by_horizon(
-        multi_metrics,
-        CANDIDATES,
-        horizon_path,
-    )
-
-    for path in (full_path, diagnostic_path, horizon_path):
-        assert path.exists()
-        assert path.stat().st_size > 0
+    assert "run_final_evaluation" not in code
+    assert ".fit(" not in code
+    assert ".predict(" not in code

@@ -1,126 +1,108 @@
 # PHASE 04 — EXECUTION LOG
 
-## 1. Trạng thái
+## 1. Scope
 
-```text
-Phase: 04 — Temporal Split & Validation Design
-Execution date: 2026-10-20
-Result: PASS
-```
+Triển khai feature engineering dùng chung cho one-step và recursive forecasting. Phase này chỉ tạo feature logic và validation audit trên development period; không tạo X/y population, không loại sample, không impute, không train model và không tính metric trên holdout.
 
-## 2. Môi trường đã dùng
+## 2. Environment
 
 ```text
 Python: 3.14.3
-pandas: 3.0.6
 NumPy: 2.5.4
-scikit-learn: 1.9.1
+pandas: 3.1.0
 pytest: 9.1.1
+Package mode: editable local install
 ```
 
-## 3. Thành phần đã chạy
+## 3. Official execution
 
-1. Xác minh audit `PASS` của Phase 1–3.
-2. Tái tạo sáu supervised datasets từ source chính thức của Phase 3.
-3. Tạo shared top-level train/test indices theo cutoff đã duyệt.
-4. Tạo năm expanding-window `TimeSeriesSplit` folds trong top-level train.
-5. Áp dụng và kiểm tra cùng indices trên sáu configurations.
-6. Kiểm tra chronology, overlap, union và final-test sealing.
-7. Kiểm tra config contract và deterministic split generation.
-8. Chạy pipeline chính thức, automated tests và compile source/tests.
+```bash
+.venv/bin/python -m practice_3_v2.analysis.feature_engineering
+```
 
-## 4. Kết quả top-level split
+Official result:
 
 ```text
-cutoff = 2017-08-03 00:00:00
-TRAIN  = timestamp < cutoff
-TEST   = timestamp >= cutoff
+outputs/results/phase_04_feature_validation.json
+SHA256: 3d4c94bf2a260669c982a3d867bcda6d39aeb3067cd3f2c08ceb7bf607584760
 ```
 
-| Chỉ số | Kết quả |
-|---|---:|
-| Total rows | 116.675 |
-| Train rows | 108.083 |
-| Test rows | 8.592 |
-| Train start | 2004-10-08 01:00:00 |
-| Train end | 2017-08-02 23:00:00 |
-| Test start | 2017-08-03 00:00:00 |
-| Test end | 2018-08-03 00:00:00 |
-
-Train và test không overlap, hợp lại đúng toàn bộ common timestamp population và thỏa `max(train_time) < min(test_time)`.
-
-## 5. Kết quả TimeSeriesSplit
+## 4. Approved feature schema
 
 ```text
-strategy = expanding_window
-n_splits = 5
-test_size = 2160
-gap = 0
-max_train_size = null
+Lag features: 8
+Shifted rolling features: 4
+Calendar features: 10
+Total: 22
 ```
 
-| Fold | Train samples | Validation samples | Train end | Validation start | Validation end |
-|---:|---:|---:|---|---|---|
-| 1 | 97.283 | 2.160 | 2016-05-02 22:00:00 | 2016-05-02 23:00:00 | 2016-07-31 22:00:00 |
-| 2 | 99.443 | 2.160 | 2016-07-31 22:00:00 | 2016-07-31 23:00:00 | 2016-10-29 22:00:00 |
-| 3 | 101.603 | 2.160 | 2016-10-29 22:00:00 | 2016-10-29 23:00:00 | 2017-01-27 22:00:00 |
-| 4 | 103.763 | 2.160 | 2017-01-27 22:00:00 | 2017-01-27 23:00:00 | 2017-05-04 23:00:00 |
-| 5 | 105.923 | 2.160 | 2017-05-04 23:00:00 | 2017-05-05 00:00:00 | 2017-08-02 23:00:00 |
-
-Training windows mở rộng tuần tự, validation folds không overlap và final test không xuất hiện trong bất kỳ CV fold nào.
-
-## 6. Shared-index và final-test sealing
-
-Sáu configurations dùng chung:
+Lag features:
 
 ```text
-train indices
-test indices
-CV train indices của từng fold
-CV validation indices của từng fold
+lag_1h, lag_2h, lag_3h, lag_23h,
+lag_24h, lag_25h, lag_48h, lag_168h
 ```
 
-Final test được đánh dấu sealed và chưa được dùng cho feature selection, tuning, model selection hoặc metric calculation.
-
-## 7. Kết quả validation
+Rolling features:
 
 ```text
-Phase 4 tests: 22 passed
-Full project tests: 68 passed
-Source/tests compile: PASS
-Phase 1–3 entry gate: PASS
-Validation config contract: PASS
-Top-level chronology and partition: PASS
-Shared indices across six configurations: PASS
-Training-only TimeSeriesSplit: PASS
-Final-test sealing: PASS
-Deterministic split generation: PASS
-Audit JSON round trip: PASS
+rolling_mean_24h, rolling_std_24h,
+rolling_mean_168h, rolling_std_168h
 ```
 
-## 8. Artifacts bàn giao
+Mọi rolling feature dùng `target.shift(1)` trước trailing window; `std` dùng `ddof=1`. Calendar feature được lấy từ target timestamp vì lịch đã biết trước.
 
-- Configuration: `config/validation.json`
-- Source implementation: `src/practice_3/data/temporal_split.py`
-- Automated tests: `tests/test_temporal_split.py`
-- Machine-readable audit: `outputs/results/phase_04_split_audit.json`
-
-Full train/test datasets không được persist. Phase 5 phải tái tạo supervised datasets và áp dụng đúng shared indices từ Phase 4.
-
-## 9. Giới hạn được giữ lại
-
-- Phase 4 không scaling, imputation hoặc feature selection.
-- Phase 4 không train, tune hoặc chọn model.
-- Phase 4 không đọc final-test target để tính metric.
-- `test_size=2160` biểu diễn số sample hợp lệ, không bảo đảm chính xác 90 ngày lịch.
-- `gap=0` chỉ được phê duyệt cho core one-step protocol; direct multi-step với overlapping labels phải mở lại gap decision.
-
-## 10. Kết luận
+## 5. Development-only result
 
 ```text
-PHASE 04: PASS
-HANDOFF TO PHASE 05: READY
-FINAL TEST: SEALED
+Development rows: 112,535
+Rows with all 22 features: 108,108
+First fully available timestamp: 2004-10-08 01:00:00
+Holdout rows used for feature calculation: 0
+Imputation applied: false
+Rows dropped: false
 ```
 
-Phase 5 được phép sử dụng top-level train và các CV folds để huấn luyện/tuning. Final test vẫn bị khóa cho đến final evaluation ở Phase 6.
+Số null của lag/rolling phản ánh initial history và 26 missing targets được giữ nguyên. Phase 5 chịu trách nhiệm chốt sample eligibility.
+
+## 6. Leakage and recursive-safety evidence
+
+```text
+Current target excluded: PASS
+Future target excluded: PASS
+Target-time metadata excluded: PASS
+Phase 3 anomaly flag excluded: PASS
+Centered rolling excluded: PASS
+Holdout-mutation isolation: PASS
+Current/future-target mutation isolation: PASS
+Batch/recursive feature parity: PASS
+Recursive prediction append behavior: PASS
+```
+
+Feature row tại `T` chỉ dùng target history đến `T-1 giờ`. Hàm recursive row builder từ chối history chứa target hoặc future timestamp và dùng prediction đã append cho bước kế tiếp.
+
+## 7. Validation evidence
+
+```text
+Focused Phase 4 tests: 17/17 PASS
+Full v2 regression suite: 65/65 PASS
+Official artifact deterministic: PASS
+Exact 22-feature order: PASS
+Calendar range checks: PASS
+Infinite values: NONE
+Input mutation: NONE
+Legacy runtime import: NONE
+git diff --check: PASS
+```
+
+## 8. Notebook boundary
+
+Notebook chỉ đọc official Phase 4 audit để trình bày feature dictionary, null counts và leakage controls. Notebook không tạo feature matrix và không chạy source pipeline.
+
+## 9. Completion state
+
+```text
+Phase 4 technical status: PASS
+Human result review: APPROVED
+Phase 5 design/implementation: NOT AUTHORIZED
+```
