@@ -1,0 +1,149 @@
+{
+  "phase": "phase_02_temporal_split_validation",
+  "contract_version": "1.0.0",
+  "prepared_input": "datasets/processed/aep_hourly_prepared.csv",
+  "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+  "timestamp_semantics": {
+    "split_key": "target_timestamp",
+    "forecast_origin": "t",
+    "primary_target": "t_plus_1_hour"
+  },
+  "development": {
+    "rows": 112535,
+    "observed_targets": 112509,
+    "missing_targets": 26,
+    "time_start": "2004-10-01 01:00:00",
+    "time_end": "2017-08-02 23:00:00",
+    "start_inclusive": "2004-10-01 01:00:00",
+    "end_exclusive": "2017-08-03 00:00:00"
+  },
+  "holdout": {
+    "rows": 8761,
+    "observed_targets": 8760,
+    "missing_targets": 1,
+    "time_start": "2017-08-03 00:00:00",
+    "time_end": "2018-08-03 00:00:00",
+    "start_inclusive": "2017-08-03 00:00:00",
+    "end_inclusive": "2018-08-03 00:00:00",
+    "label": "historical_re_evaluation_holdout",
+    "is_claimed_unseen": false
+  },
+  "cross_validation": {
+    "method": "expanding_window",
+    "splits": 5,
+    "shuffle": false,
+    "gap_hours": 0,
+    "validation_duration": "one_calendar_year",
+    "folds": [
+      {
+        "fold": 1,
+        "train": {
+          "rows": 68711,
+          "observed_targets": 68694,
+          "missing_targets": 17,
+          "time_start": "2004-10-01 01:00:00",
+          "time_end": "2012-08-02 23:00:00"
+        },
+        "validation": {
+          "rows": 8760,
+          "observed_targets": 8757,
+          "missing_targets": 3,
+          "time_start": "2012-08-03 00:00:00",
+          "time_end": "2013-08-02 23:00:00"
+        },
+        "validation_start_inclusive": "2012-08-03 00:00:00",
+        "validation_end_exclusive": "2013-08-03 00:00:00"
+      },
+      {
+        "fold": 2,
+        "train": {
+          "rows": 77471,
+          "observed_targets": 77451,
+          "missing_targets": 20,
+          "time_start": "2004-10-01 01:00:00",
+          "time_end": "2013-08-02 23:00:00"
+        },
+        "validation": {
+          "rows": 8760,
+          "observed_targets": 8757,
+          "missing_targets": 3,
+          "time_start": "2013-08-03 00:00:00",
+          "time_end": "2014-08-02 23:00:00"
+        },
+        "validation_start_inclusive": "2013-08-03 00:00:00",
+        "validation_end_exclusive": "2014-08-03 00:00:00"
+      },
+      {
+        "fold": 3,
+        "train": {
+          "rows": 86231,
+          "observed_targets": 86208,
+          "missing_targets": 23,
+          "time_start": "2004-10-01 01:00:00",
+          "time_end": "2014-08-02 23:00:00"
+        },
+        "validation": {
+          "rows": 8760,
+          "observed_targets": 8759,
+          "missing_targets": 1,
+          "time_start": "2014-08-03 00:00:00",
+          "time_end": "2015-08-02 23:00:00"
+        },
+        "validation_start_inclusive": "2014-08-03 00:00:00",
+        "validation_end_exclusive": "2015-08-03 00:00:00"
+      },
+      {
+        "fold": 4,
+        "train": {
+          "rows": 94991,
+          "observed_targets": 94967,
+          "missing_targets": 24,
+          "time_start": "2004-10-01 01:00:00",
+          "time_end": "2015-08-02 23:00:00"
+        },
+        "validation": {
+          "rows": 8784,
+          "observed_targets": 8783,
+          "missing_targets": 1,
+          "time_start": "2015-08-03 00:00:00",
+          "time_end": "2016-08-02 23:00:00"
+        },
+        "validation_start_inclusive": "2015-08-03 00:00:00",
+        "validation_end_exclusive": "2016-08-03 00:00:00"
+      },
+      {
+        "fold": 5,
+        "train": {
+          "rows": 103775,
+          "observed_targets": 103750,
+          "missing_targets": 25,
+          "time_start": "2004-10-01 01:00:00",
+          "time_end": "2016-08-02 23:00:00"
+        },
+        "validation": {
+          "rows": 8760,
+          "observed_targets": 8759,
+          "missing_targets": 1,
+          "time_start": "2016-08-03 00:00:00",
+          "time_end": "2017-08-02 23:00:00"
+        },
+        "validation_start_inclusive": "2016-08-03 00:00:00",
+        "validation_end_exclusive": "2017-08-03 00:00:00"
+      }
+    ]
+  },
+  "missing_target_policy": {
+    "retain_timeline_rows": true,
+    "imputation": "none",
+    "training_label_eligible": false,
+    "metric_eligible": false
+  },
+  "checks": {
+    "timeline_coverage_complete": true,
+    "development_holdout_overlap": 0,
+    "fold_train_expands": true,
+    "fold_validation_non_overlapping": true,
+    "holdout_target_values_inspected": false
+  },
+  "status": "PASS"
+}

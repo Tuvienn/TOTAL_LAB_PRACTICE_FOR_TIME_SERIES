@@ -1,0 +1,207 @@
+{
+  "phase": "phase_05_xy_construction_split_application",
+  "contract_version": "1.0.0",
+  "prepared_input": "datasets/processed/aep_hourly_prepared.csv",
+  "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+  "split_audit": "outputs/results/phase_02_temporal_split.json",
+  "split_audit_sha256": "f18452573cedd321ea8097539560899bc5dbce43ba0b47cda3b51dc504bcf735",
+  "feature_audit": "outputs/results/phase_04_feature_validation.json",
+  "feature_audit_sha256": "3d4c94bf2a260669c982a3d867bcda6d39aeb3067cd3f2c08ceb7bf607584760",
+  "alignment": {
+    "sample_key": "target_timestamp",
+    "forecast_origin_offset_hours": 1,
+    "target_column": "AEP_MW",
+    "primary_horizon_hours": 1
+  },
+  "feature_count": 22,
+  "feature_order": [
+    "lag_1h",
+    "lag_2h",
+    "lag_3h",
+    "lag_23h",
+    "lag_24h",
+    "lag_25h",
+    "lag_48h",
+    "lag_168h",
+    "rolling_mean_24h",
+    "rolling_std_24h",
+    "rolling_mean_168h",
+    "rolling_std_168h",
+    "hour",
+    "day_of_week",
+    "month",
+    "is_weekend",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week_sin",
+    "day_of_week_cos",
+    "month_sin",
+    "month_cos"
+  ],
+  "development": {
+    "raw_rows": 112535,
+    "eligible_rows": 108083,
+    "excluded_rows": 4452,
+    "invalid_feature_vector": 4427,
+    "missing_target_with_valid_features": 25,
+    "eligible_start": "2004-10-08 01:00:00",
+    "eligible_end": "2017-08-02 23:00:00"
+  },
+  "eligibility": {
+    "target_must_be_observed_and_finite": true,
+    "all_features_must_be_observed_and_finite": true,
+    "imputation": "none",
+    "shuffle": false,
+    "exclusion_priority": [
+      "invalid_feature_vector",
+      "missing_target_with_valid_features"
+    ]
+  },
+  "cross_validation": {
+    "method": "expanding_window",
+    "folds": [
+      {
+        "fold": 1,
+        "validation_start_inclusive": "2012-08-03 00:00:00",
+        "validation_end_exclusive": "2013-08-03 00:00:00",
+        "train": {
+          "raw_rows": 68711,
+          "eligible_rows": 65670,
+          "excluded_rows": 3041,
+          "eligible_start": "2004-10-08 01:00:00",
+          "eligible_end": "2012-08-02 23:00:00"
+        },
+        "validation": {
+          "raw_rows": 8760,
+          "eligible_rows": 8253,
+          "excluded_rows": 507,
+          "eligible_start": "2012-08-03 00:00:00",
+          "eligible_end": "2013-08-02 23:00:00"
+        },
+        "gap_hours": 0,
+        "shuffle": false,
+        "raw_counts_match_phase_02": true
+      },
+      {
+        "fold": 2,
+        "validation_start_inclusive": "2013-08-03 00:00:00",
+        "validation_end_exclusive": "2014-08-03 00:00:00",
+        "train": {
+          "raw_rows": 77471,
+          "eligible_rows": 73923,
+          "excluded_rows": 3548,
+          "eligible_start": "2004-10-08 01:00:00",
+          "eligible_end": "2013-08-02 23:00:00"
+        },
+        "validation": {
+          "raw_rows": 8760,
+          "eligible_rows": 8363,
+          "excluded_rows": 397,
+          "eligible_start": "2013-08-03 00:00:00",
+          "eligible_end": "2014-08-02 23:00:00"
+        },
+        "gap_hours": 0,
+        "shuffle": false,
+        "raw_counts_match_phase_02": true
+      },
+      {
+        "fold": 3,
+        "validation_start_inclusive": "2014-08-03 00:00:00",
+        "validation_end_exclusive": "2015-08-03 00:00:00",
+        "train": {
+          "raw_rows": 86231,
+          "eligible_rows": 82286,
+          "excluded_rows": 3945,
+          "eligible_start": "2004-10-08 01:00:00",
+          "eligible_end": "2014-08-02 23:00:00"
+        },
+        "validation": {
+          "raw_rows": 8760,
+          "eligible_rows": 8591,
+          "excluded_rows": 169,
+          "eligible_start": "2014-08-03 00:00:00",
+          "eligible_end": "2015-08-02 23:00:00"
+        },
+        "gap_hours": 0,
+        "shuffle": false,
+        "raw_counts_match_phase_02": true
+      },
+      {
+        "fold": 4,
+        "validation_start_inclusive": "2015-08-03 00:00:00",
+        "validation_end_exclusive": "2016-08-03 00:00:00",
+        "train": {
+          "raw_rows": 94991,
+          "eligible_rows": 90877,
+          "excluded_rows": 4114,
+          "eligible_start": "2004-10-08 01:00:00",
+          "eligible_end": "2015-08-02 23:00:00"
+        },
+        "validation": {
+          "raw_rows": 8784,
+          "eligible_rows": 8615,
+          "excluded_rows": 169,
+          "eligible_start": "2015-08-03 00:00:00",
+          "eligible_end": "2016-08-02 23:00:00"
+        },
+        "gap_hours": 0,
+        "shuffle": false,
+        "raw_counts_match_phase_02": true
+      },
+      {
+        "fold": 5,
+        "validation_start_inclusive": "2016-08-03 00:00:00",
+        "validation_end_exclusive": "2017-08-03 00:00:00",
+        "train": {
+          "raw_rows": 103775,
+          "eligible_rows": 99492,
+          "excluded_rows": 4283,
+          "eligible_start": "2004-10-08 01:00:00",
+          "eligible_end": "2016-08-02 23:00:00"
+        },
+        "validation": {
+          "raw_rows": 8760,
+          "eligible_rows": 8591,
+          "excluded_rows": 169,
+          "eligible_start": "2016-08-03 00:00:00",
+          "eligible_end": "2017-08-02 23:00:00"
+        },
+        "gap_hours": 0,
+        "shuffle": false,
+        "raw_counts_match_phase_02": true
+      }
+    ],
+    "validation_history_policy": "hourly_actual_update_through_target_minus_1_hour",
+    "same_eligible_population_for_all_candidates": true
+  },
+  "holdout": {
+    "reserved": true,
+    "features_materialized": false,
+    "target_statistics_reported": false,
+    "evaluation_owner": "phase_07"
+  },
+  "recursive_24h": {
+    "matrix_materialized": false,
+    "evaluation_owner": "phase_07"
+  },
+  "persistence": {
+    "xy_table_written": false,
+    "reconstruction_owner": "practice_3_v2.data.supervised_dataset"
+  },
+  "checks": {
+    "development_only": true,
+    "exact_feature_order": true,
+    "target_in_X": false,
+    "metadata_in_X": false,
+    "feature_imputation_applied": false,
+    "shuffle_applied": false,
+    "eligible_X_finite": true,
+    "eligible_y_finite": true,
+    "xy_timestamp_aligned": true,
+    "forecast_origin_offset_valid": true,
+    "folds_chronological": true,
+    "folds_non_overlapping": true,
+    "holdout_used_for_construction": false
+  },
+  "status": "PASS"
+}

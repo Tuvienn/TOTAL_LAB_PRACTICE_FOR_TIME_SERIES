@@ -1,0 +1,70 @@
+{
+  "phase": "phase_05_xy_construction_split_application",
+  "contract_version": "1.0.0",
+  "prepared_input": "datasets/processed/aep_hourly_prepared.csv",
+  "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+  "split_audit": "outputs/results/phase_02_temporal_split.json",
+  "split_audit_sha256": "f18452573cedd321ea8097539560899bc5dbce43ba0b47cda3b51dc504bcf735",
+  "feature_audit": "outputs/results/phase_04_feature_validation.json",
+  "feature_audit_sha256": "3d4c94bf2a260669c982a3d867bcda6d39aeb3067cd3f2c08ceb7bf607584760",
+  "alignment": {
+    "sample_key": "target_timestamp",
+    "forecast_origin_offset_hours": 1,
+    "target_column": "AEP_MW",
+    "primary_horizon_hours": 1
+  },
+  "feature_order": [
+    "lag_1h",
+    "lag_2h",
+    "lag_3h",
+    "lag_23h",
+    "lag_24h",
+    "lag_25h",
+    "lag_48h",
+    "lag_168h",
+    "rolling_mean_24h",
+    "rolling_std_24h",
+    "rolling_mean_168h",
+    "rolling_std_168h",
+    "hour",
+    "day_of_week",
+    "month",
+    "is_weekend",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week_sin",
+    "day_of_week_cos",
+    "month_sin",
+    "month_cos"
+  ],
+  "eligibility": {
+    "target_must_be_observed_and_finite": true,
+    "all_features_must_be_observed_and_finite": true,
+    "imputation": "none",
+    "shuffle": false,
+    "exclusion_priority": [
+      "invalid_feature_vector",
+      "missing_target_with_valid_features"
+    ]
+  },
+  "cross_validation": {
+    "source": "config/temporal_split.json",
+    "method": "expanding_window",
+    "split_key": "target_timestamp",
+    "folds": 5,
+    "gap_hours": 0,
+    "validation_history_policy": "hourly_actual_update_through_target_minus_1_hour",
+    "same_eligible_population_for_all_candidates": true
+  },
+  "scope": {
+    "official_audit_partition": "development_only",
+    "holdout_features_materialized": false,
+    "holdout_target_statistics_reported": false,
+    "recursive_24h_matrix_materialized": false,
+    "persist_xy_table": false
+  },
+  "outputs": {
+    "audit": "outputs/results/phase_05_supervised_dataset.json"
+  },
+  "status": "APPROVED"
+}

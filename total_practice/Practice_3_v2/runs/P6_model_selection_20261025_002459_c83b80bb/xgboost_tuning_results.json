@@ -1,0 +1,1653 @@
+{
+  "status": "PASS",
+  "sampled_candidates": [
+    {
+      "candidate_index": 1,
+      "source_index": 5238,
+      "parameter_identity": "414f37d6b09e",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 800,
+        "max_depth": 5,
+        "learning_rate": 0.03,
+        "subsample": 0.85,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 1,
+        "reg_alpha": 0.0,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 120.50450641054768,
+          "rmse": 158.2022110949941,
+          "samples": 8253,
+          "duration_seconds": 1.6215962918940932
+        },
+        {
+          "fold": 2,
+          "mae": 122.27182406414414,
+          "rmse": 161.79676175556943,
+          "samples": 8363,
+          "duration_seconds": 1.623940208926797
+        },
+        {
+          "fold": 3,
+          "mae": 115.81198108394686,
+          "rmse": 150.79702737572038,
+          "samples": 8591,
+          "duration_seconds": 1.6590847079642117
+        },
+        {
+          "fold": 4,
+          "mae": 120.44045519261462,
+          "rmse": 163.31100448644594,
+          "samples": 8615,
+          "duration_seconds": 1.6913204158190638
+        },
+        {
+          "fold": 5,
+          "mae": 115.06423475966855,
+          "rmse": 149.16995562174552,
+          "samples": 8591,
+          "duration_seconds": 1.704573375172913
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 118.81860030218438,
+        "mean_cv_rmse": 156.65539206689508,
+        "cv_mae_standard_deviation": 2.8471904324192314,
+        "cv_rmse_standard_deviation": 5.717966486256528,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 2,
+      "source_index": 912,
+      "parameter_identity": "19408ddc8cf6",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 5,
+        "learning_rate": 0.03,
+        "subsample": 1.0,
+        "colsample_bytree": 0.7,
+        "min_child_weight": 10,
+        "reg_alpha": 0.1,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 150.7367307958091,
+          "rmse": 195.2188342883152,
+          "samples": 8253,
+          "duration_seconds": 0.5977724171243608
+        },
+        {
+          "fold": 2,
+          "mae": 156.5953719601967,
+          "rmse": 203.72062243464998,
+          "samples": 8363,
+          "duration_seconds": 0.5991126659791917
+        },
+        {
+          "fold": 3,
+          "mae": 146.2514583075675,
+          "rmse": 188.33395614195913,
+          "samples": 8591,
+          "duration_seconds": 0.6134551670402288
+        },
+        {
+          "fold": 4,
+          "mae": 156.37600614843296,
+          "rmse": 205.20721330438707,
+          "samples": 8615,
+          "duration_seconds": 0.6285537499934435
+        },
+        {
+          "fold": 5,
+          "mae": 145.66409341898498,
+          "rmse": 187.93004563605902,
+          "samples": 8591,
+          "duration_seconds": 0.642546416958794
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 151.12473212619824,
+        "mean_cv_rmse": 196.0821343610741,
+        "cv_mae_standard_deviation": 4.716390503009251,
+        "cv_rmse_standard_deviation": 7.3327984982974375,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 3,
+      "source_index": 204,
+      "parameter_identity": "3cc79e14bd9e",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 3,
+        "learning_rate": 0.03,
+        "subsample": 1.0,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 5,
+        "reg_alpha": 1.0,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 204.35151434042925,
+          "rmse": 260.63136457694134,
+          "samples": 8253,
+          "duration_seconds": 0.3819779169280082
+        },
+        {
+          "fold": 2,
+          "mae": 221.09406726896,
+          "rmse": 282.059318242375,
+          "samples": 8363,
+          "duration_seconds": 0.3965182499960065
+        },
+        {
+          "fold": 3,
+          "mae": 207.26582313158391,
+          "rmse": 262.2258131056099,
+          "samples": 8591,
+          "duration_seconds": 0.39870687504298985
+        },
+        {
+          "fold": 4,
+          "mae": 223.65204857080673,
+          "rmse": 284.16839098992494,
+          "samples": 8615,
+          "duration_seconds": 0.40074737509712577
+        },
+        {
+          "fold": 5,
+          "mae": 205.15119474595508,
+          "rmse": 259.17693330060376,
+          "samples": 8591,
+          "duration_seconds": 0.41863654111512005
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 212.302929611547,
+        "mean_cv_rmse": 269.652364043091,
+        "cv_mae_standard_deviation": 8.316626245719924,
+        "cv_rmse_standard_deviation": 11.053635512900367,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 4,
+      "source_index": 6074,
+      "parameter_identity": "529c6db96c75",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 800,
+        "max_depth": 7,
+        "learning_rate": 0.03,
+        "subsample": 1.0,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 10,
+        "reg_alpha": 1.0,
+        "reg_lambda": 10.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 110.80670972865927,
+          "rmse": 148.00364930854263,
+          "samples": 8253,
+          "duration_seconds": 2.1999251251108944
+        },
+        {
+          "fold": 2,
+          "mae": 114.13447766575989,
+          "rmse": 152.68810347140288,
+          "samples": 8363,
+          "duration_seconds": 2.2297021250706166
+        },
+        {
+          "fold": 3,
+          "mae": 106.40962471627284,
+          "rmse": 139.49432079098148,
+          "samples": 8591,
+          "duration_seconds": 2.248173624975607
+        },
+        {
+          "fold": 4,
+          "mae": 111.80263088091266,
+          "rmse": 155.3589409568707,
+          "samples": 8615,
+          "duration_seconds": 2.3310223328880966
+        },
+        {
+          "fold": 5,
+          "mae": 104.38977529627662,
+          "rmse": 135.9938880638114,
+          "samples": 8591,
+          "duration_seconds": 2.3769531659781933
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 109.50864365757624,
+        "mean_cv_rmse": 146.30778051832183,
+        "cv_mae_standard_deviation": 3.5819666351284596,
+        "cv_rmse_standard_deviation": 7.46066496021509,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 5,
+      "source_index": 2253,
+      "parameter_identity": "bee7fd16e899",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 500,
+        "max_depth": 3,
+        "learning_rate": 0.03,
+        "subsample": 0.7,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 5,
+        "reg_alpha": 0.1,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 173.38924612167546,
+          "rmse": 221.54854452681084,
+          "samples": 8253,
+          "duration_seconds": 0.6803746670484543
+        },
+        {
+          "fold": 2,
+          "mae": 182.07778986495575,
+          "rmse": 234.43411461882914,
+          "samples": 8363,
+          "duration_seconds": 0.6932856249623001
+        },
+        {
+          "fold": 3,
+          "mae": 170.51468856397685,
+          "rmse": 216.7649054876007,
+          "samples": 8591,
+          "duration_seconds": 0.7187901248689741
+        },
+        {
+          "fold": 4,
+          "mae": 178.89460334445735,
+          "rmse": 230.37038150492154,
+          "samples": 8615,
+          "duration_seconds": 0.8325550421141088
+        },
+        {
+          "fold": 5,
+          "mae": 167.69328673811984,
+          "rmse": 213.73710070091673,
+          "samples": 8591,
+          "duration_seconds": 0.786192832980305
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 174.51392292663704,
+        "mean_cv_rmse": 223.37100936781582,
+        "cv_mae_standard_deviation": 5.294946560691171,
+        "cv_rmse_standard_deviation": 7.8886968617603275,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 6,
+      "source_index": 2006,
+      "parameter_identity": "cd17b8898aa2",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 7,
+        "learning_rate": 0.1,
+        "subsample": 0.7,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 1,
+        "reg_alpha": 1.0,
+        "reg_lambda": 10.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 112.6053547999591,
+          "rmse": 149.3042943610511,
+          "samples": 8253,
+          "duration_seconds": 0.8566955828573555
+        },
+        {
+          "fold": 2,
+          "mae": 113.88245482799982,
+          "rmse": 151.92510609510396,
+          "samples": 8363,
+          "duration_seconds": 0.8619428330566734
+        },
+        {
+          "fold": 3,
+          "mae": 106.80224171734955,
+          "rmse": 140.33928572858076,
+          "samples": 8591,
+          "duration_seconds": 0.8865766669623554
+        },
+        {
+          "fold": 4,
+          "mae": 111.62725091138276,
+          "rmse": 154.94501338220385,
+          "samples": 8615,
+          "duration_seconds": 0.9301947080530226
+        },
+        {
+          "fold": 5,
+          "mae": 104.88762995067512,
+          "rmse": 136.69279651460366,
+          "samples": 8591,
+          "duration_seconds": 0.9212159998714924
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 109.96098644147328,
+        "mean_cv_rmse": 146.64129921630868,
+        "cv_mae_standard_deviation": 3.488943964023331,
+        "cv_rmse_standard_deviation": 6.96634634837446,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 7,
+      "source_index": 1828,
+      "parameter_identity": "94b35a80e7f9",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 7,
+        "learning_rate": 0.05,
+        "subsample": 0.85,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 10,
+        "reg_alpha": 0.0,
+        "reg_lambda": 5.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 114.9794646170332,
+          "rmse": 152.95943194101196,
+          "samples": 8253,
+          "duration_seconds": 0.8434557078871876
+        },
+        {
+          "fold": 2,
+          "mae": 118.00697185986638,
+          "rmse": 156.88684876776273,
+          "samples": 8363,
+          "duration_seconds": 0.8626604999881238
+        },
+        {
+          "fold": 3,
+          "mae": 110.14361209223316,
+          "rmse": 144.35676459537444,
+          "samples": 8591,
+          "duration_seconds": 0.8919132919982076
+        },
+        {
+          "fold": 4,
+          "mae": 116.36251462293238,
+          "rmse": 159.8737290028907,
+          "samples": 8615,
+          "duration_seconds": 1.1600306669715792
+        },
+        {
+          "fold": 5,
+          "mae": 108.48400306279828,
+          "rmse": 141.13610691879276,
+          "samples": 8591,
+          "duration_seconds": 1.0320017919875681
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 113.59531325097268,
+        "mean_cv_rmse": 151.04257624516652,
+        "cv_mae_standard_deviation": 3.6626695960063875,
+        "cv_rmse_standard_deviation": 7.192458940281931,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 8,
+      "source_index": 1143,
+      "parameter_identity": "c26e33403029",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 5,
+        "learning_rate": 0.05,
+        "subsample": 1.0,
+        "colsample_bytree": 0.7,
+        "min_child_weight": 5,
+        "reg_alpha": 0.0,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 134.4181296763298,
+          "rmse": 174.88566693808366,
+          "samples": 8253,
+          "duration_seconds": 0.6169208330102265
+        },
+        {
+          "fold": 2,
+          "mae": 137.1262120912053,
+          "rmse": 179.86133517941843,
+          "samples": 8363,
+          "duration_seconds": 0.6367725001182407
+        },
+        {
+          "fold": 3,
+          "mae": 129.708036117012,
+          "rmse": 167.45727663449202,
+          "samples": 8591,
+          "duration_seconds": 0.6093323330860585
+        },
+        {
+          "fold": 4,
+          "mae": 134.735723030325,
+          "rmse": 179.19503402149712,
+          "samples": 8615,
+          "duration_seconds": 0.7111385830212384
+        },
+        {
+          "fold": 5,
+          "mae": 128.84613564977155,
+          "rmse": 166.48005059949617,
+          "samples": 8591,
+          "duration_seconds": 0.9680807499680668
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 132.96684731292873,
+        "mean_cv_rmse": 173.5758726745975,
+        "cv_mae_standard_deviation": 3.1665619268282987,
+        "cv_rmse_standard_deviation": 5.667194765986991,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 9,
+      "source_index": 6033,
+      "parameter_identity": "3e6d9daa1679",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 800,
+        "max_depth": 7,
+        "learning_rate": 0.03,
+        "subsample": 1.0,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 5,
+        "reg_alpha": 0.1,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 111.65458157260996,
+          "rmse": 149.2642324016737,
+          "samples": 8253,
+          "duration_seconds": 3.084428041940555
+        },
+        {
+          "fold": 2,
+          "mae": 113.56572733879888,
+          "rmse": 151.28936253068946,
+          "samples": 8363,
+          "duration_seconds": 2.269278291845694
+        },
+        {
+          "fold": 3,
+          "mae": 105.48870809113461,
+          "rmse": 138.87746836469304,
+          "samples": 8591,
+          "duration_seconds": 2.3723669168539345
+        },
+        {
+          "fold": 4,
+          "mae": 111.33844380259721,
+          "rmse": 154.13553513143293,
+          "samples": 8615,
+          "duration_seconds": 2.307691792026162
+        },
+        {
+          "fold": 5,
+          "mae": 105.34269523065562,
+          "rmse": 137.75395935174356,
+          "samples": 8591,
+          "duration_seconds": 2.351972750155255
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 109.47803120715926,
+        "mean_cv_rmse": 146.26411155604654,
+        "cv_mae_standard_deviation": 3.4036294964594243,
+        "cv_rmse_standard_deviation": 6.681292834870161,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 10,
+      "source_index": 839,
+      "parameter_identity": "60fc008a68ce",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 5,
+        "learning_rate": 0.03,
+        "subsample": 0.85,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 1,
+        "reg_alpha": 0.0,
+        "reg_lambda": 10.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 145.86652545381224,
+          "rmse": 189.41408460340725,
+          "samples": 8253,
+          "duration_seconds": 0.6469757498707622
+        },
+        {
+          "fold": 2,
+          "mae": 152.7064831232064,
+          "rmse": 198.3332308494112,
+          "samples": 8363,
+          "duration_seconds": 0.6462628750596195
+        },
+        {
+          "fold": 3,
+          "mae": 142.22025843724538,
+          "rmse": 183.24879328031514,
+          "samples": 8591,
+          "duration_seconds": 0.6522397908847779
+        },
+        {
+          "fold": 4,
+          "mae": 150.46617761081689,
+          "rmse": 198.78295227143812,
+          "samples": 8615,
+          "duration_seconds": 0.6518418330233544
+        },
+        {
+          "fold": 5,
+          "mae": 140.86194605000873,
+          "rmse": 181.33637669233946,
+          "samples": 8591,
+          "duration_seconds": 0.6739869997836649
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 146.42427813501794,
+        "mean_cv_rmse": 190.22308753938222,
+        "cv_mae_standard_deviation": 4.576624493721514,
+        "cv_rmse_standard_deviation": 7.311834305859533,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 11,
+      "source_index": 5543,
+      "parameter_identity": "43d16d59be56",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 800,
+        "max_depth": 5,
+        "learning_rate": 0.05,
+        "subsample": 1.0,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 1,
+        "reg_alpha": 1.0,
+        "reg_lambda": 10.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 115.90121750234763,
+          "rmse": 153.34642924495247,
+          "samples": 8253,
+          "duration_seconds": 1.6335691248532385
+        },
+        {
+          "fold": 2,
+          "mae": 117.05259331467475,
+          "rmse": 154.61431870393443,
+          "samples": 8363,
+          "duration_seconds": 1.777508958010003
+        },
+        {
+          "fold": 3,
+          "mae": 110.56418383428152,
+          "rmse": 144.40870928159111,
+          "samples": 8591,
+          "duration_seconds": 1.8633867499884218
+        },
+        {
+          "fold": 4,
+          "mae": 115.07250650663813,
+          "rmse": 157.23632342635582,
+          "samples": 8615,
+          "duration_seconds": 1.7039822498336434
+        },
+        {
+          "fold": 5,
+          "mae": 109.47837387509458,
+          "rmse": 142.60629668297608,
+          "samples": 8591,
+          "duration_seconds": 1.8444632501341403
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 113.61377500660733,
+        "mean_cv_rmse": 150.442415467962,
+        "cv_mae_standard_deviation": 3.0195135685485806,
+        "cv_rmse_standard_deviation": 5.827617453646973,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 12,
+      "source_index": 6067,
+      "parameter_identity": "cd264d66c5a0",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 800,
+        "max_depth": 7,
+        "learning_rate": 0.03,
+        "subsample": 1.0,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 10,
+        "reg_alpha": 0.0,
+        "reg_lambda": 5.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 110.65946947322186,
+          "rmse": 147.88234821324323,
+          "samples": 8253,
+          "duration_seconds": 3.2397792499978095
+        },
+        {
+          "fold": 2,
+          "mae": 113.88660361301268,
+          "rmse": 152.34570459782523,
+          "samples": 8363,
+          "duration_seconds": 2.401177749969065
+        },
+        {
+          "fold": 3,
+          "mae": 105.37732108365586,
+          "rmse": 138.45071498950261,
+          "samples": 8591,
+          "duration_seconds": 2.4148423329461366
+        },
+        {
+          "fold": 4,
+          "mae": 111.47965644043819,
+          "rmse": 154.57045292918514,
+          "samples": 8615,
+          "duration_seconds": 2.4589597911108285
+        },
+        {
+          "fold": 5,
+          "mae": 104.81180114000117,
+          "rmse": 136.6003562841256,
+          "samples": 8591,
+          "duration_seconds": 2.5137113330420107
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 109.24297035006596,
+        "mean_cv_rmse": 145.96991540277637,
+        "cv_mae_standard_deviation": 3.5539012122633484,
+        "cv_rmse_standard_deviation": 7.247128338732319,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 13,
+      "source_index": 4467,
+      "parameter_identity": "9138eb5166e4",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 800,
+        "max_depth": 3,
+        "learning_rate": 0.03,
+        "subsample": 0.85,
+        "colsample_bytree": 0.7,
+        "min_child_weight": 5,
+        "reg_alpha": 0.1,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 157.66643829327214,
+          "rmse": 202.90616814503983,
+          "samples": 8253,
+          "duration_seconds": 1.1083788750693202
+        },
+        {
+          "fold": 2,
+          "mae": 164.37487914119484,
+          "rmse": 213.35412869568546,
+          "samples": 8363,
+          "duration_seconds": 1.1467215840239078
+        },
+        {
+          "fold": 3,
+          "mae": 154.7695502333474,
+          "rmse": 198.2034846555035,
+          "samples": 8591,
+          "duration_seconds": 1.1244789171032608
+        },
+        {
+          "fold": 4,
+          "mae": 160.06622215975042,
+          "rmse": 209.30752288933877,
+          "samples": 8615,
+          "duration_seconds": 1.1162613751366735
+        },
+        {
+          "fold": 5,
+          "mae": 152.69669623825078,
+          "rmse": 195.64538500740616,
+          "samples": 8591,
+          "duration_seconds": 1.2078579999506474
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 157.9147572131631,
+        "mean_cv_rmse": 203.88333787859474,
+        "cv_mae_standard_deviation": 4.087642995937652,
+        "cv_rmse_standard_deviation": 6.636220649795032,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 14,
+      "source_index": 712,
+      "parameter_identity": "a4cb421fa12e",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 3,
+        "learning_rate": 0.1,
+        "subsample": 1.0,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 5,
+        "reg_alpha": 0.0,
+        "reg_lambda": 5.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 148.08972731506725,
+          "rmse": 191.30698583263936,
+          "samples": 8253,
+          "duration_seconds": 0.41762658301740885
+        },
+        {
+          "fold": 2,
+          "mae": 152.12997307709554,
+          "rmse": 199.49773725063838,
+          "samples": 8363,
+          "duration_seconds": 0.4340143750887364
+        },
+        {
+          "fold": 3,
+          "mae": 142.46727464152164,
+          "rmse": 184.21581666331682,
+          "samples": 8591,
+          "duration_seconds": 0.43592599988915026
+        },
+        {
+          "fold": 4,
+          "mae": 148.69256554247679,
+          "rmse": 196.36558608896138,
+          "samples": 8615,
+          "duration_seconds": 0.4534860828425735
+        },
+        {
+          "fold": 5,
+          "mae": 142.44429558367767,
+          "rmse": 183.51180369706054,
+          "samples": 8591,
+          "duration_seconds": 0.4513842079322785
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 146.7647672319678,
+        "mean_cv_rmse": 190.97958590652328,
+        "cv_mae_standard_deviation": 3.7786843513852686,
+        "cv_rmse_standard_deviation": 6.374816648365784,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 15,
+      "source_index": 4837,
+      "parameter_identity": "38248de7db82",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 800,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "subsample": 1.0,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 1,
+        "reg_alpha": 0.1,
+        "reg_lambda": 5.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 137.94525475584635,
+          "rmse": 179.2266660952749,
+          "samples": 8253,
+          "duration_seconds": 1.095939541934058
+        },
+        {
+          "fold": 2,
+          "mae": 142.56336901567917,
+          "rmse": 188.24877296772274,
+          "samples": 8363,
+          "duration_seconds": 1.0984819170553237
+        },
+        {
+          "fold": 3,
+          "mae": 133.97822246300635,
+          "rmse": 173.8611467556599,
+          "samples": 8591,
+          "duration_seconds": 1.128525375155732
+        },
+        {
+          "fold": 4,
+          "mae": 136.90512482769878,
+          "rmse": 182.4955804959078,
+          "samples": 8615,
+          "duration_seconds": 1.1586453330237418
+        },
+        {
+          "fold": 5,
+          "mae": 132.481488849159,
+          "rmse": 171.36151262937665,
+          "samples": 8591,
+          "duration_seconds": 1.1621529168915004
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 136.77469198227791,
+        "mean_cv_rmse": 179.03873578878841,
+        "cv_mae_standard_deviation": 3.4970801147669737,
+        "cv_rmse_standard_deviation": 6.0424674033373025,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 16,
+      "source_index": 3456,
+      "parameter_identity": "cd84c32729cf",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 500,
+        "max_depth": 5,
+        "learning_rate": 0.1,
+        "subsample": 0.7,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 1,
+        "reg_alpha": 0.0,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 113.99950728144312,
+          "rmse": 151.45344527322786,
+          "samples": 8253,
+          "duration_seconds": 1.087739541195333
+        },
+        {
+          "fold": 2,
+          "mae": 115.84097538544033,
+          "rmse": 152.82602037786683,
+          "samples": 8363,
+          "duration_seconds": 1.1161908751819283
+        },
+        {
+          "fold": 3,
+          "mae": 109.30263047811664,
+          "rmse": 142.8341569964625,
+          "samples": 8591,
+          "duration_seconds": 1.1248196249362081
+        },
+        {
+          "fold": 4,
+          "mae": 111.61023412561666,
+          "rmse": 153.93307438801406,
+          "samples": 8615,
+          "duration_seconds": 1.149266832973808
+        },
+        {
+          "fold": 5,
+          "mae": 108.06552551361891,
+          "rmse": 140.71905792591426,
+          "samples": 8591,
+          "duration_seconds": 1.1577077920082957
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 111.76377455684712,
+        "mean_cv_rmse": 148.35315099229712,
+        "cv_mae_standard_deviation": 2.8768009398824077,
+        "cv_rmse_standard_deviation": 5.467953949020811,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 17,
+      "source_index": 260,
+      "parameter_identity": "96b1c56f2877",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "subsample": 0.7,
+        "colsample_bytree": 0.7,
+        "min_child_weight": 5,
+        "reg_alpha": 1.0,
+        "reg_lambda": 10.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 180.59447144693596,
+          "rmse": 231.5612743435148,
+          "samples": 8253,
+          "duration_seconds": 0.4575791659299284
+        },
+        {
+          "fold": 2,
+          "mae": 190.9335072221018,
+          "rmse": 244.29682282354727,
+          "samples": 8363,
+          "duration_seconds": 0.4506072090007365
+        },
+        {
+          "fold": 3,
+          "mae": 176.19177545905598,
+          "rmse": 224.3385265050572,
+          "samples": 8591,
+          "duration_seconds": 0.4665552079677582
+        },
+        {
+          "fold": 4,
+          "mae": 185.1293947012841,
+          "rmse": 238.1623586914949,
+          "samples": 8615,
+          "duration_seconds": 0.45157000003382564
+        },
+        {
+          "fold": 5,
+          "mae": 174.14373088024533,
+          "rmse": 221.12926690107628,
+          "samples": 8591,
+          "duration_seconds": 0.4715917920693755
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 181.39857594192466,
+        "mean_cv_rmse": 231.8976498529381,
+        "cv_mae_standard_deviation": 6.086444862300562,
+        "cv_rmse_standard_deviation": 8.558009498203926,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 18,
+      "source_index": 244,
+      "parameter_identity": "b20fd2bbc9de",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "subsample": 0.7,
+        "colsample_bytree": 0.7,
+        "min_child_weight": 1,
+        "reg_alpha": 0.0,
+        "reg_lambda": 5.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 178.8692952799361,
+          "rmse": 228.48020388122512,
+          "samples": 8253,
+          "duration_seconds": 0.4353902079164982
+        },
+        {
+          "fold": 2,
+          "mae": 189.44075734914952,
+          "rmse": 242.21430852471192,
+          "samples": 8363,
+          "duration_seconds": 0.44531383318826556
+        },
+        {
+          "fold": 3,
+          "mae": 177.06717740586078,
+          "rmse": 225.42759311258374,
+          "samples": 8591,
+          "duration_seconds": 0.44946870813146234
+        },
+        {
+          "fold": 4,
+          "mae": 186.69762428358968,
+          "rmse": 239.9967505168468,
+          "samples": 8615,
+          "duration_seconds": 0.4403239169623703
+        },
+        {
+          "fold": 5,
+          "mae": 175.90869225879555,
+          "rmse": 222.75664311922722,
+          "samples": 8591,
+          "duration_seconds": 0.4363139169290662
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 181.5967093154663,
+        "mean_cv_rmse": 231.77509983091895,
+        "cv_mae_standard_deviation": 5.437966674136094,
+        "cv_rmse_standard_deviation": 7.861963628423342,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 19,
+      "source_index": 767,
+      "parameter_identity": "99cd7f206a36",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 5,
+        "learning_rate": 0.03,
+        "subsample": 0.7,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 5,
+        "reg_alpha": 0.0,
+        "reg_lambda": 10.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 146.79371504585453,
+          "rmse": 189.84308235248577,
+          "samples": 8253,
+          "duration_seconds": 0.6476486250758171
+        },
+        {
+          "fold": 2,
+          "mae": 152.7295320066812,
+          "rmse": 199.16601692844895,
+          "samples": 8363,
+          "duration_seconds": 0.6417122920975089
+        },
+        {
+          "fold": 3,
+          "mae": 141.88145047324235,
+          "rmse": 182.76555041521746,
+          "samples": 8591,
+          "duration_seconds": 0.6449538341257721
+        },
+        {
+          "fold": 4,
+          "mae": 151.3226672455383,
+          "rmse": 199.91204145537196,
+          "samples": 8615,
+          "duration_seconds": 0.6511267919559032
+        },
+        {
+          "fold": 5,
+          "mae": 140.5506418872221,
+          "rmse": 181.27442051895437,
+          "samples": 8591,
+          "duration_seconds": 0.6825016250368208
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 146.65560133170771,
+        "mean_cv_rmse": 190.5922223340957,
+        "cv_mae_standard_deviation": 4.873525617551597,
+        "cv_rmse_standard_deviation": 7.861404669695136,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 20,
+      "source_index": 1791,
+      "parameter_identity": "e7464992aa06",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 7,
+        "learning_rate": 0.05,
+        "subsample": 0.85,
+        "colsample_bytree": 0.7,
+        "min_child_weight": 5,
+        "reg_alpha": 0.0,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 115.87257178734248,
+          "rmse": 153.6632213321117,
+          "samples": 8253,
+          "duration_seconds": 0.8612202499061823
+        },
+        {
+          "fold": 2,
+          "mae": 118.69597120968103,
+          "rmse": 158.2776949613575,
+          "samples": 8363,
+          "duration_seconds": 0.8757619999814779
+        },
+        {
+          "fold": 3,
+          "mae": 112.17555674634065,
+          "rmse": 146.54682577982038,
+          "samples": 8591,
+          "duration_seconds": 0.8873415829148144
+        },
+        {
+          "fold": 4,
+          "mae": 116.88194169870864,
+          "rmse": 159.3913937959048,
+          "samples": 8615,
+          "duration_seconds": 0.9108409169130027
+        },
+        {
+          "fold": 5,
+          "mae": 111.73766593946426,
+          "rmse": 145.20041652983684,
+          "samples": 8591,
+          "duration_seconds": 0.938760707853362
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 115.07274147630741,
+        "mean_cv_rmse": 152.61591047980625,
+        "cv_mae_standard_deviation": 2.7039650836500098,
+        "cv_rmse_standard_deviation": 5.8460786399304725,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 21,
+      "source_index": 1905,
+      "parameter_identity": "9b1f0a3f5b23",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 7,
+        "learning_rate": 0.05,
+        "subsample": 1.0,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 5,
+        "reg_alpha": 1.0,
+        "reg_lambda": 1.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 116.37493184296619,
+          "rmse": 154.32710144857262,
+          "samples": 8253,
+          "duration_seconds": 0.8542190829757601
+        },
+        {
+          "fold": 2,
+          "mae": 118.21599838948345,
+          "rmse": 157.69958126219532,
+          "samples": 8363,
+          "duration_seconds": 0.8690727921202779
+        },
+        {
+          "fold": 3,
+          "mae": 110.49589459536142,
+          "rmse": 144.73450314493422,
+          "samples": 8591,
+          "duration_seconds": 0.8826435001101345
+        },
+        {
+          "fold": 4,
+          "mae": 117.34370352401335,
+          "rmse": 161.10643650751814,
+          "samples": 8615,
+          "duration_seconds": 0.9077283751685172
+        },
+        {
+          "fold": 5,
+          "mae": 110.08895676161826,
+          "rmse": 143.69477805705523,
+          "samples": 8591,
+          "duration_seconds": 0.920756708830595
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 114.50389702268853,
+        "mean_cv_rmse": 152.31248008405512,
+        "cv_mae_standard_deviation": 3.4900071572218314,
+        "cv_rmse_standard_deviation": 6.958502003156464,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 22,
+      "source_index": 4139,
+      "parameter_identity": "16a53f8fb629",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 500,
+        "max_depth": 7,
+        "learning_rate": 0.1,
+        "subsample": 0.7,
+        "colsample_bytree": 0.7,
+        "min_child_weight": 1,
+        "reg_alpha": 1.0,
+        "reg_lambda": 10.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 110.89908700340028,
+          "rmse": 147.07208762791564,
+          "samples": 8253,
+          "duration_seconds": 1.4047258340287954
+        },
+        {
+          "fold": 2,
+          "mae": 112.00511565545408,
+          "rmse": 148.17061054272583,
+          "samples": 8363,
+          "duration_seconds": 1.4249613750725985
+        },
+        {
+          "fold": 3,
+          "mae": 105.33019679933942,
+          "rmse": 137.15914127636037,
+          "samples": 8591,
+          "duration_seconds": 1.47060004202649
+        },
+        {
+          "fold": 4,
+          "mae": 109.14366282918601,
+          "rmse": 151.42025716075966,
+          "samples": 8615,
+          "duration_seconds": 1.4649579161778092
+        },
+        {
+          "fold": 5,
+          "mae": 103.89227348205971,
+          "rmse": 135.428647932479,
+          "samples": 8591,
+          "duration_seconds": 1.4884875840507448
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 108.2540671538879,
+        "mean_cv_rmse": 143.85014890804808,
+        "cv_mae_standard_deviation": 3.144268983936756,
+        "cv_rmse_standard_deviation": 6.356808611526542,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 23,
+      "source_index": 4931,
+      "parameter_identity": "886c4d34c9bd",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 800,
+        "max_depth": 3,
+        "learning_rate": 0.1,
+        "subsample": 0.7,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 5,
+        "reg_alpha": 1.0,
+        "reg_lambda": 10.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 126.94896836756331,
+          "rmse": 166.0069957165899,
+          "samples": 8253,
+          "duration_seconds": 1.0581104999873787
+        },
+        {
+          "fold": 2,
+          "mae": 129.3053789057829,
+          "rmse": 172.42087383699197,
+          "samples": 8363,
+          "duration_seconds": 1.0727147501893342
+        },
+        {
+          "fold": 3,
+          "mae": 120.80516833568561,
+          "rmse": 157.6143970030987,
+          "samples": 8591,
+          "duration_seconds": 1.0837787499185652
+        },
+        {
+          "fold": 4,
+          "mae": 124.70942385646401,
+          "rmse": 168.0348170169095,
+          "samples": 8615,
+          "duration_seconds": 1.110164290992543
+        },
+        {
+          "fold": 5,
+          "mae": 118.8121298815621,
+          "rmse": 154.0403457390369,
+          "samples": 8591,
+          "duration_seconds": 1.1230742090847343
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 124.11621386941158,
+        "mean_cv_rmse": 163.6234858625254,
+        "cv_mae_standard_deviation": 3.8574644363053863,
+        "cv_rmse_standard_deviation": 6.789414120500424,
+        "standard_deviation_ddof": 0
+      }
+    },
+    {
+      "candidate_index": 24,
+      "source_index": 217,
+      "parameter_identity": "403fd7f19b83",
+      "parameters": {
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "random_state": 42,
+        "n_jobs": -1,
+        "n_estimators": 300,
+        "max_depth": 3,
+        "learning_rate": 0.03,
+        "subsample": 1.0,
+        "colsample_bytree": 1.0,
+        "min_child_weight": 1,
+        "reg_alpha": 0.0,
+        "reg_lambda": 5.0
+      },
+      "fold_metrics": [
+        {
+          "fold": 1,
+          "mae": 202.8913236095965,
+          "rmse": 258.56293985665906,
+          "samples": 8253,
+          "duration_seconds": 0.3830206668935716
+        },
+        {
+          "fold": 2,
+          "mae": 217.06423499529177,
+          "rmse": 277.0144807833621,
+          "samples": 8363,
+          "duration_seconds": 0.3930235418956727
+        },
+        {
+          "fold": 3,
+          "mae": 202.0619350464876,
+          "rmse": 255.48564252281628,
+          "samples": 8591,
+          "duration_seconds": 0.3971937499009073
+        },
+        {
+          "fold": 4,
+          "mae": 212.5877280724028,
+          "rmse": 270.19854556038166,
+          "samples": 8615,
+          "duration_seconds": 0.40874312492087483
+        },
+        {
+          "fold": 5,
+          "mae": 199.03187269926377,
+          "rmse": 252.32072296866454,
+          "samples": 8591,
+          "duration_seconds": 0.4140022078063339
+        }
+      ],
+      "status": "PASS",
+      "aggregate": {
+        "folds": 5,
+        "validation_samples": 42413,
+        "mean_cv_mae": 206.7274188846085,
+        "mean_cv_rmse": 262.71646633837673,
+        "cv_mae_standard_deviation": 6.883266500378115,
+        "cv_rmse_standard_deviation": 9.359730787242649,
+        "standard_deviation_ddof": 0
+      }
+    }
+  ],
+  "selected_parameter_candidate": {
+    "candidate_index": 22,
+    "parameter_identity": "16a53f8fb629",
+    "parameters": {
+      "objective": "reg:squarederror",
+      "tree_method": "hist",
+      "random_state": 42,
+      "n_jobs": -1,
+      "n_estimators": 500,
+      "max_depth": 7,
+      "learning_rate": 0.1,
+      "subsample": 0.7,
+      "colsample_bytree": 0.7,
+      "min_child_weight": 1,
+      "reg_alpha": 1.0,
+      "reg_lambda": 10.0
+    },
+    "fold_metrics": [
+      {
+        "fold": 1,
+        "mae": 110.89908700340028,
+        "rmse": 147.07208762791564,
+        "samples": 8253,
+        "duration_seconds": 1.4047258340287954
+      },
+      {
+        "fold": 2,
+        "mae": 112.00511565545408,
+        "rmse": 148.17061054272583,
+        "samples": 8363,
+        "duration_seconds": 1.4249613750725985
+      },
+      {
+        "fold": 3,
+        "mae": 105.33019679933942,
+        "rmse": 137.15914127636037,
+        "samples": 8591,
+        "duration_seconds": 1.47060004202649
+      },
+      {
+        "fold": 4,
+        "mae": 109.14366282918601,
+        "rmse": 151.42025716075966,
+        "samples": 8615,
+        "duration_seconds": 1.4649579161778092
+      },
+      {
+        "fold": 5,
+        "mae": 103.89227348205971,
+        "rmse": 135.428647932479,
+        "samples": 8591,
+        "duration_seconds": 1.4884875840507448
+      }
+    ],
+    "aggregate": {
+      "folds": 5,
+      "validation_samples": 42413,
+      "mean_cv_mae": 108.2540671538879,
+      "mean_cv_rmse": 143.85014890804808,
+      "cv_mae_standard_deviation": 3.144268983936756,
+      "cv_rmse_standard_deviation": 6.356808611526542,
+      "standard_deviation_ddof": 0
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "phase": "phase_06_supplemental_assignment_experiments",
+  "contract_version": "1.0.0",
+  "evidence_label": "post_hoc_supplemental_evidence",
+  "timing_disclosure": "designed_after_historical_holdout_evaluation",
+  "run_id": "P6_supplemental_20261025_165310_678c64f3",
+  "execution_identity": "678c64f3",
+  "upstream_evidence": {
+    "evidence_label": "post_hoc_supplemental_evidence",
+    "verified_upstream_sha256": {
+      "phase_05_audit": "21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5",
+      "phase_06_cv_results": "1c1647a458b9261956e831045ed1c4b2f84791fd9843839bd088b31a239d31d4",
+      "phase_06_model_lock": "ad31cb65daa36c394d7d5afc2cf0af333760c8e75ba718e702368e260db70eee",
+      "features_contract": "3191bb66323b96c305722511808a8c5dfa18a5a64b0527709696bc47f75dca5e",
+      "supervised_contract": "5b1960fb6ca841df9e0dc619f54374152f793e75f596235408fdd3e7b337c649",
+      "temporal_split_contract": "abcd404e9d6509564391a60e152faa7fd2241fa979333ed249c1fb55454f788b"
+    },
+    "prepared_sha256": "5b61ab66e585ba479233e7a5597fa42fc5f73bc54c46317b1408bd7a65cab587",
+    "package_versions": {
+      "python": "3.14.3",
+      "numpy": "2.5.4",
+      "pandas": "3.1.0",
+      "scikit-learn": "1.9.1",
+      "xgboost": "3.4.1"
+    },
+    "official_feature_order": [
+      "lag_1h",
+      "lag_2h",
+      "lag_3h",
+      "lag_23h",
+      "lag_24h",
+      "lag_25h",
+      "lag_48h",
+      "lag_168h",
+      "rolling_mean_24h",
+      "rolling_std_24h",
+      "rolling_mean_168h",
+      "rolling_std_168h",
+      "hour",
+      "day_of_week",
+      "month",
+      "is_weekend",
+      "hour_sin",
+      "hour_cos",
+      "day_of_week_sin",
+      "day_of_week_cos",
+      "month_sin",
+      "month_cos"
+    ],
+    "official_fold_counts": [
+      {
+        "fold": 1,
+        "train_samples": 65670,
+        "validation_samples": 8253,
+        "validation_start": "2012-08-03 00:00:00",
+        "validation_end_exclusive": "2013-08-03 00:00:00"
+      },
+      {
+        "fold": 2,
+        "train_samples": 73923,
+        "validation_samples": 8363,
+        "validation_start": "2013-08-03 00:00:00",
+        "validation_end_exclusive": "2014-08-03 00:00:00"
+      },
+      {
+        "fold": 3,
+        "train_samples": 82286,
+        "validation_samples": 8591,
+        "validation_start": "2014-08-03 00:00:00",
+        "validation_end_exclusive": "2015-08-03 00:00:00"
+      },
+      {
+        "fold": 4,
+        "train_samples": 90877,
+        "validation_samples": 8615,
+        "validation_start": "2015-08-03 00:00:00",
+        "validation_end_exclusive": "2016-08-03 00:00:00"
+      },
+      {
+        "fold": 5,
+        "train_samples": 99492,
+        "validation_samples": 8591,
+        "validation_start": "2016-08-03 00:00:00",
+        "validation_end_exclusive": "2017-08-03 00:00:00"
+      }
+    ],
+    "natural_eligibility": {
+      "1": 112482,
+      "6": 112347,
+      "12": 112185,
+      "24": 111861,
+      "48": 111213,
+      "168": 108083
+    },
+    "common_lag_fold_counts": [
+      {
+        "fold": 1,
+        "train_samples": 65670,
+        "validation_samples": 8253,
+        "validation_start": "2012-08-03 00:00:00",
+        "validation_end_exclusive": "2013-08-03 00:00:00"
+      },
+      {
+        "fold": 2,
+        "train_samples": 73923,
+        "validation_samples": 8363,
+        "validation_start": "2013-08-03 00:00:00",
+        "validation_end_exclusive": "2014-08-03 00:00:00"
+      },
+      {
+        "fold": 3,
+        "train_samples": 82286,
+        "validation_samples": 8591,
+        "validation_start": "2014-08-03 00:00:00",
+        "validation_end_exclusive": "2015-08-03 00:00:00"
+      },
+      {
+        "fold": 4,
+        "train_samples": 90877,
+        "validation_samples": 8615,
+        "validation_start": "2015-08-03 00:00:00",
+        "validation_end_exclusive": "2016-08-03 00:00:00"
+      },
+      {
+        "fold": 5,
+        "train_samples": 99492,
+        "validation_samples": 8591,
+        "validation_start": "2016-08-03 00:00:00",
+        "validation_end_exclusive": "2017-08-03 00:00:00"
+      }
+    ],
+    "holdout_accessed": false,
+    "holdout_features_materialized": false,
+    "holdout_evaluated": false
+  },
+  "completed_project_data_fits": 35,
+  "component_sha256": {
+    "linear_regression": "a84bf3b3a9fd7d788727a3a28e534616a7fa692fc71a8235cd40241a4fb6320b",
+    "lag_sensitivity": "b85d899bce896655bb11abbeffddaf448929d64911d6563d8a4c6e61b1c0c1ff",
+    "model_comparison_figure": "632ef37bf1a1b77e3fedbbc493a438bdbaa93efbe0ded29c03d2ce25be17c2d8",
+    "lag_sensitivity_figure": "01d4a650c473717917b9413decaf847e52f7c78aef52db72ad9e6151f2d7aa79"
+  },
+  "checks": {
+    "development_only": true,
+    "holdout_accessed": false,
+    "holdout_evaluated": false,
+    "model_lock_changed": false,
+    "selection_authority": "none",
+    "xgboost_reference_retrained": false,
+    "tuning_performed": false,
+    "binary_model_persisted": false
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,283 @@
+2026-10-25 00:24:59 | INFO | Phase 6 model selection initialized.
+2026-10-25 00:24:59 | INFO | Phase 6 model selection started.
+2026-10-25 00:24:59 | INFO | persistence fold 1/5 started.
+2026-10-25 00:24:59 | INFO | persistence fold 1 completed: MAE=419.381558 RMSE=543.820298 time=0.000s.
+2026-10-25 00:24:59 | INFO | persistence fold 2/5 started.
+2026-10-25 00:24:59 | INFO | persistence fold 2 completed: MAE=419.726534 RMSE=539.732295 time=0.000s.
+2026-10-25 00:24:59 | INFO | persistence fold 3/5 started.
+2026-10-25 00:24:59 | INFO | persistence fold 3 completed: MAE=414.182633 RMSE=533.884611 time=0.000s.
+2026-10-25 00:24:59 | INFO | persistence fold 4/5 started.
+2026-10-25 00:24:59 | INFO | persistence fold 4 completed: MAE=417.151132 RMSE=541.408136 time=0.000s.
+2026-10-25 00:24:59 | INFO | persistence fold 5/5 started.
+2026-10-25 00:24:59 | INFO | persistence fold 5 completed: MAE=411.839250 RMSE=532.618509 time=0.000s.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 1/5 started.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 1 completed: MAE=969.156307 RMSE=1298.726890 time=0.000s.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 2/5 started.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 2 completed: MAE=1037.900992 RMSE=1409.584853 time=0.000s.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 3/5 started.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 3 completed: MAE=979.776510 RMSE=1316.637190 time=0.000s.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 4/5 started.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 4 completed: MAE=894.486245 RMSE=1211.201928 time=0.000s.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 5/5 started.
+2026-10-25 00:24:59 | INFO | seasonal_naive_24 fold 5 completed: MAE=908.968455 RMSE=1217.394990 time=0.000s.
+2026-10-25 00:24:59 | INFO | xgboost_baseline fold 1/5 started.
+2026-10-25 00:24:59 | INFO | xgboost_baseline fold 1 completed: MAE=119.706905 RMSE=157.729207 time=0.752s.
+2026-10-25 00:24:59 | INFO | xgboost_baseline fold 2/5 started.
+2026-10-25 00:25:00 | INFO | xgboost_baseline fold 2 completed: MAE=121.944616 RMSE=160.555851 time=0.737s.
+2026-10-25 00:25:00 | INFO | xgboost_baseline fold 3/5 started.
+2026-10-25 00:25:01 | INFO | xgboost_baseline fold 3 completed: MAE=115.243774 RMSE=150.119037 time=0.716s.
+2026-10-25 00:25:01 | INFO | xgboost_baseline fold 4/5 started.
+2026-10-25 00:25:02 | INFO | xgboost_baseline fold 4 completed: MAE=121.729976 RMSE=165.672604 time=0.735s.
+2026-10-25 00:25:02 | INFO | xgboost_baseline fold 5/5 started.
+2026-10-25 00:25:02 | INFO | xgboost_baseline fold 5 completed: MAE=114.444917 RMSE=149.136165 time=0.768s.
+2026-10-25 00:25:02 | INFO | random_forest fold 1/5 started.
+2026-10-25 00:25:13 | INFO | random_forest fold 1 completed: MAE=127.769517 RMSE=172.568434 time=10.770s.
+2026-10-25 00:25:13 | INFO | random_forest fold 2/5 started.
+2026-10-25 00:25:25 | INFO | random_forest fold 2 completed: MAE=129.475103 RMSE=173.691665 time=11.877s.
+2026-10-25 00:25:25 | INFO | random_forest fold 3/5 started.
+2026-10-25 00:25:39 | INFO | random_forest fold 3 completed: MAE=120.312338 RMSE=158.957899 time=14.134s.
+2026-10-25 00:25:39 | INFO | random_forest fold 4/5 started.
+2026-10-25 00:25:55 | INFO | random_forest fold 4 completed: MAE=129.692811 RMSE=183.369098 time=16.044s.
+2026-10-25 00:25:55 | INFO | random_forest fold 5/5 started.
+2026-10-25 00:26:14 | INFO | random_forest fold 5 completed: MAE=119.767420 RMSE=160.822140 time=18.430s.
+2026-10-25 00:26:14 | INFO | XGBoost tuning candidate 1/24 fold 1/5 started.
+2026-10-25 00:26:15 | INFO | XGBoost tuning candidate 1/24 fold 1 completed: MAE=120.504506 RMSE=158.202211 time=1.622s.
+2026-10-25 00:26:15 | INFO | XGBoost tuning candidate 1/24 fold 2/5 started.
+2026-10-25 00:26:17 | INFO | XGBoost tuning candidate 1/24 fold 2 completed: MAE=122.271824 RMSE=161.796762 time=1.624s.
+2026-10-25 00:26:17 | INFO | XGBoost tuning candidate 1/24 fold 3/5 started.
+2026-10-25 00:26:19 | INFO | XGBoost tuning candidate 1/24 fold 3 completed: MAE=115.811981 RMSE=150.797027 time=1.659s.
+2026-10-25 00:26:19 | INFO | XGBoost tuning candidate 1/24 fold 4/5 started.
+2026-10-25 00:26:20 | INFO | XGBoost tuning candidate 1/24 fold 4 completed: MAE=120.440455 RMSE=163.311004 time=1.691s.
+2026-10-25 00:26:20 | INFO | XGBoost tuning candidate 1/24 fold 5/5 started.
+2026-10-25 00:26:22 | INFO | XGBoost tuning candidate 1/24 fold 5 completed: MAE=115.064235 RMSE=149.169956 time=1.705s.
+2026-10-25 00:26:22 | INFO | XGBoost tuning candidate 2/24 fold 1/5 started.
+2026-10-25 00:26:23 | INFO | XGBoost tuning candidate 2/24 fold 1 completed: MAE=150.736731 RMSE=195.218834 time=0.598s.
+2026-10-25 00:26:23 | INFO | XGBoost tuning candidate 2/24 fold 2/5 started.
+2026-10-25 00:26:23 | INFO | XGBoost tuning candidate 2/24 fold 2 completed: MAE=156.595372 RMSE=203.720622 time=0.599s.
+2026-10-25 00:26:23 | INFO | XGBoost tuning candidate 2/24 fold 3/5 started.
+2026-10-25 00:26:24 | INFO | XGBoost tuning candidate 2/24 fold 3 completed: MAE=146.251458 RMSE=188.333956 time=0.613s.
+2026-10-25 00:26:24 | INFO | XGBoost tuning candidate 2/24 fold 4/5 started.
+2026-10-25 00:26:25 | INFO | XGBoost tuning candidate 2/24 fold 4 completed: MAE=156.376006 RMSE=205.207213 time=0.629s.
+2026-10-25 00:26:25 | INFO | XGBoost tuning candidate 2/24 fold 5/5 started.
+2026-10-25 00:26:25 | INFO | XGBoost tuning candidate 2/24 fold 5 completed: MAE=145.664093 RMSE=187.930046 time=0.643s.
+2026-10-25 00:26:25 | INFO | XGBoost tuning candidate 3/24 fold 1/5 started.
+2026-10-25 00:26:26 | INFO | XGBoost tuning candidate 3/24 fold 1 completed: MAE=204.351514 RMSE=260.631365 time=0.382s.
+2026-10-25 00:26:26 | INFO | XGBoost tuning candidate 3/24 fold 2/5 started.
+2026-10-25 00:26:26 | INFO | XGBoost tuning candidate 3/24 fold 2 completed: MAE=221.094067 RMSE=282.059318 time=0.397s.
+2026-10-25 00:26:26 | INFO | XGBoost tuning candidate 3/24 fold 3/5 started.
+2026-10-25 00:26:26 | INFO | XGBoost tuning candidate 3/24 fold 3 completed: MAE=207.265823 RMSE=262.225813 time=0.399s.
+2026-10-25 00:26:26 | INFO | XGBoost tuning candidate 3/24 fold 4/5 started.
+2026-10-25 00:26:27 | INFO | XGBoost tuning candidate 3/24 fold 4 completed: MAE=223.652049 RMSE=284.168391 time=0.401s.
+2026-10-25 00:26:27 | INFO | XGBoost tuning candidate 3/24 fold 5/5 started.
+2026-10-25 00:26:27 | INFO | XGBoost tuning candidate 3/24 fold 5 completed: MAE=205.151195 RMSE=259.176933 time=0.419s.
+2026-10-25 00:26:27 | INFO | XGBoost tuning candidate 4/24 fold 1/5 started.
+2026-10-25 00:26:29 | INFO | XGBoost tuning candidate 4/24 fold 1 completed: MAE=110.806710 RMSE=148.003649 time=2.200s.
+2026-10-25 00:26:29 | INFO | XGBoost tuning candidate 4/24 fold 2/5 started.
+2026-10-25 00:26:32 | INFO | XGBoost tuning candidate 4/24 fold 2 completed: MAE=114.134478 RMSE=152.688103 time=2.230s.
+2026-10-25 00:26:32 | INFO | XGBoost tuning candidate 4/24 fold 3/5 started.
+2026-10-25 00:26:34 | INFO | XGBoost tuning candidate 4/24 fold 3 completed: MAE=106.409625 RMSE=139.494321 time=2.248s.
+2026-10-25 00:26:34 | INFO | XGBoost tuning candidate 4/24 fold 4/5 started.
+2026-10-25 00:26:36 | INFO | XGBoost tuning candidate 4/24 fold 4 completed: MAE=111.802631 RMSE=155.358941 time=2.331s.
+2026-10-25 00:26:36 | INFO | XGBoost tuning candidate 4/24 fold 5/5 started.
+2026-10-25 00:26:39 | INFO | XGBoost tuning candidate 4/24 fold 5 completed: MAE=104.389775 RMSE=135.993888 time=2.377s.
+2026-10-25 00:26:39 | INFO | XGBoost tuning candidate 5/24 fold 1/5 started.
+2026-10-25 00:26:39 | INFO | XGBoost tuning candidate 5/24 fold 1 completed: MAE=173.389246 RMSE=221.548545 time=0.680s.
+2026-10-25 00:26:39 | INFO | XGBoost tuning candidate 5/24 fold 2/5 started.
+2026-10-25 00:26:40 | INFO | XGBoost tuning candidate 5/24 fold 2 completed: MAE=182.077790 RMSE=234.434115 time=0.693s.
+2026-10-25 00:26:40 | INFO | XGBoost tuning candidate 5/24 fold 3/5 started.
+2026-10-25 00:26:41 | INFO | XGBoost tuning candidate 5/24 fold 3 completed: MAE=170.514689 RMSE=216.764905 time=0.719s.
+2026-10-25 00:26:41 | INFO | XGBoost tuning candidate 5/24 fold 4/5 started.
+2026-10-25 00:26:41 | INFO | XGBoost tuning candidate 5/24 fold 4 completed: MAE=178.894603 RMSE=230.370382 time=0.833s.
+2026-10-25 00:26:41 | INFO | XGBoost tuning candidate 5/24 fold 5/5 started.
+2026-10-25 00:26:42 | INFO | XGBoost tuning candidate 5/24 fold 5 completed: MAE=167.693287 RMSE=213.737101 time=0.786s.
+2026-10-25 00:26:42 | INFO | XGBoost tuning candidate 6/24 fold 1/5 started.
+2026-10-25 00:26:43 | INFO | XGBoost tuning candidate 6/24 fold 1 completed: MAE=112.605355 RMSE=149.304294 time=0.857s.
+2026-10-25 00:26:43 | INFO | XGBoost tuning candidate 6/24 fold 2/5 started.
+2026-10-25 00:26:44 | INFO | XGBoost tuning candidate 6/24 fold 2 completed: MAE=113.882455 RMSE=151.925106 time=0.862s.
+2026-10-25 00:26:44 | INFO | XGBoost tuning candidate 6/24 fold 3/5 started.
+2026-10-25 00:26:45 | INFO | XGBoost tuning candidate 6/24 fold 3 completed: MAE=106.802242 RMSE=140.339286 time=0.887s.
+2026-10-25 00:26:45 | INFO | XGBoost tuning candidate 6/24 fold 4/5 started.
+2026-10-25 00:26:46 | INFO | XGBoost tuning candidate 6/24 fold 4 completed: MAE=111.627251 RMSE=154.945013 time=0.930s.
+2026-10-25 00:26:46 | INFO | XGBoost tuning candidate 6/24 fold 5/5 started.
+2026-10-25 00:26:47 | INFO | XGBoost tuning candidate 6/24 fold 5 completed: MAE=104.887630 RMSE=136.692797 time=0.921s.
+2026-10-25 00:26:47 | INFO | XGBoost tuning candidate 7/24 fold 1/5 started.
+2026-10-25 00:26:48 | INFO | XGBoost tuning candidate 7/24 fold 1 completed: MAE=114.979465 RMSE=152.959432 time=0.843s.
+2026-10-25 00:26:48 | INFO | XGBoost tuning candidate 7/24 fold 2/5 started.
+2026-10-25 00:26:48 | INFO | XGBoost tuning candidate 7/24 fold 2 completed: MAE=118.006972 RMSE=156.886849 time=0.863s.
+2026-10-25 00:26:48 | INFO | XGBoost tuning candidate 7/24 fold 3/5 started.
+2026-10-25 00:26:49 | INFO | XGBoost tuning candidate 7/24 fold 3 completed: MAE=110.143612 RMSE=144.356765 time=0.892s.
+2026-10-25 00:26:49 | INFO | XGBoost tuning candidate 7/24 fold 4/5 started.
+2026-10-25 00:26:51 | INFO | XGBoost tuning candidate 7/24 fold 4 completed: MAE=116.362515 RMSE=159.873729 time=1.160s.
+2026-10-25 00:26:51 | INFO | XGBoost tuning candidate 7/24 fold 5/5 started.
+2026-10-25 00:26:52 | INFO | XGBoost tuning candidate 7/24 fold 5 completed: MAE=108.484003 RMSE=141.136107 time=1.032s.
+2026-10-25 00:26:52 | INFO | XGBoost tuning candidate 8/24 fold 1/5 started.
+2026-10-25 00:26:52 | INFO | XGBoost tuning candidate 8/24 fold 1 completed: MAE=134.418130 RMSE=174.885667 time=0.617s.
+2026-10-25 00:26:52 | INFO | XGBoost tuning candidate 8/24 fold 2/5 started.
+2026-10-25 00:26:53 | INFO | XGBoost tuning candidate 8/24 fold 2 completed: MAE=137.126212 RMSE=179.861335 time=0.637s.
+2026-10-25 00:26:53 | INFO | XGBoost tuning candidate 8/24 fold 3/5 started.
+2026-10-25 00:26:53 | INFO | XGBoost tuning candidate 8/24 fold 3 completed: MAE=129.708036 RMSE=167.457277 time=0.609s.
+2026-10-25 00:26:53 | INFO | XGBoost tuning candidate 8/24 fold 4/5 started.
+2026-10-25 00:26:54 | INFO | XGBoost tuning candidate 8/24 fold 4 completed: MAE=134.735723 RMSE=179.195034 time=0.711s.
+2026-10-25 00:26:54 | INFO | XGBoost tuning candidate 8/24 fold 5/5 started.
+2026-10-25 00:26:55 | INFO | XGBoost tuning candidate 8/24 fold 5 completed: MAE=128.846136 RMSE=166.480051 time=0.968s.
+2026-10-25 00:26:55 | INFO | XGBoost tuning candidate 9/24 fold 1/5 started.
+2026-10-25 00:26:58 | INFO | XGBoost tuning candidate 9/24 fold 1 completed: MAE=111.654582 RMSE=149.264232 time=3.084s.
+2026-10-25 00:26:58 | INFO | XGBoost tuning candidate 9/24 fold 2/5 started.
+2026-10-25 00:27:00 | INFO | XGBoost tuning candidate 9/24 fold 2 completed: MAE=113.565727 RMSE=151.289363 time=2.269s.
+2026-10-25 00:27:00 | INFO | XGBoost tuning candidate 9/24 fold 3/5 started.
+2026-10-25 00:27:03 | INFO | XGBoost tuning candidate 9/24 fold 3 completed: MAE=105.488708 RMSE=138.877468 time=2.372s.
+2026-10-25 00:27:03 | INFO | XGBoost tuning candidate 9/24 fold 4/5 started.
+2026-10-25 00:27:05 | INFO | XGBoost tuning candidate 9/24 fold 4 completed: MAE=111.338444 RMSE=154.135535 time=2.308s.
+2026-10-25 00:27:05 | INFO | XGBoost tuning candidate 9/24 fold 5/5 started.
+2026-10-25 00:27:07 | INFO | XGBoost tuning candidate 9/24 fold 5 completed: MAE=105.342695 RMSE=137.753959 time=2.352s.
+2026-10-25 00:27:08 | INFO | XGBoost tuning candidate 10/24 fold 1/5 started.
+2026-10-25 00:27:08 | INFO | XGBoost tuning candidate 10/24 fold 1 completed: MAE=145.866525 RMSE=189.414085 time=0.647s.
+2026-10-25 00:27:08 | INFO | XGBoost tuning candidate 10/24 fold 2/5 started.
+2026-10-25 00:27:09 | INFO | XGBoost tuning candidate 10/24 fold 2 completed: MAE=152.706483 RMSE=198.333231 time=0.646s.
+2026-10-25 00:27:09 | INFO | XGBoost tuning candidate 10/24 fold 3/5 started.
+2026-10-25 00:27:09 | INFO | XGBoost tuning candidate 10/24 fold 3 completed: MAE=142.220258 RMSE=183.248793 time=0.652s.
+2026-10-25 00:27:09 | INFO | XGBoost tuning candidate 10/24 fold 4/5 started.
+2026-10-25 00:27:10 | INFO | XGBoost tuning candidate 10/24 fold 4 completed: MAE=150.466178 RMSE=198.782952 time=0.652s.
+2026-10-25 00:27:10 | INFO | XGBoost tuning candidate 10/24 fold 5/5 started.
+2026-10-25 00:27:11 | INFO | XGBoost tuning candidate 10/24 fold 5 completed: MAE=140.861946 RMSE=181.336377 time=0.674s.
+2026-10-25 00:27:11 | INFO | XGBoost tuning candidate 11/24 fold 1/5 started.
+2026-10-25 00:27:12 | INFO | XGBoost tuning candidate 11/24 fold 1 completed: MAE=115.901218 RMSE=153.346429 time=1.634s.
+2026-10-25 00:27:12 | INFO | XGBoost tuning candidate 11/24 fold 2/5 started.
+2026-10-25 00:27:14 | INFO | XGBoost tuning candidate 11/24 fold 2 completed: MAE=117.052593 RMSE=154.614319 time=1.778s.
+2026-10-25 00:27:14 | INFO | XGBoost tuning candidate 11/24 fold 3/5 started.
+2026-10-25 00:27:16 | INFO | XGBoost tuning candidate 11/24 fold 3 completed: MAE=110.564184 RMSE=144.408709 time=1.863s.
+2026-10-25 00:27:16 | INFO | XGBoost tuning candidate 11/24 fold 4/5 started.
+2026-10-25 00:27:18 | INFO | XGBoost tuning candidate 11/24 fold 4 completed: MAE=115.072507 RMSE=157.236323 time=1.704s.
+2026-10-25 00:27:18 | INFO | XGBoost tuning candidate 11/24 fold 5/5 started.
+2026-10-25 00:27:20 | INFO | XGBoost tuning candidate 11/24 fold 5 completed: MAE=109.478374 RMSE=142.606297 time=1.844s.
+2026-10-25 00:27:20 | INFO | XGBoost tuning candidate 12/24 fold 1/5 started.
+2026-10-25 00:27:23 | INFO | XGBoost tuning candidate 12/24 fold 1 completed: MAE=110.659469 RMSE=147.882348 time=3.240s.
+2026-10-25 00:27:23 | INFO | XGBoost tuning candidate 12/24 fold 2/5 started.
+2026-10-25 00:27:25 | INFO | XGBoost tuning candidate 12/24 fold 2 completed: MAE=113.886604 RMSE=152.345705 time=2.401s.
+2026-10-25 00:27:25 | INFO | XGBoost tuning candidate 12/24 fold 3/5 started.
+2026-10-25 00:27:28 | INFO | XGBoost tuning candidate 12/24 fold 3 completed: MAE=105.377321 RMSE=138.450715 time=2.415s.
+2026-10-25 00:27:28 | INFO | XGBoost tuning candidate 12/24 fold 4/5 started.
+2026-10-25 00:27:30 | INFO | XGBoost tuning candidate 12/24 fold 4 completed: MAE=111.479656 RMSE=154.570453 time=2.459s.
+2026-10-25 00:27:30 | INFO | XGBoost tuning candidate 12/24 fold 5/5 started.
+2026-10-25 00:27:33 | INFO | XGBoost tuning candidate 12/24 fold 5 completed: MAE=104.811801 RMSE=136.600356 time=2.514s.
+2026-10-25 00:27:33 | INFO | XGBoost tuning candidate 13/24 fold 1/5 started.
+2026-10-25 00:27:34 | INFO | XGBoost tuning candidate 13/24 fold 1 completed: MAE=157.666438 RMSE=202.906168 time=1.108s.
+2026-10-25 00:27:34 | INFO | XGBoost tuning candidate 13/24 fold 2/5 started.
+2026-10-25 00:27:35 | INFO | XGBoost tuning candidate 13/24 fold 2 completed: MAE=164.374879 RMSE=213.354129 time=1.147s.
+2026-10-25 00:27:35 | INFO | XGBoost tuning candidate 13/24 fold 3/5 started.
+2026-10-25 00:27:36 | INFO | XGBoost tuning candidate 13/24 fold 3 completed: MAE=154.769550 RMSE=198.203485 time=1.124s.
+2026-10-25 00:27:36 | INFO | XGBoost tuning candidate 13/24 fold 4/5 started.
+2026-10-25 00:27:37 | INFO | XGBoost tuning candidate 13/24 fold 4 completed: MAE=160.066222 RMSE=209.307523 time=1.116s.
+2026-10-25 00:27:37 | INFO | XGBoost tuning candidate 13/24 fold 5/5 started.
+2026-10-25 00:27:38 | INFO | XGBoost tuning candidate 13/24 fold 5 completed: MAE=152.696696 RMSE=195.645385 time=1.208s.
+2026-10-25 00:27:38 | INFO | XGBoost tuning candidate 14/24 fold 1/5 started.
+2026-10-25 00:27:39 | INFO | XGBoost tuning candidate 14/24 fold 1 completed: MAE=148.089727 RMSE=191.306986 time=0.418s.
+2026-10-25 00:27:39 | INFO | XGBoost tuning candidate 14/24 fold 2/5 started.
+2026-10-25 00:27:39 | INFO | XGBoost tuning candidate 14/24 fold 2 completed: MAE=152.129973 RMSE=199.497737 time=0.434s.
+2026-10-25 00:27:39 | INFO | XGBoost tuning candidate 14/24 fold 3/5 started.
+2026-10-25 00:27:40 | INFO | XGBoost tuning candidate 14/24 fold 3 completed: MAE=142.467275 RMSE=184.215817 time=0.436s.
+2026-10-25 00:27:40 | INFO | XGBoost tuning candidate 14/24 fold 4/5 started.
+2026-10-25 00:27:40 | INFO | XGBoost tuning candidate 14/24 fold 4 completed: MAE=148.692566 RMSE=196.365586 time=0.453s.
+2026-10-25 00:27:40 | INFO | XGBoost tuning candidate 14/24 fold 5/5 started.
+2026-10-25 00:27:41 | INFO | XGBoost tuning candidate 14/24 fold 5 completed: MAE=142.444296 RMSE=183.511804 time=0.451s.
+2026-10-25 00:27:41 | INFO | XGBoost tuning candidate 15/24 fold 1/5 started.
+2026-10-25 00:27:42 | INFO | XGBoost tuning candidate 15/24 fold 1 completed: MAE=137.945255 RMSE=179.226666 time=1.096s.
+2026-10-25 00:27:42 | INFO | XGBoost tuning candidate 15/24 fold 2/5 started.
+2026-10-25 00:27:43 | INFO | XGBoost tuning candidate 15/24 fold 2 completed: MAE=142.563369 RMSE=188.248773 time=1.098s.
+2026-10-25 00:27:43 | INFO | XGBoost tuning candidate 15/24 fold 3/5 started.
+2026-10-25 00:27:44 | INFO | XGBoost tuning candidate 15/24 fold 3 completed: MAE=133.978222 RMSE=173.861147 time=1.129s.
+2026-10-25 00:27:44 | INFO | XGBoost tuning candidate 15/24 fold 4/5 started.
+2026-10-25 00:27:45 | INFO | XGBoost tuning candidate 15/24 fold 4 completed: MAE=136.905125 RMSE=182.495580 time=1.159s.
+2026-10-25 00:27:45 | INFO | XGBoost tuning candidate 15/24 fold 5/5 started.
+2026-10-25 00:27:46 | INFO | XGBoost tuning candidate 15/24 fold 5 completed: MAE=132.481489 RMSE=171.361513 time=1.162s.
+2026-10-25 00:27:46 | INFO | XGBoost tuning candidate 16/24 fold 1/5 started.
+2026-10-25 00:27:47 | INFO | XGBoost tuning candidate 16/24 fold 1 completed: MAE=113.999507 RMSE=151.453445 time=1.088s.
+2026-10-25 00:27:47 | INFO | XGBoost tuning candidate 16/24 fold 2/5 started.
+2026-10-25 00:27:48 | INFO | XGBoost tuning candidate 16/24 fold 2 completed: MAE=115.840975 RMSE=152.826020 time=1.116s.
+2026-10-25 00:27:48 | INFO | XGBoost tuning candidate 16/24 fold 3/5 started.
+2026-10-25 00:27:50 | INFO | XGBoost tuning candidate 16/24 fold 3 completed: MAE=109.302630 RMSE=142.834157 time=1.125s.
+2026-10-25 00:27:50 | INFO | XGBoost tuning candidate 16/24 fold 4/5 started.
+2026-10-25 00:27:51 | INFO | XGBoost tuning candidate 16/24 fold 4 completed: MAE=111.610234 RMSE=153.933074 time=1.149s.
+2026-10-25 00:27:51 | INFO | XGBoost tuning candidate 16/24 fold 5/5 started.
+2026-10-25 00:27:52 | INFO | XGBoost tuning candidate 16/24 fold 5 completed: MAE=108.065526 RMSE=140.719058 time=1.158s.
+2026-10-25 00:27:52 | INFO | XGBoost tuning candidate 17/24 fold 1/5 started.
+2026-10-25 00:27:52 | INFO | XGBoost tuning candidate 17/24 fold 1 completed: MAE=180.594471 RMSE=231.561274 time=0.458s.
+2026-10-25 00:27:52 | INFO | XGBoost tuning candidate 17/24 fold 2/5 started.
+2026-10-25 00:27:53 | INFO | XGBoost tuning candidate 17/24 fold 2 completed: MAE=190.933507 RMSE=244.296823 time=0.451s.
+2026-10-25 00:27:53 | INFO | XGBoost tuning candidate 17/24 fold 3/5 started.
+2026-10-25 00:27:53 | INFO | XGBoost tuning candidate 17/24 fold 3 completed: MAE=176.191775 RMSE=224.338527 time=0.467s.
+2026-10-25 00:27:53 | INFO | XGBoost tuning candidate 17/24 fold 4/5 started.
+2026-10-25 00:27:54 | INFO | XGBoost tuning candidate 17/24 fold 4 completed: MAE=185.129395 RMSE=238.162359 time=0.452s.
+2026-10-25 00:27:54 | INFO | XGBoost tuning candidate 17/24 fold 5/5 started.
+2026-10-25 00:27:54 | INFO | XGBoost tuning candidate 17/24 fold 5 completed: MAE=174.143731 RMSE=221.129267 time=0.472s.
+2026-10-25 00:27:54 | INFO | XGBoost tuning candidate 18/24 fold 1/5 started.
+2026-10-25 00:27:55 | INFO | XGBoost tuning candidate 18/24 fold 1 completed: MAE=178.869295 RMSE=228.480204 time=0.435s.
+2026-10-25 00:27:55 | INFO | XGBoost tuning candidate 18/24 fold 2/5 started.
+2026-10-25 00:27:55 | INFO | XGBoost tuning candidate 18/24 fold 2 completed: MAE=189.440757 RMSE=242.214309 time=0.445s.
+2026-10-25 00:27:55 | INFO | XGBoost tuning candidate 18/24 fold 3/5 started.
+2026-10-25 00:27:56 | INFO | XGBoost tuning candidate 18/24 fold 3 completed: MAE=177.067177 RMSE=225.427593 time=0.449s.
+2026-10-25 00:27:56 | INFO | XGBoost tuning candidate 18/24 fold 4/5 started.
+2026-10-25 00:27:56 | INFO | XGBoost tuning candidate 18/24 fold 4 completed: MAE=186.697624 RMSE=239.996751 time=0.440s.
+2026-10-25 00:27:56 | INFO | XGBoost tuning candidate 18/24 fold 5/5 started.
+2026-10-25 00:27:56 | INFO | XGBoost tuning candidate 18/24 fold 5 completed: MAE=175.908692 RMSE=222.756643 time=0.436s.
+2026-10-25 00:27:56 | INFO | XGBoost tuning candidate 19/24 fold 1/5 started.
+2026-10-25 00:27:57 | INFO | XGBoost tuning candidate 19/24 fold 1 completed: MAE=146.793715 RMSE=189.843082 time=0.648s.
+2026-10-25 00:27:57 | INFO | XGBoost tuning candidate 19/24 fold 2/5 started.
+2026-10-25 00:27:58 | INFO | XGBoost tuning candidate 19/24 fold 2 completed: MAE=152.729532 RMSE=199.166017 time=0.642s.
+2026-10-25 00:27:58 | INFO | XGBoost tuning candidate 19/24 fold 3/5 started.
+2026-10-25 00:27:58 | INFO | XGBoost tuning candidate 19/24 fold 3 completed: MAE=141.881450 RMSE=182.765550 time=0.645s.
+2026-10-25 00:27:58 | INFO | XGBoost tuning candidate 19/24 fold 4/5 started.
+2026-10-25 00:27:59 | INFO | XGBoost tuning candidate 19/24 fold 4 completed: MAE=151.322667 RMSE=199.912041 time=0.651s.
+2026-10-25 00:27:59 | INFO | XGBoost tuning candidate 19/24 fold 5/5 started.
+2026-10-25 00:28:00 | INFO | XGBoost tuning candidate 19/24 fold 5 completed: MAE=140.550642 RMSE=181.274421 time=0.683s.
+2026-10-25 00:28:00 | INFO | XGBoost tuning candidate 20/24 fold 1/5 started.
+2026-10-25 00:28:01 | INFO | XGBoost tuning candidate 20/24 fold 1 completed: MAE=115.872572 RMSE=153.663221 time=0.861s.
+2026-10-25 00:28:01 | INFO | XGBoost tuning candidate 20/24 fold 2/5 started.
+2026-10-25 00:28:01 | INFO | XGBoost tuning candidate 20/24 fold 2 completed: MAE=118.695971 RMSE=158.277695 time=0.876s.
+2026-10-25 00:28:01 | INFO | XGBoost tuning candidate 20/24 fold 3/5 started.
+2026-10-25 00:28:02 | INFO | XGBoost tuning candidate 20/24 fold 3 completed: MAE=112.175557 RMSE=146.546826 time=0.887s.
+2026-10-25 00:28:02 | INFO | XGBoost tuning candidate 20/24 fold 4/5 started.
+2026-10-25 00:28:03 | INFO | XGBoost tuning candidate 20/24 fold 4 completed: MAE=116.881942 RMSE=159.391394 time=0.911s.
+2026-10-25 00:28:03 | INFO | XGBoost tuning candidate 20/24 fold 5/5 started.
+2026-10-25 00:28:04 | INFO | XGBoost tuning candidate 20/24 fold 5 completed: MAE=111.737666 RMSE=145.200417 time=0.939s.
+2026-10-25 00:28:04 | INFO | XGBoost tuning candidate 21/24 fold 1/5 started.
+2026-10-25 00:28:05 | INFO | XGBoost tuning candidate 21/24 fold 1 completed: MAE=116.374932 RMSE=154.327101 time=0.854s.
+2026-10-25 00:28:05 | INFO | XGBoost tuning candidate 21/24 fold 2/5 started.
+2026-10-25 00:28:06 | INFO | XGBoost tuning candidate 21/24 fold 2 completed: MAE=118.215998 RMSE=157.699581 time=0.869s.
+2026-10-25 00:28:06 | INFO | XGBoost tuning candidate 21/24 fold 3/5 started.
+2026-10-25 00:28:07 | INFO | XGBoost tuning candidate 21/24 fold 3 completed: MAE=110.495895 RMSE=144.734503 time=0.883s.
+2026-10-25 00:28:07 | INFO | XGBoost tuning candidate 21/24 fold 4/5 started.
+2026-10-25 00:28:08 | INFO | XGBoost tuning candidate 21/24 fold 4 completed: MAE=117.343704 RMSE=161.106437 time=0.908s.
+2026-10-25 00:28:08 | INFO | XGBoost tuning candidate 21/24 fold 5/5 started.
+2026-10-25 00:28:09 | INFO | XGBoost tuning candidate 21/24 fold 5 completed: MAE=110.088957 RMSE=143.694778 time=0.921s.
+2026-10-25 00:28:09 | INFO | XGBoost tuning candidate 22/24 fold 1/5 started.
+2026-10-25 00:28:10 | INFO | XGBoost tuning candidate 22/24 fold 1 completed: MAE=110.899087 RMSE=147.072088 time=1.405s.
+2026-10-25 00:28:10 | INFO | XGBoost tuning candidate 22/24 fold 2/5 started.
+2026-10-25 00:28:11 | INFO | XGBoost tuning candidate 22/24 fold 2 completed: MAE=112.005116 RMSE=148.170611 time=1.425s.
+2026-10-25 00:28:11 | INFO | XGBoost tuning candidate 22/24 fold 3/5 started.
+2026-10-25 00:28:13 | INFO | XGBoost tuning candidate 22/24 fold 3 completed: MAE=105.330197 RMSE=137.159141 time=1.471s.
+2026-10-25 00:28:13 | INFO | XGBoost tuning candidate 22/24 fold 4/5 started.
+2026-10-25 00:28:14 | INFO | XGBoost tuning candidate 22/24 fold 4 completed: MAE=109.143663 RMSE=151.420257 time=1.465s.
+2026-10-25 00:28:14 | INFO | XGBoost tuning candidate 22/24 fold 5/5 started.
+2026-10-25 00:28:16 | INFO | XGBoost tuning candidate 22/24 fold 5 completed: MAE=103.892273 RMSE=135.428648 time=1.488s.
+2026-10-25 00:28:16 | INFO | XGBoost tuning candidate 23/24 fold 1/5 started.
+2026-10-25 00:28:17 | INFO | XGBoost tuning candidate 23/24 fold 1 completed: MAE=126.948968 RMSE=166.006996 time=1.058s.
+2026-10-25 00:28:17 | INFO | XGBoost tuning candidate 23/24 fold 2/5 started.
+2026-10-25 00:28:18 | INFO | XGBoost tuning candidate 23/24 fold 2 completed: MAE=129.305379 RMSE=172.420874 time=1.073s.
+2026-10-25 00:28:18 | INFO | XGBoost tuning candidate 23/24 fold 3/5 started.
+2026-10-25 00:28:19 | INFO | XGBoost tuning candidate 23/24 fold 3 completed: MAE=120.805168 RMSE=157.614397 time=1.084s.
+2026-10-25 00:28:19 | INFO | XGBoost tuning candidate 23/24 fold 4/5 started.
+2026-10-25 00:28:20 | INFO | XGBoost tuning candidate 23/24 fold 4 completed: MAE=124.709424 RMSE=168.034817 time=1.110s.
+2026-10-25 00:28:20 | INFO | XGBoost tuning candidate 23/24 fold 5/5 started.
+2026-10-25 00:28:21 | INFO | XGBoost tuning candidate 23/24 fold 5 completed: MAE=118.812130 RMSE=154.040346 time=1.123s.
+2026-10-25 00:28:21 | INFO | XGBoost tuning candidate 24/24 fold 1/5 started.
+2026-10-25 00:28:22 | INFO | XGBoost tuning candidate 24/24 fold 1 completed: MAE=202.891324 RMSE=258.562940 time=0.383s.
+2026-10-25 00:28:22 | INFO | XGBoost tuning candidate 24/24 fold 2/5 started.
+2026-10-25 00:28:22 | INFO | XGBoost tuning candidate 24/24 fold 2 completed: MAE=217.064235 RMSE=277.014481 time=0.393s.
+2026-10-25 00:28:22 | INFO | XGBoost tuning candidate 24/24 fold 3/5 started.
+2026-10-25 00:28:23 | INFO | XGBoost tuning candidate 24/24 fold 3 completed: MAE=202.061935 RMSE=255.485643 time=0.397s.
+2026-10-25 00:28:23 | INFO | XGBoost tuning candidate 24/24 fold 4/5 started.
+2026-10-25 00:28:23 | INFO | XGBoost tuning candidate 24/24 fold 4 completed: MAE=212.587728 RMSE=270.198546 time=0.409s.
+2026-10-25 00:28:23 | INFO | XGBoost tuning candidate 24/24 fold 5/5 started.
+2026-10-25 00:28:23 | INFO | XGBoost tuning candidate 24/24 fold 5 completed: MAE=199.031873 RMSE=252.320723 time=0.414s.
+2026-10-25 00:28:23 | INFO | Phase 6 model selection completed.
