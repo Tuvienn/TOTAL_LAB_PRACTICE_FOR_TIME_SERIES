@@ -1,0 +1,12 @@
+2026-11-25 13:49:12,805 - INFO - Practice 2 initialized.
+2026-11-25 13:49:12,805 - INFO - Logging system configured successfully.
+2026-11-25 13:49:12,805 - INFO - Run ID: 2026-11-25_core_arima_two_candidates_v2
+2026-11-25 13:49:12,816 - INFO - Hoàn thành kiểm tra dữ liệu | Số quan sát: 204 | Giá trị thiếu: 0
+2026-11-25 13:49:13,505 - INFO - E02 train-only ADF complete | n_train=163 | n_test=41
+2026-11-25 13:49:13,509 - INFO - E03 transformed training series created | natural_log + first_difference | n=162
+2026-11-25 13:49:13,565 - INFO - E03 official conclusion | natural_log + d=1 | test_used=false
+2026-11-25 13:49:13,625 - INFO - E04 ACF/PACF on log-first-difference training series
+2026-11-25 13:49:13,732 - INFO - Bắt đầu phân tích phần dư cho mô hình ARIMA(1,1,1).
+2026-11-25 13:49:13,807 - INFO - Đã hoàn thành residual diagnostics cho mô hình ARIMA(1,1,1).
+2026-11-25 13:49:13,914 - INFO - E05 complete | horizon=41 | baseline=seasonal_naive_12 | test_used=true
+2026-11-25 13:49:13,920 - INFO - Đã lưu Model Summary | Model: ARIMA(1,1,1) | File: /Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/Practice_2/outputs/results/Model_Summary_Prac2_Exercise.txt
