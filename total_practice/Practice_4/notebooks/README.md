@@ -1,20 +1,26 @@
-# Notebooks
+# Practice 4 — Notebooks
 
-Notebook chỉ dùng để trình bày kết quả từ approved artifacts.
+README chính của toàn bộ Practice 4 nằm tại <a href="../README.md" style="color:#1f6feb;">../README.md</a>.
 
-Final presentation notebook dự kiến được tạo tại Phase 10 với tên:
+## Notebook chính
 
-`practice_4_end_to_end.ipynb`
+- <a href="practice4.ipynb" style="color:#1f6feb;">practice4.ipynb</a>: pipeline end-to-end gồm data preparation,
+  temporal split, training-only EDA, preprocessing, feature engineering, VAR,
+  XGBoost, LSTM và walk-forward evaluation.
 
-Notebook phải:
+## Cách chạy trong VS Code
 
-- trình bày theo Phase 0–10 và bám các approval gates đã hoàn thành;
-- đọc official metrics, predictions, audits và figures từ approved artifact owners;
-- không tải raw data từ Internet;
-- không chứa duplicate preprocessing, feature-engineering hoặc model-training logic;
-- không mở test set hoặc tuning lại model;
-- kết thúc mỗi phase bằng evidence-based conclusion hoặc limitation;
-- trả lời sáu câu hỏi phân tích của đề trong phần discussion cuối cùng.
+1. Mở riêng thư mục `total_practice/Practice_4` bằng VS Code.
+2. Mở `practice4.ipynb`.
+3. Chọn kernel **Practice 4 (.venv, Python 3.12)**.
+4. Chọn **Run All** hoặc chạy tuần tự từ trên xuống.
 
-Notebook chưa được tạo trước khi Phase 0–9 hoàn thành và các required artifacts đã
-được Human review.
+Không cài package trực tiếp trong notebook. Xem
+<a href="../docs/environment.md" style="color:#1f6feb;">docs/environment.md</a> nếu cần kiểm tra môi trường.
+
+## Kết quả
+
+Sau khi chạy, xem dashboard tại
+<a href="../docs/results/README.md" style="color:#1f6feb;">docs/results/README.md</a>. Notebook tạo các artifact
+trong <a href="../results/" style="color:#1f6feb;">../results/</a>, còn runtime log nằm tại
+<a href="../docs/logs/practice4.log" style="color:#1f6feb;">../docs/logs/practice4.log</a>.

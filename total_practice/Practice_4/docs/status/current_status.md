@@ -1,36 +1,67 @@
 # Current Status — Practice 4
 
-Trạng thái dự án: `PLANNING`.
+Trạng thái dự án: `NOTEBOOK_EXECUTED`.
 
-## Đã hoàn thành ở mức lập kế hoạch
+## Dataset và provenance
 
-- Đã đọc đề bài Practice 4 và các quy tắc repository áp dụng.
-- Human đã chọn **Hourly energy demand, generation and weather** làm dataset chính.
-- Human đã thống nhất kiến trúc tổng quan gồm Phase 0–10:
-  - Phase 0: Problem Definition;
-  - Phase 1: Data Preparation;
-  - Phase 2: Temporal Split và Validation Design;
-  - Phase 3: EDA chỉ trên training set;
-  - Phase 4–9: preprocessing, feature engineering, modeling và final evaluation;
-  - Phase 10: End-to-End Notebook và Final Report.
-- Đã thực hiện preliminary read-only inspection đối với archive công khai:
-  - `energy_dataset.csv`: 35.064 dòng, 29 cột, hourly 2015–2018;
-  - `weather_features.csv`: 178.396 dòng, 17 cột, weather của năm thành phố;
-  - `total load actual` có 36 giá trị thiếu;
-  - ba trường `temp`, `humidity`, `wind_speed` không thiếu;
-  - có các city-hour bị lặp do nhiều weather descriptions, nhưng ba trường weather
-    bắt buộc giống nhau trong các bản lặp đã kiểm tra.
-- Hai tài liệu tổng quan đã được cập nhật theo quyết định dataset và đang chờ Human review.
+Bộ dữ liệu được chọn là **Hourly energy demand, generation and weather**.
+Notebook sử dụng canonical processed file:
 
-## Chưa thực hiện
+```text
+datasets/processed/electricity_load_weather_hourly.csv
+```
 
-- Chưa tải hoặc lưu dataset Spain vào repository.
-- Chưa ghi checksum, provenance và bằng chứng kiểm tra có thể tái lập trong execution log.
-- Chưa khóa data contract và data-preparation policy thuộc Phase 1.
-- Chưa khóa split boundaries và validation protocol thuộc Phase 2.
-- Chưa khóa missing-value treatment, scaling hoặc walk-forward protocol.
-- Chưa thiết kế chi tiết hay triển khai Phase 0.
-- Chưa viết code, notebook, test hoặc huấn luyện mô hình.
+Thông tin audit read-only của processed dataset:
 
-Dataset UCI `LD2011_2014.txt` hiện có trong `datasets/raw/` không phải dataset chính
-của Practice 4 và được giữ nguyên như source evidence; chưa có quyết định xóa hoặc di chuyển.
+| Thuộc tính | Giá trị |
+|---|---:|
+| Số dòng | 35.064 |
+| Số cột | 5 |
+| Khoảng thời gian | 2014-12-31 23:00 UTC → 2018-12-31 22:00 UTC |
+| Tần suất | Hourly, không có khoảng lệch |
+| Missing values | 36 missing `load` targets; weather inputs complete |
+| Duplicate timestamps | 0 |
+| Cột | `time`, `load`, `temperature`, `humidity`, `wind_speed` |
+| SHA-256 processed file | `9dd198be2b630b75bb679d8c7b3cb6fe1c655638114b81cf655fc5576ade3e6f` |
+
+Raw source checksums được ghi nhận để truy xuất:
+
+```text
+datasets/raw/energy_dataset.csv
+14cd13e020d87af0ab49db8e0f1e4d308320ec5b8d2dec23bab4d27c75c7733a
+
+datasets/raw/weather_features.csv
+3566c3c21179d4fc6691eec6d37a6cfe8fe6a4d9e097f95e4fda4a29dc683b18
+```
+
+Canonical processed dataset giữ nguyên 36 missing `load` targets. Notebook chỉ
+forward-fill `load` theo quá khứ cho input; các mốc có target gốc bị thiếu được
+đánh dấu và loại khỏi validation/test metrics. Duplicate timestamp và interval
+bất thường không được tự động sửa.
+
+## Đã triển khai và kiểm chứng
+
+- `notebooks/practice4.ipynb` đã được gắn nhãn Phase 1–10.
+- Project root và các đường dẫn dataset/log/results không còn phụ thuộc vào thư mục khởi chạy.
+- Các cell cài package `%pip install` đã được loại khỏi notebook.
+- Data-quality audit đã được thêm vào Phase 1.
+- Protocol recursive rolling one-step-ahead cho VAR, XGBoost và LSTM đã được triển khai trong Phase 9; prediction được append vào history và không retrain sau mỗi bước.
+- Notebook đã chạy lại trên môi trường macOS hiện tại bằng kernel Practice 4.
+- 50/50 code cells thực thi, không có execution error.
+- Log hiện tại: `docs/logs/practice4.log`.
+- Kết quả hiện tại: `results/model_evaluation.csv`, `results/model_evaluation.xlsx` và các model summaries.
+
+## Kết quả chạy hiện tại
+
+- VAR Test RMSE: `4614.2743`
+- XGBoost Test RMSE: `3664.4820`
+- LSTM Test RMSE: `4855.8257`
+- XGBoost đang đứng đầu theo Test RMSE trong lần chạy hiện tại; LSTM đứng đầu Validation RMSE.
+
+Baseline Naive/Seasonal Naive không nằm trong scope bắt buộc của lần triển khai này.
+
+## Tiếp theo
+
+- kiểm tra execution evidence và kết quả mới.
+- Phần trả lời sáu câu hỏi phân tích của đề sẽ bổ sung sau.
+- Baseline chỉ bổ sung khi phạm vi yêu cầu.
