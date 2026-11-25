@@ -52,7 +52,7 @@ XGBoost có thể thuận lợi khi có nhiều lag/rolling/calendar predictors 
 phi tuyến hoặc interaction. ARIMA có thể thuận lợi với chuỗi ngắn, cấu trúc tuyến
 tính sau stationarity treatment và nhu cầu diễn giải AR/MA gọn.
 
-Practice 3 v2 **không triển khai ARIMA benchmark**, nên không có bằng chứng thực
+Practice 3 **không triển khai ARIMA benchmark**, nên không có bằng chứng thực
 nghiệm để tuyên bố XGBoost tốt hơn ARIMA.
 
 ## 4. Error và interpretation
@@ -94,7 +94,7 @@ Phase 9 không train, predict, tuning, thay model lock hoặc đánh giá lại 
 ## Evidence
 
 - <a href="../../notebooks/Practice_3_present.ipynb" style="color:#1f6feb;">Notebook chính — cells 44–48</a>
-- <a href="../../src/practice_3_v2/analysis/final_conclusion.py" style="color:#1f6feb;">Source: final_conclusion.py</a>
+- <a href="../../src/practice_3/analysis/final_conclusion.py" style="color:#1f6feb;">Source: final_conclusion.py</a>
 - <a href="../../tests/test_final_conclusion.py" style="color:#1f6feb;">Final-conclusion tests</a>
 - <a href="../../outputs/results/phase_09_final_conclusion.json" style="color:#1f6feb;">Official final JSON</a>
 - <a href="../phase_details/PHASE_09_FINAL_CONCLUSION.md" style="color:#1f6feb;">Phase detail</a>

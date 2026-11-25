@@ -1,4 +1,4 @@
-# QUY TẮC CODE — PRACTICE 3 V2
+# QUY TẮC CODE — PRACTICE 3
 
 ## 1. Ngôn ngữ
 
@@ -7,9 +7,9 @@
 
 ## 2. Source ownership
 
-- Logic được tái sử dụng hoặc ảnh hưởng correctness phải có một owner trong `src/practice_3_v2/`.
+- Logic được tái sử dụng hoặc ảnh hưởng correctness phải có một owner trong `src/practice_3/`.
 - Notebook không được chứa bản sao của data repair, split, feature engineering, training, forecasting hoặc metric logic.
-- Không import package legacy `practice_3` khi chạy official v2 pipeline.
+- Không import package legacy implementation khi chạy official Practice 3 pipeline.
 
 ## 3. Đường dẫn và configuration
 

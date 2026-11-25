@@ -130,7 +130,7 @@ Audit chứa schema, alignment, exclusion counts, eligible range, fold counts, b
 
 ```text
 config/supervised_dataset.json
-src/practice_3_v2/data/supervised_dataset.py
+src/practice_3/data/supervised_dataset.py
 tests/test_supervised_dataset.py
 outputs/results/phase_05_supervised_dataset.json
 docs/logs/PHASE_05_EXECUTION.md
@@ -171,9 +171,9 @@ Focused tests phải kiểm tra:
 15. Official audit không có holdout target-derived statistics.
 16. Repeated run tạo cùng audit bytes.
 17. Invalid contract/checksum/boundary làm pipeline dừng.
-18. Không import runtime code từ legacy `practice_3`.
+18. Không import runtime code từ legacy implementation.
 
-Trước bàn giao phải chạy focused tests, full v2 regression suite, notebook clean-kernel execution và `git diff --check`.
+Trước bàn giao phải chạy focused tests, full Practice 3 regression suite, notebook clean-kernel execution và `git diff --check`.
 
 ## 14. Stop conditions
 
@@ -213,7 +213,7 @@ Invalid feature-vector exclusions: 4,427
 Missing-target exclusions with valid X: 25
 Expanding-window folds: 5
 Focused tests: 17/17 PASS
-Full v2 regression suite: 82/82 PASS
+Full Practice 3 regression suite: 82/82 PASS
 Official audit: PASS
 Human result review: APPROVED
 ```

@@ -3,7 +3,7 @@
   "contract_version": "1.0.0",
   "upstream": {
     "phase_05_audit": "outputs/results/phase_05_supervised_dataset.json",
-    "phase_05_audit_sha256": "21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5",
+    "phase_05_audit_sha256": "261dc58db3bfd4621c444c6c08fc51182622247239d8c1f5b848ee08dc7a59e0",
     "eligible_samples": 108083,
     "feature_count": 22,
     "folds": 5
@@ -79,14 +79,46 @@
     "random_state": 42,
     "early_stopping": false,
     "parameter_space": {
-      "n_estimators": [300, 500, 800],
-      "max_depth": [3, 5, 7],
-      "learning_rate": [0.03, 0.05, 0.1],
-      "subsample": [0.7, 0.85, 1.0],
-      "colsample_bytree": [0.7, 0.85, 1.0],
-      "min_child_weight": [1, 5, 10],
-      "reg_alpha": [0.0, 0.1, 1.0],
-      "reg_lambda": [1.0, 5.0, 10.0]
+      "n_estimators": [
+        300,
+        500,
+        800
+      ],
+      "max_depth": [
+        3,
+        5,
+        7
+      ],
+      "learning_rate": [
+        0.03,
+        0.05,
+        0.1
+      ],
+      "subsample": [
+        0.7,
+        0.85,
+        1.0
+      ],
+      "colsample_bytree": [
+        0.7,
+        0.85,
+        1.0
+      ],
+      "min_child_weight": [
+        1,
+        5,
+        10
+      ],
+      "reg_alpha": [
+        0.0,
+        0.1,
+        1.0
+      ],
+      "reg_lambda": [
+        1.0,
+        5.0,
+        10.0
+      ]
     }
   },
   "selection": {

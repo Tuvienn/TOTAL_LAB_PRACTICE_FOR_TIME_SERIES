@@ -1,8 +1,8 @@
-# PRACTICE 3 V2 — PROJECT WORKFLOW
+# PRACTICE 3 — PROJECT WORKFLOW
 
 ## 1. Mục đích
 
-Tài liệu này mô tả workflow kỹ thuật end-to-end của Practice 3 v2, luồng artifact giữa các phase và validation gate cần vượt qua trước khi chuyển phase.
+Tài liệu này mô tả workflow kỹ thuật end-to-end của Practice 3, luồng artifact giữa các phase và validation gate cần vượt qua trước khi chuyển phase.
 
 Đây không phải workflow quản trị AI–Human. Quy tắc phê duyệt và triển khai nằm tại `docs/rules/workflow_rule.md`.
 
@@ -164,7 +164,7 @@ final conclusion and handoff
 | `config/` | Machine-readable approved contracts |
 | `datasets/raw/` | Raw data bất biến |
 | `datasets/processed/` | Dữ liệu dẫn xuất có thể tái tạo |
-| `src/practice_3_v2/` | Pipeline, analysis, metric và visualization logic |
+| `src/practice_3/` | Pipeline, analysis, metric và visualization logic |
 | `tests/` | Contract, alignment, leakage và determinism tests |
 | `runs/` | Checkpoint/execution state cục bộ, không phải official evidence |
 | `outputs/results/` | Official machine-readable results |

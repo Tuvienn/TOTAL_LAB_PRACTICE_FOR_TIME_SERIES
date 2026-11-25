@@ -6,8 +6,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3_v2.analysis.eda import extract_development_data
-from practice_3_v2.analysis.feature_engineering import (
+from practice_3.analysis.eda import extract_development_data
+from practice_3.analysis.feature_engineering import (
     PROJECT_ROOT,
     build_calendar_features,
     build_feature_row_from_history,
@@ -17,7 +17,7 @@ from practice_3_v2.analysis.feature_engineering import (
     validate_feature_contract,
     validate_feature_frame,
 )
-from practice_3_v2.data.temporal_split import validate_prepared_input
+from practice_3.data.temporal_split import validate_prepared_input
 
 
 (
@@ -265,7 +265,7 @@ def test_phase_04_audit_is_deterministic_and_contains_no_holdout_statistics(
 
 def test_pipeline_source_does_not_import_legacy_package() -> None:
     source = (
-        PROJECT_ROOT / "src/practice_3_v2/analysis/feature_engineering.py"
+        PROJECT_ROOT / "src/practice_3/analysis/feature_engineering.py"
     ).read_text(encoding="utf-8")
     assert "from practice_3 " not in source
     assert "import practice_3" not in source

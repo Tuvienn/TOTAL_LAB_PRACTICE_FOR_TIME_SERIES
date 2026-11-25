@@ -2,7 +2,7 @@ from dataclasses import replace
 
 import pytest
 
-from practice_3_v2.visualization.presentation_artifacts import (
+from practice_3.visualization.presentation_artifacts import (
     load_presentation_artifacts,
     validate_presentation_artifacts,
 )

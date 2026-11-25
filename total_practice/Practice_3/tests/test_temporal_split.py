@@ -5,8 +5,8 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from practice_3_v2.data.data_preparation import load_json_contract
-from practice_3_v2.data.temporal_split import (
+from practice_3.data.data_preparation import load_json_contract
+from practice_3.data.temporal_split import (
     PROJECT_ROOT,
     build_development_holdout_masks,
     build_expanding_window_folds,
@@ -205,7 +205,7 @@ def test_phase_02_artifact_is_deterministic(tmp_path: Path) -> None:
 
 
 def test_pipeline_source_does_not_import_legacy_package() -> None:
-    source_path = PROJECT_ROOT / "src/practice_3_v2/data/temporal_split.py"
+    source_path = PROJECT_ROOT / "src/practice_3/data/temporal_split.py"
     source = source_path.read_text(encoding="utf-8")
     assert "from practice_3 " not in source
     assert "import practice_3" not in source

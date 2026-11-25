@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "time-series-practice-3-v2"
+name = "time-series-practice-3"
 version = "0.1.0"
-description = "End-to-end time-series forecasting workflow for Practice 3 v2"
+description = "End-to-end time-series forecasting workflow for Practice 3"
 requires-python = ">=3.12"
 dependencies = [
     "numpy>=2.0",

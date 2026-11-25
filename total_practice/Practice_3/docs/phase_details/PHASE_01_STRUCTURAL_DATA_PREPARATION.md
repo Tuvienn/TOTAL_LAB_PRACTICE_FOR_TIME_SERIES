@@ -57,7 +57,7 @@ Raw file là immutable evidence. Không sort, deduplicate, impute, reindex hoặ
 
 ## 4. Known structural findings
 
-Legacy evidence cho biết các expected findings sau; v2 phải tự xác minh lại từ raw input:
+Legacy evidence cho biết các expected findings sau; Practice 3 phải tự xác minh lại từ raw input:
 
 | Kiểm tra | Expected finding |
 |---|---:|
@@ -72,7 +72,7 @@ Legacy evidence cho biết các expected findings sau; v2 phải tự xác minh 
 | Missing hourly timestamps | 27 |
 | Fully duplicated rows | 0 |
 
-Nếu v2 quan sát kết quả khác contract hoặc expected findings, pipeline phải dừng để Human review; không tự sửa expected counts.
+Nếu Practice 3 quan sát kết quả khác contract hoặc expected findings, pipeline phải dừng để Human review; không tự sửa expected counts.
 
 ## 5. Approved processing policy
 
@@ -260,7 +260,7 @@ Không đưa runtime timestamp ngẫu nhiên vào nội dung quyết định det
 ## 10. Proposed source ownership
 
 ```text
-src/practice_3_v2/data/data_preparation.py
+src/practice_3/data/data_preparation.py
 ```
 
 Proposed functions:
@@ -279,7 +279,7 @@ save_prepared_artifacts
 run_phase_01
 ```
 
-Implementation dùng tiếng Anh cho identifier, exception và docstring. Không import runtime code từ package legacy `practice_3`.
+Implementation dùng tiếng Anh cho identifier, exception và docstring. Không import runtime code từ package legacy implementation.
 
 ## 11. Environment prerequisite
 
@@ -327,7 +327,7 @@ Focused tests phải kiểm tra:
 16. Serialized CSV đọc lại và validation được.
 17. Processed artifact checksum deterministic giữa hai runs.
 18. Audit lists khớp dữ liệu thực tế.
-19. Pipeline không import package legacy `practice_3`.
+19. Pipeline không import package legacy implementation.
 20. Official artifact chỉ được promote sau validation.
 
 Module-scoped fixtures được ưu tiên để tránh chạy pipeline lặp lại không cần thiết.
@@ -337,7 +337,7 @@ Module-scoped fixtures được ưu tiên để tránh chạy pipeline lặp l�
 Phase 1 PASS khi:
 
 - focused tests PASS;
-- full v2 regression suite PASS;
+- full Practice 3 regression suite PASS;
 - raw checksum trước/sau không đổi;
 - prepared artifact khớp contract;
 - serialized artifact validation PASS;

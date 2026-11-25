@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from practice_3_v2.analysis.eda_presentation import (
+from practice_3.analysis.eda_presentation import (
     build_presentation_evidence,
     run,
 )

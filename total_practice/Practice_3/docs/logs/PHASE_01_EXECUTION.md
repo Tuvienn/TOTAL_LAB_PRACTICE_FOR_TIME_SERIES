@@ -23,7 +23,7 @@ Practice_3/.venv
 ## 3. Official execution
 
 ```bash
-.venv/bin/python -m practice_3_v2.data.data_preparation
+.venv/bin/python -m practice_3.data.data_preparation
 ```
 
 Official outputs:
@@ -74,7 +74,7 @@ Audit lưu danh sách cụ thể của 4 duplicate timestamps và 27 missing tim
 ```text
 Phase 0 contract tests: PASS
 Phase 1 focused tests: PASS
-Full v2 regression suite: 20/20 PASS
+Full Practice 3 regression suite: 20/20 PASS
 Serialized artifact validation: PASS
 Independent checksum/count recalculation: PASS
 Deterministic official rerun: PASS

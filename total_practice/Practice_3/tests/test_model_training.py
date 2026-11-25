@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3_v2.analysis.model_training import (
+from practice_3.analysis.model_training import (
     PROJECT_ROOT,
     append_run_log,
     atomic_write_json,
@@ -20,8 +20,8 @@ from practice_3_v2.analysis.model_training import (
     validate_model_training_contract,
     validate_resume_identity,
 )
-from practice_3_v2.data.data_preparation import load_json_contract
-from practice_3_v2.data.supervised_dataset import (
+from practice_3.data.data_preparation import load_json_contract
+from practice_3.data.supervised_dataset import (
     SupervisedFold,
     SupervisedPartition,
 )
@@ -235,7 +235,7 @@ def test_checkpoint_resume_rejects_changed_identity(tmp_path: Path) -> None:
 
 
 def test_notebook_and_source_respect_phase_06_boundaries() -> None:
-    source = (PROJECT_ROOT / "src/practice_3_v2/analysis/model_training.py").read_text(
+    source = (PROJECT_ROOT / "src/practice_3/analysis/model_training.py").read_text(
         encoding="utf-8"
     )
     assert "from practice_3 " not in source

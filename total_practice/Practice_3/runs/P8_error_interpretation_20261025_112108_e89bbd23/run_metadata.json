@@ -11,12 +11,12 @@
     "xgboost": "3.4.1"
   },
   "upstream_evidence": {
-    "phase_07_audit_sha256": "441dc33389d90e18902fae0d1ffc7e18aec46e9f130bc55284baef4abfd82adf",
+    "phase_07_audit_sha256": "c931030ce8f4c43b3bf32c0c8ab74357bb482b45d721a3f6b6b8f27577b03dfa",
     "one_step_predictions_sha256": "d06b30db1a49592682039677b919cde19a4240ef37865ae5238991c43eee16f3",
     "one_step_metrics_sha256": "336cdd18a6441c5a05efa76e65a280553e7166cbca190230453efe79525449b5",
     "recursive_predictions_sha256": "b99f9a3fbd18f8677bd8175db208e2360a1da5674a12e670b2f19d4a4c96f913",
     "recursive_metrics_sha256": "7cab2c6943cb0df9f034f78ebe82254bf60270ddcc6f53830fa09db51915db07",
-    "phase_06_model_lock_sha256": "ad31cb65daa36c394d7d5afc2cf0af333760c8e75ba718e702368e260db70eee",
+    "phase_06_model_lock_sha256": "d1a31482d62b906a1b563d5b3d49cf2475f09842c9ed4d487c9bafe0ce06adf5",
     "candidate_registry": [
       "persistence",
       "seasonal_naive_24",

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from practice_3_v2.analysis.metrics import (
+from practice_3.analysis.metrics import (
     aggregate_fold_metrics,
     mean_absolute_error,
     regression_metrics,

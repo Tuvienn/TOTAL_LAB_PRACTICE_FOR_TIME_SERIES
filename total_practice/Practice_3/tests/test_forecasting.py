@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3_v2.analysis.forecasting import (
+from practice_3.analysis.forecasting import (
     EXPECTED_CANDIDATES,
     PROJECT_ROOT,
     build_recursive_predictions,
@@ -19,7 +19,7 @@ from practice_3_v2.analysis.forecasting import (
     validate_final_evaluation_contract,
     validate_resume_identity,
 )
-from practice_3_v2.data.data_preparation import load_json_contract
+from practice_3.data.data_preparation import load_json_contract
 
 
 FINAL_CONTRACT = load_json_contract(PROJECT_ROOT / "config/final_evaluation.json")
@@ -191,7 +191,7 @@ def test_run_resume_rejects_changed_identity(tmp_path: Path) -> None:
 
 
 def test_source_has_no_tuning_or_legacy_runtime_import() -> None:
-    source = (PROJECT_ROOT / "src/practice_3_v2/analysis/forecasting.py").read_text(
+    source = (PROJECT_ROOT / "src/practice_3/analysis/forecasting.py").read_text(
         encoding="utf-8"
     )
     assert "sample_tuning_parameters" not in source

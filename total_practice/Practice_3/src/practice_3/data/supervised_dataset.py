@@ -1,4 +1,4 @@
-"""One-step supervised-data construction for Practice 3 v2."""
+"""One-step supervised-data construction for Practice 3."""
 
 from __future__ import annotations
 
@@ -13,16 +13,16 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from practice_3_v2.analysis.eda import extract_development_data
-from practice_3_v2.analysis.feature_engineering import (
+from practice_3.analysis.eda import extract_development_data
+from practice_3.analysis.feature_engineering import (
     build_time_safe_features,
     load_phase_04_inputs,
 )
-from practice_3_v2.data.data_preparation import (
+from practice_3.data.data_preparation import (
     calculate_sha256,
     load_json_contract,
 )
-from practice_3_v2.data.temporal_split import validate_prepared_input
+from practice_3.data.temporal_split import validate_prepared_input
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -514,7 +514,7 @@ def build_phase_05_audit(
         "persistence": {
             "xy_table_written": False,
             "reconstruction_owner": (
-                "practice_3_v2.data.supervised_dataset"
+                "practice_3.data.supervised_dataset"
             ),
         },
         "checks": {

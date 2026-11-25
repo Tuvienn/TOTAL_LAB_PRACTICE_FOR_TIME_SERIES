@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3_v2.analysis.interpretation import (
+from practice_3.analysis.interpretation import (
     EXPECTED_CANDIDATES,
     PROJECT_ROOT,
     _promote_phase_08_outputs,
@@ -21,7 +21,7 @@ from practice_3_v2.analysis.interpretation import (
     run_preflight,
     validate_error_analysis_contract,
 )
-from practice_3_v2.data.data_preparation import calculate_sha256, load_json_contract
+from practice_3.data.data_preparation import calculate_sha256, load_json_contract
 
 
 ERROR_CONTRACT = load_json_contract(PROJECT_ROOT / "config/error_analysis.json")
@@ -272,7 +272,7 @@ def test_failed_bundle_promotion_removes_every_partial_output(
     second_source.write_bytes(b"second")
     first_output = tmp_path / "official" / "first.output"
     second_output = tmp_path / "official" / "second.output"
-    import practice_3_v2.analysis.interpretation as module
+    import practice_3.analysis.interpretation as module
 
     real_replace = module.os.replace
     calls = 0
@@ -296,21 +296,21 @@ def test_failed_bundle_promotion_removes_every_partial_output(
 
 def test_phase_08_source_has_no_tuning_selection_or_binary_persistence() -> None:
     source = (
-        PROJECT_ROOT / "src/practice_3_v2/analysis/interpretation.py"
+        PROJECT_ROOT / "src/practice_3/analysis/interpretation.py"
     ).read_text(encoding="utf-8")
     assert "sample_tuning_parameters" not in source
     assert "select_candidate(" not in source
     assert "joblib" not in source
     assert "pickle" not in source
     assert ".dump(" not in source
-    assert "from practice_3." not in source
+    assert "from practice_3.analysis.interpretation" not in source
     assert "import practice_3\n" not in source
 
 
 def test_notebook_does_not_execute_phase_08_analysis_logic() -> None:
     notebook_path = PROJECT_ROOT / "notebooks/Practice_3_present.ipynb"
     notebook_source = notebook_path.read_text(encoding="utf-8")
-    assert "practice_3_v2.analysis.interpretation" not in notebook_source
+    assert "practice_3.analysis.interpretation" not in notebook_source
     assert "run_analysis(" not in notebook_source
     assert "--run" not in notebook_source
 

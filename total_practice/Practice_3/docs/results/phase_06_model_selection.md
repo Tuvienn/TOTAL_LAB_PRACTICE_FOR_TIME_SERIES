@@ -16,7 +16,7 @@ sau đó khóa model trước khi mở historical holdout.
 ## Evidence
 
 - <a href="../../notebooks/Practice_3_present.ipynb" style="color:#1f6feb;">Notebook chính — cells 23–31</a>
-- <a href="../../src/practice_3_v2/analysis/model_training.py" style="color:#1f6feb;">Source: model_training.py</a> · <a href="../../src/practice_3_v2/analysis/metrics.py" style="color:#1f6feb;">metrics.py</a> · <a href="../../src/practice_3_v2/analysis/supplemental_experiments.py" style="color:#1f6feb;">supplemental_experiments.py</a>
+- <a href="../../src/practice_3/analysis/model_training.py" style="color:#1f6feb;">Source: model_training.py</a> · <a href="../../src/practice_3/analysis/metrics.py" style="color:#1f6feb;">metrics.py</a> · <a href="../../src/practice_3/analysis/supplemental_experiments.py" style="color:#1f6feb;">supplemental_experiments.py</a>
 - <a href="../../tests/test_model_training.py" style="color:#1f6feb;">Model tests</a>
 - <a href="../../outputs/results/phase_06_model_lock.json" style="color:#1f6feb;">Model lock</a> · <a href="../../outputs/results/phase_06_cv_results.json" style="color:#1f6feb;">CV results</a> · <a href="../../outputs/results/phase_06_training_diagnostics.json" style="color:#1f6feb;">Training diagnostics</a>
 - <a href="../../outputs/figures/phase_06_cv_comparison.png" style="color:#1f6feb;">CV comparison</a> · <a href="../../outputs/figures/phase_06_selected_candidate_folds.png" style="color:#1f6feb;">Selected folds</a> · <a href="../../outputs/figures/phase_06_tuning_candidates.png" style="color:#1f6feb;">Tuning candidates</a>

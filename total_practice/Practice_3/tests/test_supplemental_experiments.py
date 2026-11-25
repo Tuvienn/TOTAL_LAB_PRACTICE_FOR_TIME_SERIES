@@ -6,8 +6,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3_v2.analysis import supplemental_experiments as supplemental
-from practice_3_v2.analysis.supplemental_experiments import (
+from practice_3.analysis import supplemental_experiments as supplemental
+from practice_3.analysis.supplemental_experiments import (
     EXPECTED_P_VALUES,
     build_common_lag_folds,
     build_consecutive_lag_frame,
@@ -20,13 +20,13 @@ from practice_3_v2.analysis.supplemental_experiments import (
     validate_resume_identity,
     validate_supplemental_contract,
 )
-from practice_3_v2.data.data_preparation import calculate_sha256, load_json_contract
-from practice_3_v2.data.supervised_dataset import (
+from practice_3.data.data_preparation import calculate_sha256, load_json_contract
+from practice_3.data.supervised_dataset import (
     PROJECT_ROOT,
     SupervisedFold,
     SupervisedPartition,
 )
-from practice_3_v2.visualization.supplemental_experiments import (
+from practice_3.visualization.supplemental_experiments import (
     save_lag_sensitivity_figure,
     save_model_comparison_figure,
 )
@@ -460,7 +460,7 @@ def test_model_lock_identity_remains_unchanged_after_supplemental_execution() ->
 def test_source_and_notebook_respect_supplemental_boundaries() -> None:
     source = (
         PROJECT_ROOT
-        / "src/practice_3_v2/analysis/supplemental_experiments.py"
+        / "src/practice_3/analysis/supplemental_experiments.py"
     ).read_text(encoding="utf-8")
     assert "from practice_3 " not in source
     assert "import practice_3" not in source

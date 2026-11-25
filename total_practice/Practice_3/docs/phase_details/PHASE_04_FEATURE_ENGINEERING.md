@@ -148,7 +148,7 @@ Feature owner phải cung cấp hàm tạo một feature row từ history để 
 
 ```text
 config/features.json
-src/practice_3_v2/analysis/feature_engineering.py
+src/practice_3/analysis/feature_engineering.py
 tests/test_feature_engineering.py
 outputs/results/phase_04_feature_validation.json
 docs/logs/PHASE_04_EXECUTION.md
@@ -211,9 +211,9 @@ Focused tests phải kiểm tra:
 13. Không dùng `quality_flag`, `source_count`, anomaly flag hoặc current target làm feature.
 14. Invalid order, lag, rolling policy hoặc checksum làm pipeline dừng.
 15. Official audit deterministic qua repeated run.
-16. Không có runtime import từ legacy `practice_3`.
+16. Không có runtime import từ legacy implementation.
 
-Trước bàn giao phải chạy focused tests, full v2 regression suite và `git diff --check`.
+Trước bàn giao phải chạy focused tests, full Practice 3 regression suite và `git diff --check`.
 
 ## 11. Atomic and deterministic policy
 
@@ -264,7 +264,7 @@ Development rows validated: 112,535
 Rows with all 22 features: 108,108
 First fully available timestamp: 2004-10-08 01:00:00
 Focused tests: 17/17 PASS
-Full v2 regression suite: 65/65 PASS
+Full Practice 3 regression suite: 65/65 PASS
 Official audit: PASS
 Human result review: APPROVED
 ```
@@ -298,7 +298,7 @@ sin/cos riêng lẻ dễ gây diễn giải sai. Correlation chỉ là descripti
 association, không phải causal evidence hoặc XGBoost feature importance.
 
 ```text
-src/practice_3_v2/analysis/feature_presentation.py
+src/practice_3/analysis/feature_presentation.py
 outputs/results/phase_04_feature_presentation.json
 outputs/figures/phase_04_temporal_feature_correlation.png
 tests/test_feature_presentation.py

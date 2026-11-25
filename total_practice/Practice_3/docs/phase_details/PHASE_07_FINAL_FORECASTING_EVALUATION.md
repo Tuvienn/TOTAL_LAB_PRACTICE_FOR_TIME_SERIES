@@ -32,7 +32,7 @@ không thực hiện error interpretation thay Phase 8.
 
 ## 3. Claim boundary
 
-Holdout đã từng được quan sát trong legacy Practice 3. Vì vậy mọi artifact phải
+Holdout đã từng được quan sát trong legacy implementation. Vì vậy mọi artifact phải
 gọi partition này là `historical_re_evaluation_holdout`, không được gọi là
 untouched/unseen final test.
 
@@ -252,9 +252,9 @@ locked parameters, seed, package versions, feature schema và development data.
 
 ```text
 config/final_evaluation.json
-src/practice_3_v2/analysis/forecasting.py
-src/practice_3_v2/analysis/evaluation.py
-src/practice_3_v2/visualization/forecast_evaluation.py
+src/practice_3/analysis/forecasting.py
+src/practice_3/analysis/evaluation.py
+src/practice_3/visualization/forecast_evaluation.py
 tests/test_forecasting.py
 tests/test_evaluation.py
 ```
@@ -282,7 +282,7 @@ Tests phải kiểm tra:
 15. metric JSON linkage với prediction checksum;
 16. figure provenance;
 17. notebook không chạy evaluation logic;
-18. không import legacy `practice_3` runtime.
+18. không import legacy implementation runtime.
 
 ## 17. Stop conditions
 

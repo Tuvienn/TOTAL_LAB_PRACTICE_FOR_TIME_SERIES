@@ -1,4 +1,4 @@
-"""TRAIN-only exploratory data analysis for Practice 3 v2."""
+"""TRAIN-only exploratory data analysis for Practice 3."""
 
 from __future__ import annotations
 
@@ -15,11 +15,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from practice_3_v2.data.data_preparation import (
+from practice_3.data.data_preparation import (
     calculate_sha256,
     load_json_contract,
 )
-from practice_3_v2.data.temporal_split import (
+from practice_3.data.temporal_split import (
     build_development_holdout_masks,
     load_phase_02_inputs,
     validate_contract_alignment,

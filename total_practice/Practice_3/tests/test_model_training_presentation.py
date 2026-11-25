@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from practice_3_v2.analysis.model_training_presentation import (
+from practice_3.analysis.model_training_presentation import (
     build_training_diagnostics,
     run,
 )

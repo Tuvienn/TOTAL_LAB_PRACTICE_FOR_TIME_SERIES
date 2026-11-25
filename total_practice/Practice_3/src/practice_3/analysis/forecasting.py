@@ -15,7 +15,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from practice_3_v2.analysis.evaluation import (
+from practice_3.analysis.evaluation import (
     ONE_STEP_COLUMNS,
     RECURSIVE_COLUMNS,
     atomic_write_csv,
@@ -25,29 +25,29 @@ from practice_3_v2.analysis.evaluation import (
     validate_one_step_predictions,
     validate_recursive_predictions,
 )
-from practice_3_v2.analysis.feature_engineering import (
+from practice_3.analysis.feature_engineering import (
     build_feature_row_from_history,
     build_time_safe_features,
 )
-from practice_3_v2.analysis.model_training import (
+from practice_3.analysis.model_training import (
     append_run_log,
     atomic_write_json,
     dependency_smoke_test,
     package_versions,
     read_json_document,
 )
-from practice_3_v2.data.data_preparation import calculate_sha256, load_json_contract
-from practice_3_v2.data.supervised_dataset import (
+from practice_3.data.data_preparation import calculate_sha256, load_json_contract
+from practice_3.data.supervised_dataset import (
     PROJECT_ROOT,
     build_supervised_candidates,
     extract_eligible_xy,
     load_phase_05_inputs,
 )
-from practice_3_v2.data.temporal_split import (
+from practice_3.data.temporal_split import (
     build_development_holdout_masks,
     validate_prepared_input,
 )
-from practice_3_v2.visualization.forecast_evaluation import (
+from practice_3.visualization.forecast_evaluation import (
     save_one_step_figure,
     save_recursive_horizon_figure,
 )

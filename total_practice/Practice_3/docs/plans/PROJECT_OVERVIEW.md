@@ -1,4 +1,4 @@
-# PRACTICE 3 V2 — TỔNG QUAN DỰ ÁN
+# PRACTICE 3 — TỔNG QUAN DỰ ÁN
 
 ## 1. Mô tả
 
@@ -73,7 +73,7 @@ Shuffle:
     false
 ```
 
-Holdout đã từng được quan sát trong legacy Practice 3 nên không được mô tả là untouched hoặc unseen final test. Evidence khoa học chính cho model selection là TRAIN-only temporal CV.
+Holdout đã từng được quan sát trong legacy implementation nên không được mô tả là untouched hoặc unseen final test. Evidence khoa học chính cho model selection là TRAIN-only temporal CV.
 
 ## 6. Metrics và model selection
 

@@ -23,8 +23,8 @@ duyệt. Human đã chạy refit/analysis; official bundle đã PASS technical r
 
 ```text
 config/error_analysis.json
-src/practice_3_v2/analysis/interpretation.py
-src/practice_3_v2/visualization/error_analysis.py
+src/practice_3/analysis/interpretation.py
+src/practice_3/visualization/error_analysis.py
 tests/test_interpretation.py
 ```
 
@@ -47,7 +47,7 @@ Command đã chạy:
 
 ```bash
 MPLCONFIGDIR=.matplotlib-cache \
-  .venv/bin/python -m practice_3_v2.analysis.interpretation --preflight
+  .venv/bin/python -m practice_3.analysis.interpretation --preflight
 ```
 
 Kết quả:
@@ -103,7 +103,7 @@ cd "/Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/
 source .venv/bin/activate
 
 MPLCONFIGDIR=.matplotlib-cache \
-  python -m practice_3_v2.analysis.interpretation --run
+  python -m practice_3.analysis.interpretation --run
 ```
 
 Run hoàn tất:

@@ -1,4 +1,4 @@
-"""Validated regression metrics shared by Practice 3 v2 evaluation phases."""
+"""Validated regression metrics shared by Practice 3 evaluation phases."""
 
 from __future__ import annotations
 

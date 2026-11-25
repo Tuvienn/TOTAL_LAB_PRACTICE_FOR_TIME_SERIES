@@ -19,7 +19,7 @@ Package mode: editable local install
 
 ```bash
 MPLCONFIGDIR=/private/tmp/practice3v2-mpl \
-.venv/bin/python -m practice_3_v2.analysis.eda
+.venv/bin/python -m practice_3.analysis.eda
 ```
 
 Official result:
@@ -145,7 +145,7 @@ Official rerun giữ nguyên JSON và toàn bộ figure checksums.
 
 ```text
 Focused Phase 3 tests: 15/15 PASS
-Full v2 regression suite: 48/48 PASS
+Full Practice 3 regression suite: 48/48 PASS
 Holdout-mutation isolation: PASS
 Hourly lag-alignment test: PASS
 Missing-target preservation: PASS

@@ -174,7 +174,7 @@ Tests phải kiểm tra:
 13. interrupted/failed execution không promote official outputs;
 14. figures và result checksum linkage;
 15. notebook không chạy Phase 8 source logic;
-16. không import legacy `practice_3` runtime.
+16. không import legacy implementation runtime.
 
 ## 12. Stop conditions
 

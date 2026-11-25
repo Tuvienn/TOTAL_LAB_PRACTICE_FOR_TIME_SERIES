@@ -1,4 +1,4 @@
-"""Phase 6 development-only model selection for Practice 3 v2."""
+"""Phase 6 development-only model selection for Practice 3."""
 
 from __future__ import annotations
 
@@ -19,16 +19,16 @@ from typing import Any
 
 import numpy as np
 
-from practice_3_v2.analysis.eda import extract_development_data
-from practice_3_v2.analysis.metrics import (
+from practice_3.analysis.eda import extract_development_data
+from practice_3.analysis.metrics import (
     aggregate_fold_metrics,
     regression_metrics,
 )
-from practice_3_v2.data.data_preparation import (
+from practice_3.data.data_preparation import (
     calculate_sha256,
     load_json_contract,
 )
-from practice_3_v2.data.supervised_dataset import (
+from practice_3.data.supervised_dataset import (
     PROJECT_ROOT,
     SupervisedFold,
     apply_expanding_window_folds,
@@ -36,7 +36,7 @@ from practice_3_v2.data.supervised_dataset import (
     load_phase_05_inputs,
     validate_supervised_population,
 )
-from practice_3_v2.data.temporal_split import validate_prepared_input
+from practice_3.data.temporal_split import validate_prepared_input
 
 
 EXPECTED_ELIGIBLE_SAMPLES = 108_083
@@ -118,7 +118,7 @@ def validate_model_training_contract(contract: dict[str, Any]) -> None:
     if contract["upstream"] != {
         "phase_05_audit": "outputs/results/phase_05_supervised_dataset.json",
         "phase_05_audit_sha256": (
-            "21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5"
+            "261dc58db3bfd4621c444c6c08fc51182622247239d8c1f5b848ee08dc7a59e0"
         ),
         "eligible_samples": EXPECTED_ELIGIBLE_SAMPLES,
         "feature_count": EXPECTED_FEATURE_COUNT,

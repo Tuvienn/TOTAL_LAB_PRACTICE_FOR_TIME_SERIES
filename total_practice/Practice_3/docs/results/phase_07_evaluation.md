@@ -15,7 +15,7 @@
 ## Evidence
 
 - <a href="../../notebooks/Practice_3_present.ipynb" style="color:#1f6feb;">Notebook chính — cells 32–37</a>
-- <a href="../../src/practice_3_v2/analysis/forecasting.py" style="color:#1f6feb;">Source: forecasting.py</a> · <a href="../../src/practice_3_v2/analysis/evaluation.py" style="color:#1f6feb;">evaluation.py</a> · <a href="../../src/practice_3_v2/visualization/forecast_evaluation.py" style="color:#1f6feb;">forecast_evaluation.py</a>
+- <a href="../../src/practice_3/analysis/forecasting.py" style="color:#1f6feb;">Source: forecasting.py</a> · <a href="../../src/practice_3/analysis/evaluation.py" style="color:#1f6feb;">evaluation.py</a> · <a href="../../src/practice_3/visualization/forecast_evaluation.py" style="color:#1f6feb;">forecast_evaluation.py</a>
 - <a href="../../tests/test_evaluation.py" style="color:#1f6feb;">Evaluation tests</a>
 - <a href="../../outputs/results/phase_07_evaluation_audit.json" style="color:#1f6feb;">Evaluation audit</a> · <a href="../../outputs/results/phase_07_one_step_metrics.json" style="color:#1f6feb;">One-step metrics</a> · <a href="../../outputs/results/phase_07_recursive_metrics.json" style="color:#1f6feb;">Recursive metrics</a>
 - Predictions: <a href="../../outputs/results/phase_07_one_step_predictions.csv" style="color:#1f6feb;">one-step</a> · <a href="../../outputs/results/phase_07_recursive_predictions.csv" style="color:#1f6feb;">recursive</a>

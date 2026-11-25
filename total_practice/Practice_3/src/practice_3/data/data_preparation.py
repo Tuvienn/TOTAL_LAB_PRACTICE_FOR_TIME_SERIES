@@ -1,4 +1,4 @@
-"""Structural data preparation for Practice 3 v2."""
+"""Structural data preparation for Practice 3."""
 
 from __future__ import annotations
 

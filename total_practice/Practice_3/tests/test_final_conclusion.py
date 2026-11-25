@@ -5,7 +5,7 @@ import re
 
 import pytest
 
-from practice_3_v2.analysis.final_conclusion import (
+from practice_3.analysis.final_conclusion import (
     atomic_write_json,
     build_final_conclusion,
     load_phase_09_inputs,
@@ -13,8 +13,8 @@ from practice_3_v2.analysis.final_conclusion import (
     validate_evidence_consistency,
     validate_final_conclusion_contract,
 )
-from practice_3_v2.data.data_preparation import calculate_sha256, load_json_contract
-from practice_3_v2.data.supervised_dataset import PROJECT_ROOT
+from practice_3.data.data_preparation import calculate_sha256, load_json_contract
+from practice_3.data.supervised_dataset import PROJECT_ROOT
 
 
 CONTRACT = load_json_contract(PROJECT_ROOT / "config/final_conclusion.json")
@@ -200,7 +200,9 @@ def test_official_artifact_matches_deterministic_build(inputs: tuple) -> None:
 def test_readme_local_links_exist() -> None:
     readme_path = PROJECT_ROOT / "README.md"
     readme = readme_path.read_text(encoding="utf-8")
-    links = re.findall(r"\[[^\]]+\]\(([^)]+)\)", readme)
+    markdown_links = re.findall(r"\[[^\]]+\]\(([^)]+)\)", readme)
+    html_links = re.findall(r'href=["\']([^"\']+)["\']', readme)
+    links = markdown_links + html_links
     local_links = [
         link
         for link in links
@@ -212,7 +214,7 @@ def test_readme_local_links_exist() -> None:
 
 def test_source_and_notebook_respect_phase_09_boundaries() -> None:
     source = (
-        PROJECT_ROOT / "src/practice_3_v2/analysis/final_conclusion.py"
+        PROJECT_ROOT / "src/practice_3/analysis/final_conclusion.py"
     ).read_text(encoding="utf-8")
     assert ".fit(" not in source
     assert ".predict(" not in source
@@ -230,7 +232,7 @@ def test_source_and_notebook_respect_phase_09_boundaries() -> None:
         for cell in notebook["cells"]
         if cell.get("cell_type") == "code"
     )
-    assert "practice_3_v2.analysis.final_conclusion" not in code
+    assert "practice_3.analysis.final_conclusion" not in code
     assert "outputs/results/phase_09_final_conclusion.json" in code
     assert ".fit(" not in code
     assert ".predict(" not in code

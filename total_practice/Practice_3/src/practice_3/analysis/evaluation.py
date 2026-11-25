@@ -1,4 +1,4 @@
-"""Prediction validation and evaluation artifacts for Practice 3 v2."""
+"""Prediction validation and evaluation artifacts for Practice 3."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from practice_3_v2.analysis.metrics import regression_metrics
+from practice_3.analysis.metrics import regression_metrics
 ONE_STEP_COLUMNS = [
     "timestamp",
     "candidate",

@@ -2,7 +2,7 @@
 
 ## 1. Scope
 
-Xác minh Problem, Data, Forecasting, Temporal, Metric và Claim contracts của Practice 3 v2. Phase này không chạy Data Preparation, EDA, training hoặc prediction.
+Xác minh Problem, Data, Forecasting, Temporal, Metric và Claim contracts của Practice 3. Phase này không chạy Data Preparation, EDA, training hoặc prediction.
 
 ## 2. Evidence
 
@@ -25,7 +25,7 @@ Training executed: NO
 Holdout target accessed: NO
 ```
 
-Contract tests sử dụng Python 3.14.3 và `pytest 9.1.1` từ môi trường legacy hiện có vì v2 chưa tạo virtual environment riêng. Test chỉ dùng Python standard library và không import runtime code hoặc output của legacy project.
+Contract tests sử dụng Python 3.14.3 và `pytest 9.1.1` từ môi trường legacy hiện có vì Practice 3 chưa tạo virtual environment riêng. Test chỉ dùng Python standard library và không import runtime code hoặc output của legacy project.
 
 ## 4. Result
 

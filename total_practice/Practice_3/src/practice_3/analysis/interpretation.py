@@ -15,27 +15,27 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from practice_3_v2.analysis.evaluation import (
+from practice_3.analysis.evaluation import (
     atomic_write_csv,
     validate_one_step_predictions,
     validate_recursive_predictions,
 )
-from practice_3_v2.analysis.metrics import regression_metrics
-from practice_3_v2.analysis.model_training import (
+from practice_3.analysis.metrics import regression_metrics
+from practice_3.analysis.model_training import (
     append_run_log,
     atomic_write_json,
     dependency_smoke_test,
     package_versions,
     read_json_document,
 )
-from practice_3_v2.analysis.forecasting import build_full_development_partition
-from practice_3_v2.data.data_preparation import calculate_sha256, load_json_contract
-from practice_3_v2.data.supervised_dataset import PROJECT_ROOT, load_phase_05_inputs
-from practice_3_v2.data.temporal_split import (
+from practice_3.analysis.forecasting import build_full_development_partition
+from practice_3.data.data_preparation import calculate_sha256, load_json_contract
+from practice_3.data.supervised_dataset import PROJECT_ROOT, load_phase_05_inputs
+from practice_3.data.temporal_split import (
     build_development_holdout_masks,
     validate_prepared_input,
 )
-from practice_3_v2.visualization.error_analysis import (
+from practice_3.visualization.error_analysis import (
     save_error_by_load_figure,
     save_error_by_time_figure,
     save_feature_importance_figure,

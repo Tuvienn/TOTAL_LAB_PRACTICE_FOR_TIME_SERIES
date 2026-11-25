@@ -6,16 +6,16 @@
     "phase_02_temporal_split": "f18452573cedd321ea8097539560899bc5dbce43ba0b47cda3b51dc504bcf735",
     "phase_03_eda": "5d542d5c8cc9f2436ef817646d0413765a62dee6805ee41556991c1c0e125dd7",
     "phase_04_features": "3d4c94bf2a260669c982a3d867bcda6d39aeb3067cd3f2c08ceb7bf607584760",
-    "phase_05_supervised": "21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5",
-    "phase_06_cv": "1c1647a458b9261956e831045ed1c4b2f84791fd9843839bd088b31a239d31d4",
-    "phase_06_model_lock": "ad31cb65daa36c394d7d5afc2cf0af333760c8e75ba718e702368e260db70eee",
+    "phase_05_supervised": "261dc58db3bfd4621c444c6c08fc51182622247239d8c1f5b848ee08dc7a59e0",
+    "phase_06_cv": "b9c3e137b30b99e3de682410ad8cf33afa8ef6a794e1a0df84100b49510cb937",
+    "phase_06_model_lock": "d1a31482d62b906a1b563d5b3d49cf2475f09842c9ed4d487c9bafe0ce06adf5",
     "supplemental_linear": "a84bf3b3a9fd7d788727a3a28e534616a7fa692fc71a8235cd40241a4fb6320b",
     "supplemental_lag": "b85d899bce896655bb11abbeffddaf448929d64911d6563d8a4c6e61b1c0c1ff",
-    "supplemental_audit": "0251607ed0d65b2de1823de4cea9073f2f55ab4bbc82aa4ba33a85493d200da5",
-    "phase_07_audit": "441dc33389d90e18902fae0d1ffc7e18aec46e9f130bc55284baef4abfd82adf",
+    "supplemental_audit": "5c55490b58ffbc276b51ca0f97f5347a269c4a24172206362704cba2c0663ec6",
+    "phase_07_audit": "c931030ce8f4c43b3bf32c0c8ab74357bb482b45d721a3f6b6b8f27577b03dfa",
     "phase_07_one_step": "336cdd18a6441c5a05efa76e65a280553e7166cbca190230453efe79525449b5",
     "phase_07_recursive": "7cab2c6943cb0df9f034f78ebe82254bf60270ddcc6f53830fa09db51915db07",
-    "phase_08_error_analysis": "0a6c6aa352b18731ba9277ba5b56e0219c76e1f1bd05de54886fba44d5dbdfc0",
+    "phase_08_error_analysis": "6e3def6ae9c7eb54c6cdae9c4e5478abde7dac67567cc56303ea1479e8b08216",
     "phase_08_feature_importance": "5e5c98a3159ae49f3703bdcd3d4c8e0c50c2656f10bdb229972fb37c3ad74ed1"
   },
   "workflow": [
@@ -283,7 +283,7 @@
         "a compact AR/MA statistical structure is preferred",
         "model-based probabilistic intervals are required under validated assumptions"
       ],
-      "conclusion": "Practice 3 v2 has no empirical evidence that XGBoost outperforms ARIMA; a fair comparison requires a separate ARIMA benchmark on identical folds, timestamps, and metrics.",
+      "conclusion": "Practice 3 has no empirical evidence that XGBoost outperforms ARIMA; a fair comparison requires a separate ARIMA benchmark on identical folds, timestamps, and metrics.",
       "head_to_head_superiority_claim_allowed": false
     }
   },
@@ -294,7 +294,7 @@
     "Residual autocorrelation remains, including short-lag and daily structure.",
     "XGBoost gain importance is model-specific and is not causal importance.",
     "Linear Regression and lag-p experiments are post-hoc development-only evidence.",
-    "ARIMA was not empirically benchmarked in Practice 3 v2.",
+    "ARIMA was not empirically benchmarked in Practice 3.",
     "Findings are limited to this AEP dataset, period, and temporal protocol.",
     "No external validation or production drift monitoring was performed."
   ],

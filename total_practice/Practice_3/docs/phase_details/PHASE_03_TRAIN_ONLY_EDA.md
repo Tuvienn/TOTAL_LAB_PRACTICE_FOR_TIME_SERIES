@@ -250,7 +250,7 @@ Phase 3 không được tự động chốt feature list. Mọi feature vẫn ph
 
 ```text
 config/eda.json
-src/practice_3_v2/analysis/eda.py
+src/practice_3/analysis/eda.py
 tests/test_eda.py
 outputs/results/phase_03_eda_summary.json
 outputs/figures/phase_03_*.png
@@ -275,7 +275,7 @@ save_phase_03_artifacts
 run_phase_03
 ```
 
-Source code, identifier, exception và docstring dùng tiếng Anh. Không import runtime code hoặc official output từ legacy `practice_3`.
+Source code, identifier, exception và docstring dùng tiếng Anh. Không import runtime code hoặc official output từ legacy implementation.
 
 ## 15. Dependency boundary
 
@@ -312,9 +312,9 @@ Focused tests phải kiểm tra:
 17. Figures tồn tại, không rỗng và có checksum được ghi trong audit.
 18. Repeated execution tạo cùng scientific JSON fields và figure bytes hoặc approved deterministic rendering identity.
 19. Invalid checksum, boundary hoặc split status làm pipeline dừng.
-20. Không có runtime import từ legacy `practice_3`.
+20. Không có runtime import từ legacy implementation.
 
-Trước bàn giao phải chạy focused tests, full v2 regression suite và `git diff --check`.
+Trước bàn giao phải chạy focused tests, full Practice 3 regression suite và `git diff --check`.
 
 ## 17. Atomic artifact policy
 
@@ -363,7 +363,7 @@ trước khi đọc Feature Engineering. Extension không thay đổi canonical 
 audit và không làm mất hiệu lực checksum mà Phase 4–9 đang tham chiếu.
 
 ```text
-src/practice_3_v2/analysis/eda_presentation.py
+src/practice_3/analysis/eda_presentation.py
 outputs/results/phase_03_eda_presentation.json
 outputs/figures/phase_03_annual_stability.png
 tests/test_eda_presentation.py

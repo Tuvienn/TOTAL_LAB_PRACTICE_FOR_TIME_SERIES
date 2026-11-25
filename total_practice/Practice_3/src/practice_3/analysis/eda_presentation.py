@@ -15,8 +15,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from practice_3_v2.analysis.eda import extract_development_data
-from practice_3_v2.data.data_preparation import calculate_sha256
+from practice_3.analysis.eda import extract_development_data
+from practice_3.data.data_preparation import calculate_sha256
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]

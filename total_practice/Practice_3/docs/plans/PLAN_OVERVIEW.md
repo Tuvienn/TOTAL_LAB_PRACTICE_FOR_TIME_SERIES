@@ -1,8 +1,8 @@
-# PRACTICE 3 V2 — PLAN OVERVIEW
+# PRACTICE 3 — PLAN OVERVIEW
 
 ## 1. Mục đích
 
-Tài liệu này là bản đồ tổng thể của Practice 3 v2. Nó cho biết mỗi phase sở hữu công việc gì, phụ thuộc vào phase nào và đang ở trạng thái nào.
+Tài liệu này là bản đồ tổng thể của Practice 3. Nó cho biết mỗi phase sở hữu công việc gì, phụ thuộc vào phase nào và đang ở trạng thái nào.
 
 Phase detail vẫn là nguồn thiết kế chi tiết. `docs/status/current_status.md` vẫn là nguồn trạng thái execution chính thức.
 

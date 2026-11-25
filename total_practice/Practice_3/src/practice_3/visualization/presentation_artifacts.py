@@ -5,7 +5,7 @@ from typing import Any
 
 import pandas as pd
 
-from practice_3_v2.data.data_preparation import PROJECT_ROOT, calculate_sha256
+from practice_3.data.data_preparation import PROJECT_ROOT, calculate_sha256
 
 
 @dataclass(frozen=True)

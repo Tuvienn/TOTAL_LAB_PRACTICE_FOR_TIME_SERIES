@@ -16,14 +16,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from practice_3_v2.analysis.eda import extract_development_data
-from practice_3_v2.analysis.feature_engineering import (
+from practice_3.analysis.eda import extract_development_data
+from practice_3.analysis.feature_engineering import (
     build_time_safe_features,
     load_phase_04_inputs,
     validate_feature_frame,
 )
-from practice_3_v2.data.data_preparation import calculate_sha256
-from practice_3_v2.data.temporal_split import validate_prepared_input
+from practice_3.data.data_preparation import calculate_sha256
+from practice_3.data.temporal_split import validate_prepared_input
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]

@@ -1,4 +1,4 @@
-"""Deterministic Phase 9 evidence synthesis for Practice 3 v2."""
+"""Deterministic Phase 9 evidence synthesis for Practice 3."""
 
 from __future__ import annotations
 
@@ -10,11 +10,11 @@ from pathlib import Path
 import tempfile
 from typing import Any
 
-from practice_3_v2.data.data_preparation import (
+from practice_3.data.data_preparation import (
     calculate_sha256,
     load_json_contract,
 )
-from practice_3_v2.data.supervised_dataset import PROJECT_ROOT
+from practice_3.data.supervised_dataset import PROJECT_ROOT
 
 
 EXPECTED_UPSTREAM_KEYS = [
@@ -320,7 +320,7 @@ def build_final_conclusion(
         "Residual autocorrelation remains, including short-lag and daily structure.",
         "XGBoost gain importance is model-specific and is not causal importance.",
         "Linear Regression and lag-p experiments are post-hoc development-only evidence.",
-        "ARIMA was not empirically benchmarked in Practice 3 v2.",
+        "ARIMA was not empirically benchmarked in Practice 3.",
         "Findings are limited to this AEP dataset, period, and temporal protocol.",
         "No external validation or production drift monitoring was performed.",
     ]
@@ -441,7 +441,7 @@ def build_final_conclusion(
                     "a compact AR/MA statistical structure is preferred",
                     "model-based probabilistic intervals are required under validated assumptions",
                 ],
-                "conclusion": "Practice 3 v2 has no empirical evidence that XGBoost outperforms ARIMA; a fair comparison requires a separate ARIMA benchmark on identical folds, timestamps, and metrics.",
+                "conclusion": "Practice 3 has no empirical evidence that XGBoost outperforms ARIMA; a fair comparison requires a separate ARIMA benchmark on identical folds, timestamps, and metrics.",
                 "head_to_head_superiority_claim_allowed": False,
             },
         },

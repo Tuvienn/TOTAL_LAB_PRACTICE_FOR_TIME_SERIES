@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from practice_3_v2.analysis.feature_presentation import (
+from practice_3.analysis.feature_presentation import (
     build_correlation_evidence,
     run,
 )

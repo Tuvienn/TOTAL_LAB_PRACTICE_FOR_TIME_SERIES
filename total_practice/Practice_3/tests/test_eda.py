@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from practice_3_v2.analysis.eda import (
+from practice_3.analysis.eda import (
     PROJECT_ROOT,
     build_daily_trend,
     build_seasonality_profiles,
@@ -18,7 +18,7 @@ from practice_3_v2.analysis.eda import (
     summarize_missingness,
     validate_development_data,
 )
-from practice_3_v2.data.temporal_split import validate_prepared_input
+from practice_3.data.temporal_split import validate_prepared_input
 
 
 (
@@ -232,7 +232,7 @@ def test_phase_03_audit_contains_no_holdout_target_statistics(
 
 def test_pipeline_source_does_not_import_legacy_package() -> None:
     source = (
-        PROJECT_ROOT / "src/practice_3_v2/analysis/eda.py"
+        PROJECT_ROOT / "src/practice_3/analysis/eda.py"
     ).read_text(encoding="utf-8")
     assert "from practice_3 " not in source
     assert "import practice_3" not in source

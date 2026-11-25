@@ -106,7 +106,7 @@ End boundary là inclusive để giữ timestamp cuối của source dataset. M�
 2017-08-03 00:00:00 <= target_timestamp <= 2018-08-03 00:00:00
 ```
 
-Holdout đã từng được quan sát trong legacy Practice 3, vì vậy chỉ được gọi là `historical_re_evaluation_holdout`; không được gọi là unseen hoặc untouched final test.
+Holdout đã từng được quan sát trong legacy implementation, vì vậy chỉ được gọi là `historical_re_evaluation_holdout`; không được gọi là unseen hoặc untouched final test.
 
 ## 5. Expanding-window cross-validation
 
@@ -167,7 +167,7 @@ Trước model lock:
 
 ```text
 config/temporal_split.json
-src/practice_3_v2/data/temporal_split.py
+src/practice_3/data/temporal_split.py
 tests/test_temporal_split.py
 outputs/results/phase_02_temporal_split.json
 docs/logs/PHASE_02_EXECUTION.md
@@ -188,7 +188,7 @@ save_phase_02_artifact
 run_phase_02
 ```
 
-Source code, identifier, exception và docstring dùng tiếng Anh. Không import runtime code hoặc official output từ legacy `practice_3`.
+Source code, identifier, exception và docstring dùng tiếng Anh. Không import runtime code hoặc official output từ legacy implementation.
 
 ## 9. Configuration contract
 
@@ -249,9 +249,9 @@ Focused tests phải kiểm tra:
 13. `shuffle = false` và `gap = 0` được giữ nguyên.
 14. Split deterministic qua nhiều lần chạy.
 15. Invalid boundary, checksum hoặc overlap làm pipeline dừng.
-16. Không có runtime import từ legacy `practice_3`.
+16. Không có runtime import từ legacy implementation.
 
-Trước bàn giao phải chạy focused tests, full v2 regression suite và `git diff --check`.
+Trước bàn giao phải chạy focused tests, full Practice 3 regression suite và `git diff --check`.
 
 ## 12. Atomic and deterministic artifact policy
 

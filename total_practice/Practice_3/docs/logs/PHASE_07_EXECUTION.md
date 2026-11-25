@@ -22,9 +22,9 @@ result review.
 
 ```text
 config/final_evaluation.json
-src/practice_3_v2/analysis/forecasting.py
-src/practice_3_v2/analysis/evaluation.py
-src/practice_3_v2/visualization/forecast_evaluation.py
+src/practice_3/analysis/forecasting.py
+src/practice_3/analysis/evaluation.py
+src/practice_3/visualization/forecast_evaluation.py
 tests/test_forecasting.py
 tests/test_evaluation.py
 ```
@@ -48,7 +48,7 @@ Command đã chạy:
 
 ```bash
 MPLCONFIGDIR=.matplotlib-cache \
-  .venv/bin/python -m practice_3_v2.analysis.forecasting --preflight
+  .venv/bin/python -m practice_3.analysis.forecasting --preflight
 ```
 
 Kết quả:

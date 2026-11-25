@@ -7,7 +7,7 @@ Triển khai và xác minh temporal split từ prepared hourly dataset đến de
 ## 2. Official execution
 
 ```bash
-.venv/bin/python -m practice_3_v2.data.temporal_split
+.venv/bin/python -m practice_3.data.temporal_split
 ```
 
 Official output:
@@ -72,7 +72,7 @@ Phase 2 chỉ audit target availability; không đọc holdout target values đ�
 
 ```text
 Focused Phase 2 tests: 13/13 PASS
-Full v2 regression suite: 33/33 PASS
+Full Practice 3 regression suite: 33/33 PASS
 Independent audit validation: PASS
 Deterministic official rerun: PASS
 Official audit SHA256: f18452573cedd321ea8097539560899bc5dbce43ba0b47cda3b51dc504bcf735

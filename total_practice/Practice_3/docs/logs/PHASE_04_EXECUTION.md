@@ -17,7 +17,7 @@ Package mode: editable local install
 ## 3. Official execution
 
 ```bash
-.venv/bin/python -m practice_3_v2.analysis.feature_engineering
+.venv/bin/python -m practice_3.analysis.feature_engineering
 ```
 
 Official result:
@@ -85,7 +85,7 @@ Feature row tại `T` chỉ dùng target history đến `T-1 giờ`. Hàm recurs
 
 ```text
 Focused Phase 4 tests: 17/17 PASS
-Full v2 regression suite: 65/65 PASS
+Full Practice 3 regression suite: 65/65 PASS
 Official artifact deterministic: PASS
 Exact 22-feature order: PASS
 Calendar range checks: PASS

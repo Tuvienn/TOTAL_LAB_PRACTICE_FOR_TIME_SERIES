@@ -1,4 +1,4 @@
-"""Leakage-safe feature engineering for Practice 3 v2."""
+"""Leakage-safe feature engineering for Practice 3."""
 
 from __future__ import annotations
 
@@ -12,16 +12,16 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from practice_3_v2.analysis.eda import (
+from practice_3.analysis.eda import (
     extract_development_data,
     load_phase_03_inputs,
     validate_development_data,
 )
-from practice_3_v2.data.data_preparation import (
+from practice_3.data.data_preparation import (
     calculate_sha256,
     load_json_contract,
 )
-from practice_3_v2.data.temporal_split import validate_prepared_input
+from practice_3.data.temporal_split import validate_prepared_input
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]

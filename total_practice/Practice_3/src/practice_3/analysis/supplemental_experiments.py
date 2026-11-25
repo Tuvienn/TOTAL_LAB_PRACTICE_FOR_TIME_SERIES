@@ -1,4 +1,4 @@
-"""Post-hoc Phase 6 supplemental experiments for Practice 3 v2."""
+"""Post-hoc Phase 6 supplemental experiments for Practice 3."""
 
 from __future__ import annotations
 
@@ -16,21 +16,21 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from practice_3_v2.analysis.metrics import (
+from practice_3.analysis.metrics import (
     aggregate_fold_metrics,
     regression_metrics,
 )
-from practice_3_v2.analysis.model_training import (
+from practice_3.analysis.model_training import (
     append_run_log,
     atomic_write_json,
     package_versions,
     read_json_document,
 )
-from practice_3_v2.data.data_preparation import (
+from practice_3.data.data_preparation import (
     calculate_sha256,
     load_json_contract,
 )
-from practice_3_v2.data.supervised_dataset import (
+from practice_3.data.supervised_dataset import (
     PROJECT_ROOT,
     SupervisedFold,
     SupervisedPartition,
@@ -38,7 +38,7 @@ from practice_3_v2.data.supervised_dataset import (
     build_supervised_candidates,
     validate_supervised_population,
 )
-from practice_3_v2.visualization.supplemental_experiments import (
+from practice_3.visualization.supplemental_experiments import (
     save_lag_sensitivity_figure,
     save_model_comparison_figure,
 )

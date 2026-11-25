@@ -15,8 +15,8 @@ development period; holdout không tham gia EDA.
 ## Evidence
 
 - <a href="../../notebooks/Practice_3_present.ipynb" style="color:#1f6feb;">Notebook chính — cells 10–14</a>
-- <a href="../../src/practice_3_v2/analysis/eda.py" style="color:#1f6feb;">Source: eda.py</a>
-- <a href="../../src/practice_3_v2/analysis/eda_presentation.py" style="color:#1f6feb;">Source: eda_presentation.py</a>
+- <a href="../../src/practice_3/analysis/eda.py" style="color:#1f6feb;">Source: eda.py</a>
+- <a href="../../src/practice_3/analysis/eda_presentation.py" style="color:#1f6feb;">Source: eda_presentation.py</a>
 - <a href="../../tests/test_eda.py" style="color:#1f6feb;">Tests</a>
 - <a href="../../outputs/results/phase_03_eda_summary.json" style="color:#1f6feb;">EDA summary</a> · <a href="../../outputs/results/phase_03_eda_presentation.json" style="color:#1f6feb;">Presentation JSON</a>
 - <a href="../phase_details/PHASE_03_TRAIN_ONLY_EDA.md" style="color:#1f6feb;">Phase detail</a>

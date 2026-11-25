@@ -1,4 +1,4 @@
-# QUY TẮC WORKFLOW — PRACTICE 3 V2
+# QUY TẮC WORKFLOW — PRACTICE 3
 
 ## 1. Chu kỳ triển khai phase
 

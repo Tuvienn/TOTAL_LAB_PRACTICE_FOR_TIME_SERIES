@@ -8,14 +8,14 @@ Triển khai one-step X/y alignment, sample eligibility và five-fold expanding-
 
 ```bash
 MPLCONFIGDIR=/private/tmp/practice3v2-mpl \
-.venv/bin/python -m practice_3_v2.data.supervised_dataset
+.venv/bin/python -m practice_3.data.supervised_dataset
 ```
 
 Official result:
 
 ```text
 outputs/results/phase_05_supervised_dataset.json
-SHA256: 21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5
+SHA256: 261dc58db3bfd4621c444c6c08fc51182622247239d8c1f5b848ee08dc7a59e0
 ```
 
 Không có X/y CSV hoặc Parquet được tạo.
@@ -69,7 +69,7 @@ Tất cả raw counts khớp Phase 2. Train mở rộng theo thời gian, valida
 
 ```text
 Focused Phase 5 tests: 17/17 PASS
-Full v2 regression suite: 82/82 PASS
+Full Practice 3 regression suite: 82/82 PASS
 Exact X schema/order: PASS
 X/y timestamp alignment: PASS
 Eligible X/y finite: PASS

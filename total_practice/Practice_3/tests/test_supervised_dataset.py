@@ -6,8 +6,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3_v2.analysis.eda import extract_development_data
-from practice_3_v2.data.supervised_dataset import (
+from practice_3.analysis.eda import extract_development_data
+from practice_3.data.supervised_dataset import (
     PROJECT_ROOT,
     apply_expanding_window_folds,
     build_supervised_candidates,
@@ -17,7 +17,7 @@ from practice_3_v2.data.supervised_dataset import (
     validate_supervised_contract,
     validate_supervised_population,
 )
-from practice_3_v2.data.temporal_split import validate_prepared_input
+from practice_3.data.temporal_split import validate_prepared_input
 
 
 (
@@ -327,7 +327,7 @@ def test_phase_05_audit_is_deterministic_and_development_only(
 
 def test_pipeline_source_does_not_import_legacy_package() -> None:
     source = (
-        PROJECT_ROOT / "src/practice_3_v2/data/supervised_dataset.py"
+        PROJECT_ROOT / "src/practice_3/data/supervised_dataset.py"
     ).read_text(encoding="utf-8")
     assert "from practice_3 " not in source
     assert "import practice_3" not in source

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from practice_3_v2.analysis.supervised_presentation import (
+from practice_3.analysis.supervised_presentation import (
     build_supervised_presentation,
     run,
 )

@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3_v2.analysis.evaluation import (
+from practice_3.analysis.evaluation import (
     ONE_STEP_COLUMNS,
     RECURSIVE_COLUMNS,
     atomic_write_csv,
@@ -15,7 +15,7 @@ from practice_3_v2.analysis.evaluation import (
     validate_one_step_predictions,
     validate_recursive_predictions,
 )
-from practice_3_v2.visualization.forecast_evaluation import (
+from practice_3.visualization.forecast_evaluation import (
     _prepare_one_step_plot_data,
 )
 

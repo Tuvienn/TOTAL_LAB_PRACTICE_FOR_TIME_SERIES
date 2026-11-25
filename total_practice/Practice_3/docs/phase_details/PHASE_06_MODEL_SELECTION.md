@@ -52,7 +52,7 @@ same fold aggregation policy
 same holdout-sealed state
 ```
 
-Không thực hiện feature-configuration screening. Legacy Practice 3 có feature population khác nên kết quả legacy không phải official evidence của v2.
+Không thực hiện feature-configuration screening. Legacy Practice 3 có feature population khác nên kết quả legacy không phải official evidence của Practice 3.
 
 ## 5. Candidate registry
 
@@ -178,7 +178,7 @@ Không dùng relative performance tolerance 1%. Chỉ dùng numeric tolerance r�
 Environment hiện tại chưa có `scikit-learn` và `xgboost`. Khi implementation được phép:
 
 1. bổ sung optional dependency group `modeling` trong `pyproject.toml`;
-2. cài package vào `.venv` của Practice 3 v2;
+2. cài package vào `.venv` của Practice 3;
 3. ghi exact resolved versions;
 4. kiểm tra Python 3.14 compatibility;
 5. kiểm tra XGBoost/OpenMP import trên macOS;
@@ -271,8 +271,8 @@ Phase 7 sẽ refit candidate đã khóa trên toàn bộ development trước kh
 
 ```text
 config/model_training.json
-src/practice_3_v2/analysis/metrics.py
-src/practice_3_v2/analysis/model_training.py
+src/practice_3/analysis/metrics.py
+src/practice_3/analysis/model_training.py
 tests/test_metrics.py
 tests/test_model_training.py
 outputs/results/phase_06_cv_results.json
@@ -341,7 +341,7 @@ Focused tests phải kiểm tra:
 14. CV artifact và model lock checksum linkage;
 15. repeated deterministic selection tạo cùng scientific result;
 16. notebook không chạy training/prediction;
-17. không import runtime code từ legacy `practice_3`.
+17. không import runtime code từ legacy implementation.
 
 Trước bàn giao phải chạy focused tests, full regression suite, notebook clean-kernel execution và `git diff --check`.
 

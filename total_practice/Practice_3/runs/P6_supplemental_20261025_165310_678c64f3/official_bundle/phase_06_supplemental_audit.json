@@ -8,9 +8,9 @@
   "upstream_evidence": {
     "evidence_label": "post_hoc_supplemental_evidence",
     "verified_upstream_sha256": {
-      "phase_05_audit": "21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5",
-      "phase_06_cv_results": "1c1647a458b9261956e831045ed1c4b2f84791fd9843839bd088b31a239d31d4",
-      "phase_06_model_lock": "ad31cb65daa36c394d7d5afc2cf0af333760c8e75ba718e702368e260db70eee",
+      "phase_05_audit": "261dc58db3bfd4621c444c6c08fc51182622247239d8c1f5b848ee08dc7a59e0",
+      "phase_06_cv_results": "b9c3e137b30b99e3de682410ad8cf33afa8ef6a794e1a0df84100b49510cb937",
+      "phase_06_model_lock": "d1a31482d62b906a1b563d5b3d49cf2475f09842c9ed4d487c9bafe0ce06adf5",
       "features_contract": "3191bb66323b96c305722511808a8c5dfa18a5a64b0527709696bc47f75dca5e",
       "supervised_contract": "5b1960fb6ca841df9e0dc619f54374152f793e75f596235408fdd3e7b337c649",
       "temporal_split_contract": "abcd404e9d6509564391a60e152faa7fd2241fa979333ed249c1fb55454f788b"

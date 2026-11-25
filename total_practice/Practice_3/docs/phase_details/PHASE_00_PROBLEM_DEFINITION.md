@@ -85,7 +85,7 @@ Shuffle:
     false
 ```
 
-Holdout này đã từng được quan sát trong legacy Practice 3. Vì vậy v2 không gọi đây là untouched hoặc unseen final test. Scientific selection evidence chính là TRAIN-only temporal CV.
+Holdout này đã từng được quan sát trong legacy implementation. Vì vậy Practice 3 không gọi đây là untouched hoặc unseen final test. Scientific selection evidence chính là TRAIN-only temporal CV.
 
 Exact fold boundaries và `gap` phải được thiết kế, kiểm tra và Human duyệt trong Phase 2.
 
@@ -141,7 +141,7 @@ Workflow được xem là hợp lệ khi:
 - residual/error analysis được thực hiện trước final conclusion;
 - mọi claim ghi đúng giới hạn của historical re-evaluation holdout.
 
-Không chốt trước một tỷ lệ cải thiện tối thiểu so với baseline khi v2 chưa tạo baseline evidence.
+Không chốt trước một tỷ lệ cải thiện tối thiểu so với baseline khi Practice 3 chưa tạo baseline evidence.
 
 ## 12. Output và completion gate
 

@@ -186,7 +186,7 @@
   },
   "persistence": {
     "xy_table_written": false,
-    "reconstruction_owner": "practice_3_v2.data.supervised_dataset"
+    "reconstruction_owner": "practice_3.data.supervised_dataset"
   },
   "checks": {
     "development_only": true,

@@ -53,7 +53,7 @@ Status: PASS
 
 ```text
 Focused Phase 6 tests: 25/25 PASS
-Full v2 regression suite: 107/107 PASS
+Full Practice 3 regression suite: 107/107 PASS
 ```
 
 ## 6. Human execution boundary

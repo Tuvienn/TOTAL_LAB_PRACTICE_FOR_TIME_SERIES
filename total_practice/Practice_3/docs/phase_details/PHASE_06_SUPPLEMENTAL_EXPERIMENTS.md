@@ -53,15 +53,15 @@ lịch sử model selection.
 ```text
 Phase 5 audit:
   outputs/results/phase_05_supervised_dataset.json
-  SHA256: 21d6590a0b4acf5d58d26cb0af36f52b300eacd8a884d7153dad125c3ff81eb5
+  SHA256: 261dc58db3bfd4621c444c6c08fc51182622247239d8c1f5b848ee08dc7a59e0
 
 Phase 6 CV results:
   outputs/results/phase_06_cv_results.json
-  SHA256: 1c1647a458b9261956e831045ed1c4b2f84791fd9843839bd088b31a239d31d4
+  SHA256: b9c3e137b30b99e3de682410ad8cf33afa8ef6a794e1a0df84100b49510cb937
 
 Phase 6 model lock:
   outputs/results/phase_06_model_lock.json
-  SHA256: ad31cb65daa36c394d7d5afc2cf0af333760c8e75ba718e702368e260db70eee
+  SHA256: d1a31482d62b906a1b563d5b3d49cf2475f09842c9ed4d487c9bafe0ce06adf5
 
 Feature contract SHA256:
   3191bb66323b96c305722511808a8c5dfa18a5a64b0527709696bc47f75dca5e
@@ -226,8 +226,8 @@ Execution phải hỗ trợ checkpoint/resume và không lưu estimator binary.
 
 ```text
 config/supplemental_experiments.json
-src/practice_3_v2/analysis/supplemental_experiments.py
-src/practice_3_v2/visualization/supplemental_experiments.py
+src/practice_3/analysis/supplemental_experiments.py
+src/practice_3/visualization/supplemental_experiments.py
 tests/test_supplemental_experiments.py
 outputs/results/phase_06_supplemental_linear_regression.json
 outputs/results/phase_06_supplemental_lag_sensitivity.json
@@ -264,7 +264,7 @@ Focused tests phải kiểm tra:
 15. audit liên kết checksum của hai JSON và hai figures;
 16. no tuning, no model selection, no model-lock mutation, no binary persistence;
 17. notebook không chạy supplemental training;
-18. không import runtime code từ legacy `practice_3`.
+18. không import runtime code từ legacy implementation.
 
 Sau Human execution phải chạy focused tests, full regression suite và notebook
 clean-kernel execution.

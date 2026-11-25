@@ -1,6 +1,6 @@
 import pandas as pd
 
-from practice_3_v2.visualization.table_style import (
+from practice_3.visualization.table_style import (
     SELECTED_ROW_STYLE,
     style_table,
 )

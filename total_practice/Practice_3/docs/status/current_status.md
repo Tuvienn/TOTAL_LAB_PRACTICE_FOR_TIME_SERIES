@@ -1,4 +1,4 @@
-# PRACTICE 3 V2 — CURRENT STATUS
+# PRACTICE 3 — CURRENT STATUS
 
 ## 1. Project identity
 
@@ -18,7 +18,7 @@ Evaluation completed: YES — HISTORICAL RE-EVALUATION
 - Legacy implementation snapshot: commit `38d970e`.
 - Legacy runtime code và outputs chỉ là historical evidence, không phải official
   evidence của workflow hiện tại.
-- Working tree hiện tại chỉ chứa implementation Practice 3 v2 dưới
+- Working tree hiện tại chỉ chứa implementation Practice 3 dưới
   `total_practice/Practice_3/`; legacy snapshot không còn được dùng làm runtime
   dependency.
 
@@ -34,14 +34,14 @@ Prepared rows: 121,296
 Missing targets preserved: 27
 ```
 
-Raw file đã được copy nguyên trạng từ legacy project và checksum hai bản giống nhau. Phase 1 pipeline đã tạo prepared dataset và data-quality audit từ source/configuration của v2; không dùng legacy processed output.
+Raw file đã được copy nguyên trạng từ legacy project và checksum hai bản giống nhau. Phase 1 pipeline đã tạo prepared dataset và data-quality audit từ source/configuration của Practice 3; không dùng legacy processed output.
 
 ## 4. Workflow readiness
 
 | Hạng mục | Trạng thái |
 |---|---|
 | Scaffold | READY |
-| Package namespace `practice_3_v2` | READY |
+| Package namespace `practice_3` | READY |
 | Architecture rule | READY |
 | Code rule | READY |
 | Workflow rule | READY |
@@ -57,28 +57,28 @@ Raw file đã được copy nguyên trạng từ legacy project và checksum hai
 | Phase 2 detailed design | APPROVED |
 | Phase 2 implementation | PASS — HUMAN AUTHORIZED TRANSITION |
 | Phase 2 focused tests | 13/13 PASS |
-| Full v2 regression suite | 33/33 PASS |
+| Full Practice 3 regression suite | 33/33 PASS |
 | Phase 2 temporal split audit | PASS |
 | Phase 3 detailed design | APPROVED |
 | Phase 3 implementation | PASS — HUMAN APPROVED |
 | Phase 3 focused tests | 15/15 PASS |
-| Full v2 regression suite | 48/48 PASS |
+| Full Practice 3 regression suite | 48/48 PASS |
 | Phase 3 official JSON | PASS |
 | Phase 3 official figures | 6/6 PASS |
 | Phase 4 detailed design | APPROVED |
 | Phase 4 implementation | PASS — HUMAN APPROVED |
 | Phase 4 focused tests | 17/17 PASS |
-| Full v2 regression suite | 65/65 PASS |
+| Full Practice 3 regression suite | 65/65 PASS |
 | Phase 4 official audit | PASS |
 | Phase 5 detailed design | APPROVED |
 | Phase 5 implementation | PASS — HUMAN APPROVED |
 | Phase 5 focused tests | 17/17 PASS |
-| Full v2 regression suite | 82/82 PASS |
+| Full Practice 3 regression suite | 82/82 PASS |
 | Phase 5 official audit | PASS |
 | Phase 6 detailed design | APPROVED — IMPLEMENTATION AUTHORIZED |
 | Phase 6 dependency gate | PASS — Python 3.14.3, scikit-learn 1.9.1, XGBoost 3.4.1 |
 | Phase 6 focused tests | 25/25 PASS |
-| Full v2 regression suite | 107/107 PASS |
+| Full Practice 3 regression suite | 107/107 PASS |
 | Phase 6 preflight | PASS |
 | Phase 6 Human training | COMPLETED — 140/140 TASKS |
 | Phase 6 model selection | xgboost_tuned — MEAN CV MAE 108.254067 MW |
@@ -88,7 +88,7 @@ Raw file đã được copy nguyên trạng từ legacy project và checksum hai
 | Phase 7 detailed design | APPROVED — IMPLEMENTATION AUTHORIZED |
 | Phase 7 implementation | COMPLETED |
 | Phase 7 focused tests | 23/23 PASS |
-| Full v2 regression suite | 130/130 PASS |
+| Full Practice 3 regression suite | 130/130 PASS |
 | Phase 7 preflight | PASS — HOLDOUT NOT OPENED |
 | Phase 7 Human final evaluation | COMPLETED — PASS |
 | Phase 7 technical review | PASS |
@@ -96,7 +96,7 @@ Raw file đã được copy nguyên trạng từ legacy project và checksum hai
 | Phase 8 detailed design | APPROVED — IMPLEMENTATION AUTHORIZED |
 | Phase 8 implementation | COMPLETED |
 | Phase 8 focused tests | 23/23 PASS |
-| Full v2 regression suite | 176/176 PASS |
+| Full Practice 3 regression suite | 176/176 PASS |
 | Phase 8 preflight | PASS — PROJECT MODEL NOT REFIT |
 | Phase 8 Human execution | COMPLETED — PASS |
 | Phase 8 official artifacts | PASS |
@@ -117,7 +117,7 @@ Raw file đã được copy nguyên trạng từ legacy project và checksum hai
 | Phase 9 focused tests | 23/23 PASS |
 | Table-style focused tests | 2/2 PASS |
 | Presentation-loader focused tests | 2/2 PASS |
-| Full v2 regression suite after presentation refactor | 212/212 PASS |
+| Full Practice 3 regression suite after presentation refactor | 212/212 PASS |
 | Phase 9 README local-link validation | PASS |
 | Presentation notebook | PASS — READY THROUGH PHASE 9 |
 | Notebook clean-kernel execution | PASS — 27/27 code cells, no errors |

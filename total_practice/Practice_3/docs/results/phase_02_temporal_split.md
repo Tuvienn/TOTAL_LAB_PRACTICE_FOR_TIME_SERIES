@@ -15,7 +15,7 @@ feature engineering và model selection.
 ## Evidence
 
 - <a href="../../notebooks/Practice_3_present.ipynb" style="color:#1f6feb;">Notebook chính — cells 6–9</a>
-- <a href="../../src/practice_3_v2/data/temporal_split.py" style="color:#1f6feb;">Source: temporal_split.py</a>
+- <a href="../../src/practice_3/data/temporal_split.py" style="color:#1f6feb;">Source: temporal_split.py</a>
 - <a href="../../tests/test_temporal_split.py" style="color:#1f6feb;">Tests</a>
 - <a href="../../outputs/results/phase_02_temporal_split.json" style="color:#1f6feb;">Temporal split JSON</a>
 - <a href="../phase_details/PHASE_02_TEMPORAL_SPLIT_VALIDATION.md" style="color:#1f6feb;">Phase detail</a>

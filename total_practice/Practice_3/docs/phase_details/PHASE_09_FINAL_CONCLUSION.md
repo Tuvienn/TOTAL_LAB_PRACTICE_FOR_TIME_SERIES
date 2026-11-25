@@ -164,7 +164,7 @@ ARIMA có thể phù hợp hơn khi:
 Kết luận bắt buộc:
 
 ```text
-Practice 3 v2 không có bằng chứng thực nghiệm để tuyên bố XGBoost tốt hơn ARIMA.
+Practice 3 không có bằng chứng thực nghiệm để tuyên bố XGBoost tốt hơn ARIMA.
 Muốn so sánh phải thiết kế một ARIMA benchmark riêng trên cùng folds, timestamps,
 metrics và leakage controls.
 ```
@@ -218,7 +218,7 @@ Nếu thiết kế được Human duyệt, Phase 9 dự kiến sở hữu:
 
 ```text
 config/final_conclusion.json
-src/practice_3_v2/analysis/final_conclusion.py
+src/practice_3/analysis/final_conclusion.py
 tests/test_final_conclusion.py
 outputs/results/phase_09_final_conclusion.json
 docs/logs/PHASE_09_EXECUTION.md
@@ -321,7 +321,7 @@ Tests phải kiểm tra:
 11. output deterministic và atomic;
 12. notebook chỉ đọc official Phase 9 artifact;
 13. README links tồn tại;
-14. không import legacy `practice_3` runtime.
+14. không import legacy implementation runtime.
 
 ## 13. Stop conditions
 

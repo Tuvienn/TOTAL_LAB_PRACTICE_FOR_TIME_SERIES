@@ -15,13 +15,13 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 
-from practice_3_v2.analysis.eda import extract_development_data
-from practice_3_v2.data.data_preparation import calculate_sha256
-from practice_3_v2.data.supervised_dataset import (
+from practice_3.analysis.eda import extract_development_data
+from practice_3.data.data_preparation import calculate_sha256
+from practice_3.data.supervised_dataset import (
     build_supervised_candidates,
     load_phase_05_inputs,
 )
-from practice_3_v2.data.temporal_split import validate_prepared_input
+from practice_3.data.temporal_split import validate_prepared_input
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]

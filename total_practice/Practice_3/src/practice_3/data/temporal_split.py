@@ -1,4 +1,4 @@
-"""Temporal split and validation design for Practice 3 v2."""
+"""Temporal split and validation design for Practice 3."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from typing import Any
 
 import pandas as pd
 
-from practice_3_v2.data.data_preparation import (
+from practice_3.data.data_preparation import (
     calculate_sha256,
     load_and_validate_saved_dataset,
     load_json_contract,

@@ -15,8 +15,8 @@ dùng target hiện tại hoặc tương lai.
 ## Evidence
 
 - <a href="../../notebooks/Practice_3_present.ipynb" style="color:#1f6feb;">Notebook chính — cells 15–18</a>
-- <a href="../../src/practice_3_v2/analysis/feature_engineering.py" style="color:#1f6feb;">Source: feature_engineering.py</a>
-- <a href="../../src/practice_3_v2/analysis/feature_presentation.py" style="color:#1f6feb;">Source: feature_presentation.py</a>
+- <a href="../../src/practice_3/analysis/feature_engineering.py" style="color:#1f6feb;">Source: feature_engineering.py</a>
+- <a href="../../src/practice_3/analysis/feature_presentation.py" style="color:#1f6feb;">Source: feature_presentation.py</a>
 - <a href="../../tests/test_feature_engineering.py" style="color:#1f6feb;">Tests</a>
 - <a href="../../outputs/results/phase_04_feature_validation.json" style="color:#1f6feb;">Feature validation</a> · <a href="../../outputs/results/phase_04_feature_presentation.json" style="color:#1f6feb;">Feature presentation</a>
 - <a href="../../outputs/figures/phase_04_temporal_feature_correlation.png" style="color:#1f6feb;">Temporal feature correlation</a>

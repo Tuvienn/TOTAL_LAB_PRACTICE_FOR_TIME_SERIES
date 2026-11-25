@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from practice_3_v2.data.data_preparation import (
+from practice_3.data.data_preparation import (
     PROJECT_ROOT,
     aggregate_duplicate_timestamps,
     build_complete_hourly_timeline,
@@ -215,7 +215,7 @@ def test_invalid_data_is_not_promoted_over_existing_artifacts(
 def test_pipeline_source_does_not_import_legacy_package() -> None:
     source_path = (
         PROJECT_ROOT
-        / "src/practice_3_v2/data/data_preparation.py"
+        / "src/practice_3/data/data_preparation.py"
     )
     source = source_path.read_text(encoding="utf-8")
     assert "from practice_3 " not in source

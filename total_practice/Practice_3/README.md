@@ -2,8 +2,8 @@
 
 Practice 3 xây dựng workflow dự báo điện năng theo giờ từ dữ liệu AEP, từ định
 nghĩa bài toán đến chuẩn bị dữ liệu, EDA, feature engineering, model selection,
-forecasting, phân tích lỗi và kết luận. Nội dung hiện tại là implementation v2;
-namespace Python `practice_3_v2` được giữ để bảo toàn import và test đã kiểm chứng.
+forecasting, phân tích lỗi và kết luận. Nội dung hiện tại là implementation chính thức;
+namespace Python `practice_3` được giữ để bảo toàn import và test đã kiểm chứng.
 
 <p>
 <a href="docs/results/README.md" style="color:#1f6feb; font-weight:600;">🔗 Mở Dashboard kết quả</a>
@@ -115,13 +115,13 @@ source code, tests, result JSON/CSV, figures và execution evidence:
 Notebook chính là
 <a href="notebooks/Practice_3_present.ipynb" style="color:#1f6feb;">`notebooks/Practice_3_present.ipynb`</a>.
 Notebook chỉ trình bày official artifacts; pipeline và reusable logic nằm trong
-`src/practice_3_v2/`.
+`src/practice_3/`.
 
 Trong VS Code:
 
 1. Mở thư mục `total_practice/Practice_3`.
-2. Chọn kernel **Practice 3 v2 (Time Series)** hoặc kernelspec
-   `practice3-v2-timeseries`.
+2. Chọn kernel **Practice 3 (Time Series)** hoặc kernelspec
+   `practice3-timeseries`.
 3. Mở `notebooks/Practice_3_present.ipynb` và chọn **Run All**.
 
 Không cài package trong notebook. Dependency và package metadata nằm trong
@@ -132,7 +132,7 @@ Kiểm tra bằng terminal:
 
 ```bash
 cd "/Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/Practice_3"
-.venv/bin/python -m practice_3_v2.analysis.final_conclusion --preflight
+.venv/bin/python -m practice_3.analysis.final_conclusion --preflight
 .venv/bin/python -m pytest -q
 ```
 
@@ -154,7 +154,7 @@ Practice_3/
 │   ├── figures/            # official figures
 │   └── results/            # JSON/CSV machine-readable artifacts
 ├── runs/                   # raw runtime log theo run ID nếu có
-├── src/practice_3_v2/      # data, analysis và visualization logic
+├── src/practice_3/      # data, analysis và visualization logic
 ├── tests/                  # regression và contract tests
 └── pyproject.toml
 ```

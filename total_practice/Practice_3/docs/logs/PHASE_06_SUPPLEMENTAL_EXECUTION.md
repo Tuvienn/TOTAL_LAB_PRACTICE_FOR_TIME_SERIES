@@ -25,8 +25,8 @@ model selection mới. Kết quả không được thay candidate `xgboost_tuned
 
 ```text
 config/supplemental_experiments.json
-src/practice_3_v2/analysis/supplemental_experiments.py
-src/practice_3_v2/visualization/supplemental_experiments.py
+src/practice_3/analysis/supplemental_experiments.py
+src/practice_3/visualization/supplemental_experiments.py
 tests/test_supplemental_experiments.py
 ```
 
@@ -48,7 +48,7 @@ Command AI đã chạy:
 
 ```bash
 MPLCONFIGDIR=/private/tmp/practice3v2-mpl \
-  .venv/bin/python -m practice_3_v2.analysis.supplemental_experiments --preflight
+  .venv/bin/python -m practice_3.analysis.supplemental_experiments --preflight
 ```
 
 Kết quả:
@@ -82,7 +82,7 @@ Eligibility giảm đơn điệu đúng thiết kế. Common comparison populati
 
 ```text
 tests/test_supplemental_experiments.py: 23/23 PASS
-Full v2 regression suite: 176/176 PASS
+Full Practice 3 regression suite: 176/176 PASS
 ```
 
 Tests kiểm tra contract mutation, checksum/package/fold/feature lock, lag alignment,
@@ -115,7 +115,7 @@ Technical review xác nhận:
 4. mọi `p` dùng cùng fold populations hợp lệ tại `p=168`;
 5. natural eligibility giảm đơn điệu từ 112.482 xuống 108.083 samples;
 6. model-lock SHA-256 vẫn là
-   `ad31cb65daa36c394d7d5afc2cf0af333760c8e75ba718e702368e260db70eee`;
+   `d1a31482d62b906a1b563d5b3d49cf2475f09842c9ed4d487c9bafe0ce06adf5`;
 7. không tuning, không selection lại, không holdout evaluation và không binary model;
 8. hai PNG hợp lệ ở kích thước 1582×943 và 1741×1418;
 9. focused tests 23/23 PASS, full regression suite 176/176 PASS.
