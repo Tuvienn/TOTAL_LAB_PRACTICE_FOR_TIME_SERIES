@@ -313,7 +313,7 @@ STOP
 → document issue
 → explain impact
 → propose next action
-→ wait for approval
+→ chờ xác nhận
 ```
 
 ---
@@ -342,7 +342,7 @@ Kết quả Exercise 1 sẽ được dùng làm evidence cho:
 Exercise 2 — White Noise comparison
 Exercise 3 — Decomposition interpretation
 Exercise 5 — Visualization synthesis
-User-owned Word report — outside the AI implementation plan
+User-owned Word report — outside the implementation plan
 ```
 
 Exercise 1 không tự quyết định forecasting model.

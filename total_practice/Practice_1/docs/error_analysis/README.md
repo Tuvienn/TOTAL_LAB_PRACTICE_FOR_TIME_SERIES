@@ -27,6 +27,6 @@ Mỗi issue report phải ghi:
 - downstream impact;
 - correction requirements.
 
-Issue report không phải implementation plan và không cho phép agent tự sửa file.
-Fix plan tương ứng phải được tạo trong `docs/fix_plans/` và được Human phê duyệt trước
+Issue report không phải implementation plan và không cho phép workflow tự sửa file.
+Fix plan tương ứng phải được tạo trong `docs/fix_plans/` và được xác nhận trước
 khi triển khai.
