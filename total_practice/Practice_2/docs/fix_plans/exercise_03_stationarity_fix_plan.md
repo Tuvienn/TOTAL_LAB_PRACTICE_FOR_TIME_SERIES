@@ -62,7 +62,7 @@ kernel/process sạch và không được hard-code kết quả dự kiến.
 
 ```text
 total_practice/Practice_2/src/practice_2/analysis/stationarity.py
-total_practice/Practice_2/notebooks/Practice_2_present.ipynb
+total_practice/Practice_2/notebooks/Practice_2_Exercise.ipynb
 total_practice/Practice_2/tests/test_exercise_01.py
 total_practice/Practice_2/docs/exercise_details/exercise_03_differencing_adf_retest.md
 total_practice/Practice_2/docs/plans/exercise_03_before_process.md
@@ -79,7 +79,7 @@ phải được ghi rõ trong implementation report.
 
 ```text
 datasets/raw/a10.csv
-notebooks/Practice2_latest.ipynb
+historical Practice2_latest.ipynb reference (not present in the current repository)
 Exercise 4 implementation, notebook section and outputs
 Exercise 5 implementation, notebook section and outputs
 Practice 1, Practice 3 and unrelated files
@@ -144,7 +144,7 @@ Không duplicate logic trong notebook.
 
 ### Step 4 — Update the E03 Notebook Orchestration
 
-Trong `Practice_2_present.ipynb`:
+Trong `Practice_2_Exercise.ipynb`:
 
 1. giữ raw first-difference attempt và kết luận blocker làm evidence;
 2. tạo approved log-transformed training series;

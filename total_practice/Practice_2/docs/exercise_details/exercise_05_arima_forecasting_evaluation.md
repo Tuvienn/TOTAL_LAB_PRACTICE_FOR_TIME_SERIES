@@ -10,8 +10,8 @@ Dataset: Monthly Retail Sales
 Input: E01 chronological holdout + E04 provisional ARIMA candidates
 Inherited transformation: natural_log
 Inherited regular differencing order: d = 1
-Specification status: DRAFT_WAITING_HUMAN_REVIEW
-Implementation authorized: NO
+Specification status: APPROVED_AND_VALIDATED
+Implementation authorized: YES
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_05_execution.md
 ```
@@ -284,10 +284,10 @@ AND no unresolved blocking issue
 
 ```text
 EXERCISE_05_SPECIFICATION_CREATED=true
-EXERCISE_05_SPECIFICATION_REVIEWED=false
-EXERCISE_05_SPECIFICATION_APPROVED=false
-EXERCISE_05_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_05_IMPLEMENTED=false
-EXERCISE_05_VALIDATED=false
-EXERCISE_05_COMPLETED=false
+EXERCISE_05_SPECIFICATION_REVIEWED=true
+EXERCISE_05_SPECIFICATION_APPROVED=true
+EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_05_IMPLEMENTED=true
+EXERCISE_05_VALIDATED=true
+EXERCISE_05_COMPLETED=true
 ```

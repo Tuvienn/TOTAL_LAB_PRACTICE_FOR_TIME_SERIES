@@ -11,7 +11,8 @@ Input: Stationary log first-differenced training series from E03
 Inherited transformation: natural_log
 Inherited regular differencing order: d = 1
 Model training required: NO
-Specification status: DRAFT_WAITING_HUMAN_REVIEW
+Specification status: APPROVED_AND_VALIDATED
+Implementation authorized: YES
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_04_execution.md
 ```
@@ -217,7 +218,7 @@ AIC/BIC, residuals và đánh giá trên sealed test set cùng approved baseline
 
 ```text
 EXERCISE_04_SPECIFICATION_CREATED=true
-EXERCISE_04_SPECIFICATION_REVIEWED=false
-EXERCISE_04_SPECIFICATION_APPROVED=false
-EXERCISE_04_IMPLEMENTATION_AUTHORIZED=false
+EXERCISE_04_SPECIFICATION_REVIEWED=true
+EXERCISE_04_SPECIFICATION_APPROVED=true
+EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
 ```

@@ -8,18 +8,17 @@ Exercise ID: EXERCISE_06
 Topic: AirPassengers ARIMA Baseline and SARIMA Extension
 Plan type: Exercise Before-Process Plan
 Dataset: AirPassengers
-Status: DRAFT_WAITING_E5_COMPLETION_AND_HUMAN_REVIEW
-Implementation authorized: NO
+Status: APPROVED_FOR_IMPLEMENTATION
+Implementation authorized: YES
 Scientific dependency: independent Dataset 2 workflow
-Process gate: EXERCISE_05_NOT_COMPLETED
+Process gate: EXERCISE_05_COMPLETED
 Downstream gate: CLOSED_PENDING_E06_VALIDATION
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_06_execution.md
 ```
 
-File này chỉ mô tả kế hoạch chi tiết cho E06. Việc tạo plan không cho phép triển khai
-code, chỉnh notebook, tạo output hoặc cập nhật trạng thái E06 khi chưa hoàn thành E05,
-chưa review lại reusable interfaces và chưa có Human approval riêng cho E06.
+File này mô tả kế hoạch chi tiết cho E06. Human đã duyệt scope để triển khai; E06
+chỉ được ghi completed sau khi clean-kernel validation và evidence review đạt.
 
 ## 2. Objective
 
@@ -193,7 +192,7 @@ approved existing modules under src/practice_2/data/
 approved existing modules under src/practice_2/analysis/
 approved existing modules under src/practice_2/visualization/
 tests/test_exercise_06.py
-notebooks/Practice_2_present.ipynb
+notebooks/Practice_2_Advanced.ipynb (E06 draft notebook only; not execution evidence)
 outputs/figures/06_airpassengers_original_series.png
 outputs/figures/06_airpassengers_differencing.png
 outputs/figures/06_airpassengers_acf_pacf.png
@@ -224,7 +223,7 @@ AGENTS.md
 .agents/ rules and workflows
 approved Practice_2 rule files
 E01–E05 validated evidence and outputs
-notebooks/Practice2_latest.ipynb
+historical Practice2_latest.ipynb reference (not present in the current repository)
 README.md before the approved final-documentation stage
 unrelated Practice/Lab files
 ```
@@ -330,9 +329,11 @@ whether SARIMA improvement is supported on this holdout
 
 Không dùng từ ngữ tuyệt đối như “hoàn toàn vượt trội” hoặc suy rộng ngoài setup.
 
-### Step 12 — Update Canonical Notebook
+### Step 12 — Update E06 Draft Notebook
 
-Thêm E06 vào `Practice_2_present.ipynb` với cấu trúc ngắn:
+Thêm E06 vào `Practice_2_Advanced.ipynb` với cấu trúc ngắn. Notebook này chỉ là
+draft cho E06 và không là evidence completion cho đến khi entry gate, approval và
+validation đều hoàn tất:
 
 ```text
 # Exercise 6 — Mở rộng SARIMA với AirPassengers
@@ -465,7 +466,7 @@ Khi dừng:
 | Chọn order quá chắc chắn từ ACF/PACF | Dùng ít candidates và yêu cầu fit/residual evidence |
 | SARIMA quá phức tạp với 115 training points | Giới hạn candidate count và theo dõi convergence |
 | Residual được kết luận bằng mắt | Bắt buộc Ljung–Box cùng residual plot/ACF |
-| Output notebook cũ gây nhầm lẫn | Chỉ `Practice_2_present.ipynb` là canonical |
+| Output notebook cũ gây nhầm lẫn | `Practice_2_Exercise.ipynb` là canonical cho core; `Practice_2_Advanced.ipynb` chỉ là E06 draft |
 | Kết luận quá mức từ một holdout | Giới hạn conclusion trong dataset và split hiện tại |
 
 ## 16. E06 Completion Handoff
@@ -490,10 +491,10 @@ E06 completion không thay thế, sửa lại hoặc che lấp trạng thái c�
 
 ```text
 EXERCISE_06_BEFORE_PROCESS_CREATED=true
-EXERCISE_06_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_06_BEFORE_PROCESS_APPROVED=false
-EXERCISE_06_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_06_WAITING_FOR_E05=true
+EXERCISE_06_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_06_BEFORE_PROCESS_APPROVED=true
+EXERCISE_06_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_06_WAITING_FOR_E05=false
 EXERCISE_06_IMPLEMENTED=false
 EXERCISE_06_VALIDATED=false
 EXERCISE_06_COMPLETED=false

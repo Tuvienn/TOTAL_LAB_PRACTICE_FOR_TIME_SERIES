@@ -8,8 +8,8 @@ Exercise ID: EXERCISE_04
 Topic: ACF/PACF and ARIMA Candidate Identification
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: DRAFT_WAITING_HUMAN_REVIEW
-Implementation authorized: NO
+Status: APPROVED_AND_COMPLETED
+Implementation authorized: YES
 Upstream handoff: EXERCISE_03_COMPLETED_WITH_LOG_TRANSFORMATION
 Downstream gate: CLOSED_PENDING_E04_VALIDATION
 Execution state owner: docs/status/current_status.md
@@ -106,7 +106,7 @@ src/practice_2/analysis/correlation.py
 src/practice_2/analysis/__init__.py
 src/practice_2/visualization/plots.py
 tests/test_exercise_04.py
-notebooks/Practice_2_present.ipynb
+notebooks/Practice_2_Exercise.ipynb
 outputs/figures/03_acf_pacf_log_first_differenced.png
 outputs/results/acf_log_first_differenced.csv
 outputs/results/pacf_log_first_differenced.csv
@@ -127,7 +127,7 @@ AGENTS.md
 .agents/ rules and workflows
 approved Practice_2 rule files
 E01–E03 validated source logic and result files
-notebooks/Practice2_latest.ipynb
+historical Practice2_latest.ipynb reference (not present in the current repository)
 E05/E06 implementation or documents
 README.md
 unrelated Practice/Lab files
@@ -271,7 +271,7 @@ status
 
 ### Step 8 — Update Canonical Notebook
 
-Thêm E04 vào `Practice_2_present.ipynb` theo cấu trúc ngắn:
+Thêm E04 vào `Practice_2_Exercise.ipynb` theo cấu trúc ngắn:
 
 ```text
 # Exercise 4 — Phân tích ACF/PACF
@@ -419,12 +419,12 @@ remaining seasonal-lag limitation when applicable
 
 ```text
 EXERCISE_04_BEFORE_PROCESS_CREATED=true
-EXERCISE_04_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_04_BEFORE_PROCESS_APPROVED=false
-EXERCISE_04_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_04_IMPLEMENTED=false
-EXERCISE_04_VALIDATED=false
-EXERCISE_04_COMPLETED=false
+EXERCISE_04_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_04_BEFORE_PROCESS_APPROVED=true
+EXERCISE_04_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_04_IMPLEMENTED=true
+EXERCISE_04_VALIDATED=true
+EXERCISE_04_COMPLETED=true
 EXERCISE_05_HANDOFF_OPEN=false
 ```
 

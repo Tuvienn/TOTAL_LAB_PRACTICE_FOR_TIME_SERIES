@@ -8,7 +8,8 @@ Exercise: EXERCISE_03
 Issue type: Scientific result and legacy workflow inconsistency
 Current state: BLOCKED_BY_SCIENTIFIC_RESULT
 Downstream impact: EXERCISE_04_HANDOFF_OPEN=false
-Review scope: Practice_2_present.ipynb and Practice2_latest.ipynb
+Review scope: historical Practice_2_present.ipynb and Practice2_latest.ipynb
+references (neither is present in the current repository)
 ```
 
 ## 2. Expected Behavior
@@ -25,7 +26,7 @@ Exercise 3 phải:
 
 ## 3. Observed Behavior
 
-### 3.1. Canonical notebook: `Practice_2_present.ipynb`
+### 3.1. Historical intended canonical notebook: `Practice_2_present.ipynb`
 
 ```text
 full observations: 204
@@ -45,11 +46,15 @@ decision: fail to reject H0
 selected d: REVIEW_REQUIRED
 ```
 
-Notebook present thực hiện đúng boundary, differencing và stop condition. Tuy nhiên,
+Notebook historical thực hiện đúng boundary, differencing và stop condition. Tuy nhiên,
 first-differenced training series chưa có evidence stationary nên E03 chưa đạt
 Scientific Handoff Gate.
 
-### 3.2. Legacy notebook: `Practice2_latest.ipynb`
+Repository reconciliation note: `Practice_2_Exercise.ipynb` is the current
+canonical core notebook. The historical evidence above must not be treated as
+execution evidence for that file until its own contents are rerun and validated.
+
+### 3.2. Historical legacy notebook reference: `Practice2_latest.ipynb`
 
 ```text
 differencing input: full series

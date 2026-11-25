@@ -8,7 +8,7 @@ Exercise ID: EXERCISE_05
 Topic: ARIMA Training, Residual Diagnostics, Forecasting and Evaluation
 Plan type: Exercise Before-Process Plan
 Dataset: Monthly Retail Sales
-Status: DRAFT_WAITING_HUMAN_REVIEW
+Status: APPROVED_AND_COMPLETED
 Implementation authorized: NO
 Human-reported execution: YES, notebook evidence requires formal reconciliation
 Upstream handoff: E04 ARIMA candidates; formal status discrepancy remains
@@ -54,7 +54,7 @@ total_practice/Practice_2/docs/exercise_details/exercise_05_arima_forecasting_ev
 total_practice/Practice_2/docs/exercise_details/exercise_04_acf_pacf_arima_candidates.md
 total_practice/Practice_2/docs/plans/exercise_04_before_process.md
 E01–E04 validated evidence, execution logs, and outputs
-notebooks/Practice_2_present.ipynb
+notebooks/Practice_2_Exercise.ipynb
 ```
 
 If required upstream evidence is missing or status/approval records conflict,
@@ -62,26 +62,23 @@ stop and report the discrepancy before formal execution or completion.
 
 ## 4. Entry Gate and Current State
 
-The current status records that the Human reported E04/E05 completed and that
-notebook execution evidence exists. It also preserves `EXERCISE_04_HANDOFF_OPEN=true`
-and says formal E04/E05 execution logs and status reconciliation are pending.
-The E05 specification is currently a draft and says implementation is not
-authorized.
+The current status records that the Human approved E04/E05 completion and that
+validated notebook execution evidence exists. `EXERCISE_04_HANDOFF_OPEN=false`
+records the approved E04 handoff to E05.
 
 Therefore:
 
 ```text
-Human-reported E05 notebook run: present
-Formal E04 handoff state: unresolved
-E05 specification approval: pending
-E05 plan approval: pending
-Formal E05 completion: not established
+Human-approved E05 notebook run: validated
+Formal E04 handoff state: resolved
+E05 specification approval: approved
+E05 plan approval: approved
+Formal E05 completion: approved with residual-autocorrelation limitation
 ```
 
-Before treating the run as official, review the approval state with the Human,
-resolve the E04 status discrepancy, verify the notebook outputs against the
-specification, and obtain approval for any required rerun or changes. Do not
-silently promote exploratory notebook output to approved evidence.
+The Human-approved run is now treated as official E05 evidence. The residual
+autocorrelation limitation remains visible in the execution evidence and is not
+silently converted into a white-noise claim.
 
 ## 5. Upstream Input Contract
 
@@ -97,7 +94,7 @@ Split: chronological 80/20
 Shuffle: false
 Transformation: natural_log
 Selected regular differencing order: d = 1
-E04 handoff: one or two provisional ARIMA(p,1,q) candidates with rationale
+E04 handoff: two approved ARIMA(p,1,q) candidates with rationale
 Test set: sealed until final evaluation
 ```
 
@@ -138,7 +135,7 @@ only the following, as needed:
 ```text
 docs/exercise_details/exercise_05_arima_forecasting_evaluation.md
 docs/plans/exercise_05_before_process.md
-notebooks/Practice_2_present.ipynb
+notebooks/Practice_2_Exercise.ipynb
 outputs/figures/05_arima_residual_diagnostics.png
 outputs/figures/05_arima_forecast_comparison.png
 outputs/results/05_arima_fit_summary.csv
@@ -163,7 +160,7 @@ AGENTS.md
 .agents/rules/ and .agents/workflows/
 approved Practice_2 rule files
 E01–E04 validated source logic, outputs, and execution evidence
-notebooks/Practice2_latest.ipynb
+historical Practice2_latest.ipynb reference (not present in the current repository)
 E06 implementation, outputs, or execution evidence
 README.md before the approved final-documentation stage
 unrelated Practice/Lab files
@@ -180,13 +177,10 @@ STOP → explain reason and impact → propose scope update → wait for approva
 
 ### Step 0 — Verify Approval and Reconcile Existing State
 
-Review the E05 specification and this plan approval state. Confirm E04 handoff
-evidence and reconcile the existing `EXERCISE_04_HANDOFF_OPEN=true` status with
-the Human-reported E04/E05 completion. Determine whether the existing notebook
-run is to be retained as exploratory evidence or formally validated/rerun.
-
-If approval or upstream status remains unresolved, do not perform a formal E05
-execution, update completion state, or describe the run as approved.
+Review the approved E05 specification and this plan approval state. Confirm the
+E04 handoff evidence and the two approved ARIMA candidates. The clean-kernel
+run is retained as formal evidence, with residual autocorrelation documented as
+a limitation.
 
 ### Step 1 — Verify the Dataset and E01 Boundary
 
@@ -289,8 +283,7 @@ it has a lower AIC/BIC.
 After all checks pass, create `docs/logs/exercise_05_execution.md` with input
 identity, split, model parameters, warnings, diagnostics, forecasts, metrics,
 largest errors, and validation outcomes. Update `current_status.md` only with
-verified state and reconcile the upstream E04 discrepancy. Human review remains
-required for formal completion.
+verified state and retain the residual-autocorrelation limitation.
 
 ## 10. Test and Validation Plan
 
@@ -376,10 +369,10 @@ AND Human reviews the final result
 
 ```text
 EXERCISE_05_BEFORE_PROCESS_CREATED=true
-EXERCISE_05_BEFORE_PROCESS_REVIEWED=false
-EXERCISE_05_BEFORE_PROCESS_APPROVED=false
-EXERCISE_05_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_05_IMPLEMENTED=false
-EXERCISE_05_VALIDATED=false
-EXERCISE_05_COMPLETED=false
+EXERCISE_05_BEFORE_PROCESS_REVIEWED=true
+EXERCISE_05_BEFORE_PROCESS_APPROVED=true
+EXERCISE_05_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_05_IMPLEMENTED=true
+EXERCISE_05_VALIDATED=true
+EXERCISE_05_COMPLETED=true
 ```

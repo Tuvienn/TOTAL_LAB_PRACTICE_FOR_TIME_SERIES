@@ -265,7 +265,7 @@ EXERCISE_03_IMPLEMENTED=true
 EXERCISE_03_VALIDATED=true
 EXERCISE_03_COMPLETED=true
 EXERCISE_03_BLOCKED_BY_SCIENTIFIC_RESULT=false
-EXERCISE_04_HANDOFF_OPEN=true
+EXERCISE_04_HANDOFF_OPEN=false
 ```
 
 Actual result và runtime state phải được đọc từ execution log và current status;

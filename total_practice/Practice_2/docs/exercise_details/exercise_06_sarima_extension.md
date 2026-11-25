@@ -11,16 +11,16 @@ Frequency: Monthly
 Seasonal period: s = 12
 Chronological split: 80% train / 20% test
 Model training required: YES, after approval
-Specification status: DRAFT_WAITING_E5_COMPLETION_AND_HUMAN_REVIEW
+Specification status: APPROVED_FOR_IMPLEMENTATION
+Implementation authorized: YES
 Direct data dependency on E01–E05: NO
-Process gate: EXERCISE_05_NOT_COMPLETED
+Process gate: EXERCISE_05_COMPLETED
 Execution state owner: docs/status/current_status.md
 Execution evidence: docs/logs/exercise_06_execution.md
 ```
 
-Specification này định nghĩa yêu cầu khoa học của E06. Nó không cho phép triển khai
-code, chỉnh notebook, tạo output hoặc cập nhật trạng thái E06 khi E05 chưa hoàn thành
-và chưa có Human approval riêng cho E06.
+Specification này định nghĩa yêu cầu khoa học của E06. E06 đã được Human duyệt để
+triển khai; completion vẫn phụ thuộc clean-kernel validation và execution evidence.
 
 ## 2. Objective
 
@@ -295,8 +295,8 @@ của Core Practice E01–E05.
 
 ```text
 EXERCISE_06_SPECIFICATION_CREATED=true
-EXERCISE_06_SPECIFICATION_REVIEWED=false
-EXERCISE_06_SPECIFICATION_APPROVED=false
-EXERCISE_06_IMPLEMENTATION_AUTHORIZED=false
-EXERCISE_06_WAITING_FOR_E05=true
+EXERCISE_06_SPECIFICATION_REVIEWED=true
+EXERCISE_06_SPECIFICATION_APPROVED=true
+EXERCISE_06_IMPLEMENTATION_AUTHORIZED=true
+EXERCISE_06_WAITING_FOR_E05=false
 ```

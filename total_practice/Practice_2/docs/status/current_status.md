@@ -6,29 +6,53 @@
 EXERCISE_01_COMPLETED
 EXERCISE_02_COMPLETED
 EXERCISE_03_COMPLETED_WITH_LOG_TRANSFORMATION
-EXERCISE_04_AND_EXERCISE_05_COMPLETION_REPORTED_BY_HUMAN
+EXERCISE_04_COMPLETED
+EXERCISE_05_COMPLETED_WITH_RESIDUAL_AUTOCORRELATION_LIMITATION
 EXERCISE_06_EXPLORATORY_NOTEBOOK_RESULTS_AVAILABLE
-EXERCISE_06_APPROVAL_AND_VALIDATION_PENDING
+EXERCISE_06_IMPLEMENTATION_AUTHORIZED
+EXERCISE_06_VALIDATION_PENDING
 ```
 
 ## Exercise 04–05 Status Note
 
 ```text
-Human-reported state: E04 and E05 completed
-Notebook execution evidence: available in notebooks/Practice_2_present.ipynb
-E04/E05 formal execution logs and status reconciliation: pending
+Human-approved state: E04 and E05 completed
+Canonical core notebook: notebooks/Practice_2_Exercise.ipynb
+Notebook contents: validated clean-kernel execution evidence
+E04/E05 formal execution logs and status reconciliation: completed
 ```
 
-The E04 specification and before-process plan remain drafts in their approval
-records. This status note records the Human-reported completion and notebook
-evidence; it does not retroactively change those approval records.
+The E04 and E05 specifications and before-process plans are now approved and
+validated. E05 retains a documented residual-autocorrelation limitation.
+
+## Protocol Reconciliation Rerun
+
+```text
+execution source: notebooks/Practice_2_Exercise.ipynb, clean-kernel rerun
+execution date: 2026-11-25
+train observations: 163
+test observations: 41
+E02 input: original training series only
+E03 transformation: natural_log + first difference
+E03 selected d: 1
+E04 input: log-first-difference training series
+E05 fit scale: log training levels with d=1
+E05 forecast horizon: 41 months
+E05 baseline: seasonal-naive, seasonal period 12
+E05 residual diagnostics: Ljung–Box included
+formal completion: approved by Human with residual-autocorrelation limitation
+```
+
+The rerun establishes reproducible train-only and holdout boundaries for the
+approved E04/E05 workflow. The residual limitation remains part of the formal
+result and does not get hidden by the model comparison.
 
 ## Exercise 06 — AirPassengers Exploratory Evidence
 
 ```text
 execution source: notebook cells run by Human from a chat-provided template
-implementation authorization: false
-validation status: not validated
+implementation authorization: true
+validation status: pending clean-kernel execution
 completion status: not completed
 dataset: airline-passengers.csv
 rows: 144
@@ -56,11 +80,10 @@ SARIMA largest absolute error: 1960-03, 33.003028
 
 The exploratory results show lower MAE and RMSE for SARIMA on this holdout.
 Ljung–Box indicates remaining autocorrelation in SARIMA residuals at lag 12.
-These notebook outputs are preliminary evidence only: no approved E06 execution
+These notebook outputs remain exploratory evidence only: no formal E06 execution
 log, clean-kernel run, targeted tests, or final output inspection has been recorded.
-The E06 specification and before-process plan remain
-`DRAFT_WAITING_E5_COMPLETION_AND_HUMAN_REVIEW`; E06 implementation is not
-authorized or marked complete.
+The E06 specification and before-process plan are approved for implementation;
+E06 is not yet marked complete.
 
 ## Exercise 01 Evidence
 
@@ -86,9 +109,8 @@ seasonality and likely non-stationarity; E02 is required for statistical testing
 ## Authorization State
 
 The authorization block below preserves the existing formal E01–E04 record.
-`EXERCISE_04_HANDOFF_OPEN=true` has not been changed; it remains a formal
-status discrepancy with the Human-reported E04/E05 completion above and must be
-reconciled before E04/E05 are treated as formally completed in the project record.
+`EXERCISE_04_HANDOFF_OPEN=false`; E04 has handed two approved ARIMA candidates
+to E05. E05 is complete with the residual-autocorrelation limitation recorded.
 
 ```text
 EXERCISE_01_IMPLEMENTATION_AUTHORIZED=true
@@ -104,7 +126,7 @@ EXERCISE_03_IMPLEMENTED=true
 EXERCISE_03_VALIDATED=true
 EXERCISE_03_COMPLETED=true
 EXERCISE_03_BLOCKED_BY_SCIENTIFIC_RESULT=false
-EXERCISE_04_HANDOFF_OPEN=true
+EXERCISE_04_HANDOFF_OPEN=false
 ```
 
 ## Exercise 03 Result
