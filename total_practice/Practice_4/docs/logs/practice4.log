@@ -1,80 +1,83 @@
-2026-11-25 07:16:39 | INFO     | Khởi tạo hệ thống logging thành công.
-2026-11-25 07:16:39 | INFO     | Log file: D:\Practice_Time_Series_Data\Practice_4\total_practice\Practice_4\docs\logs\practice4.log
-2026-11-25 07:16:45 | INFO     | Hoàn thành chia dữ liệu theo thời gian.
-2026-11-25 07:16:45 | INFO     | Train: 24544 | Validation: 5260 | Test: 5260
-2026-11-25 07:16:45 | INFO     | Khởi tạo cấu hình hiển thị biểu đồ thành công.
-2026-11-25 07:16:45 | INFO     | Bắt đầu đọc dữ liệu từ: ..\datasets\processed\electricity_load_weather_hourly.csv
-2026-11-25 07:16:45 | INFO     | Đọc dữ liệu thành công.
-2026-11-25 07:16:45 | INFO     | Kích thước ban đầu: 35064 dòng x 5 cột
-2026-11-25 07:16:45 | INFO     | Chuyển đổi cột time sang datetime thành công.
-2026-11-25 07:16:45 | INFO     | Khoảng thời gian dữ liệu: 2014-12-31 23:00:00+00:00 -> 2018-12-31 22:00:00+00:00
-2026-11-25 07:16:45 | INFO     | Danh sách cột dữ liệu:
-2026-11-25 07:16:45 | INFO     | ['time', 'load', 'temperature', 'humidity', 'wind_speed']
-2026-11-25 07:16:45 | INFO     | Số lượng giá trị thiếu trên Train:
-2026-11-25 07:16:45 | INFO     | 
-time           0
-load           0
-temperature    0
-humidity       0
-wind_speed     0
-2026-11-25 07:16:45 | INFO     | Phân bố bước nhảy thời gian trên Train:
-2026-11-25 07:16:45 | INFO     | 
-time
+2026-11-25 20:00:52 | INFO     | Khởi tạo hệ thống logging thành công.
+2026-11-25 20:00:52 | INFO     | Log file: /Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/Practice_4/docs/logs/practice4.log
+2026-11-25 20:00:53 | WARNING  | Canonical dataset giữ nguyên 36 missing load target; notebook sẽ dùng xử lý causal past-only cho input và loại target thiếu khỏi metrics.
+2026-11-25 20:00:53 | INFO     | Processed data quality summary:
+ Rows  Columns  Duplicate timestamps  Missing values  Missing load targets  Unexpected intervals                     Start                       End
+35064        5                     0              36                    36                     0 2014-12-31 23:00:00+00:00 2018-12-31 22:00:00+00:00
+2026-11-25 20:00:53 | INFO     | Causal load treatment: forward-fill past-only; missing targets excluded from metrics: 36
+2026-11-25 20:00:53 | INFO     | Hoàn thành chia dữ liệu theo thời gian.
+2026-11-25 20:00:53 | INFO     | Train: 24544 | Validation: 5260 | Test: 5260
+2026-11-25 20:00:53 | INFO     | Missing load targets by split | Train: 32 | Validation: 2 | Test: 2
+2026-11-25 20:00:53 | INFO     | Khởi tạo cấu hình hiển thị biểu đồ thành công.
+2026-11-25 20:00:53 | INFO     | Bắt đầu đọc dữ liệu từ: /Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/Practice_4/datasets/processed/electricity_load_weather_hourly.csv
+2026-11-25 20:00:53 | INFO     | Đọc dữ liệu thành công.
+2026-11-25 20:00:53 | INFO     | Kích thước ban đầu: 35064 dòng x 5 cột
+2026-11-25 20:00:53 | INFO     | Chuyển đổi cột time sang datetime thành công.
+2026-11-25 20:00:53 | INFO     | Khoảng thời gian dữ liệu: 2014-12-31 23:00:00+00:00 -> 2018-12-31 22:00:00+00:00
+2026-11-25 20:00:53 | INFO     | Danh sách cột dữ liệu:
+2026-11-25 20:00:53 | INFO     | ['time', 'load', 'temperature', 'humidity', 'wind_speed']
+2026-11-25 20:00:53 | INFO     | Số lượng giá trị thiếu trên raw Train trước causal treatment:
+2026-11-25 20:00:53 | INFO     | time            0
+load           32
+temperature     0
+humidity        0
+wind_speed      0
+2026-11-25 20:00:53 | INFO     | Phân bố bước nhảy thời gian trên Train:
+2026-11-25 20:00:53 | INFO     | time
 0 days 01:00:00    24543
-2026-11-25 07:16:45 | INFO     | Thống kê mô tả các biến số trên Train:
-2026-11-25 07:16:45 | INFO     | 
-               count      mean      std       min       25%       50%       75%       max
-load         24544.0  28552.69  4536.35  18041.00  24680.00  28811.50  31978.00  41015.00
+2026-11-25 20:00:53 | INFO     | Thống kê mô tả các biến số trên Train:
+2026-11-25 20:00:53 | INFO     |                count      mean      std       min       25%       50%       75%       max
+load         24544.0  28551.83  4536.51  18041.00  24676.00  28811.50  31978.00  41015.00
 temperature  24544.0     15.74     9.45     -9.02      8.56     14.51     22.57     40.18
 humidity     24544.0     56.74    24.96      0.00     35.00     57.00     79.00    100.00
 wind_speed   24544.0      2.46     1.99      0.00      1.00      2.00      3.00     18.00
-2026-11-25 07:16:45 | INFO     | Hoàn thành bước khám phá tổng quan dữ liệu.
-2026-11-25 07:16:45 | INFO     | Bảng kiểm tra Missing Values trên Train:
+2026-11-25 20:00:53 | INFO     | Hoàn thành bước khám phá tổng quan dữ liệu.
+2026-11-25 20:00:53 | INFO     | Bảng kiểm tra Missing Values trên Train:
              Missing Count  Missing (%)
-time                     0          0.0
-load                     0          0.0
-temperature              0          0.0
-humidity                 0          0.0
-wind_speed               0          0.0
-2026-11-25 07:16:45 | INFO     | Train | Số dòng trùng lặp hoàn toàn: 0 | Số mốc thời gian trùng lặp: 0
-2026-11-25 07:16:45 | WARNING  | Phát hiện 2 điểm nghi ngờ lỗi cảm biến (temperature == 0 & humidity == 0):
+time                     0       0.0000
+load                    32       0.1304
+temperature              0       0.0000
+humidity                 0       0.0000
+wind_speed               0       0.0000
+2026-11-25 20:00:53 | INFO     | Train | Số dòng trùng lặp hoàn toàn: 0 | Số mốc thời gian trùng lặp: 0
+2026-11-25 20:00:53 | WARNING  | Phát hiện 2 điểm nghi ngờ lỗi cảm biến (temperature == 0 & humidity == 0):
                           time     load  temperature  humidity  wind_speed
 2116 2015-03-30 03:00:00+00:00  21335.0          0.0       0.0         1.0
 2124 2015-03-30 11:00:00+00:00  31578.0          0.0       0.0         3.0
-2026-11-25 07:16:45 | INFO     | Train | Biến load        | IQR Bounds=[13733.00, 42925.00] | Low=0, High=0 (0.00%)
-2026-11-25 07:16:45 | INFO     | Train | Biến temperature | IQR Bounds=[-12.44, 43.58] | Low=0, High=0 (0.00%)
-2026-11-25 07:16:45 | INFO     | Train | Biến humidity    | IQR Bounds=[-31.00, 145.00] | Low=0, High=0 (0.00%)
-2026-11-25 07:16:45 | INFO     | Train | Biến wind_speed  | IQR Bounds=[-2.00, 6.00] | Low=0, High=1232 (5.02%)
-2026-11-25 07:16:54 | INFO     | Ma trận tương quan Pearson:
+2026-11-25 20:00:53 | INFO     | Train | Biến load        | IQR Bounds=[13723.00, 42931.00] | Low=0, High=0 (0.00%)
+2026-11-25 20:00:53 | INFO     | Train | Biến temperature | IQR Bounds=[-12.44, 43.58] | Low=0, High=0 (0.00%)
+2026-11-25 20:00:53 | INFO     | Train | Biến humidity    | IQR Bounds=[-31.00, 145.00] | Low=0, High=0 (0.00%)
+2026-11-25 20:00:53 | INFO     | Train | Biến wind_speed  | IQR Bounds=[-2.00, 6.00] | Low=0, High=1232 (5.02%)
+2026-11-25 20:00:54 | INFO     | Ma trận tương quan Pearson:
               load  temperature  humidity  wind_speed
-load         1.000        0.214    -0.195       0.095
+load         1.000        0.214    -0.195       0.094
 temperature  0.214        1.000    -0.804       0.097
 humidity    -0.195       -0.804     1.000      -0.143
-wind_speed   0.095        0.097    -0.143       1.000
-2026-11-25 07:16:54 | INFO     | Hoàn thành Correlation Matrix.
-2026-11-25 07:16:54 | INFO     | Hoàn thành chuẩn hóa dữ liệu bằng StandardScaler.
-2026-11-25 07:16:54 | INFO     | Kiểm tra dữ liệu sau Preprocessing thành công.
-2026-11-25 07:16:54 | INFO     | Hoàn thành tạo Lag Window cho LSTM.
-2026-11-25 07:16:55 | INFO     | Hoàn thành tạo Lag và Rolling Features cho XGBoost.
-2026-11-25 07:16:55 | INFO     | Hoàn thành kiểm tra Feature Engineering.
-2026-11-25 07:17:05 | INFO     | ADF test hoàn thành. Các biến cần sai phân: []
-2026-11-25 07:17:18 | INFO     | Đã huấn luyện VAR với lag order = 26 (BIC).
-2026-11-25 07:17:30 | INFO     | Hoàn thành walk-forward forecasting cho VAR.
-2026-11-25 07:19:08 | INFO     | XGBoost best config: max_depth=7, n_estimators=1500, best_iteration=1497
-2026-11-25 07:20:34 | INFO     | Hoàn thành huấn luyện LSTM. Best validation loss = 0.017829
-2026-11-25 07:20:35 | INFO     | Kết quả Backtesting (MAE, RMSE, MAPE):
-  Model    Dataset        MAE       RMSE  MAPE (%)
-    VAR Validation 442.545200 731.531122  1.572032
-    VAR       Test 417.904748 637.754730  1.488067
-XGBoost Validation 297.657315 496.544950  1.044094
-XGBoost       Test 279.523162 435.086831  0.974592
-   LSTM Validation 410.058440 605.700956  1.458301
-   LSTM       Test 391.695420 545.409923  1.383776
-2026-11-25 07:20:35 | INFO     | Hoàn thành trực quan hóa dự báo trên Test.
-2026-11-25 07:23:38 | INFO     | Hoàn thành tạo Model Evaluation Table.
-2026-11-25 07:26:56 | INFO     | Hoàn thành bảng xếp hạng mô hình.
-2026-11-25 07:31:07 | INFO     | Đã lưu toàn bộ Model Evaluation Tables vào: D:\Practice_Time_Series_Data\Practice_4\total_practice\Practice_4\results
-2026-11-25 07:33:21 | INFO     | Model summary directory: D:\Practice_Time_Series_Data\Practice_4\total_practice\Practice_4\results\model_summaries
-2026-11-25 07:33:24 | INFO     | Saved VAR Model Summary: D:\Practice_Time_Series_Data\Practice_4\total_practice\Practice_4\results\model_summaries\VAR_summary.txt
-2026-11-25 07:34:23 | INFO     | Saved XGBoost Model Summary: D:\Practice_Time_Series_Data\Practice_4\total_practice\Practice_4\results\model_summaries\XGBoost_summary.txt
-2026-11-25 07:35:50 | INFO     | Saved LSTM Model Summary: D:\Practice_Time_Series_Data\Practice_4\total_practice\Practice_4\results\model_summaries\LSTM_summary.txt
+wind_speed   0.094        0.097    -0.143       1.000
+2026-11-25 20:00:54 | INFO     | Hoàn thành Correlation Matrix.
+2026-11-25 20:00:54 | INFO     | Hoàn thành chuẩn hóa dữ liệu bằng StandardScaler.
+2026-11-25 20:00:54 | INFO     | Kiểm tra dữ liệu sau Preprocessing thành công.
+2026-11-25 20:00:54 | INFO     | Hoàn thành tạo Lag Window cho LSTM.
+2026-11-25 20:00:54 | INFO     | Hoàn thành tạo Lag và Rolling Features cho XGBoost.
+2026-11-25 20:00:54 | INFO     | Hoàn thành kiểm tra Feature Engineering.
+2026-11-25 20:00:56 | INFO     | ADF test hoàn thành. Các biến cần sai phân: []
+2026-11-25 20:00:58 | INFO     | Đã huấn luyện VAR với lag order = 26 (BIC).
+2026-11-25 20:00:58 | INFO     | Hoàn thành walk-forward forecasting cho VAR.
+2026-11-25 20:03:04 | INFO     | XGBoost best config: max_depth=7, n_estimators=500, best_iteration=497
+2026-11-25 20:04:15 | INFO     | Hoàn thành huấn luyện LSTM. Best validation loss = 0.561868
+2026-11-25 20:04:21 | INFO     | Kết quả Backtesting (MAE, RMSE, MAPE):
+  Model    Dataset         MAE        RMSE  MAPE (%)  Is Best
+    VAR Validation 3886.713862 4597.912488 13.643357    False
+    VAR       Test 3952.871465 4614.274261 13.944388    False
+XGBoost Validation 3078.316392 3888.146946 10.405300    False
+XGBoost       Test 2935.207615 3664.482049  9.948216     True
+   LSTM Validation 2666.656334 3400.397467  9.384605     True
+   LSTM       Test 3884.703680 4855.825715 13.349584    False
+2026-11-25 20:04:21 | INFO     | Hoàn thành trực quan hóa dự báo trên Test.
+2026-11-25 20:04:21 | INFO     | Hoàn thành tạo Model Evaluation Table.
+2026-11-25 20:04:21 | INFO     | Hoàn thành bảng xếp hạng mô hình.
+2026-11-25 20:04:21 | INFO     | Đã lưu toàn bộ Model Evaluation Tables vào: /Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/Practice_4/results
+2026-11-25 20:04:21 | INFO     | Model summary directory: /Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/Practice_4/results/model_summaries
+2026-11-25 20:04:21 | INFO     | Saved VAR Model Summary: /Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/Practice_4/results/model_summaries/VAR_summary.txt
+2026-11-25 20:04:21 | INFO     | Saved XGBoost Model Summary: /Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/Practice_4/results/model_summaries/XGBoost_summary.txt
+2026-11-25 20:04:21 | INFO     | Saved LSTM Model Summary: /Users/vientu/Time Series/TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/total_practice/Practice_4/results/model_summaries/LSTM_summary.txt

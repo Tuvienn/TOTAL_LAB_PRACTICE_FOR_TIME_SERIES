@@ -22,9 +22,10 @@ def build_electricity_weather_dataset(
     df_energy = df_energy.rename(columns={"total load actual": "load"})
     df_energy["time"] = pd.to_datetime(df_energy["time"], utc=True)
     df_energy = df_energy.sort_values("time")
-    df_energy["load"] = df_energy["load"].interpolate(
-        method="linear", limit_direction="both"
-    )
+    # Preserve missing target observations.  Filling ``load`` here would use
+    # future target values (and would therefore leak information into
+    # validation/test).  The notebook applies a causal, past-only treatment
+    # for model inputs and keeps an observed-target mask for evaluation.
 
     # 2. Đọc và làm sạch dữ liệu thời tiết (Weather)
     df_weather = pd.read_csv(
@@ -61,8 +62,13 @@ def build_electricity_weather_dataset(
         df_merged.set_index("time")
         .sort_index()
         .asfreq("1h")
-        .interpolate(method="linear", limit_direction="both")
     )
+
+    # Weather is an input signal.  If a timestamp gap is introduced by the
+    # hourly reindex, use only the last observed value; never use future
+    # weather or interpolate the target ``load`` in the canonical dataset.
+    weather_cols = ["temperature", "humidity", "wind_speed"]
+    df_merged[weather_cols] = df_merged[weather_cols].ffill()
 
     # 4. Lưu kết quả ra thư mục processed/
     processed_dir.mkdir(parents=True, exist_ok=True)

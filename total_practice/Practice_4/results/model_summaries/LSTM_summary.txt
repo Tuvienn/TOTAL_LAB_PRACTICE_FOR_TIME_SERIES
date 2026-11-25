@@ -1,8 +1,8 @@
 LSTM MODEL SUMMARY - ELECTRICITY LOAD FORECASTING
 ==============================================================================
-Training samples: 24,520
-Validation samples: 5,260
-Test samples: 5,260
+Training samples: 24,488
+Validation samples: 5,258
+Test samples: 5,258
 Input shape per sample: (24, 4)
 Input features: load, temperature, humidity, wind_speed
 Target: next-step load
@@ -22,13 +22,13 @@ Optimizer: Adam
 Learning rate: 0.001
 Batch size: 128
 Maximum epochs: 30
-Completed epochs: 19
+Completed epochs: 13
 Early stopping patience: 6
-Best epoch: 13
+Best epoch: 7
 Training device: cpu
 
 BEST EPOCH LOSSES (STANDARDIZED SCALE)
 ------------------------------------------------------------------------------
-Train MSE: 0.01594182
-Validation MSE: 0.01782875
+Train MSE: 0.01945775
+Validation MSE: 0.56186758
 Note: These losses are calculated on standardized load values.
