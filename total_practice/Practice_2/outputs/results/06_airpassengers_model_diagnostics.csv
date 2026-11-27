@@ -1,0 +1,5 @@
+Model,Lag,Ljung-Box statistic,p-value,Interpretation
+"ARIMA(0,1,1)",12,74.20183538219824,5.1989890053143886e-11,Autocorrelation evidence remains
+"ARIMA(0,1,1)",24,131.90448087549257,7.004942931600863e-17,Autocorrelation evidence remains
+"SARIMA(0,1,1)(0,1,1,12)",12,17.84502395160507,0.12047779388094743,No rejection at selected lag
+"SARIMA(0,1,1)(0,1,1,12)",24,26.456472358366632,0.3304174240976083,No rejection at selected lag

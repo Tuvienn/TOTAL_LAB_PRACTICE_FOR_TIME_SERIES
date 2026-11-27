@@ -1,0 +1,3 @@
+Partition,Observations,Start,End,Status
+Train,115,1949-01-01,1958-07-01,Training-only
+Test,29,1958-08-01,1960-12-01,Sealed holdout

@@ -1,0 +1,5 @@
+Series,ADF statistic,p-value,Critical value (5%),Status
+Original training series,-0.35688921964045006,0.917051728587593,-2.8906107514600103,Training-only evidence
+Regular difference (d=1),-2.539634780808079,0.106126099996738,-2.89090644,Not stationary at α=0.05
+"Seasonal difference (D=1, s=12)",-3.3388033698967,0.013230590830311927,-2.89090644,Stationary evidence
+Combined regular + seasonal difference,-12.176268238314329,1.3839808857959283e-22,-2.8906107514600103,Stationary evidence

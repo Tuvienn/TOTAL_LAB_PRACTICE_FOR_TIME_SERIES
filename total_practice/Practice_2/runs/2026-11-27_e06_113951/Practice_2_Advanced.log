@@ -1,0 +1,23 @@
+2026-11-27 11:39:51,964 | INFO | Run ID: 2026-11-27_e06_113951
+2026-11-27 11:39:51,964 | INFO | Train observations: 115; test observations: 29
+2026-11-27 11:39:51,964 | INFO | Raw SHA-256: 8cb51be753a718d9be5d76d7e238cc224792754676adc21faa59e954b0201621
+2026-11-27 11:39:51,965 | INFO | ADF results:
+                                Series  ADF statistic      p-value  Critical value (5%)                   Status
+              Original training series      -0.356889 9.170517e-01            -2.890611   Training-only evidence
+              Regular difference (d=1)      -2.539635 1.061261e-01            -2.890906 Not stationary at α=0.05
+       Seasonal difference (D=1, s=12)      -3.338803 1.323059e-02            -2.890906      Stationary evidence
+Combined regular + seasonal difference     -12.176268 1.383981e-22            -2.890611      Stationary evidence
+2026-11-27 11:39:51,965 | INFO | Model candidates:
+                  Model   Order Seasonal order         AIC         BIC  Converged                                                              Rationale                      Status
+           ARIMA(0,1,1) (0,1,1)      (0,0,0,0) 1046.606968 1052.043965       True                                   Non-seasonal baseline for comparison Fit on training series only
+SARIMA(0,1,1)(0,1,1,12) (0,1,1)     (0,1,1,12)  659.341569  666.773579       True Seasonal extension supported by s=12 and transformed-training ACF/PACF Fit on training series only
+2026-11-27 11:39:51,965 | INFO | Model metrics:
+                  Model       MAE       RMSE                             Status
+           ARIMA(0,1,1) 88.420620 101.104982 Sealed 29-month holdout evaluation
+SARIMA(0,1,1)(0,1,1,12) 24.059215  30.580049 Sealed 29-month holdout evaluation
+2026-11-27 11:39:51,965 | INFO | Residual diagnostics:
+                  Model  Lag  Ljung-Box statistic      p-value                   Interpretation
+           ARIMA(0,1,1)   12            74.201835 5.198989e-11 Autocorrelation evidence remains
+           ARIMA(0,1,1)   24           131.904481 7.004943e-17 Autocorrelation evidence remains
+SARIMA(0,1,1)(0,1,1,12)   12            17.845024 1.204778e-01     No rejection at selected lag
+SARIMA(0,1,1)(0,1,1,12)   24            26.456472 3.304174e-01     No rejection at selected lag

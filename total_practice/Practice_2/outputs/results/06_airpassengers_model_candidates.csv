@@ -1,0 +1,3 @@
+Model,Order,Seasonal order,AIC,BIC,Converged,Rationale,Status
+"ARIMA(0,1,1)","(0,1,1)","(0,0,0,0)",1046.6069675996332,1052.0439653422234,True,Non-seasonal baseline for comparison,Fit on training series only
+"SARIMA(0,1,1)(0,1,1,12)","(0,1,1)","(0,1,1,12)",659.3415689115045,666.7735793549391,True,Seasonal extension supported by s=12 and transformed-training ACF/PACF,Fit on training series only

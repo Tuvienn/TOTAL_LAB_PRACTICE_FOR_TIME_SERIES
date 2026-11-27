@@ -8,9 +8,8 @@ EXERCISE_02_COMPLETED
 EXERCISE_03_COMPLETED_WITH_LOG_TRANSFORMATION
 EXERCISE_04_COMPLETED
 EXERCISE_05_COMPLETED_WITH_RESIDUAL_AUTOCORRELATION_LIMITATION
-EXERCISE_06_EXPLORATORY_NOTEBOOK_RESULTS_AVAILABLE
-EXERCISE_06_IMPLEMENTATION_AUTHORIZED
-EXERCISE_06_VALIDATION_NOT_COMPLETED
+EXERCISE_06_ADVANCED_WORKFLOW_VALIDATED
+EXERCISE_06_COMPLETED_AS_EXPLORATORY_EXTENSION
 ```
 
 ## Exercise 04–05 Status Note
@@ -47,43 +46,29 @@ The rerun establishes reproducible train-only and holdout boundaries for the
 confirmed E04/E05 workflow. The residual limitation remains part of the formal
 result and does not get hidden by the model comparison.
 
-## Exercise 06 — AirPassengers Exploratory Evidence
+## Exercise 06 — AirPassengers Advanced Extension Status
 
 ```text
-execution source: notebook cells run from the notebook from a chat-provided template
+implementation source: notebooks/Practice_2_Advanced.ipynb, existing notebook adjusted in place
 implementation authorization: true
-validation status: not completed clean-kernel execution
-completion status: not completed
+validation status: completed clean-kernel execution
+completion status: completed as an exploratory extension
 dataset: airline-passengers.csv
 rows: 144
 train observations: 115
 test observations: 29
 split: chronological 80/20, shuffle=false
-analysis scale: natural_log
-ADF original training p-value: 0.496626
-ADF regular difference (d=1) p-value: 0.085812
-ADF seasonal difference (D=1, s=12) p-value: 0.290527
-ADF combined difference p-value: 0.001719
-selected differencing for exploratory run: d=1, D=1, s=12
-ACF/PACF candidate: ARIMA(1,1,1) and SARIMA(1,1,1)(0,1,1,12)
-ARIMA converged: true
-SARIMA converged: true
-ARIMA AIC/BIC: -197.221464 / -189.012869
-SARIMA AIC/BIC: -369.862160 / -359.362269
-ARIMA Ljung-Box p-values, lags 12/24: 0.999957 / 1.000000
-SARIMA Ljung-Box p-values, lags 12/24: 0.010010 / 0.408396
-ARIMA MAE/RMSE: 84.254386 / 96.327568
-SARIMA MAE/RMSE: 12.165113 / 14.917604
-ARIMA largest absolute error: 1958-11, 186.108123
-SARIMA largest absolute error: 1960-03, 33.003028
+model comparison: ARIMA(0,1,1) baseline and SARIMA(0,1,1)(0,1,1,12)
+completed diagnostics: residual plot, residual ACF and Ljung–Box at lags 12 and 24
+completed evaluation: MAE and RMSE on the same 29-month holdout
+execution evidence: docs/logs/exercise_06_execution.md
+official run: 2026-11-27_e06_113951
+official raw log: runs/2026-11-27_e06_113951/Practice_2_Advanced.log
 ```
 
-The exploratory results show lower MAE and RMSE for SARIMA on this holdout.
-Ljung–Box indicates remaining autocorrelation in SARIMA residuals at lag 12.
-These notebook outputs remain exploratory evidence only: no formal E06 execution
-log, clean-kernel run, targeted tests, or final output inspection has been recorded.
-The E06 specification and before-process plan are confirmed for implementation;
-E06 is not yet marked complete.
+Historical exploratory outputs are not used as evidence for the adjusted workflow.
+E06 is an advanced extension; the official clean-kernel run and final output
+inspection are recorded above. It remains separate from the core E01–E05 result.
 
 ## Exercise 01 Evidence
 

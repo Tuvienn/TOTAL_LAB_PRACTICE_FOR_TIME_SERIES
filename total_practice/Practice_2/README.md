@@ -119,7 +119,7 @@ Kết luận và artifact được trình bày theo từng exercise trong
 - E03: natural-log first difference, `d=1`, evidence validated.
 - E04: ACF/PACF và candidates đã được xác nhận.
 - E05: fitting, 41-month forecast, baseline và residual diagnostics đã được kiểm tra; residual autocorrelation là limitation cần ghi nhận.
-- E06: đã xác nhận phạm vi SARIMA exploratory; validation và execution evidence chưa hoàn tất.
+- E06: advanced ARIMA/SARIMA extension đã được chạy và xác nhận trên holdout 29 tháng; SARIMA là mô hình được ưu tiên.
 
 ### Kết quả từng Exercise
 
@@ -172,8 +172,10 @@ Practice_2/
 ## 9. Giới hạn hiện tại
 
 E04/E05 đã completed và được xác nhận bằng clean-kernel run. Residual
-Ljung–Box vẫn cho thấy autocorrelation, vì vậy không được kết luận residual là
-white noise. E06 là exploratory extension, không thay thế core E01–E05.
+Ljung–Box của core E05 vẫn cho thấy autocorrelation, vì vậy không được kết luận
+residual là white noise. E06 là exploratory extension độc lập, đã được xác nhận
+bằng run `2026-11-27_e06_113951` trên holdout 29 tháng và không thay thế core
+E01–E05.
 
 ## 10. Kiểm tra trước khi merge
 

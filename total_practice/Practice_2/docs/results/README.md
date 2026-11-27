@@ -11,7 +11,7 @@ evidence gốc.
 | <a href="./exercise_03.md" style="color:#1f6feb;">E03</a> | Sai phân và tính dừng | Đã kiểm tra | <a href="./exercise_03.md" style="color:#1f6feb;">Mở kết quả</a> |
 | <a href="./exercise_04.md" style="color:#1f6feb;">E04</a> | ACF/PACF và candidates | Đã xác nhận | <a href="./exercise_04.md" style="color:#1f6feb;">Mở kết quả</a> |
 | <a href="./exercise_05.md" style="color:#1f6feb;">E05</a> | ARIMA, diagnostics và forecast | Đã xác nhận, có limitation | <a href="./exercise_05.md" style="color:#1f6feb;">Mở kết quả</a> |
-| <a href="./exercise_06.md" style="color:#1f6feb;">E06</a> | SARIMA AirPassengers | Đã xác nhận phạm vi triển khai | <a href="./exercise_06.md" style="color:#1f6feb;">Mở kết quả</a> |
+| <a href="./exercise_06.md" style="color:#1f6feb;">E06</a> | SARIMA AirPassengers | Đã xác nhận clean-kernel, holdout 29 tháng | <a href="./exercise_06.md" style="color:#1f6feb;">Mở kết quả</a> |
 
 ## Quy ước thư mục
 
@@ -24,5 +24,6 @@ evidence gốc.
 ## Cảnh báo chung
 
 E04 và E05 đã được xác nhận từ clean-kernel run. E05 vẫn ghi rõ limitation về
-residual autocorrelation. E06 đã được xác nhận để triển khai nhưng chưa completed;
-nó không thay thế trạng thái của core practice.
+residual autocorrelation. E06 cũng đã có clean-kernel execution evidence trên
+holdout 29 tháng; đây là exploratory extension và không thay thế trạng thái của
+core practice.

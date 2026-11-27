@@ -1,0 +1,3 @@
+Model,MAE,RMSE,Status
+"ARIMA(0,1,1)",88.42062047382066,101.10498193703137,Sealed 29-month holdout evaluation
+"SARIMA(0,1,1)(0,1,1,12)",24.059215322728438,30.580048594955926,Sealed 29-month holdout evaluation

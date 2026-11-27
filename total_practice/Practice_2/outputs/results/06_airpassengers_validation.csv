@@ -1,0 +1,12 @@
+Check,Value
+Raw SHA-256,8cb51be753a718d9be5d76d7e238cc224792754676adc21faa59e954b0201621
+Rows,144
+Missing target values,0
+Duplicate timestamps,0
+Monthly frequency,MS
+Train observations,115
+Test observations,29
+Forecast index aligned,True
+Selected d,1
+Selected D,1
+Seasonal period,12
