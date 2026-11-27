@@ -13,7 +13,7 @@
 ![Python](https://img.shields.io/badge/Python-Time%20Series-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-In%20Progress-F59E0B?style=flat-square)
 ![Focus](https://img.shields.io/badge/Focus-Forecasting-0EA5E9?style=flat-square)
-![Practice](https://img.shields.io/badge/Practice-1%2B-22C55E?style=flat-square)
+![Practice](https://img.shields.io/badge/Practice-1--4-22C55E?style=flat-square)
 
 </div>
 
@@ -34,7 +34,7 @@ Mục tiêu không chỉ là chạy được code, mà còn là hiểu đúng:
 - cách xây dựng baseline và đánh giá mô hình forecasting.
 
 > README này mô tả **toàn bộ repository**.  
-> Mỗi Practice sẽ có tài liệu riêng cho mục tiêu, dữ liệu, quy trình, kết quả và kết luận chi tiết.
+> Mỗi Practice có README riêng cho mục tiêu, dữ liệu, notebook, dashboard, quy trình, kết quả và kết luận chi tiết.
 
 ---
 
@@ -78,7 +78,9 @@ TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/
 │   │   ├── config/
 │   │   ├── pyproject.toml
 │   │   └── README.md
-│   └── Practice_2/
+│   ├── Practice_2/
+│   ├── Practice_3/
+│   └── Practice_4/
 ├── references/
 ├── .agents/
 ├── AGENTS.md
@@ -97,7 +99,7 @@ TOTAL_LAB_PRACTICE_FOR_TIME_SERIES/
   </tr>
   <tr>
     <td><code>Practice_n/</code></td>
-    <td>Mỗi Practice là một bài học hoặc bài thực hành độc lập.</td>
+    <td>Mỗi Practice là một bài học hoặc bài thực hành độc lập, có README và dashboard riêng.</td>
   </tr>
   <tr>
     <td><code>references/</code></td>
@@ -166,6 +168,53 @@ Practice 1 sử dụng dataset **AirPassengers**.
 - Decomposition.
 - Phân tích trend, seasonality và residual/noise.
 - Chuẩn bị nền tảng cho feature engineering và forecasting.
+
+<a href="total_practice/Practice_1/README.md" style="color:#1f6feb; font-weight:600;">🔗 Mở README Practice 1</a>
+
+## Practice 2 — ADF và ARIMA/SARIMA
+
+Practice 2 thực hành kiểm định tính dừng, transformation, differencing,
+ACF/PACF, ARIMA và SARIMA trên dữ liệu chuỗi thời gian monthly.
+
+### Nội dung chính
+
+- ADF trên chuỗi gốc và chuỗi đã transformation.
+- Log transformation và regular differencing.
+- ACF/PACF để đề xuất ARIMA candidates.
+- ARIMA forecast trên chronological holdout.
+- Residual diagnostics, Ljung–Box và seasonal-naive baseline.
+- SARIMA exploratory extension trên AirPassengers.
+
+<a href="total_practice/Practice_2/README.md" style="color:#1f6feb; font-weight:600;">🔗 Mở README Practice 2</a>
+
+## Practice 3 — Machine Learning Forecasting
+
+Practice 3 xây dựng workflow dự báo điện năng theo giờ bằng machine learning,
+từ chuẩn bị dữ liệu tới feature engineering, model selection, forecasting và
+error interpretation.
+
+### Nội dung chính
+
+- Structural data preparation và temporal split.
+- Training-only EDA và leakage-safe feature engineering.
+- Model selection, model lock và forecasting evaluation.
+- Error analysis, interpretation và final conclusion.
+
+<a href="total_practice/Practice_3/README.md" style="color:#1f6feb; font-weight:600;">🔗 Mở README Practice 3</a>
+
+## Practice 4 — Multivariate Forecasting
+
+Practice 4 mở rộng dự báo điện năng với dữ liệu đa biến gồm load và weather,
+so sánh các hướng VAR, XGBoost và LSTM.
+
+### Nội dung chính
+
+- Data preparation, chronological split và training-only EDA.
+- Preprocessing, scaling và feature engineering.
+- VAR, XGBoost và LSTM.
+- Walk-forward evaluation và error analysis.
+
+<a href="total_practice/Practice_4/README.md" style="color:#1f6feb; font-weight:600;">🔗 Mở README Practice 4</a>
 
 ---
 
@@ -267,7 +316,7 @@ Mỗi bài thực hành ưu tiên các nguyên tắc sau:
 4. Chạy và verify sau mỗi thay đổi.
 5. Xem output của AI là chưa đáng tin cho đến khi được kiểm chứng.
 6. Không sử dụng code nếu chưa hiểu mục đích và vai trò của nó.
-7. Xây dựng baseline trước khi thử mô hình phức tạp.
+7. Xây dựng baseline trước khi thử mô hình phức tạp khi protocol của Practice yêu cầu.
 8. Không báo cáo kết quả chưa được tạo ra từ một lần chạy thực tế.
 9. Đánh giá theo đúng thứ tự thời gian.
 10. Kết luận phải dựa trên bằng chứng từ dữ liệu và kết quả thực nghiệm.
@@ -331,15 +380,28 @@ Mỗi bài thực hành ưu tiên các nguyên tắc sau:
   </tr>
   <tr>
     <td>Practice 1</td>
-    <td>🟡 Đang phát triển</td>
-    <td>Khám phá đặc tính dữ liệu chuỗi thời gian</td>
+    <td>✅ E1–E5 hoàn thành</td>
+    <td>Diagnostics, decomposition, data quality và visualization</td>
   </tr>
   <tr>
-    <td>Practice 2+</td>
-    <td>⚪ Chưa bắt đầu</td>
-    <td>Sẽ bổ sung theo lộ trình học</td>
+    <td>Practice 2</td>
+    <td>🟡 Core E01–E05</td>
+    <td>ADF, ARIMA/SARIMA và forecast evaluation</td>
+  </tr>
+  <tr>
+    <td>Practice 3</td>
+    <td>✅ Phase workflow đã tổ chức</td>
+    <td>Machine-learning forecasting và error interpretation</td>
+  </tr>
+  <tr>
+    <td>Practice 4</td>
+    <td>🟡 Multivariate workflow</td>
+    <td>VAR, XGBoost, LSTM và walk-forward evaluation</td>
   </tr>
 </table>
+
+Trạng thái chi tiết, notebook, dashboard và artifact của từng bài được xem từ
+README riêng của Practice tương ứng.
 
 ---
 
