@@ -1,6 +1,6 @@
 # Current Status — Practice 4
 
-Trạng thái dự án: `NOTEBOOK_EXECUTED`.
+Trạng thái dự án: `NOTEBOOK_EXECUTED_AND_REPORTED`.
 
 ## Dataset và provenance
 
@@ -47,7 +47,7 @@ bất thường không được tự động sửa.
 - Data-quality audit đã được thêm vào Phase 1.
 - Protocol recursive rolling one-step-ahead cho VAR, XGBoost và LSTM đã được triển khai trong Phase 9; prediction được append vào history và không retrain sau mỗi bước.
 - Notebook đã chạy lại trên môi trường macOS hiện tại bằng kernel Practice 4.
-- 50/50 code cells thực thi, không có execution error.
+- 49/49 code cells thực thi, không có execution error.
 - Log hiện tại: `docs/logs/practice4.log`.
 - Kết quả hiện tại: `results/model_evaluation.csv`, `results/model_evaluation.xlsx` và các model summaries.
 
@@ -60,8 +60,9 @@ bất thường không được tự động sửa.
 
 Baseline Naive/Seasonal Naive không nằm trong scope bắt buộc của lần triển khai này.
 
-## Tiếp theo
+## Final report
 
-- kiểm tra execution evidence và kết quả mới.
-- Phần trả lời sáu câu hỏi phân tích của đề sẽ bổ sung sau.
-- Baseline chỉ bổ sung khi phạm vi yêu cầu.
+Sáu câu hỏi phân tích của đề đã được trả lời trong notebook và được tổng hợp tại
+<a href="../results/phase_10_final_report.md" style="color:#1f6feb;">Phase 10 — Results và Final Report</a>.
+
+Baseline Naive/Seasonal Naive chỉ bổ sung khi phạm vi yêu cầu.

@@ -3,7 +3,7 @@
 Practice 4 dự báo điện năng tiêu thụ theo giờ từ lịch sử `load` và các biến thời
 tiết bằng VAR, XGBoost và LSTM.
 
-Notebook đã thực thi 50/50 code cells; các kết quả trong tài liệu này tương ứng
+Notebook đã thực thi 49/49 code cells; các kết quả trong tài liệu này tương ứng
 với lần chạy hiện tại.
 
 <p>
@@ -149,7 +149,8 @@ hiện tại. Các bảng và biểu đồ hiển thị trong notebook; các art
 
 - Baseline Naive/Seasonal Naive chưa nằm trong scope bắt buộc của lần triển khai
   này.
-- Sáu câu hỏi phân tích bổ sung của đề chưa được viết thành final report.
+- Sáu câu hỏi phân tích đã được tổng hợp tại
+  <a href="docs/results/phase_10_final_report.md" style="color:#1f6feb;">Phase 10 — Final Report</a>.
 - Kết quả hiện tại được tổng hợp từ execution của notebook.
 
 ## 10. Kiểm tra trước khi merge

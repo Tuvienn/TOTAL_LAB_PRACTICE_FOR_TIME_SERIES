@@ -17,7 +17,7 @@
 | <a href="phase_07_xgboost.md" style="color:#1f6feb;">Phase 7</a> | XGBoost | Đã chạy | <a href="phase_07_xgboost.md" style="color:#1f6feb;">Mở kết quả</a> |
 | <a href="phase_08_lstm.md" style="color:#1f6feb;">Phase 8</a> | LSTM | Đã chạy | <a href="phase_08_lstm.md" style="color:#1f6feb;">Mở kết quả</a> |
 | <a href="phase_09_evaluation.md" style="color:#1f6feb;">Phase 9</a> | Walk-forward Evaluation | Đã chạy | <a href="phase_09_evaluation.md" style="color:#1f6feb;">Mở kết quả</a> |
-| <a href="phase_10_final_report.md" style="color:#1f6feb;">Phase 10</a> | Results và Final Report | Chưa hoàn tất | <a href="phase_10_final_report.md" style="color:#1f6feb;">Mở kết quả</a> |
+| <a href="phase_10_final_report.md" style="color:#1f6feb;">Phase 10</a> | Results và Final Report | Đã hoàn tất | <a href="phase_10_final_report.md" style="color:#1f6feb;">Mở kết quả</a> |
 
 ## Kết quả model hiện tại
 

@@ -26,8 +26,8 @@ STATSMODELS VAR SUMMARY
 ==================================
 Model:                         VAR
 Method:                        OLS
-Date:           Wed, 25, Nov, 2026
-Time:                     20:04:21
+Date:           Thu, 26, Nov, 2026
+Time:                     22:31:44
 --------------------------------------------------------------------
 No. of Equations:         4.00000    BIC:                   -12.1696
 Nobs:                     24518.0    HQIC:                  -12.2635
