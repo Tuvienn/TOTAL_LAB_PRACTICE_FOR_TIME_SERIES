@@ -36,7 +36,7 @@ horizon.
 
 The ARIMA(0,1,1) candidate outperformed the baseline on this holdout, but the
 remaining Ljung–Box signal prevents an unconditional white-noise conclusion.
-The result is therefore reconciliation evidence, not a formal completion claim.
+E05 is formally completed with this residual-autocorrelation limitation recorded.
 
 ## Output
 

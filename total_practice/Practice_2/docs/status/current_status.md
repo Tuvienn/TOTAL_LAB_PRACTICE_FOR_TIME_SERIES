@@ -109,7 +109,7 @@ seasonality and likely non-stationarity; E02 is required for statistical testing
 ## Authorization State
 
 The authorization block below preserves the existing formal E01–E04 record.
-`EXERCISE_04_HANDOFF_OPEN=false`; E04 has handed two confirmed ARIMA candidates
+`EXERCISE_04_HANDOFF_OPEN=false`; E04 has handed confirmed ARIMA candidates
 to E05. E05 is complete with the residual-autocorrelation limitation recorded.
 
 ```text
@@ -148,7 +148,7 @@ decision: reject H0
 selected d: 1
 stationarity supported: true on log first-differenced training scale
 test set used: false
-E04 handoff: open for review
+E04 handoff: completed and closed
 ```
 
 ## Exercise 03 Limitation

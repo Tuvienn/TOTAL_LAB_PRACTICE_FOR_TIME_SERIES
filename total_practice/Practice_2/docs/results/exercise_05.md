@@ -18,8 +18,8 @@ RMSE và MAPE.
 ## Điểm cần chú ý
 
 Ljung–Box vẫn bác bỏ white-noise null ở lag 12 và 24 cho các candidates. Vì vậy
-không được kết luận residual hoàn toàn là white noise. Kết quả hiện là
-reconciliation evidence, chưa phải formal model selection.
+không được kết luận residual hoàn toàn là white noise. E05 đã completed; giới
+hạn residual-autocorrelation vẫn là một phần của kết luận chính thức.
 
 ## Trạng thái
 
