@@ -141,7 +141,7 @@ Practice_4/
 - Model summaries: <a href="results/model_summaries/" style="color:#1f6feb;">results/model_summaries/</a>
 - Current status và provenance: <a href="docs/status/current_status.md" style="color:#1f6feb;">docs/status/current_status.md</a>
 
-Notebook đã thực thi 50/50 code cells không có execution error trong lần chạy
+Notebook đã thực thi 49/49 code cells không có execution error trong lần chạy
 hiện tại. Các bảng và biểu đồ hiển thị trong notebook; các artifact máy đọc được
 được lưu trong `results/`.
 

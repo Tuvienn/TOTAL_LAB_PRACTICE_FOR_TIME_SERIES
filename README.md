@@ -145,12 +145,12 @@ Practice 1 sử dụng dataset **AirPassengers**.
     <td><code>12</code></td>
   </tr>
   <tr>
-    <td>Timestamp column</td>
-    <td><code>month</code></td>
+    <td>Raw schema</td>
+    <td><code>rownames, time, value</code></td>
   </tr>
   <tr>
-    <td>Target column</td>
-    <td><code>passengers</code></td>
+    <td>Analysis index / target</td>
+    <td><code>date / passengers_thousands</code></td>
   </tr>
   <tr>
     <td>Khoảng thời gian</td>
@@ -385,17 +385,17 @@ Mỗi bài thực hành ưu tiên các nguyên tắc sau:
   </tr>
   <tr>
     <td>Practice 2</td>
-    <td>🟡 Core E01–E05</td>
+    <td>✅ Core E01–E05 completed; E06 exploratory extension validated</td>
     <td>ADF, ARIMA/SARIMA và forecast evaluation</td>
   </tr>
   <tr>
     <td>Practice 3</td>
-    <td>✅ Phase workflow đã tổ chức</td>
+    <td>✅ Phase 0–9 official artifacts validated</td>
     <td>Machine-learning forecasting và error interpretation</td>
   </tr>
   <tr>
     <td>Practice 4</td>
-    <td>🟡 Multivariate workflow</td>
+    <td>✅ Notebook executed and reported</td>
     <td>VAR, XGBoost, LSTM và walk-forward evaluation</td>
   </tr>
 </table>
